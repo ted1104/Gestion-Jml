@@ -1,0 +1,65 @@
+.header{
+  // border : 1px solid red;
+
+  &__box{
+    // border : 1px solid blue;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    // border: 1px solid red;
+
+    @include responsive(tab-port){
+      grid-template-columns: 1fr 2fr 1fr 1rem;
+    }
+    @include responsive(norm-desk){
+      grid-template-columns: 1fr 2fr 1fr 5rem;
+    }
+
+    &--logo{
+      // border : 1px solid green;
+      justify-self:center;
+      padding: 1.6rem;
+
+      @include responsive(tab-port){
+        padding: 1rem;
+      }
+    }
+    &--searchbar{
+      // border : 1px solid red;
+      // justify-self: center;
+      align-self: center;
+    }
+    &--navbar{
+      align-self: center;
+    }
+    &--iconmenu{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      // border : 1px solid red;
+
+      &-1{
+        // border : 1px solid red;
+      }
+      &-2{
+        flex-grow: 1;
+        // border : 1px solid red;
+        padding: 0 .5rem;
+      }
+      &-3{
+        // border : 1px solid red;
+      }
+
+    }
+  }
+}
+
+.number_pannier{
+  background-color: $color_primary_red;
+  font-size: .6rem;
+  color: $color_primary_white;
+  padding: .1rem .3rem;
+  border-radius: 2rem;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}

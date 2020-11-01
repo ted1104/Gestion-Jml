@@ -1,0 +1,3083 @@
+/*###### ABSTRACTS FILES########*/
+@font-face {
+  font-family: "Jay Gothic";
+  src: url("polices/Jay-Gothic-URW-Light.ttf") format("truetype");
+}
+/*###### BASE FILES########*/
+/* line 1, ../sass/base/_base.scss */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* line 9, ../sass/base/_base.scss */
+html {
+  font-size: 70%;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 56.313em) {
+  /* line 9, ../sass/base/_base.scss */
+  html {
+    font-size: 70%;
+  }
+}
+
+/* line 16, ../sass/base/_base.scss */
+a {
+  text-decoration: none;
+  color: black;
+}
+
+/* line 20, ../sass/base/_base.scss */
+.ul_class {
+  margin: 20px !important;
+}
+
+@keyframes CommingFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes CommingFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes CommingFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes CommingFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0em);
+  }
+}
+@keyframes CommingFromPointToGrand {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes CommingFromGrandToPoint {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0);
+  }
+}
+@keyframes CommingHiddenToVisibleOpacity {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes CommingHiddenToVisibleOpacityInverse {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* line 1, ../sass/base/_typography.scss */
+body {
+  font-family: "Jay Gothic", "Arial", "Sans-serif";
+  font-size: 1.6rem;
+}
+
+/* line 11, ../sass/base/_typography.scss */
+.title_secondary {
+  font-size: 1em;
+  color: #ff0505;
+}
+
+/* line 16, ../sass/base/_typography.scss */
+.title_tertiary {
+  font-size: .8em;
+  color: #ff0505;
+}
+
+/* line 22, ../sass/base/_typography.scss */
+.title_default {
+  font-size: .8em;
+}
+
+/* line 1, ../sass/base/_utilities.scss */
+.u-content-vertical {
+  display: flex;
+  flex-direction: column;
+}
+/* line 5, ../sass/base/_utilities.scss */
+.u-content-vertical__align-right {
+  align-items: flex-end;
+}
+/* line 7, ../sass/base/_utilities.scss */
+.u-content-vertical__align-space-between {
+  justify-content: space-between;
+}
+
+/* line 9, ../sass/base/_utilities.scss */
+.u-content-flex {
+  display: flex;
+}
+/* line 11, ../sass/base/_utilities.scss */
+.u-content-flex__align-right {
+  align-items: flex-end;
+}
+/* line 13, ../sass/base/_utilities.scss */
+.u-content-flex__align-space-between {
+  justify-content: space-between;
+}
+
+/* line 15, ../sass/base/_utilities.scss */
+.u-content-self-to-right-grid {
+  justify-self: right;
+}
+
+/* line 16, ../sass/base/_utilities.scss */
+.u-content-self-justify-to-center-grid {
+  justify-self: center;
+}
+
+/* line 17, ../sass/base/_utilities.scss */
+.u-content-self-align-to-center-grid {
+  align-self: center;
+}
+
+/* line 19, ../sass/base/_utilities.scss */
+.u-content-all-to-right-grid {
+  justify-content: right;
+}
+
+/* line 20, ../sass/base/_utilities.scss */
+.u-content-self-vertical-to-center-grid {
+  align-content: center;
+}
+
+/* line 22, ../sass/base/_utilities.scss */
+.u-content-justify {
+  text-align: justify;
+}
+
+/* line 24, ../sass/base/_utilities.scss */
+.u-opacity-1x {
+  opacity: .1;
+}
+
+/* line 25, ../sass/base/_utilities.scss */
+.u-opacity-2x {
+  opacity: .2;
+}
+
+/* line 26, ../sass/base/_utilities.scss */
+.u-opacity-3x {
+  opacity: .3;
+}
+
+/* line 27, ../sass/base/_utilities.scss */
+.u-opacity-4x {
+  opacity: .4;
+}
+
+/* line 28, ../sass/base/_utilities.scss */
+.u-opacity-5x {
+  opacity: .5;
+}
+
+/* line 31, ../sass/base/_utilities.scss */
+.u-margin-top-1x {
+  margin-top: 1px !important;
+}
+
+/* line 32, ../sass/base/_utilities.scss */
+.u-margin-top-2x {
+  margin-top: 4px !important;
+}
+
+/* line 33, ../sass/base/_utilities.scss */
+.u-margin-top-3x {
+  margin-top: 6px !important;
+}
+
+/* line 34, ../sass/base/_utilities.scss */
+.u-margin-top-4x {
+  margin-top: 8px !important;
+}
+
+/* line 35, ../sass/base/_utilities.scss */
+.u-margin-top-5x {
+  margin-top: 10px !important;
+}
+
+/* line 36, ../sass/base/_utilities.scss */
+.u-margin-top-6x {
+  margin-top: 12px !important;
+}
+
+/* line 37, ../sass/base/_utilities.scss */
+.u-margin-top-7x {
+  margin-top: 14px !important;
+}
+
+/* line 38, ../sass/base/_utilities.scss */
+.u-margin-top-8x {
+  margin-top: 16px !important;
+}
+
+/* line 39, ../sass/base/_utilities.scss */
+.u-margin-top-9x {
+  margin-top: 18px !important;
+}
+
+/* line 40, ../sass/base/_utilities.scss */
+.u-margin-top-10x {
+  margin-top: 20px !important;
+}
+
+/* line 42, ../sass/base/_utilities.scss */
+.u-margin-bottom-1x {
+  margin-bottom: 1px !important;
+}
+
+/* line 43, ../sass/base/_utilities.scss */
+.u-margin-bottom-2x {
+  margin-bottom: 4px !important;
+}
+
+/* line 44, ../sass/base/_utilities.scss */
+.u-margin-bottom-3x {
+  margin-bottom: 6px !important;
+}
+
+/* line 45, ../sass/base/_utilities.scss */
+.u-margin-bottom-4x {
+  margin-bottom: 8px !important;
+}
+
+/* line 46, ../sass/base/_utilities.scss */
+.u-margin-bottom-5x {
+  margin-bottom: 10px !important;
+}
+
+/* line 47, ../sass/base/_utilities.scss */
+.u-margin-bottom-6x {
+  margin-bottom: 12px !important;
+}
+
+/* line 48, ../sass/base/_utilities.scss */
+.u-margin-bottom-7x {
+  margin-bottom: 14px !important;
+}
+
+/* line 49, ../sass/base/_utilities.scss */
+.u-margin-bottom-8x {
+  margin-bottom: 16px !important;
+}
+
+/* line 50, ../sass/base/_utilities.scss */
+.u-margin-bottom-9x {
+  margin-bottom: 18px !important;
+}
+
+/* line 51, ../sass/base/_utilities.scss */
+.u-margin-bottom-10x {
+  margin-bottom: 20px !important;
+}
+
+/* line 53, ../sass/base/_utilities.scss */
+.u-margin-left-1x {
+  margin-left: 1px !important;
+}
+
+/* line 54, ../sass/base/_utilities.scss */
+.u-margin-left-2x {
+  margin-left: 4px !important;
+}
+
+/* line 55, ../sass/base/_utilities.scss */
+.u-margin-left-3x {
+  margin-left: 6px !important;
+}
+
+/* line 56, ../sass/base/_utilities.scss */
+.u-margin-left-4x {
+  margin-left: 8px !important;
+}
+
+/* line 57, ../sass/base/_utilities.scss */
+.u-margin-left-5x {
+  margin-left: 10px !important;
+}
+
+/* line 58, ../sass/base/_utilities.scss */
+.u-margin-left-6x {
+  margin-left: 12px !important;
+}
+
+/* line 60, ../sass/base/_utilities.scss */
+.u-margin-right-1x {
+  margin-right: 1px !important;
+}
+
+/* line 61, ../sass/base/_utilities.scss */
+.u-margin-right-2x {
+  margin-right: 4px !important;
+}
+
+/* line 62, ../sass/base/_utilities.scss */
+.u-margin-right-3x {
+  margin-right: 6px !important;
+}
+
+/* line 63, ../sass/base/_utilities.scss */
+.u-margin-right-4x {
+  margin-right: 8px !important;
+}
+
+/* line 64, ../sass/base/_utilities.scss */
+.u-margin-right-5x {
+  margin-right: 10px !important;
+}
+
+/* line 65, ../sass/base/_utilities.scss */
+.u-margin-right-6x {
+  margin-right: 12px !important;
+}
+
+/* line 68, ../sass/base/_utilities.scss */
+.u-padding-bottom-1x {
+  padding-bottom: 1px !important;
+}
+
+/* line 69, ../sass/base/_utilities.scss */
+.u-padding-bottom-2x {
+  padding-bottom: 4px !important;
+}
+
+/* line 70, ../sass/base/_utilities.scss */
+.u-padding-bottom-3x {
+  padding-bottom: 6px !important;
+}
+
+/* line 71, ../sass/base/_utilities.scss */
+.u-padding-bottom-4x {
+  padding-bottom: 8px !important;
+}
+
+/* line 72, ../sass/base/_utilities.scss */
+.u-padding-bottom-5x {
+  padding-bottom: 10px !important;
+}
+
+/* line 73, ../sass/base/_utilities.scss */
+.u-padding-bottom-6x {
+  padding-bottom: 12px !important;
+}
+
+/* line 75, ../sass/base/_utilities.scss */
+.u-font-size-1x {
+  font-size: 1em;
+}
+
+/* line 76, ../sass/base/_utilities.scss */
+.u-font-size-2x {
+  font-size: 1.2em;
+}
+
+/* line 77, ../sass/base/_utilities.scss */
+.u-font-size-3x {
+  font-size: 1.3em;
+}
+
+/* line 78, ../sass/base/_utilities.scss */
+.u-font-size-4x {
+  font-size: 1.4em;
+  font-weight: lighter !important;
+}
+
+/* line 79, ../sass/base/_utilities.scss */
+.u-font-size-5x {
+  font-size: 1.5em;
+}
+
+/* line 80, ../sass/base/_utilities.scss */
+.u-font-size-6x {
+  font-size: 1.6em;
+}
+
+/* line 81, ../sass/base/_utilities.scss */
+.u-font-size-7x {
+  font-size: 1.7em;
+}
+
+/* line 82, ../sass/base/_utilities.scss */
+.u-font-size-8x {
+  font-size: 1.8em;
+}
+
+/* line 83, ../sass/base/_utilities.scss */
+.u-font-size-9x {
+  font-size: 1.9em;
+}
+
+/* line 84, ../sass/base/_utilities.scss */
+.u-font-size-10x {
+  font-size: 2em;
+}
+
+/* line 87, ../sass/base/_utilities.scss */
+.u-color-red {
+  color: #ff0505;
+}
+
+/* line 92, ../sass/base/_utilities.scss */
+.u-bold {
+  font-weight: bold;
+}
+
+/* line 96, ../sass/base/_utilities.scss */
+.u-postion-relative {
+  position: relative;
+}
+
+/* line 99, ../sass/base/_utilities.scss */
+.u-position-screen-right-bottom {
+  position: fixed;
+  bottom: 3%;
+  right: 3%;
+}
+
+/* line 106, ../sass/base/_utilities.scss */
+.u-border-primary {
+  border: 1px solid black;
+}
+
+/* line 109, ../sass/base/_utilities.scss */
+.u-border-secondary {
+  border: 1px solid #fff;
+}
+
+/* line 112, ../sass/base/_utilities.scss */
+.u-border-tertiary {
+  border: 1px solid #155A7A;
+}
+
+/* line 115, ../sass/base/_utilities.scss */
+.u-border-radius-5 {
+  border-radius: 5px;
+}
+
+/* line 119, ../sass/base/_utilities.scss */
+.u-cursor-pointer {
+  cursor: pointer;
+}
+
+/* line 124, ../sass/base/_utilities.scss */
+.u-grid-1-1-area {
+  grid-column: 1/-1;
+}
+
+/* line 129, ../sass/base/_utilities.scss */
+.u-scroll-horizontal {
+  display: flex;
+  min-width: 100%;
+  min-height: 200px;
+  overflow-x: auto;
+}
+/* line 136, ../sass/base/_utilities.scss */
+.u-scroll-horizontal .card {
+  min-width: 200px !important;
+  max-width: 200px;
+  margin: 5px;
+  flex: 1 1 1;
+}
+/* line 142, ../sass/base/_utilities.scss */
+.u-scroll-horizontal__property {
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 75.063em) {
+  /* line 142, ../sass/base/_utilities.scss */
+  .u-scroll-horizontal__property {
+    flex-direction: column;
+    align-items: center;
+    min-width: 100%;
+    min-height: 75vh;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+}
+/* line 156, ../sass/base/_utilities.scss */
+.u-scroll-horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+/* line 162, ../sass/base/_utilities.scss */
+.bloc-center-horizontal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20% !important;
+  transform: translateX(-50%) translateY(-200%);
+}
+
+/* line 171, ../sass/base/_utilities.scss */
+.center-element {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+/* line 177, ../sass/base/_utilities.scss */
+.top-right-element {
+  position: absolute;
+  right: -5%;
+  top: -10%;
+}
+
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+@media screen and (max-width: 37.5em) {
+  /* line 186, ../sass/base/_utilities.scss */
+  .u-hidden-mob {
+    display: none;
+  }
+
+  /* line 189, ../sass/base/_utilities.scss */
+  .u-mob-take-grid {
+    display: grid;
+  }
+
+  /* line 192, ../sass/base/_utilities.scss */
+  .u-font-size-mob {
+    font-size: 1.3rem;
+  }
+}
+/*
+RESPONSIVE TABLETTE PORTRAIT
+601px-900px
+37.563em - 56.25em
+*/
+/*
+RESPONSIVE TABLETTE LANDSCAPE
+901px-1200px
+56.313em - 75em
+*/
+/*
+RESPONSIVE DESKTOP NORMAL
+1201-1800px
+75.063em - 112.5em
+*/
+/*
+RESPONSIVE DESKTOP BIG
+1801px et +
+112.563em
+*/
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+/*
+RESPONSIVE TABLETTE PORTRAIT
+601px-900px
+37.563em - 56.25em
+*/
+@media screen and (min-width: 37.563em) {
+  /* line 198, ../sass/base/_utilities.scss */
+  .u-hidden-tab-por {
+    display: none;
+  }
+
+  /* line 201, ../sass/base/_utilities.scss */
+  .u-tab-port-take-grid {
+    display: grid;
+  }
+
+  /* line 204, ../sass/base/_utilities.scss */
+  .u-font-size-tab-por {
+    font-size: 1.3rem;
+  }
+}
+/*
+RESPONSIVE TABLETTE LANDSCAPE
+901px-1200px
+56.313em - 75em
+*/
+/*
+RESPONSIVE DESKTOP NORMAL
+1201-1800px
+75.063em - 112.5em
+*/
+/*
+RESPONSIVE DESKTOP BIG
+1801px et +
+112.563em
+*/
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+/*
+RESPONSIVE TABLETTE PORTRAIT
+601px-900px
+37.563em - 56.25em
+*/
+/*
+RESPONSIVE TABLETTE LANDSCAPE
+901px-1200px
+56.313em - 75em
+*/
+@media screen and (min-width: 56.313em) {
+  /* line 209, ../sass/base/_utilities.scss */
+  .u-hidden-tab-land {
+    display: none;
+  }
+
+  /* line 212, ../sass/base/_utilities.scss */
+  .u-tab-land-take-grid {
+    display: grid;
+  }
+
+  /* line 215, ../sass/base/_utilities.scss */
+  .u-content-align-right-tab-land {
+    text-align: right;
+  }
+}
+/*
+RESPONSIVE DESKTOP NORMAL
+1201-1800px
+75.063em - 112.5em
+*/
+/*
+RESPONSIVE DESKTOP BIG
+1801px et +
+112.563em
+*/
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+/*
+RESPONSIVE TABLETTE PORTRAIT
+601px-900px
+37.563em - 56.25em
+*/
+/*
+RESPONSIVE TABLETTE LANDSCAPE
+901px-1200px
+56.313em - 75em
+*/
+/*
+RESPONSIVE DESKTOP NORMAL
+1201-1800px
+75.063em - 112.5em
+*/
+@media screen and (min-width: 75.063em) {
+  /* line 218, ../sass/base/_utilities.scss */
+  .u-hidden-norm-desk {
+    display: none;
+  }
+
+  /* line 221, ../sass/base/_utilities.scss */
+  .u-tab-norm-desk-take-grid {
+    display: grid;
+  }
+
+  /* line 224, ../sass/base/_utilities.scss */
+  .u-remove-margin-norm-desk {
+    margin-top: 0px !important;
+  }
+
+  /* line 228, ../sass/base/_utilities.scss */
+  .u-change-norm-desk-grid-to-flex {
+    display: flex !important;
+  }
+  /* line 231, ../sass/base/_utilities.scss */
+  .u-change-norm-desk-grid-to-flex-u-scroll {
+    min-width: 100%;
+    min-height: 50px !important;
+    max-height: 150px;
+    overflow-x: auto;
+  }
+  /* line 237, ../sass/base/_utilities.scss */
+  .u-change-norm-desk-grid-to-flex-u-scroll__element {
+    min-width: 200px !important;
+    max-width: 200px;
+    min-height: auto;
+    max-height: auto;
+  }
+  /* line 243, ../sass/base/_utilities.scss */
+  .u-change-norm-desk-grid-to-flex-u-scroll__element:not(:last-child) {
+    margin-right: 1rem;
+  }
+}
+/*
+RESPONSIVE DESKTOP BIG
+1801px et +
+112.563em
+*/
+/* line 252, ../sass/base/_utilities.scss */
+.u-animation-FromRight {
+  animation: CommingFromRight .6s ease-in-out;
+}
+
+/* line 253, ../sass/base/_utilities.scss */
+.u-animation-FromLeft {
+  animation: CommingFromLeft .6s ease-in-out;
+}
+
+/* line 254, ../sass/base/_utilities.scss */
+.u-animation-FromTop {
+  animation: CommingFromTop .6s ease-in-out;
+}
+
+/* line 255, ../sass/base/_utilities.scss */
+.u-animation-FromBottom {
+  animation: CommingFromBottom .6s ease-in-out;
+}
+
+/* line 256, ../sass/base/_utilities.scss */
+.u-animation-FromPointToGrand {
+  animation: CommingFromPointToGrand .6s ease-in-out;
+}
+
+/* line 257, ../sass/base/_utilities.scss */
+.u-animation-FromGrandToPoint {
+  animation: CommingFromGrandToPoint .6s ease-in-out;
+}
+
+/* line 258, ../sass/base/_utilities.scss */
+.u-animation-CommingHiddenToVisibleOpacity {
+  animation: CommingHiddenToVisibleOpacity .6s ease-in-out;
+}
+
+/*###### COMPONENTS FILES########*/
+/* line 1, ../sass/components/_images_link.scss */
+.image {
+  max-width: 4rem;
+  max-height: 4rem;
+  min-width: 1rem;
+  min-height: 1rem;
+  display: block;
+}
+/* line 9, ../sass/components/_images_link.scss */
+.image_size_responsive {
+  width: 100%;
+  height: auto;
+}
+/* line 13, ../sass/components/_images_link.scss */
+.image_size_manual-1 {
+  width: 100%;
+  height: 120px;
+}
+/* line 17, ../sass/components/_images_link.scss */
+.image--icon {
+  padding: .7rem;
+  position: relative;
+}
+/* line 21, ../sass/components/_images_link.scss */
+.image__menu {
+  margin-left: -8px !important;
+  margin-top: 6px !important;
+  object-fit: cover;
+}
+/* line 28, ../sass/components/_images_link.scss */
+.image-logo {
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 28, ../sass/components/_images_link.scss */
+  .image-logo {
+    max-width: 6rem;
+    max-height: 6rem;
+    min-width: 2rem;
+    min-height: 2rem;
+  }
+}
+
+/* line 40, ../sass/components/_images_link.scss */
+.imageFrontPage {
+  display: flex;
+  width: 100%;
+  height: 20rem;
+  background-image: url("../uploads/file_static/ByOseMarketFrontImage.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  align-items: flex-end;
+  position: relative;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 40, ../sass/components/_images_link.scss */
+  .imageFrontPage {
+    height: 27rem;
+  }
+}
+@media screen and (min-width: 56.313em) {
+  /* line 40, ../sass/components/_images_link.scss */
+  .imageFrontPage {
+    height: 30rem;
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 40, ../sass/components/_images_link.scss */
+  .imageFrontPage {
+    height: 45rem;
+  }
+}
+/* line 62, ../sass/components/_images_link.scss */
+.imageFrontPage__text {
+  opacity: 0;
+  visibility: hidden;
+  font-size: 2.5rem;
+  color: #ff0505;
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 56.313em) {
+  /* line 62, ../sass/components/_images_link.scss */
+  .imageFrontPage__text {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+/* line 77, ../sass/components/_images_link.scss */
+.imageFrontPage__box {
+  width: 100%;
+  height: 4rem;
+  display: block;
+  background-color: #f7f8fc;
+  opacity: 0.9;
+  filter: blur(15px);
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 75.063em) {
+  /* line 77, ../sass/components/_images_link.scss */
+  .imageFrontPage__box {
+    background-color: transparent;
+    opacity: 0;
+    filter: blur(0px);
+  }
+}
+
+/* line 1, ../sass/components/_formulaire_home.scss */
+.formulaire-home {
+  background-color: rgba(247, 248, 252, 0.5);
+  position: absolute;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -40%);
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 75.063em) {
+  /* line 1, ../sass/components/_formulaire_home.scss */
+  .formulaire-home {
+    transform: translate(-50%, -120%);
+    width: 60%;
+    padding: .5rem;
+    border-radius: 5px;
+  }
+}
+/* line 16, ../sass/components/_formulaire_home.scss */
+.formulaire-home__form {
+  background: rgba(247, 248, 252, 0.8);
+  padding: 2px;
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  margin-top: .5rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 75.063em) {
+  /* line 16, ../sass/components/_formulaire_home.scss */
+  .formulaire-home__form {
+    width: 100%;
+    margin-top: 0rem;
+  }
+}
+
+/* line 38, ../sass/components/_formulaire_home.scss */
+.form__group-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* line 45, ../sass/components/_formulaire_home.scss */
+.form__group-icon input {
+  background-color: transparent !important;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 45, ../sass/components/_formulaire_home.scss */
+  .form__group-icon input {
+    padding: 10px !important;
+  }
+}
+/* line 52, ../sass/components/_formulaire_home.scss */
+.form__group-icon:hover {
+  background-color: rgba(204, 204, 204, 0.3);
+  border-radius: 3px;
+  font-family: "Jay Gothic";
+}
+/* line 60, ../sass/components/_formulaire_home.scss */
+.form__group label {
+  font-size: .8em;
+}
+
+/* line 1, ../sass/components/_cards.scss */
+.card {
+  padding: .2rem .5rem;
+  box-shadow: 0rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
+  transition: all 1s;
+}
+/* line 10, ../sass/components/_cards.scss */
+.card__image {
+  display: flex;
+}
+/* line 15, ../sass/components/_cards.scss */
+.card__image--img {
+  border-radius: .9rem;
+}
+/* line 19, ../sass/components/_cards.scss */
+.card__image__height-size {
+  height: auto;
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+/* line 21, ../sass/components/_cards.scss */
+.card__image__height-size__similar {
+  height: 10rem;
+}
+@media screen and (min-width: 37.563em) {
+  /* line 19, ../sass/components/_cards.scss */
+  .card__image__height-size {
+    height: 15rem;
+  }
+}
+@media screen and (min-width: 56.313em) {
+  /* line 19, ../sass/components/_cards.scss */
+  .card__image__height-size {
+    height: 18rem;
+  }
+}
+/* line 34, ../sass/components/_cards.scss */
+.card__title {
+  padding-left: 1rem;
+}
+/* line 42, ../sass/components/_cards.scss */
+.card__detail__left--title-01 {
+  font-weight: bolder;
+}
+/* line 44, ../sass/components/_cards.scss */
+.card__detail__left--title-01__item {
+  font-size: 1.4rem;
+  font-weight: bolder;
+}
+/* line 49, ../sass/components/_cards.scss */
+.card__detail__left--title-detail-text {
+  font-size: 1.3rem;
+}
+/* line 56, ../sass/components/_cards.scss */
+.card__detail__right--price {
+  font-weight: bolder;
+  color: #ff0505;
+  font-size: 1.3rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 75.063em) {
+  /* line 56, ../sass/components/_cards.scss */
+  .card__detail__right--price {
+    font-size: 1.3rem;
+  }
+}
+/* line 67, ../sass/components/_cards.scss */
+.card__margin {
+  margin: .3rem 1rem;
+}
+
+/* line 2, ../sass/components/_form.scss */
+.form-input {
+  font-size: 1.1rem;
+  font-family: "Jay Gothic";
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 2, ../sass/components/_form.scss */
+  .form-input {
+    padding: 11px !important;
+  }
+}
+/* line 10, ../sass/components/_form.scss */
+.form-input-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  background: url("../uploads/file_static/ByOseMaRkEt_CaRtPge_IcOnz-05.png") 98% center/0.7em no-repeat;
+  padding: 10px !important;
+  font-size: 1.1rem;
+  font-family: "Jay Gothic";
+  font-weight: normal;
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+/* line 24, ../sass/components/_form.scss */
+.form-input-select option {
+  font-size: 1.1rem;
+  font-family: "Jay Gothic";
+}
+@media screen and (min-width: 37.563em) {
+  /* line 10, ../sass/components/_form.scss */
+  .form-input-select {
+    padding: 11px !important;
+  }
+}
+/* line 36, ../sass/components/_form.scss */
+.form input,
+.form select {
+  background-color: rgba(204, 204, 204, 0.5);
+  width: 100%;
+  border: 0;
+  padding: 10px;
+  border-radius: 3px;
+}
+/* line 44, ../sass/components/_form.scss */
+.form input:hover, .form input:focus,
+.form select:hover,
+.form select:focus {
+  background-color: rgba(204, 204, 204, 0.3);
+}
+/* line 50, ../sass/components/_form.scss */
+.form input::-webkit-outer-spin-button, .form input::-webkit-inner-spin-button,
+.form select::-webkit-outer-spin-button,
+.form select::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* line 56, ../sass/components/_form.scss */
+.form input[type=number] {
+  -moz-appearance: textfield;
+}
+/* line 59, ../sass/components/_form.scss */
+.form input[type=file] {
+  display: none;
+}
+/* line 64, ../sass/components/_form.scss */
+.form input[type=checkbox] {
+  opacity: 0;
+  width: 0 !important;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+/* line 73, ../sass/components/_form.scss */
+.form input[type=checkbox] + span {
+  background: url("icon_input/circle.svg") left center/1em no-repeat;
+  padding: 0px 1.2em;
+  display: inline-block;
+}
+/* line 78, ../sass/components/_form.scss */
+.form input[type=checkbox]:checked + span {
+  background: url("icon_input/check-circle.svg") left center/1em no-repeat;
+}
+
+/* line 1, ../sass/components/_buttons.scss */
+.btn {
+  width: 100%;
+  border: 0;
+  color: white;
+  padding: 10px;
+  font-family: "Jay Gothic";
+  font-size: 1.1rem;
+  border-radius: 6px;
+  opacity: 1;
+  transition: all 1s;
+  text-align: center;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+/* line 14, ../sass/components/_buttons.scss */
+.btn:hover {
+  opacity: .7;
+  cursor: pointer;
+}
+/* line 19, ../sass/components/_buttons.scss */
+.btn:active {
+  background-color: blue;
+  transform: translateY(-25px);
+  box-shadow: 0 1rem 2rem rgba(255, 255, 255, 0.2);
+}
+/* line 28, ../sass/components/_buttons.scss */
+.btn-secondary {
+  background-color: red;
+}
+/* line 31, ../sass/components/_buttons.scss */
+.btn-dark {
+  background-color: black;
+}
+/* line 34, ../sass/components/_buttons.scss */
+.btn-default {
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+/* line 38, ../sass/components/_buttons.scss */
+.btn-tertiary {
+  background-color: #155A7A;
+}
+/* line 41, ../sass/components/_buttons.scss */
+.btn-rond {
+  border: 0;
+  color: white;
+  font-family: "Jay Gothic";
+  font-size: 1.1rem;
+  opacity: 1;
+  transition: all 1s;
+  text-align: center;
+  padding-top: 5px;
+  border-radius: 50px;
+  z-index: 1;
+}
+/* line 53, ../sass/components/_buttons.scss */
+.btn-rond:hover {
+  transition: all 1s;
+  opacity: 0.7;
+}
+/* line 63, ../sass/components/_buttons.scss */
+.btn-size {
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (max-width: 37.5em) {
+  /* line 65, ../sass/components/_buttons.scss */
+  .btn-size-mob-2 {
+    width: 50%;
+  }
+  /* line 68, ../sass/components/_buttons.scss */
+  .btn-size-mob-3 {
+    width: 25%;
+  }
+}
+@media screen and (min-width: 37.563em) {
+  /* line 73, ../sass/components/_buttons.scss */
+  .btn-size-tab-port-2 {
+    width: 50%;
+  }
+  /* line 76, ../sass/components/_buttons.scss */
+  .btn-size-tab-port-3 {
+    width: 25%;
+  }
+  /* line 79, ../sass/components/_buttons.scss */
+  .btn-size-tab-port-4 {
+    width: 12.5%;
+  }
+}
+@media screen and (min-width: 56.313em) {
+  /* line 84, ../sass/components/_buttons.scss */
+  .btn-size-tab-land-2 {
+    width: 50%;
+  }
+  /* line 87, ../sass/components/_buttons.scss */
+  .btn-size-tab-land-3 {
+    width: 25%;
+  }
+  /* line 90, ../sass/components/_buttons.scss */
+  .btn-size-tab-land-4 {
+    width: 12.5%;
+  }
+  /* line 93, ../sass/components/_buttons.scss */
+  .btn-size-tab-land-5 {
+    width: 6.25%;
+  }
+  /* line 96, ../sass/components/_buttons.scss */
+  .btn-size-tab-land-6 {
+    width: 3.12%;
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 101, ../sass/components/_buttons.scss */
+  .btn-size-normal-desk-2 {
+    width: 50%;
+  }
+  /* line 104, ../sass/components/_buttons.scss */
+  .btn-size-normal-desk-3 {
+    width: 25%;
+  }
+}
+/* line 112, ../sass/components/_buttons.scss */
+.btn__carre-btn-0 {
+  width: 2rem;
+  height: 2rem;
+}
+/* line 116, ../sass/components/_buttons.scss */
+.btn__carre-btn-1 {
+  width: 4rem;
+  height: 4rem;
+}
+/* line 120, ../sass/components/_buttons.scss */
+.btn__carre-btn-2 {
+  width: 6rem;
+  height: 6rem;
+}
+@media screen and (min-width: 37.563em) {
+  /* line 1, ../sass/components/_buttons.scss */
+  .btn {
+    padding: 10px !important;
+  }
+}
+
+/* line 1, ../sass/components/_menu_pc.scss */
+.mobile-menu {
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 56.313em) {
+  /* line 1, ../sass/components/_menu_pc.scss */
+  .mobile-menu {
+    display: none;
+    transition: all 1s;
+  }
+}
+
+/* line 8, ../sass/components/_menu_pc.scss */
+.ordinateur-menu {
+  opacity: 0;
+  display: none;
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 56.313em) {
+  /* line 8, ../sass/components/_menu_pc.scss */
+  .ordinateur-menu {
+    transition: all 1s;
+    display: block;
+    opacity: 1;
+  }
+}
+
+/* line 22, ../sass/components/_menu_pc.scss */
+.navbar__ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+/* line 34, ../sass/components/_menu_pc.scss */
+.navbar__ul--link:link, .navbar__ul--link:visited {
+  display: block;
+  padding: .5rem;
+  position: relative;
+  transition: all 1s;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 56.313em) {
+  /* line 34, ../sass/components/_menu_pc.scss */
+  .navbar__ul--link:link, .navbar__ul--link:visited {
+    font-size: 1.8rem;
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 34, ../sass/components/_menu_pc.scss */
+  .navbar__ul--link:link, .navbar__ul--link:visited {
+    font-size: 2rem;
+  }
+}
+/* line 52, ../sass/components/_menu_pc.scss */
+.navbar__ul--link:hover {
+  color: rgba(255, 5, 5, 0.5);
+}
+/* line 55, ../sass/components/_menu_pc.scss */
+.navbar__ul--link:hover::after {
+  opacity: 1;
+  width: 90%;
+}
+/* line 64, ../sass/components/_menu_pc.scss */
+.navbar__ul--link::after {
+  content: "";
+  display: inline-block;
+  height: 2px;
+  width: 0%;
+  background-color: red;
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  opacity: 0;
+  transition: all 1s;
+}
+
+/* line 82, ../sass/components/_menu_pc.scss */
+.active-link {
+  color: #ff0505;
+}
+
+/* line 1, ../sass/components/_popup.scss */
+.popup {
+  color: white;
+  position: fixed;
+  top: 2rem;
+  right: 3rem;
+  width: 20%;
+  padding: 15px;
+  border-radius: 5px;
+}
+/* line 10, ../sass/components/_popup.scss */
+.popup__header {
+  margin-bottom: 5px;
+}
+/* line 13, ../sass/components/_popup.scss */
+.popup__header--title {
+  font-weight: bolder;
+}
+/* line 20, ../sass/components/_popup.scss */
+.popup__danger {
+  background-color: #D62828;
+}
+/* line 23, ../sass/components/_popup.scss */
+.popup__success {
+  background-color: #06D6A0;
+}
+/* line 26, ../sass/components/_popup.scss */
+.popup__info {
+  background-color: #155A7A;
+}
+
+/* line 1, ../sass/components/_modal.scss */
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+/* line 9, ../sass/components/_modal.scss */
+.modal-container {
+  border-radius: 4px;
+  margin: auto;
+  margin-top: 10px;
+  background-color: #f7f8fc;
+  padding: 10px 15px;
+}
+/* line 27, ../sass/components/_modal.scss */
+.modal__size-petit {
+  width: 25%;
+}
+/* line 30, ../sass/components/_modal.scss */
+.modal__size-moyen {
+  width: 50%;
+}
+/* line 33, ../sass/components/_modal.scss */
+.modal__size-grand {
+  width: 75%;
+}
+/* line 36, ../sass/components/_modal.scss */
+.modal__size-plusgrand {
+  width: 95%;
+}
+/* line 41, ../sass/components/_modal.scss */
+.modal--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+/* line 45, ../sass/components/_modal.scss */
+.modal--show {
+  opacity: 1;
+  visibility: visible;
+}
+/* line 49, ../sass/components/_modal.scss */
+.modal--bloc-hidden {
+  opacity: 0;
+  width: 0px !important;
+  height: 0px !important;
+  border: 1px solid red;
+}
+/* line 55, ../sass/components/_modal.scss */
+.modal--bloc-show {
+  opacity: 1;
+  width: 100%;
+  height: auto;
+}
+
+/* line 1, ../sass/components/_squeleton.scss */
+.sq {
+  background-color: rgba(204, 204, 204, 0.5);
+  animation: BgSqueleton 1s ease-in-out infinite running;
+}
+/* line 5, ../sass/components/_squeleton.scss */
+.sq__image-size-1 {
+  height: 150px;
+}
+/* line 11, ../sass/components/_squeleton.scss */
+.sq__text-size-h-1 {
+  height: 14px;
+}
+/* line 14, ../sass/components/_squeleton.scss */
+.sq__text-size-w-15 {
+  width: 15%;
+}
+/* line 15, ../sass/components/_squeleton.scss */
+.sq__text-size-w-25 {
+  width: 25%;
+}
+/* line 16, ../sass/components/_squeleton.scss */
+.sq__text-size-w-35 {
+  width: 35%;
+}
+/* line 17, ../sass/components/_squeleton.scss */
+.sq__text-size-w-50 {
+  width: 50%;
+}
+/* line 18, ../sass/components/_squeleton.scss */
+.sq__text-size-w-60 {
+  width: 60%;
+}
+/* line 19, ../sass/components/_squeleton.scss */
+.sq__text-size-w-75 {
+  width: 75%;
+}
+/* line 20, ../sass/components/_squeleton.scss */
+.sq__text-size-w-100 {
+  width: 100%;
+}
+/* line 25, ../sass/components/_squeleton.scss */
+.sq__btn {
+  color: transparent !important;
+}
+
+@keyframes BgSqueleton {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .7;
+  }
+}
+/*###### LAYOUTS FILES########*/
+/* line 4, ../sass/layout/_header.scss */
+.header__box {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 4, ../sass/layout/_header.scss */
+  .header__box {
+    grid-template-columns: 1fr 2fr 1fr 1rem;
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 4, ../sass/layout/_header.scss */
+  .header__box {
+    grid-template-columns: 1fr 2fr 1fr 5rem;
+  }
+}
+/* line 17, ../sass/layout/_header.scss */
+.header__box--logo {
+  justify-self: center;
+  padding: 1.6rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 17, ../sass/layout/_header.scss */
+  .header__box--logo {
+    padding: 1rem;
+  }
+}
+/* line 26, ../sass/layout/_header.scss */
+.header__box--searchbar {
+  align-self: center;
+}
+/* line 31, ../sass/layout/_header.scss */
+.header__box--navbar {
+  align-self: center;
+}
+/* line 34, ../sass/layout/_header.scss */
+.header__box--iconmenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* line 43, ../sass/layout/_header.scss */
+.header__box--iconmenu-2 {
+  flex-grow: 1;
+  padding: 0 .5rem;
+}
+
+/* line 56, ../sass/layout/_header.scss */
+.number_pannier {
+  background-color: #ff0505;
+  font-size: .6rem;
+  color: #fff;
+  padding: .1rem .3rem;
+  border-radius: 2rem;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+/*###### GRID FILES########*/
+@media screen and (max-width: 37.5em) {
+  /* line 3, ../sass/grid/_grid_mobile.scss */
+  .ted-col {
+    display: grid;
+  }
+  /* line 7, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-1 {
+    grid-template-columns: 1fr;
+  }
+  /* line 11, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* line 15, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* line 18, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* line 21, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  /* line 24, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  /* line 34, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c2-c1 {
+    grid-template-columns: 2fr 1fr;
+  }
+  /* line 37, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c2 {
+    grid-template-columns: 1fr 2fr;
+  }
+  /* line 40, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c3 {
+    grid-template-columns: 1fr 3fr;
+  }
+  /* line 43, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c3-c1 {
+    grid-template-columns: 3fr 1fr;
+  }
+  /* line 46, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c4-c1 {
+    grid-template-columns: 4fr 1fr;
+  }
+  /* line 49, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c4 {
+    grid-template-columns: 1fr 4fr;
+  }
+  /* line 52, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c5 {
+    grid-template-columns: 1fr 5fr;
+  }
+  /* line 55, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c5-c1 {
+    grid-template-columns: 5fr 1fr;
+  }
+  /* line 58, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c6 {
+    grid-template-columns: 1fr 6fr;
+  }
+  /* line 61, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c6-c1 {
+    grid-template-columns: 6fr 1fr;
+  }
+  /* line 64, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c7 {
+    grid-template-columns: 7fr 1fr;
+  }
+  /* line 67, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c7-c1 {
+    grid-template-columns: 7fr 1fr;
+  }
+  /* line 70, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c1-c8 {
+    grid-template-columns: 8fr 1fr;
+  }
+  /* line 73, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-2-c8-c1 {
+    grid-template-columns: 8fr 1fr;
+  }
+  /* line 78, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-3-c2-c1-c1 {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  /* line 88, ../sass/grid/_grid_mobile.scss */
+  .ted-col-mob-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  }
+}
+@media screen and (min-width: 37.563em) {
+  /* line 3, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col {
+    display: grid;
+  }
+  /* line 6, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-1 {
+    grid-template-columns: 1fr;
+  }
+  /* line 9, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* line 13, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* line 16, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* line 19, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  /* line 22, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  /* line 28, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2-c2-c1 {
+    grid-template-columns: 2fr 1fr;
+  }
+  /* line 31, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2-c1-c2 {
+    grid-template-columns: 1fr 2fr;
+  }
+  /* line 34, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2-c3-c1 {
+    grid-template-columns: 3fr 1fr;
+  }
+  /* line 37, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2-c1-c3 {
+    grid-template-columns: 1fr 3fr;
+  }
+  /* line 40, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2-c4-c1 {
+    grid-template-columns: 4fr 1fr;
+  }
+  /* line 43, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-2-c1-c4 {
+    grid-template-columns: 1fr 4fr;
+  }
+  /* line 49, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-3-c2-c1-c1 {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  /* line 58, ../sass/grid/_grid_tab_portrait.scss */
+  .ted-col-tab-por-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+@media screen and (min-width: 56.313em) {
+  /* line 3, ../sass/grid/_grid_tab_land.scss */
+  .ted-col {
+    display: grid;
+  }
+  /* line 6, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-1 {
+    grid-template-columns: 1fr;
+  }
+  /* line 10, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* line 14, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* line 17, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* line 20, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  /* line 23, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  /* line 26, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-7 {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  /* line 33, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c2-c1 {
+    grid-template-columns: 2fr 1fr;
+  }
+  /* line 36, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c2 {
+    grid-template-columns: 1fr 2fr;
+  }
+  /* line 39, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c3-c1 {
+    grid-template-columns: 3fr 1fr;
+  }
+  /* line 42, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c3 {
+    grid-template-columns: 1fr 3fr;
+  }
+  /* line 45, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c4-c1 {
+    grid-template-columns: 4fr 1fr;
+  }
+  /* line 48, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c4 {
+    grid-template-columns: 1fr 4fr;
+  }
+  /* line 51, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c5 {
+    grid-template-columns: 1fr 5fr;
+  }
+  /* line 54, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c5-c1 {
+    grid-template-columns: 5fr 1fr;
+  }
+  /* line 57, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c6 {
+    grid-template-columns: 1fr 6fr;
+  }
+  /* line 60, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c6-c1 {
+    grid-template-columns: 6fr 1fr;
+  }
+  /* line 63, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c7 {
+    grid-template-columns: 7fr 1fr;
+  }
+  /* line 66, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c7-c1 {
+    grid-template-columns: 7fr 1fr;
+  }
+  /* line 69, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c1-c8 {
+    grid-template-columns: 1fr 8fr;
+  }
+  /* line 72, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-2-c8-c1 {
+    grid-template-columns: 8fr 1fr;
+  }
+  /* line 78, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-3-c2-c1-c1 {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  /* line 87, ../sass/grid/_grid_tab_land.scss */
+  .ted-col-tab-land-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 3, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col {
+    display: grid;
+  }
+  /* line 7, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-1 {
+    grid-template-columns: 1fr;
+  }
+  /* line 11, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* line 15, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* line 18, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* line 21, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  /* line 24, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  /* line 32, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c2-c1 {
+    grid-template-columns: 2fr 1fr;
+  }
+  /* line 35, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c1-c2 {
+    grid-template-columns: 2fr 1fr;
+  }
+  /* line 38, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c3-c1 {
+    grid-template-columns: 3fr 1fr;
+  }
+  /* line 41, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c1-c3 {
+    grid-template-columns: 1fr 3fr;
+  }
+  /* line 44, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c4-c1 {
+    grid-template-columns: 4fr 1fr;
+  }
+  /* line 47, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c1-c4 {
+    grid-template-columns: 1fr 4fr;
+  }
+  /* line 50, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c1-c5 {
+    grid-template-columns: 1fr 5fr;
+  }
+  /* line 53, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c5-c1 {
+    grid-template-columns: 5fr 1fr;
+  }
+  /* line 56, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c1-c6 {
+    grid-template-columns: 1fr 6fr;
+  }
+  /* line 59, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-2-c6-c1 {
+    grid-template-columns: 6fr 1fr;
+  }
+  /* line 64, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-3-c2-c1-c1 {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  /* line 73, ../sass/grid/_grid_desk_normal.scss */
+  .ted-col-desk-normal-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+/* line 9, ../sass/grid/_grid_main.scss */
+.ted-col {
+  grid-gap: 1px;
+  align-items: stretch;
+}
+/* line 12, ../sass/grid/_grid_main.scss */
+.ted-col-e-1 {
+  grid-gap: 2px;
+}
+/* line 15, ../sass/grid/_grid_main.scss */
+.ted-col-e-2 {
+  grid-gap: 4px;
+}
+/* line 18, ../sass/grid/_grid_main.scss */
+.ted-col-e-3 {
+  grid-gap: 6px;
+}
+/* line 21, ../sass/grid/_grid_main.scss */
+.ted-col-e-4 {
+  grid-gap: 8px;
+}
+/* line 24, ../sass/grid/_grid_main.scss */
+.ted-col-e-5 {
+  grid-gap: 10px;
+}
+/* line 27, ../sass/grid/_grid_main.scss */
+.ted-col-e-6 {
+  grid-gap: 12px;
+}
+/* line 30, ../sass/grid/_grid_main.scss */
+.ted-col-e-7 {
+  grid-gap: 14px;
+}
+/* line 33, ../sass/grid/_grid_main.scss */
+.ted-col-e-8 {
+  grid-gap: 16px;
+}
+/* line 36, ../sass/grid/_grid_main.scss */
+.ted-col-e-9 {
+  grid-gap: 18px;
+}
+/* line 39, ../sass/grid/_grid_main.scss */
+.ted-col-e-10 {
+  grid-gap: 20px;
+}
+
+/*###### PAGES FILES########*/
+/* line 4, ../sass/pages/_home.scss */
+.section-category {
+  margin-top: 7.5rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 37.563em) {
+  /* line 4, ../sass/pages/_home.scss */
+  .section-category {
+    margin-top: 9.5rem;
+  }
+}
+@media screen and (min-width: 56.313em) {
+  /* line 4, ../sass/pages/_home.scss */
+  .section-category {
+    margin: 5rem 5rem 0 5rem;
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 4, ../sass/pages/_home.scss */
+  .section-category {
+    margin: 5rem 8rem 0 8rem;
+  }
+}
+
+/* line 8, ../sass/pages/_property_cars.scss */
+.poperty-similaire {
+  margin: 0 .5rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (min-width: 75.063em) {
+  /* line 8, ../sass/pages/_property_cars.scss */
+  .poperty-similaire {
+    margin-top: 0px !important;
+  }
+}
+
+/* line 16, ../sass/pages/_property_cars.scss */
+.form-payement {
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+
+/* line 1, ../sass/pages/_divers.scss */
+.divers {
+  width: 70%;
+  height: 99%;
+  margin: auto;
+  position: relative;
+  bottom: 0;
+  display: block;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+}
+@media screen and (max-width: 37.5em) {
+  /* line 1, ../sass/pages/_divers.scss */
+  .divers {
+    width: 90%;
+  }
+}
+@media screen and (min-width: 37.563em) {
+  /* line 1, ../sass/pages/_divers.scss */
+  .divers {
+    width: 80%;
+  }
+}
+/* line 18, ../sass/pages/_divers.scss */
+.divers h1 {
+  color: #ff0505;
+}
+/* line 21, ../sass/pages/_divers.scss */
+.divers h2, .divers h3 {
+  color: #155A7A;
+}
+/* line 24, ../sass/pages/_divers.scss */
+.divers-btn {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+/* line 29, ../sass/pages/_divers.scss */
+.divers-hidden {
+  display: none;
+}
+/* line 32, ../sass/pages/_divers.scss */
+.divers-show {
+  display: block;
+}
+
+/* line 36, ../sass/pages/_divers.scss */
+.one-tab {
+  position: absolute;
+  top: 0;
+}
+
+/* line 40, ../sass/pages/_divers.scss */
+.two-tab {
+  position: absolute;
+  top: 0;
+}
+
+/* line 47, ../sass/pages/_divers.scss */
+.three-tab {
+  position: absolute;
+  top: 0;
+}
+
+/* line 1, ../sass/pages/_pages.scss */
+.main-page {
+  margin: 0 1.2rem 0 1.2rem;
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  /*
+  RESPONSIVE TELEPHONE MOBILE
+  0-600px
+  0em - 37.5em
+
+  */
+  /*
+  RESPONSIVE TABLETTE PORTRAIT
+  601px-900px
+  37.563em - 56.25em
+  */
+  /*
+  RESPONSIVE TABLETTE LANDSCAPE
+  901px-1200px
+  56.313em - 75em
+  */
+  /*
+  RESPONSIVE DESKTOP NORMAL
+  1201-1800px
+  75.063em - 112.5em
+  */
+  /*
+  RESPONSIVE DESKTOP BIG
+  1801px et +
+  112.563em
+  */
+  margin-top: 2rem !important;
+}
+@media screen and (max-width: 37.5em) {
+  /* line 1, ../sass/pages/_pages.scss */
+  .main-page {
+    margin: 0 1.3rem 0 1.3rem;
+  }
+}
+@media screen and (min-width: 37.563em) {
+  /* line 1, ../sass/pages/_pages.scss */
+  .main-page {
+    margin: 0 1rem 0 1rem;
+  }
+}
+@media screen and (min-width: 56.313em) {
+  /* line 1, ../sass/pages/_pages.scss */
+  .main-page {
+    margin: 0 1rem 0 1rem;
+  }
+}
+@media screen and (min-width: 75.063em) {
+  /* line 1, ../sass/pages/_pages.scss */
+  .main-page {
+    margin: 0 9rem 0 9rem;
+  }
+}

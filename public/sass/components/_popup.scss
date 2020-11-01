@@ -1,0 +1,29 @@
+.popup{
+
+  color: white;
+  position: fixed;
+  top: 2rem;
+  right: 3rem;
+  width: 20%;
+  padding: 15px;
+  border-radius: 5px;
+  &__header{
+    // border-bottom: 1px solid $color_primary_white;
+    margin-bottom: 5px;
+    &--title{
+      font-weight: bolder;
+
+
+    }
+  }
+
+  &__danger{
+    background-color: #D62828;
+  }
+  &__success{
+    background-color: #06D6A0;
+  }
+  &__info{
+    background-color: #155A7A;
+  }
+}

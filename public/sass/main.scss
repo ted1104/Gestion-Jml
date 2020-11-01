@@ -1,0 +1,37 @@
+/*###### ABSTRACTS FILES########*/
+@import "abstracts/functions";
+@import "abstracts/mixins";
+@import "abstracts/variables";
+
+/*###### BASE FILES########*/
+@import "base/base";
+@import "base/animations";
+@import "base/typography";
+@import "base/utilities";
+
+/*###### COMPONENTS FILES########*/
+
+@import "components/images_link";
+@import "components/formulaire_home";
+@import "components/cards";
+@import "components/form";
+@import "components/buttons";
+@import "components/menu_pc";
+@import "components/popup";
+@import "components/modal";
+@import "components/squeleton";
+
+/*###### LAYOUTS FILES########*/
+@import "layout/footer";
+@import "layout/header";
+
+/*###### GRID FILES########*/
+@import "grid/grid_main";
+
+/*###### PAGES FILES########*/
+@import "pages/home";
+@import "pages/property_cars";
+@import "pages/tenders";
+@import "pages/divers";
+@import "pages/jobs";
+@import "pages/pages";

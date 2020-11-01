@@ -1,0 +1,61 @@
+.modal{
+  // border : 1px solid red;
+  position: fixed;
+  top :0;
+  right: 0;
+  left: 0;
+  bottom:0;
+  background-color: rgba($color_black, .5);
+  &-container{
+    border-radius: 4px;
+    margin: auto;
+    margin-top: 10px;
+    background-color: rgba($color_secondary_white,1);
+    padding: 10px 15px;
+  }
+  &-header{
+
+  }
+  &-body{
+
+  }
+  &-footer{
+
+  }
+
+  &__size{
+    &-petit{
+      width: 25%;
+    }
+    &-moyen{
+      width: 50%;
+    }
+    &-grand{
+      width: 75%;
+    }
+    &-plusgrand{
+      width: 95%;
+    }
+  }
+  // EXCEPTION TO GIVE LIVE MODAL BUT NOT DISPARAITRE
+  &--hidden{
+    opacity: 0;
+    visibility: hidden;
+  }
+  &--show{
+    opacity: 1;
+    visibility: visible;
+  }
+  &--bloc-hidden{
+    opacity: 0;
+    width: 0px !important;
+    height: 0px !important;
+    border : 1px solid red;
+  }
+  &--bloc-show{
+    opacity: 1;
+    width: 100%;
+    height: auto;
+  }
+
+}

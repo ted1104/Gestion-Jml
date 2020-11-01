@@ -1,0 +1,129 @@
+.btn{
+  width: 100%;
+  border: 0;
+  color: white;
+  padding: 10px;
+  font-family: $police-1;
+  font-size: $font-size-input-btn;
+  border-radius: 6px;
+  opacity: 1;
+  transition: all 1s;
+  text-align: center;
+
+
+  &:hover{
+    opacity: .7;
+    cursor: pointer;
+    // background-color: green;
+  }
+  &:active{
+    background-color: blue;
+    transform: translateY(-25px);
+    box-shadow: 0 1rem 2rem rgba(255,255,255, .2);
+  }
+
+  &-primary{
+
+  }
+  &-secondary{
+    background-color: red;
+  }
+  &-dark{
+    background-color: black;
+  }
+  &-default{
+    color : black;
+    border: 1px solid rgba($color_black, .1);
+  }
+  &-tertiary{
+    background-color: $color_tertiary;
+  }
+  &-rond{
+
+    border: 0;
+    color: white;
+    font-family: $police-1;
+    font-size: $font-size-input-btn;
+    opacity: 1;
+    transition: all 1s;
+    text-align: center;
+    padding-top: 5px;
+    border-radius: 50px;
+    z-index: 1;
+    &:hover{
+      transition: all 1s;
+      opacity: 0.7;
+    }
+
+  }
+
+
+
+
+  &-size{
+    @include responsive(phone){
+      &-mob-2{
+        width: 50%;
+      }
+      &-mob-3{
+        width: 25%;
+      }
+    }
+    @include responsive(tab-port){
+      &-tab-port-2{
+        width: 50%;
+      }
+      &-tab-port-3{
+        width: 25%;
+      }
+      &-tab-port-4{
+        width: 12.5%;
+      }
+    }
+    @include responsive(tab-land){
+      &-tab-land-2{
+        width: 50%;
+      }
+      &-tab-land-3{
+        width: 25%;
+      }
+      &-tab-land-4{
+        width: 12.5%;
+      }
+      &-tab-land-5{
+        width: 6.25%;
+      }
+      &-tab-land-6{
+        width: 3.12%;
+      }
+    }
+    @include responsive(norm-desk){
+      &-normal-desk-2{
+        width: 50%;
+      }
+      &-normal-desk-3{
+        width: 25%;
+      }
+    }
+  }
+
+  //BUTTON CARREE WIDTH = HEIGHT
+  &__carre-btn{
+    &-0{
+      width: 2rem;
+      height: 2rem;
+    }
+    &-1{
+      width: 4rem;
+      height: 4rem;
+    }
+    &-2{
+      width: 6rem;
+      height: 6rem;
+    }
+  }
+
+  @include responsive(tab-port){
+    padding: 10px !important;
+  }
+}

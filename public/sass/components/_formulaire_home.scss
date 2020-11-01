@@ -1,0 +1,64 @@
+.formulaire-home{
+  background-color: rgba($color_secondary_white,.5);
+  position: absolute;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%,-40%);
+  @include transition;
+
+  @include responsive(norm-desk){
+      transform: translate(-50%,-120%);
+      width: 60%;
+      padding: .5rem;
+      border-radius: 5px;
+  }
+
+  &__form{
+    background: rgba($color_secondary_white, .8);
+    // border : 1px solid blue;
+    padding: 2px;
+    width: 80%;
+    margin: 0 auto;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    margin-top: .5rem;
+    @include responsive(norm-desk){
+      // background: transparent;
+       width: 100%;
+       margin-top: 0rem;
+      // margin: .5rem !important;
+    }
+
+
+  }
+
+}
+.form__group {
+  // margin-bottom: .4rem;
+  // border : 1px solid red;
+  &-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // border : 1px solid red;
+    // background-color: $color_primary_bg_input;
+
+    input {
+      background-color: transparent !important;
+      @include responsive(tab-port){
+        padding: 10px !important;
+      }
+    }
+
+    &:hover{
+      background-color: $color_primary_bg_input_hover;
+      border-radius: 3px;
+      font-family: $police-1;
+    }
+
+  }
+
+  label {
+    font-size: .8em;
+  }
+
+}
