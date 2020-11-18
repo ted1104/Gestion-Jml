@@ -30,32 +30,12 @@ $routes->setAutoRoute(false);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
-$routes->get('whoweare','About::index');
-$routes->get('whatWeDo','About::whatWeDo');
+$routes->get('/', 'Login::index');
+$routes->post('login','Login::login');
+$routes->get('logout','Login::logout');
 
 
-// PROPERTIES
-$routes->get('property','Properties::index');
-$routes->get('property-detail/(:num)','Properties::detail/$1');
 
-// CARS
-$routes->get('cars','Cars::index');
-$routes->get('cars-detail/(:num)','Cars::detail/$id');
-
-// ACTIONS
-$routes->get('auctions','Auctions::index');
-$routes->get('auctions-detail/(:num)','Auctions::detail/$1');
-
-//Tenders
-$routes->get('tenders','Tenders::index');
-$routes->get('tenders-detail/(:num)','Tenders::detail/$1');
-
-//Jobs
-$routes->get('jobs','Jobs::index');
-$routes->get('jobs-detail/(:num)','Jobs::detail/$1');
-
-$routes->get('cart','Properties::cart');
 
 /**
  * --------------------------------------------------------------------

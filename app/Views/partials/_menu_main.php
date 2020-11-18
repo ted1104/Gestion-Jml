@@ -1,78 +1,201 @@
-<!-- MENU MOBILE -->
-<header class="header mobile-menu">
-    <div class="header__box">
-      <div class="header__box--logo">
-        <a href="<?=base_url() ?>" class="image image-logo">
-          <img src="<?=base_url() ?>/uploads/file_static/ByOseMarketLogo.png" alt="Logo ByOseMarket" class="image_size_responsive image__logo">
-        </a>
-      </div>
-      <div class="header__box--searchbar">
-        <form class="form" action="#" method="post">
-          <div class="form__group-icon">
-            <input type="search" name="search" value="">
-            <i class="icon-basic-magnifier"></i>
-          </div>
-        </form>
-      </div>
-      <div class="header__box--iconmenu">
-        <a href="/cart" class="image image--icon">
-          <img src="<?=base_url() ?>/uploads/file_static/ByOseMarketPannier.png" alt="Shop ByOseMarket" class="image_size_responsive image__pannier">
-          <span class="number_pannier">4</span>
-        </a>
-        <a href="#" class="image image--icon">
-          <img src="<?=base_url() ?>/uploads/file_static/ByOseMarketMenu.png" alt="Menu ByOseMarket" class=" image_size_responsive image__menu">
-        </a>
-      </div>
-    </div>
-</header>
+<!-- Start XP Sidebar -->
+<div class="xp-sidebar">
 
-<!-- MENU ORDINATEUR -->
-<header class="header ordinateur-menu">
-    <div class="header__box">
-      <div class="header__box--logo">
-        <a href="<?=isLoggedIn() ? base_url('admin-home.dy'):base_url('/') ?>" class="image image-logo">
-          <img src="<?=base_url() ?>/uploads/file_static/ByOseMarketLogo.png" alt="Logo ByOseMarket" class="image_size_responsive image__logo">
-        </a>
-      </div>
-      <div class="header__box--navbar">
-        <nav class="navbar" v-if="MenuShift">
-          <ul class="navbar__ul">
-            <li class="navbar__ul--li"><a class="navbar__ul--link active-link" href="<?=isLoggedIn() ? base_url('admin-home.dy'):base_url('/') ?>">Home</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="<?=isLoggedIn() ? base_url('admin-property.dy'):base_url('property') ?>">Properties</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="<?=isLoggedIn() ? base_url('admin-cars.dy'):base_url('cars') ?>">Cars Listing</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="<?=isLoggedIn() ? base_url('admin-tenders.dy'):base_url('tenders') ?>">Tenders</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="<?=isLoggedIn() ? base_url('admin-auctions.dy'):base_url('auctions') ?>">Auctions</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="<?=isLoggedIn() ? base_url('admin-jobs.dy'):base_url('jobs') ?>">Jobs</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="#">Contact</a></li>
-          </ul>
-        </nav>
-        <nav class="navbar" v-if="!MenuShift">
-          <ul class="navbar__ul">
-            <li class="navbar__ul--li"><a class="navbar__ul--link active-link" href="<?=isLoggedIn() ? base_url('admin-home.dy'):base_url('/') ?>">Home</a></li>
-            <li class="navbar__ul--li">
-              <a class="navbar__ul--link" href="<?=base_url('whoweare') ?>">Who we are</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="<?=base_url('whatWeDo')?>">What we do</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="#">Why doing business with us</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="#">Service Tarif</a></li>
-            <li class="navbar__ul--li"><a class="navbar__ul--link" href="#">Team of experts</a></li>
-
-          </ul>
-        </nav>
-      </div>
-      <div class="header__box--iconmenu">
-        <a href="/cart" class="image image--icon header__box--iconmenu-1">
-          <img src="<?=base_url() ?>/uploads/file_static/ByOseMarketPannier.png" alt="Shop ByOseMarket" class="image_size_responsive image__pannier">
-          <span class="number_pannier">4</span>
-        </a>
-        <form class="form header__box--iconmenu-2" action="#" method="post">
-          <div class="form__group">
-            <input type="search" name="" value="" class="form-input" placeholder="Search">
-          </div>
-        </form>
-        <a div class="image image--icon header__box--iconmenu-3">
-          <img src="<?=base_url() ?>/uploads/file_static/ByOseMarketMenu.png" alt="Menu ByOseMarket" class="image_size_responsive u-cursor-pointer" @click="_u_shift_menu">
-          <a href="<?=isLoggedIn() ? base_url('admin-logout.dy'):base_url('login.dy') ?>"><?=isLoggedIn() ?'Logout':'Login' ?></a>
-        </a>
-      </div>
+    <!-- Start XP Logobar -->
+    <div class="xp-logobar text-center">
+        <a href="index.html" class="xp-logo"><img src="assets/images/logo.svg" class="img-fluid" alt="logo"></a>
     </div>
-</header>
+    <!-- End XP Logobar -->
+
+    <!-- Start XP Navigationbar -->
+    <div class="xp-navigationbar">
+        <ul class="xp-vertical-menu">
+            <li class="xp-vertical-header">Menu</li>
+            <!-- MENU MANAGER -->
+            <?php if(session('users')['info'][0]->roles_id == 1):  ?>
+              <li>
+                  <a href="<?=base_url('facturier-dashboard') ?>">
+                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                  </a>
+
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-list-achat') ?>">Achat</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
+
+                  </ul>
+              </li>
+              <li>
+                  <a href="<?=base_url('admin-list-negotiation-achat') ?>">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Negotiation</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-add-appro') ?>">Créer</a></li>
+                  </ul>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-histo-appro') ?>">Historique</a></li>
+                  </ul>
+              </li>
+            <?php endif; ?>
+
+            <!-- MENU GERANT -->
+            <?php if(session('users')['info'][0]->roles_id == 2): ?>
+            <?php endif; ?>
+
+            <!-- MENU CAISSIER -->
+            <?php if(session('users')['info'][0]->roles_id == 3): ?>
+              <li>
+                  <a href="<?=base_url('facturier-dashboard') ?>">
+                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                  </a>
+
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <?php if(session('users')['info'][0]->is_main == 1): ?>
+                      <li><a href="<?=base_url('caissier-add-achat') ?>">Créer</a></li>
+                      <?php endif;?>
+                      <li><a href="<?=base_url('caissier-list-achat') ?>">Mes Achats</a></li>
+                  </ul>
+
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-security"></i><span>G-Decaissement</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                    <?php if(session('users')['info'][0]->is_main == 1): ?>
+                      <li><a href="<?=base_url('caissier-list-decaissement') ?>">Demandes</a></li>
+                    <?php else: ?>
+                      <li><a href="<?=base_url('caissier-add-decaissement') ?>">Créer</a></li>
+                    <?php endif;?>
+
+                  </ul>
+              </li>
+
+            <?php endif; ?>
+
+            <!-- MENU FACTURIER -->
+            <?php if(session('users')['info'][0]->roles_id == 4): ?>
+              <li>
+                  <a href="<?=base_url('facturier-dashboard') ?>">
+                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                  </a>
+
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('facturier-add-achat') ?>">Créer</a></li>
+                      <li><a href="<?=base_url('facturier-list-achat') ?>">Mes Achats</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>Rapport</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                    <li><a href="chart-chartistjs.html">Journalier</a></li>
+                    <li><a href="chart-chartistjs.html">Mensuel</a></li>
+                      <li><a href="chart-chartistjs.html">Annuel</a></li>
+
+                  </ul>
+              </li>
+            <?php endif; ?>
+
+            <!-- MENU MAGASINIER -->
+            <?php if(session('users')['info'][0]->roles_id == 5): ?>
+              <li>
+                  <a href="<?=base_url('magaz-dashboard') ?>">
+                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                  </a>
+
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
+                  </ul>
+              </li>
+            <?php endif; ?>
+
+            <!--
+            <li>
+                <a href="javaScript:void();">
+                    <i class="mdi mdi-table"></i><span>Tables</span><i class="mdi mdi-chevron-right pull-right"></i>
+                </a>
+                <ul class="xp-vertical-submenu">
+                    <li><a href="table-bootstrap.html">Bootstrap Table</a></li>
+                    <li><a href="table-datatable.html">Data Table</a></li>
+                    <li><a href="table-editable.html">Editable Table</a></li>
+                    <li><a href="table-rwdtable.html">RWD Table</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void();">
+                    <i class="mdi mdi-map"></i><span>Maps</span><span class="badge badge-pill badge-danger pull-right">2</span>
+                </a>
+                <ul class="xp-vertical-submenu">
+                    <li><a href="map-google.html">Google Map</a></li>
+                    <li><a href="map-vector.html">Vector Map</a></li>
+                </ul>
+            </li>
+            <li class="xp-vertical-header">Extras</li>
+            <li>
+                <a href="javaScript:void();">
+                    <i class="mdi mdi-security"></i><span>Authenication</span><i class="mdi mdi-chevron-right pull-right"></i>
+                </a>
+                <ul class="xp-vertical-submenu">
+                    <li><a href="page-login.html">Login</a></li>
+                    <li><a href="page-register.html">Register</a></li>
+                    <li><a href="page-forgotpsw.html">Forgot Password</a></li>
+                    <li><a href="page-lock-screen.html">Lock Screen</a></li>
+                    <li><a href="page-comingsoon.html">Coming Soon</a></li>
+                    <li><a href="page-maintenance.html">Maintenance</a></li>
+                    <li><a href="page-404.html">Error 404</a></li>
+                    <li><a href="page-403.html">Error 403</a></li>
+                    <li><a href="page-500.html">Error 500</a></li>
+                    <li><a href="page-503.html">Error 503</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javaScript:void();">
+                    <i class="mdi mdi-book-open-page-variant"></i><span>Extra Pages</span><i class="mdi mdi-chevron-right pull-right"></i>
+                </a>
+                <ul class="xp-vertical-submenu">
+                    <li><a href="page-starter.html">Starter Page</a></li>
+                    <li><a href="page-timeline.html">Timeline</a></li>
+                    <li><a href="page-pricing.html">Pricing</a></li>
+                    <li><a href="page-invoice.html">Invoice</a></li>
+                    <li><a href="page-faq.html">FAQ</a></li>
+                </ul>
+            </li> -->
+        </ul>
+    </div>
+    <!-- End XP Navigationbar -->
+
+</div>
+<!-- End XP Sidebar -->

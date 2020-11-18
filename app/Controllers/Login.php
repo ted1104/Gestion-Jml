@@ -1,7 +1,6 @@
 <?php
 
-namespace Modules\Admin\Controllers;
-use App\Entities\UsersEntity;
+namespace App\Controllers;
 
 
 class Login extends BaseController {
@@ -13,35 +12,33 @@ class Login extends BaseController {
     $data = [
       'titlePage' => $this->title,
     ];
-    echo view($this->linkMod.'\login-view', $data);
+    echo view('login-view', $data);
   }
 
   public function login(){
     $data = $this->request->getPost();
-    $auth = $this->usersModel->authLogin($data);
+    $auth = $this->userAuthModel->authLogin($data);
     if($auth){
-      $this->session->set('users', $auth);
-      return redirect()->to('admin-home.dy');
-    }else{
-      $data = [
-        'titlePage' => $this->title,
-      ];
-      $this->session->setFlashData('message',['title' => 'Login Error', 'content' => 'Identifiants ou Mot de passe incorrects!!','color'=>'popup__danger']);
-      // print_r($this->session->getFlashData('message')['content']);
-      // exit();
-      return redirect()->to('login.dy')->withInput();
-      // echo view($this->linkMod.'\login-view', $data);
-    }
+        $this->session->setFlashData('message',['title' => 'Bienvenue !!', 'content' => 'Amusez vous bien '.$auth['info'][0]->nom.' '.$auth['info'][0]->prenom.'. Nous vous souhaitons un excelent travail','color'=>'alert-success']);
+        $redirectLink = checkroleandredirect($auth['info'][0]->roles_id);
+        $this->session->set('users', $auth);
+        $this->session->set('profile', $redirectLink->description);
+        return redirect()->to($redirectLink->routes);
+      }else{
+        $data = [
+          'titlePage' => $this->title,
+        ];
+        $this->session->setFlashData('message',['title' => 'Connexion Erreur', 'content' => 'Identifiants ou Mot de passe incorrects!!','color'=>'alert-danger']);
+        return redirect()->to('/')->withInput();
+
+      }
 
   }
 
   public function logout(){
-    // $this->session->destroy();
     $this->session->remove('users');
-    $this->session->setFlashData('message',['title' => 'Logout Info', 'content' => 'You are logged Out !!','color'=>'popup__info']);
-    // print_r($this->session->getFlashData('message'));
-    // exit();
-    return redirect()->to('login.dy');
+    $this->session->setFlashData('message',['title' => 'Deconnexion Info', 'content' => 'Vous vous êtes deconnecté! Bye A plus tard','color'=>'alert-info']);
+    return redirect()->to('/');
   }
 
 

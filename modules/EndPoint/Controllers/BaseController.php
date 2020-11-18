@@ -16,6 +16,7 @@ namespace Modules\EndPoint\Controllers;
 
 use CodeIgniter\Controller;
 
+
 class BaseController extends Controller
 {
 
@@ -28,6 +29,7 @@ class BaseController extends Controller
 	 */
 	protected $helpers = ['global'];
 	protected $db;
+
 
 	/**
 	 * Constructor.
@@ -42,6 +44,8 @@ class BaseController extends Controller
 		//--------------------------------------------------------------------
 		// E.g.:
 		// $this->session = \Config\Services::session();
+
+
 		$this->db = db_connect('default');
 
 	}

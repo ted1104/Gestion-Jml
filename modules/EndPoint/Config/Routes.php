@@ -2,75 +2,64 @@
 
 $routes->setDefaultNamespace('Modules\EndPoint\Controllers');
 $routes->group('api/v1', function($routes){
-  $routes->get('users-get-all','Users::index');
-  $routes->post('users-post-one','Users::create_user');
-
-  /*
-  * ENDPOINTS PROPERTIES
-  */
-  $routes->get('properties-get-all','Properties::index');
-  $routes->post('properties-post-one','Properties::properties_create');
-  $routes->get('properties-get-one/(:num)/property','Properties::propertie_get_one/$1');
-
-  /*
-  * ENDPOINTS CARS
-  */
-  $routes->get('cars-get-all','Cars::index');
-  $routes->post('cars-post-one','Cars::cars_create');
-  $routes->get('cars-get-one/(:num)/cars','Cars::cars_get_one/$1');
 
 
-  /*
-  * ENDPOINTS TENDERS
-  */
-  $routes->get('tenders-get-all','Tenders::index');
-  $routes->post('tenders-post-one','Tenders::tenders_create');
-  $routes->get('tenders-get-one/(:num)/tenders','Tenders::tenders_get_one/$1');
-
-  /*
-  * ENDPOINTS JOBS
-  */
-  $routes->get('jobs-get-all','Jobs::index');
-  $routes->post('jobs-post-one','Jobs::jobs_create');
-  $routes->get('jobs-get-one/(:num)/jobs','Jobs::jobs_get_one/$1');
-
-  /*
-  * ENDPOINTS AUCTIONS
-  */
-  $routes->get('auctions-get-all','Auctions::index');
-  $routes->post('auctions-post-one','Auctions::auctions_create');
-  $routes->get('auctions-get-one/(:num)/auctions','Auctions::auctions_get_one/$1');
-
-
-  /*
-  * LES ROUTES DES TABLES STATIQUE
-  *
-  */
-  $routes->get('province-get-all','Statique::province_get');
-  $routes->post('province-post-one','Statique::province_create');
-
-  $routes->get('districts-get-all','Statique::district_get');
-  $routes->post('districts-post-one','Statique::district_create');
-  $routes->get('districts-get-all/(:num)/province','Statique::district_get_by_province/$1');
-
-  $routes->get('sectors-get-all','Statique::sectors_get');
-  $routes->post('sectors-post-one','Statique::sectors_create');
-  $routes->get('sectors-get-all/(:num)/district','Statique::sectors_get_by_district/$1');
-
-  $routes->get('cells-get-all','Statique::cells_get');
-  $routes->post('cells-post-one','Statique::cells_create');
-  $routes->get('cells-get-all/(:num)/sectors','Statique::cells_get_by_sectors/$1');
-
-  $routes->get('villages-get-all','Statique::village_get');
-  $routes->post('villages-post-one','Statique::village_create');
-  $routes->get('villages-get-all/(:num)/cells','Statique::village_get_by_cells/$1');
+  //ENDPOINT DE TABLES STATIQUES
+  $routes->get('depot-get-all','TableStatique::depot_get');
+  $routes->post('depot-create-one','TableStatique::depot_create');
+  $routes->put('depot-get-update/(:num)/update','TableStatique::depot_update/$1');
 
 
 
+  //ENDPOINTS LOGIQUES DATA
+  //1.USERS
+  $routes->get('users-get-all','Users::users_get');
+  $routes->post('users-create-one','Users::users_create');
+  $routes->get('users-get-all/(:num)/profile','Users::users_get_by_profile/$1');
+  $routes->get('users-get-all-is-main-by-profile/(:num)/(:num)/is-main','Users::users_get_by_profile_is_main/$1/$2');
 
 
 
+  //2.ARTCILES
+  $routes->get('articles-get-all','Articles::articles_get');
+  $routes->post('articles-create-one','Articles::articles_create');
+  $routes->post('articles-create-price','Articles::articles_set_price');
+  $routes->get('articles-search-data-commande/(:any)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3');
+  $routes->get('articles-search-by-code/(:any)code','Articles::article_search_by_code/$1');
 
+
+  $routes->post('art-test','Articles::multitest');
+
+  //2.COMMANDES
+  $routes->get('commandes-get-all','Commandes::commandes_get');
+  $routes->post('commandes-create','Commandes::commandes_create');
+  $routes->get('commandes-get-all/(:num)/(:num)/facturier','Commandes::commandes_get_user_facturier/$1/$2');
+  $routes->get('commandes-generate-code','Commandes::commande_generate_facture_code');
+  $routes->get('commandes-get-all/(:num)/(:num)/caissier','Commandes::commandes_get_user_caissier/$1/$2');
+  $routes->get('commandes-validation-caissier/(:any)/(:num)/(:num)/(:any)/validation','Commandes::validation_operation_commande_caissier/$1/$2/$3/$4');
+  $routes->get('commandes-get-by-depot/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2');
+  $routes->get('commandes-validation-magaz/(:any)/(:num)/(:num)/(:num)/validation','Commandes::validation_operation_commande_magasinier/$1/$2/$3/$4');
+  $routes->get('commandes-all-by-status/(:num)/status','Commandes::commandes_all_get_by_status/$1');
+  $routes->post('demande-negotiation','Commandes::commandes_negotiate');
+  $routes->get('achat-get-all-negotiation/(:num)/negotiation','Commandes::commandes_get_en_negotiation/$1');
+  $routes->post('achat-validate-negotiation','Commandes::commande_validate_negotiation');
+  $routes->post('achat-annuler-tout-negotiation','Commandes::commande_tout_annuler_validate_negotiation');
+  $routes->post('achat-annuler-selection-negotiation','Commandes::commande_annuler_selectionner_validate_negotiation');
+
+
+  //3. APPROVISIONNEMENT
+  $routes->get('approvisionnement-get-all','Approvisionnement::approvisionnement_get');
+  $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
+
+
+  //4. CAISSE ET ENCAISSEEMENT
+  $routes->get('caisse-montant/(:num)','OperationCaisseEncaissement::getMontantCaisse/$1');
+  $routes->get('get-all-decaissement/(:num)/(:num)/decaisse','OperationCaisseEncaissement::getDecaissementCaissierPrincipal/$1/$2');
+  $routes->post('create-decaissement-solde','OperationCaisseEncaissement::createDecaissement');
+  $routes->get('get-decaissement-par-caissier/(:num)','OperationCaisseEncaissement::getDecaissementParCaissier/$1');
+  $routes->get('validation-decaissement/(:num)/(:num)/(:any)/validate','OperationCaisseEncaissement::validateDecaissement/$1/$2/$3');
+  $routes->get('get-decaissement-externe-par-caissier/(:num)','OperationCaisseEncaissement::getDecaissementExterne/$1');
+  $routes->post('create-decaissement--solde-externe','OperationCaisseEncaissement::createDecaissementExterne');
 
 
 });

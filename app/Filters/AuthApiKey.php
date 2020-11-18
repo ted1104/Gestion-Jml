@@ -21,7 +21,7 @@ class AuthApiKey implements FilterInterface {
     }
     $data = [
       'status' => 401,
-      'message' => 'Invalid API Key',
+      'message' => 'Ressource introuvable',
       // 'data' => $request->getHeaders()
     ];
     return $this->service->response()->setStatusCode(401)

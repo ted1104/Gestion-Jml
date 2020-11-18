@@ -19,11 +19,11 @@ class IsLoggedIn implements FilterInterface {
       if($session['isLoggedIn']){
         return true;
       }
-      $this->service->session()->setFlashData('message',['title' => 'Session Expired!', 'content' => 'Your session is expired! Please logged in','color'=>'popup__info']);
-      return redirect()->to(base_url('login.dy'));
+      $this->service->session()->setFlashData('message',['title' => 'Session Expirée', 'content' => 'Votre session a été expirée! Veuillez vous reconnecter','color'=>'alert-info']);
+      return redirect()->to(base_url('/'));
     }
-    $this->service->session()->setFlashData('message',['title' => 'Session Expired!', 'content' => 'Your session is expired! Please logged in','color'=>'popup__info']);
-    return redirect()->to(base_url('login.dy'));
+  $this->service->session()->setFlashData('message',['title' => 'Session Expirée', 'content' => 'Votre session a été expirée! Veuillez vous reconnecter','color'=>'alert-info']);
+    return redirect()->to(base_url('/'));
 
 	}
 

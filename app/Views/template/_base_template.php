@@ -1,50 +1,94 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=devide-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="description" content="Booster is a bootstrap & laravel admin dashboard template">
+    <meta name="keywords" content="admin, admin dashboard, admin panel, admin template, admin theme, bootstrap 4, laravel, crm, analytics, responsive, sass support, ui kits, web app, clean design, creative">
+    <meta name="author" content="Themesbox17"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>GESTION BOUTIQUE : <?=$this->renderSection('title') ?> </title>
+    <!-- Fevicon -->
+    <link rel="shortcut icon" href="<?=base_url() ?>/assets/images/favicon.ico">
+    <!-- Start CSS -->
+    <link href="<?=base_url() ?>/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/assets/css/style.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/css/monstyle.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/assets/plugins/animate/animate.css" rel="stylesheet" type="text/css">
+
     <script type="text/javascript" src="<?=base_url() ?>/lib/vue.js"></script>
     <script type="text/javascript" src="<?=base_url() ?>/lib/axios.min.js"></script>
     <script type="text/javascript" src="<?=base_url() ?>/vue/main.js" defer></script>
-    <link rel="stylesheet" href="<?=base_url() ?>/icons/icon-font-basic.css">
-    <link rel="stylesheet" href="<?=base_url() ?>/icons/icon-font-arrows.css">
-    <link rel="stylesheet" href="<?=base_url() ?>/stylesheets/main.css">
-    <link rel="stylesheet" href="<?=base_url() ?>/lib/trumbowyg/dist/ui/trumbowyg.min.css">
-    <link rel="stylesheet" href="<?=base_url() ?>/lib/datepicker/css/bootstrap-datepicker.standalone.css">
+    <script type="text/javascript" src="<?=base_url() ?>/vue/others.js" defer></script>
 
-    <title>BYOSEMARKET : <?=$this->renderSection('title') ?></title>
+    <!-- End CSS -->
   </head>
-  <body>
-    <div id = "app">
-        <!-- MENU RESPONSIVE -->
-        <?=$this->include('partials/_menu_main') ?>
-        <!-- FIN MENU RESPONSIVE -->
-        <?=$this->renderSection('content') ?>
-        <!-- FOOTER -->
-        <?=$this->include('partials/_footer_main') ?>
-        <!-- FIN FOOTER -->
 
-        <!-- POPUP MESSAGE ERREUR ET SUCCESS -->
-        <div v-if="errorPopup" :class="errorPopupClass">
-          <div class="popup__header ted-col ted-col-tab-land-2-c7-c1">
-            <span class="popup__header--title">{{errorPopupConfig.title}}</span>
-            <span class="icon u-content-self-to-right-grid" data-icon="&#xe04a;" @click="errorPopup=!errorPopup"></span>
-          </div>
-          <div class="popup__content">
-            <p v-if="errorPopupConfig.message[0].length ==1">{{errorPopupConfig.message[0][0]}}</p>
+  <body class="xp-vertical">
+    <div class="container-main-admin" style="z-index:-100" id="app" @click="_u_fx_bodyClicked">
+      <?=$this->renderSection('content') ?>
 
-            <p v-if="errorPopupConfig.message[0].length >1" v-for="(err, index) in errorPopupConfig.message[0]">{{errorPopupConfig.message[0][index]}}</p>
+
+
+        <?php if(session()->getFlashData('message')): ?>
+        <div class="message-alert u-animation-FromTop">
+        <div class="xp-alert">
+              <div class="alert <?=session()->getFlashData('message')['color'] ?>" role="alert">
+                <h6 class="alert-heading"><?=session()->getFlashData('message')['title'] ?></h6>
+                <hr>
+                <p><?=session()->getFlashData('message')['content'] ?></p>
+              </div>
           </div>
-          <!-- <div class="popup__footer">
-            <button type="button" name="close"></button>
-          </div> -->
         </div>
+        <?php endif; ?>
+        <!-- ALERT POUR DB MESSAGE -->
+        <div v-if="messageError" class="message-alert u-animation-FromTop" @click="messageError=!messageError">
+        <div class="xp-alert">
+              <div :class="errorPopupClass" role="alert">
+                <div class="row">
+                  <h6 class="alert-heading col-md-11">{{messageAlertConfig.title}}</h6>
+                  <!-- <i class="mdi mdi-close col-md-1 cursor" @click="messageError=!messageError"></i> -->
+                </div>
+                <ul class="ul-error" v-if="messageAlertConfig.message[0].length ==1">
+                  <li v-for="(err, index) in messageAlertConfig.message">{{err[index]}}</li>
+                </ul>
+                <ul class="ul-error" v-if="messageAlertConfig.message[0].length >1">
+                  <li v-for="(err, index) in messageAlertConfig.message[0]">{{err}}</li>
+                </ul>
+              </div>
+          </div>
+        </div>
+
+        <!-- ALERT BOTTOM POUR RECHERCHE MESSAGE -->
+        <div v-if="messageErrorBottom" class="message-alert u-animation-FromBottom" style="width:20%;top:80%" @click="messageErrorBottom=!messageErrorBottom">
+        <div class="xp-alert">
+              <div :class="errorPopupClassBottom" role="alert">
+                <div class="row">
+                  <span class="col-md-10">{{messageAlertConfigBottom.title}}</span>
+                  <!-- <i class="mdi mdi-close col-md-2 cursor" @click="messageErrorBottom=!messageErrorBottom"></i> -->
+                </div>
+                <span>{{messageAlertConfigBottom.message[0][0]}}</span>
+
+              </div>
+          </div>
+        </div>
+
     </div>
 
+    <!-- Start JS -->
+    <script src="<?=base_url() ?>/assets/js/jquery.min.js"></script>
+    <script src="<?=base_url() ?>/assets/js/popper.min.js"></script>
+    <script src="<?=base_url() ?>/assets/js/bootstrap.min.js"></script>
+    <script src="<?=base_url() ?>/assets/js/modernizr.min.js"></script>
+    <script src="<?=base_url() ?>/assets/js/detect.js"></script>
+    <script src="<?=base_url() ?>/assets/js/jquery.slimscroll.js"></script>
+    <script src="<?=base_url() ?>/assets/js/sidebar-menu.js"></script>
+
+    <!-- Main JS -->
+    <script src="<?=base_url() ?>/assets/js/main.js"></script>
+    <!-- End JS -->
+
   </body>
-  <script src="<?=base_url() ?>/lib/jquery.min.js"></script>
-  <script src="<?=base_url() ?>/lib/trumbowyg/dist/trumbowyg.min.js"></script>
-  <script src="<?=base_url() ?>/lib/datepicker/js/bootstrap-datepicker.js"></script>
-  <script type="text/javascript" src="<?=base_url() ?>/vue/others.js" defer></script>
+
 </html>
