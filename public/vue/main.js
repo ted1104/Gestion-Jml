@@ -34,7 +34,7 @@ var vthis = new Vue({
       montantCaisse:0,
       codeIdArticlePrint : "",
 
-      //VARIABLE DETAIL SHOW AND ALL LOAD ACTION
+      //VARIABLE  LOAD BUTTON ACTION
       isShow : false,
       isNoQuantity : false,
       isLoadNego : false,
@@ -42,6 +42,9 @@ var vthis = new Vue({
       isLoadSaveMainButton : false,
       isLoadSaveMainButtonModal : false,
       isDecaissementExterne : false,
+
+      //VARIABLE LOAD DATE TABLE
+      // isDataTableLoad :false,
 
 
 
@@ -679,6 +682,7 @@ var vthis = new Vue({
     },
     get_historique_approvisionnement(limit=this.PerPaged,offset=0, indexPage=0){
       const newurl = this.url+"approvisionnement-get-all/"+limit+"/"+offset;
+      this.dataToDisplay=[];
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -873,13 +877,11 @@ var vthis = new Vue({
       }
     },
     _u_previous_page(callbackFunctionGetList){
-      // var i = (this.currentIndexPage+1)-1;
       var i = this.currentIndexPage;
       console.log(this.currentIndexPage);
       if(i < this.pageNumber && 0 < i){
         this.currentIndexPage -=1;
         var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
-        // console.log(offset);
         callbackFunctionGetList(this.PerPaged,offset,this.currentIndexPage);
       }
     },

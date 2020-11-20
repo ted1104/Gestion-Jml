@@ -60,6 +60,10 @@
 																	</tr>
 																</tbody>
 															</table>
+															<!-- LOAD FOR WAITING DATA -->
+															<div class="text-center" v-if="dataToDisplay.length < 1">
+																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+															</div>
 															<!-- PAGINATION -->
 															<nav aria-label="...">
                                   <ul class="pagination">
