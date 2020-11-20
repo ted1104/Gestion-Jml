@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 
+
 class Login extends BaseController {
   protected $title;
   public function __construct(){
@@ -40,6 +41,5 @@ class Login extends BaseController {
     $this->session->setFlashData('message',['title' => 'Deconnexion Info', 'content' => 'Vous vous êtes deconnecté! Bye A plus tard','color'=>'alert-info']);
     return redirect()->to('/');
   }
-
 
 }

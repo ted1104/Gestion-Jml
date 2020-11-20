@@ -17,8 +17,8 @@
     <link href="<?=base_url() ?>/css/monstyle.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url() ?>/assets/plugins/animate/animate.css" rel="stylesheet" type="text/css">
 
-    <script type="text/javascript" src="<?=base_url() ?>/lib/vue.js"></script>
-    <script type="text/javascript" src="<?=base_url() ?>/lib/axios.min.js"></script>
+    <script type="text/javascript" src="<?=base_url() ?>/lib/vue.js" async></script>
+    <script type="text/javascript" src="<?=base_url() ?>/lib/axios.min.js" async></script>
     <script type="text/javascript" src="<?=base_url() ?>/vue/main.js" defer></script>
     <script type="text/javascript" src="<?=base_url() ?>/vue/others.js" defer></script>
 

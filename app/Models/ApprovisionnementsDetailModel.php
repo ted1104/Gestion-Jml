@@ -28,7 +28,8 @@ class ApprovisionnementsDetailModel extends Model{
     ]
 
   ];
-  protected $returnType ='Object';
+  protected $returnType ='App\Entities\ApprovisionnementsDetailEntity';
+
 
 
   // LES TRANSACTIONS

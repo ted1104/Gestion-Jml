@@ -97,8 +97,15 @@
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
-																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
+																<div class="col-md-2">
+																	<a :href="'<?=base_url()?>/print-code/'+codeIdArticlePrint+'/code'" target="_blank" class=''><i class='mdi mdi-printer text-primary font-size-big'></i> </a>
+
+
+																</div>
+																<div class="col-md-8">
+																	<h5 class=" card-title margin-top-4">FACTURE {{detailTab.numero_commande}}</h5>
+																</div>
+																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
 																<div class="row">

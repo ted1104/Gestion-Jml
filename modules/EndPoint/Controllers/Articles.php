@@ -218,6 +218,46 @@ class Articles extends ResourceController {
       'data' => $data,
     ]);
   }
+  public function article_update_price(){
+    $idarticle = $this->request->getPost('articles_id');
+    $newPrice = $this->request->getPost('prix_unitaire');
+    $type = $this->request->getPost('type_prix');
+    $newQte = $this->request->getPost('qte_decideur');
+
+    if(is_numeric ($newPrice) && is_numeric($newQte)){
+      $condition =[
+        'articles_id'=>$idarticle,
+        'type_prix' =>$type,
+      ];
+      $data =[
+        'prix_unitaire'=>$newPrice,
+        'qte_decideur'=>$newQte
+      ];
+      $info = $this->articlesPrixModel->Where($condition)->find();
+      if($this->articlesPrixModel->update($info[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>'Modification avec succès',
+          'errors'=>null
+        ];
+        $data = null;
+      }
+
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['Le montant ou la quantité est invalide']
+      ];
+      $data = null;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data,
+    
+    ]);
+  }
   public function multitest(){
     print_r($this->request->getPost());
 

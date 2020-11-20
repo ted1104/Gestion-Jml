@@ -32,10 +32,14 @@ class OperationCaisseEncaissement extends ResourceController {
   //MONTANT SOLDE DU CAISSIER
   public function getMontantCaisse($idCaissier){
     $data = $this->caisseModel->Where('users_id',$idCaissier)->find();
+    $montant = 0;
+    if($data){
+      $montant = $data[0]->montant;
+    }
     return $this->respond([
       'status' => 200,
       'message' => 'success',
-      'data' => $data[0]->montant,
+      'data' => $montant,
     ]);
   }
 

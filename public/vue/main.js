@@ -32,6 +32,7 @@ var vthis = new Vue({
       // annuler:0,
 
       montantCaisse:0,
+      codeIdArticlePrint : "",
 
       //VARIABLE DETAIL SHOW AND ALL LOAD ACTION
       isShow : false,
@@ -104,6 +105,15 @@ var vthis = new Vue({
       destination:"",
       montant:"",
 
+      //PAGINATION
+      pageNumber:0,
+      paginationTab:[],
+      paginationTabIn:{},
+      isPaginationCreated:false,
+      currentIndexPage :0,
+
+      PerPaged:5
+
 
 
     }
@@ -115,6 +125,7 @@ var vthis = new Vue({
     this._u_get_today();
     this._u_fx_get_montant();
     // console.log(this.detailTab.logic_article);
+    // this._u_next_page(this._u_previous_page);
   },
   methods : {
     add_article(e){
@@ -641,6 +652,47 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    update_article_prix(e){
+      e.preventDefault();
+      const newurl = this.url+"articles-update-price";
+      var form = this._u_fx_form_data_art_price();
+
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_close_mod_form();
+                  this.get_article();
+                  this.isLoadSaveMainButtonModal = false;
+                  return;
+                }
+                var err = response.data.message.errors;
+                this.isLoadSaveMainButtonModal = false;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+    get_historique_approvisionnement(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"approvisionnement-get-all/"+limit+"/"+offset;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.currentIndexPage = indexPage;
+              if(!this.isPaginationCreated){
+                this._u_fx_generate_pagination(response.data.all);
+                this.isPaginationCreated = true;
+              }
+              // console.log(this.dataToDisplay);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     _u_create_line_article(){
@@ -699,12 +751,28 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    _u_open_mod_form(art,type){
+    _u_open_mod_form(art,type, from=null){
       this._u_fx_form_init_field();
       this.type_prix = type;
       this.articles_id = art.id;
+      if(from !=null){
+        var typePrix = type;
+        type = type == 1 ?'Gros':'Détail';
+        this.modalTitle = "Modifier le prix de l'article "+art.nom_article+" en "+type;
+
+        for (var i = 0; i < art.logic_detail_data.length; i++) {
+          if(art.logic_detail_data[i].type_prix==typePrix){
+            this.prix_unitaire = art.logic_detail_data[i].prix_unitaire;
+            this.qte_decideur = art.logic_detail_data[i].qte_decideur;
+          }
+        }
+        this.styleModal = 'block';
+
+        console.log(art);
+        return;
+      }
       type = type == 1 ?'Gros':'Détail';
-      this.modalTitle = "Fixe le prix de l'article "+art.nom_article+" en "+type;
+      this.modalTitle = "Fixer le prix de l'article "+art.nom_article+" en "+type;
       this.styleModal = 'block';
     },
     _u_close_mod_form(){
@@ -743,7 +811,7 @@ var vthis = new Vue({
       this.date_vente = currentDateWithFormat;
     },
     _u_see_detail_tab(index){
-
+      this.codeIdArticlePrint = index.id;
       this.detailTab = index;
       this.isShow = !this.isShow;
       // console.log(this.detailTab.logic_article);
@@ -784,6 +852,37 @@ var vthis = new Vue({
       // this.messageError =false;
       // this.messageErrorBottom =false;
     },
+    _u_fx_generate_pagination(totalRecords){
+      this.pageNumber = Math.ceil(parseInt(totalRecords) / parseInt(this.PerPaged));
+      for (var i = 1; i <= this.pageNumber; i++) {
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        this.paginationTabIn ={
+          "limit":parseInt(this.PerPaged),
+          "offset":parseInt(offset)
+        }
+        this.paginationTab.push(this.paginationTabIn);
+      }
+      // console.log(this.paginationTab);
+    },
+    _u_next_page(callbackFunctionGetList){
+      var i = (this.currentIndexPage+1)+1;
+      if(i <= this.pageNumber){
+        this.currentIndexPage +=1;
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        callbackFunctionGetList(this.PerPaged,offset,this.currentIndexPage);
+      }
+    },
+    _u_previous_page(callbackFunctionGetList){
+      // var i = (this.currentIndexPage+1)-1;
+      var i = this.currentIndexPage;
+      console.log(this.currentIndexPage);
+      if(i < this.pageNumber && 0 < i){
+        this.currentIndexPage -=1;
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        // console.log(offset);
+        callbackFunctionGetList(this.PerPaged,offset,this.currentIndexPage);
+      }
+    },
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){
      this.errorPopupClass.splice(1,1);
@@ -801,7 +900,7 @@ var vthis = new Vue({
     this.messageAlertConfigBottom.message = [];
     this.messageAlertConfigBottom.message.push(message);
     this.messageErrorBottom = true;
-    console.log(this.messageAlertConfigBottom.message[0][0]);
+    // console.log(this.messageAlertConfigBottom.message[0][0]);
   },
     _u_fx_form_init_field(){
       this.code_article = "";
@@ -863,7 +962,7 @@ var vthis = new Vue({
   },
     _u_fx_to_load_router(){
     const pth = window.location.pathname.split('/');
-    if(pth[1] ==='admin-add-article' || pth[1] ==='admin-add-article'){
+    if(pth[1] ==='admin-add-article' || pth[1] ==='admin-list-article'){
       this.get_article();
     }
     if(pth[1] ==='admin-add-appro' || pth[1] ==='facturier-add-achat' || pth[1]==='caissier-add-achat'){
@@ -894,6 +993,10 @@ var vthis = new Vue({
     if(pth[1]=='caissier-list-decaissement'){
       this.get_decaisssement_caissier_principale();
     }
+    if(pth[1]=='admin-histo-appro'){
+      this.get_historique_approvisionnement();
+    }
+
 
 
 

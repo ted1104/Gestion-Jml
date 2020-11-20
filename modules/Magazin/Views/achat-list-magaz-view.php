@@ -96,7 +96,8 @@
 																		<th scope="col">
 																			<button v-if="dt.status_vente_id.id==2 && !dt.logic_is" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 																			<i v-if="dt.status_vente_id.id==1" class='mdi mdi-checkbox-marked-circle-outline'></i>
-																			<button v-if="dt.status_vente_id.id==3" class='btn btn-round btn-info'><i class='mdi mdi-printer'></i> </button>
+																			<a :href="'<?=base_url()?>/print-facture/'+dt.id+'/code'" target="_blank" v-if="dt.status_vente_id.id==3" class='btn btn-round btn-info'><i class='mdi mdi-printer text-white'></i> </a>
+
 
 																			<button v-if="dt.status_vente_id.id==2 && dt.logic_is" class='btn btn-round btn-warning' @click="_u_open_mod_popup_magaz(dt,3)"><i class='mdi mdi-alert-circle'></i></button>
 																		</th>

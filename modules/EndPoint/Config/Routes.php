@@ -26,6 +26,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('articles-create-price','Articles::articles_set_price');
   $routes->get('articles-search-data-commande/(:any)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3');
   $routes->get('articles-search-by-code/(:any)code','Articles::article_search_by_code/$1');
+  $routes->post('articles-update-price','Articles::article_update_price');
 
 
   $routes->post('art-test','Articles::multitest');
@@ -48,7 +49,7 @@ $routes->group('api/v1', function($routes){
 
 
   //3. APPROVISIONNEMENT
-  $routes->get('approvisionnement-get-all','Approvisionnement::approvisionnement_get');
+  $routes->get('approvisionnement-get-all/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2');
   $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
 
 

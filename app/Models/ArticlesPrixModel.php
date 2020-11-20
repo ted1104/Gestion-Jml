@@ -32,7 +32,7 @@ class ArticlesPrixModel extends Model{
     'qte_decideur'=>['required' => 'La Quantité determinante est obligatoire'],
 
   ];
-  protected $returnType ='Object';
+  protected $returnType ='object';
 
 
   // LES TRANSACTIONS

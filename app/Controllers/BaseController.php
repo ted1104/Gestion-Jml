@@ -32,6 +32,7 @@ class BaseController extends Controller
 	protected $db;
 	protected $userAuthModel;
 	protected $session;
+	protected $encrypter;
 
 	/**
 	 * Constructor.
@@ -47,6 +48,7 @@ class BaseController extends Controller
 		// E.g.:
 		// $this->session = \Config\Services::session();
 		$this->session = Services::session();
+		$this->encrypter = Services::encrypter();
 		$this->userAuthModel= new UsersAuthModel();
 		$this->db = db_connect('default');
 	}

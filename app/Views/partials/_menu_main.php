@@ -33,7 +33,7 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
-
+                      <li><a href="<?=base_url('admin-list-article') ?>">Liste</a></li>
                   </ul>
               </li>
               <li>

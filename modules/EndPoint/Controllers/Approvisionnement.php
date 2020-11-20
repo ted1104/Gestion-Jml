@@ -24,12 +24,13 @@ class Approvisionnement extends ResourceController {
     $this->stockModel = new StockModel();
 
   }
-  public function approvisionnement_get(){
-    $data = $this->model->findAll();
+  public function approvisionnement_get($limit, $offset){
+    $data = $this->model->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all'=> count($data = $this->model->orderBy('id','DESC')->findAll())
     ]);
   }
   public function approvisionnement_create(){

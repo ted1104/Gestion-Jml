@@ -8,8 +8,9 @@ use App\Models\CommandesDetailModel;
 use App\Models\StDepotModel;
 use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\StockModel;
-
 use CodeIgniter\I18n\Time;
+
+
 
 
 class CommandesEntity extends Entity{
@@ -29,7 +30,8 @@ class CommandesEntity extends Entity{
     'logic_article'=>null,
     'logic_somme' =>null,
     'logic_status_histo'=>null,
-    'logic_is' => null
+    'logic_is' => null,
+    'logic_code_facture'=>null
   ];
 
   protected $datamap = [];
@@ -40,6 +42,8 @@ class CommandesEntity extends Entity{
   protected $commandeDetail = null;
   protected $commandesStatusHistoriqueModel = null;
   protected $stockModel = null;
+  protected $encrypter;
+
 
 
   public function __construct(array $data = null){
@@ -50,6 +54,7 @@ class CommandesEntity extends Entity{
     $this->commandeDetail = new CommandesDetailModel();
     $this->commandesStatusHistoriqueModel = new CommandesStatusHistoriqueModel();
     $this->stockModel = new StockModel();
+    $this->encrypter = Services::encrypter();
   }
   public function getStatusVenteId(){
     $db = \Config\Database::connect();
@@ -119,7 +124,14 @@ class CommandesEntity extends Entity{
     return $is;
   }
 
+  public function getLogicCodeFacture(){
+    $plainText = 200;
+    $ciphertext = base64_encode($this->encrypter->encrypt($plainText));
 
+    // Outputs: This is a plain-text message!
+    //echo $this->encrypter->decrypt(base64_decode($ciphertext));
+    return $ciphertext;
+  }
 
 
 

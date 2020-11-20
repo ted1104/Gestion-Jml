@@ -34,6 +34,9 @@
   cursor: pointer;
   font-size: 17px;
 }
+.cursor-normal{
+  cursor: pointer;
+}
 .padding-4{
   padding:5px !important
 }
@@ -46,6 +49,9 @@
 }
 .font-size-2{
   font-size: 10px !important;
+}
+.font-size-big{
+  font-size: 30px !important;
 }
 .margin-top-3{
   margin-top: 3px;
