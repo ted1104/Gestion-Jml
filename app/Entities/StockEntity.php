@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity;
 use Config\Services;
-// use App\Models\StockModel;
+use App\Models\ArticlesModel;
 
 class StockEntity extends Entity{
 
@@ -17,12 +17,17 @@ class StockEntity extends Entity{
   ];
 
   protected $datamap = [];
-  // protected $stockModel = null;
-
+  protected static $articlesModel = null;
   public function __construct(array $data = null){
     parent::__construct($data);
+    self::$articlesModel = new ArticlesModel();
 
   }
+
+  public function getArticlesId(){
+    return self::$articlesModel->Where('id',$this->attributes['articles_id'])->find();
+  }
+
 
 
 

@@ -697,7 +697,18 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-
+    get_stock_depots(){
+    const newurl = this.url+"stock-depot";
+    this.dataToDisplay=[];
+    return axios
+          .get(newurl,{headers: this.tokenConfig})
+          .then(response =>{
+            this.dataToDisplay = response.data.data;
+            console.log('HEllo');
+          }).catch(error =>{
+            console.log(error);
+          })
+        },
 
     _u_create_line_article(){
       const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/search";
@@ -998,20 +1009,13 @@ var vthis = new Vue({
     if(pth[1]=='admin-histo-appro'){
       this.get_historique_approvisionnement();
     }
-
-
-
-
-
-
-
-
-
-
-
-
+    if(pth[1]=='admin-stock'){
+      this.get_stock_depots();
+    }
 
   }
+
+
 
   }
 })

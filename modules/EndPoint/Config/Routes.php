@@ -8,6 +8,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('depot-get-all','TableStatique::depot_get');
   $routes->post('depot-create-one','TableStatique::depot_create');
   $routes->put('depot-get-update/(:num)/update','TableStatique::depot_update/$1');
+  $routes->get('stock-depot','TableStatique::getStockDepot');
 
 
 
@@ -51,6 +52,7 @@ $routes->group('api/v1', function($routes){
   //3. APPROVISIONNEMENT
   $routes->get('approvisionnement-get-all/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2');
   $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
+
 
 
   //4. CAISSE ET ENCAISSEEMENT

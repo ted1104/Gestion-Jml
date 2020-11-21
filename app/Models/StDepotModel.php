@@ -2,6 +2,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
+
 class StDepotModel extends Model{
   protected $table = 'st_depots';
   protected $DBGroup = 'default';
@@ -17,5 +18,6 @@ class StDepotModel extends Model{
               'is_unique' => 'Le nom du dépôt existe déjà'
             ],
   ];
-  protected $returnType ='object';
+  protected $returnType ='App\Entities\StDepotEntity';
+
 }

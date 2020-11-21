@@ -8,6 +8,9 @@ $routes->get('admin-list-achat','Achat::index',['filter' => 'isLoggedIn']);
 $routes->get('admin-list-negotiation-achat','Achat::negotiation_list',['filter' => 'isLoggedIn']);
 $routes->get('admin-list-article','Articles::list',['filter' => 'isLoggedIn']);
 $routes->get('admin-histo-appro','Approv::historique',['filter' => 'isLoggedIn']);
+$routes->get('admin-stock','Approv::stockDepots',['filter' => 'isLoggedIn']);
+
+
 
 
 

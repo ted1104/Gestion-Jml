@@ -34,6 +34,7 @@
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
                       <li><a href="<?=base_url('admin-list-article') ?>">Liste</a></li>
+                      <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
                   </ul>
               </li>
               <li>
@@ -47,10 +48,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-appro') ?>">Créer</a></li>
-                  </ul>
-                  <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-histo-appro') ?>">Historique</a></li>
                   </ul>
+                  
               </li>
             <?php endif; ?>
 

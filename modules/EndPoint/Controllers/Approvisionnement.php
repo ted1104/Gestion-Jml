@@ -105,4 +105,5 @@ class Approvisionnement extends ResourceController {
        'data'=> $data
      ]);
   }
+  
 }

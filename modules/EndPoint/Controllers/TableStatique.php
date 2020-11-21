@@ -86,4 +86,12 @@ class TableStatique extends ResourceController {
       'data'=> $data
     ]);
   }
+  public function getStockDepot(){
+    $data = $this->depotsModel->orderBy('id','DESC')->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+  }
 }
