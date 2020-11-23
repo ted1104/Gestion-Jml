@@ -28,17 +28,17 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>DEPOTS STOCK</h4>
+													 <h4>DEPOTS STOCK {{dataToDisplay.nom}}</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-8 col-lg-8 col-xl-8">
-													<div class="card m-b-30">
+												<div class="col-md-10 col-lg-10 col-xl-10">
+													<div class="card m-b-30 container">
                             <div class="card-header row bg-white">
-                                <h5 class="card-title text-black col-md-6">INFORMATIONS LE STOCK DANS LE DEPOT</h5>
+                                <h5 class="card-title text-black col-md-6">INFORMATIONS DE MON STOCK</h5>
 																<div class="col-md-6">
 																	<div class="row text-center" v-if="CritiqueDataTab.length >0">
 																		<div class="col-md-4" >
@@ -56,19 +56,25 @@
 														<div class="table-responsive card-body">
 															<table class="table">
 																<thead>
-																	<tr class="bg-secondary">
-																		<th scope="col">Dépôt</th>
-																		<th scope="col">Adresse</th>
-																		<th scope="col">Responsable</th>
-																		<th scope="col">Action</th>
+																	<tr>
+																		<th scope="col">code</th>
+																		<th scope="col">Article</th>
+																		<th scope="col">Descritpion</th>
+																		<th scope="col">Qte</th>
+																		<th scope="col">Etat</th>
+
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(dt, index) in dataToDisplay">
-																		<td>{{dt.nom}}</td>
-																		<td>{{dt.adresse}}</td>
-																		<td>-</td>
-																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
+																	<tr v-for="(det,i) in dataToDisplay.logic_article_stock">
+																		<td>{{det.articles_id[0].code_article}}</td>
+																		<td>{{det.articles_id[0].nom_article}}</td>
+																		<td>{{det.articles_id[0].description}}</td>
+																		<td>{{det.qte_stock}}</td>
+																		<td>
+																			<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
+																		</td>
+
 																	</tr>
 																</tbody>
 															</table>
@@ -92,49 +98,7 @@
                         </div>
 												</div>
 
-												<div class="col-md-4 col-lg-4 col-xl-4">
-													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
-														<div class="container">
-															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL ARTICLES {{detailTab.nom}}</h5>
-																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
-															</div>
 
-															<!-- {{checkBoxArticles}} -->
-															<div  class="">
-																<div class="row">
-																	<table class="table">
-																		<thead>
-																			<tr>
-																				<th scope="col">code</th>
-																				<th scope="col">Article</th>
-																				<th scope="col">Qte</th>
-																				<th scope="col">Etat</th>
-
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr v-for="(det,i) in detailTab.logic_article_stock">
-																				<td>{{det.articles_id[0].code_article}}</td>
-																				<td>{{det.articles_id[0].nom_article}}</td>
-																				<td>{{det.qte_stock}}</td>
-																				<td>
-																					<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
-																				</td>
-
-																			</tr>
-																		</tbody>
-																	</table>
-
-
-																</div>
-
-																<hr>
-															</div>
-
-														</div>
-													</div>
-												</div>
 											</div>
                     </div>
                     <!-- End XP Col -->

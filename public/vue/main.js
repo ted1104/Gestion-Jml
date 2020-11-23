@@ -1,5 +1,8 @@
 var vthis = new Vue({
   el : "#app",
+  components: {
+   vuejsDatepicker
+  },
   data () {
     return {
       url : 'http://gestionboutique.local/api/v1/',
@@ -42,6 +45,10 @@ var vthis = new Vue({
       isLoadSaveMainButton : false,
       isLoadSaveMainButtonModal : false,
       isDecaissementExterne : false,
+      isNoReturnedData : false,
+
+      //SHOW BOOLEAN
+      isStockIndicator : false,
 
       //VARIABLE LOAD DATE TABLE
       // isDataTableLoad :false,
@@ -55,6 +62,7 @@ var vthis = new Vue({
       ListFiltreData : [], //POUR MENU LISTE
       checkBoxArticles: [],
       ArticleValidateNego : {},
+      CritiqueDataTab:[],
 
 
       //VARIABLE FORM ADD ARTICLE
@@ -108,6 +116,14 @@ var vthis = new Vue({
       destination:"",
       montant:"",
 
+      //VARIABLE AJOUT DEPOTS
+      nom :"",
+      adresse :"",
+
+      //  VARIABLE
+      montant_max:"",
+      montant_min:"",
+
       //PAGINATION
       pageNumber:0,
       paginationTab:[],
@@ -135,6 +151,7 @@ var vthis = new Vue({
     e.preventDefault();
     const newurl = this.url+"articles-create-one";
     var form = this._u_fx_form_data_art();
+    this.messageError = false;
     return axios
           .post(newurl,form,{headers: this.tokenConfig})
           .then(response =>{
@@ -167,6 +184,7 @@ var vthis = new Vue({
       e.preventDefault();
       const newurl = this.url+"articles-create-price";
       var form = this._u_fx_form_data_art_price();
+      this.messageError = false;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -188,6 +206,8 @@ var vthis = new Vue({
       e.preventDefault();
       const newurl = this.url+"/commandes-create";
       var form = new FormData();
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
       form.append('numero_commande',this.numero_commande);
       form.append('nom_client',this.nom_client);
       form.append('date_vente',this.date_vente);
@@ -204,8 +224,10 @@ var vthis = new Vue({
 			}
       if(this.tabListData.length < 1){
         this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
+        this.isLoadSaveMainButton = false;
         return;
       }
+
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -217,10 +239,12 @@ var vthis = new Vue({
                   this.nom_client = "";
                   this.depots_id = "";
                   this.payer_a = "";
+                  this.isLoadSaveMainButton = false;
                   return;
                 }
                 var err = response.data.message.errors;
                 this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
             })
             .catch(error =>{
               console.log(error);
@@ -264,6 +288,7 @@ var vthis = new Vue({
           this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
           return;
         }
+      this.messageError = false;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -288,11 +313,16 @@ var vthis = new Vue({
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
 
             }).catch(error =>{
               console.log(error);
@@ -304,11 +334,16 @@ var vthis = new Vue({
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
               this._u_fx_get_montant();
             }).catch(error =>{
               console.log(error);
@@ -320,6 +355,7 @@ var vthis = new Vue({
         this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
         return;
       }
+      this.messageError = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -343,12 +379,17 @@ var vthis = new Vue({
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
-              console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              // console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
             })
@@ -359,6 +400,7 @@ var vthis = new Vue({
         this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
         return;
       }
+      this.messageError = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -382,13 +424,17 @@ var vthis = new Vue({
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
               this.montantTotalAllCommandeParTypeVente = response.data.sommesTotalAllCommandes;
-              // alert("HELLO");
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
               console.log(this.ListFiltreData);
             }).catch(error =>{
               console.log(error);
@@ -402,6 +448,7 @@ var vthis = new Vue({
       for(var i=0; i< this.checkBoxArticles.length; i++){
         form.append('idarticle[]', this.checkBoxArticles[i]);
     	}
+      this.messageError = false;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -427,19 +474,21 @@ var vthis = new Vue({
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteTypeNegotiation;
-              // console.log("====DATA=====");
-              // console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
             }).catch(error =>{
               console.log(error);
             })
     },
     add_validate_negotiation(cmd){
-      //console.log(Object.keys(this.ArticleValidateNego).length);
       this.isLoadNego = true;
       console.log(this.ArticleValidateNego);
       const newurl = this.url+"achat-validate-negotiation";
@@ -450,6 +499,7 @@ var vthis = new Vue({
         this.isLoadNego = false;
         return;
       }
+      this.messageError = false;
       for(key in this.ArticleValidateNego){
           form.append('idarticle[]', this.ArticleValidateNego[key][0]);
           form.append('montant[]', this.ArticleValidateNego[key][1]);
@@ -478,6 +528,7 @@ var vthis = new Vue({
       const newurl = this.url+"achat-annuler-tout-negotiation";
       var form = new FormData();
       form.append('idcommande',cmd);
+      this.messageError = false;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -504,6 +555,7 @@ var vthis = new Vue({
       for(var i=0; i< this.checkBoxArticles.length; i++){
         form.append('idarticle[]', this.checkBoxArticles[i]);
     	}
+      this.messageError = false;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -538,6 +590,7 @@ var vthis = new Vue({
     const newurl = this.url+"create-decaissement-solde";
     var form = this._u_fx_form_data_decaissement();
     this.isLoadSaveMainButton = true;
+    this.messageError = false;
     return axios
           .post(newurl,form,{headers: this.tokenConfig})
           .then(response =>{
@@ -569,7 +622,6 @@ var vthis = new Vue({
             console.log(error);
           })
         },
-
     /*Fx POUR LISTE DE DEMANDES DE DECAISSEMENT COTE CAISSIER PRINCIPAL*/
     get_decaisssement_caissier_principale(status=2){
     const newurl = this.url+"get-all-decaissement/"+this.users_id+"/"+status+"/decaisse";
@@ -585,7 +637,6 @@ var vthis = new Vue({
             console.log(error);
           })
         },
-
     /*Fx POUR VALIDATION DECAISSEMENT COTE CAISSIER PRINCIPAL*/
     add_validation_decaissement(){
       const newurl = this.url+"validation-decaissement/"+this.decaissement_id+"/"+this.users_id+"/"+this.password_op+"/validate";
@@ -593,6 +644,7 @@ var vthis = new Vue({
         this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
         return;
       }
+      this.messageError = false;
       this.isLoadSaveMainButtonModal = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
@@ -622,6 +674,7 @@ var vthis = new Vue({
       this._u_fx_config_error_message_bottom("Message",['Le montant est obligatoire'],'alert-danger');
       return;
     }
+    this.messageError = false;
     this.isLoadSaveMainButton = true;
     return axios
           .post(newurl,form,{headers: this.tokenConfig})
@@ -659,7 +712,7 @@ var vthis = new Vue({
       e.preventDefault();
       const newurl = this.url+"articles-update-price";
       var form = this._u_fx_form_data_art_price();
-
+      this.messageError = false;
       this.isLoadSaveMainButtonModal = true;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
@@ -687,10 +740,34 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
               this.currentIndexPage = indexPage;
               if(!this.isPaginationCreated){
                 this._u_fx_generate_pagination(response.data.all);
                 this.isPaginationCreated = true;
+              }
+              // console.log(this.dataToDisplay);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_historique_approvisionnement_by_depot(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"approvisionnement-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset;
+      this.dataToDisplay=[];
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              if(!this.isPaginationCreated){
+                this._u_fx_generate_pagination(response.data.all);
+                this.isPaginationCreated = true;
+
               }
               // console.log(this.dataToDisplay);
             }).catch(error =>{
@@ -704,14 +781,108 @@ var vthis = new Vue({
           .get(newurl,{headers: this.tokenConfig})
           .then(response =>{
             this.dataToDisplay = response.data.data;
-            console.log('HEllo');
+            this.CritiqueDataTab = response.data.critique;
+            console.log(this.CritiqueDataTab[0].montant_min);
           }).catch(error =>{
             console.log(error);
           })
         },
+    add_depot(e){
+    e.preventDefault();
+    this.isLoadSaveMainButton = true;
+    const newurl = this.url+"depot-create-one";
+    var form = this._u_fx_form_data_depot();
+    this.messageError = false;
+    return axios
+          .post(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.get_depot();
+                this.isLoadSaveMainButton = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this.isLoadSaveMainButton = false;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+  },
+    get_depot(){
+      const newurl = this.url+"depot-get-all";
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_stock_depots_by_depot(){
+    const newurl = this.url+"stock-depot-by-depot/"+this.dpot_id+"/depot";
+    this.dataToDisplay=[];
+    return axios
+          .get(newurl,{headers: this.tokenConfig})
+          .then(response =>{
+            this.dataToDisplay = response.data.data;
+            this.CritiqueDataTab = response.data.critique;
+            console.log(this.dataToDisplay);
+          }).catch(error =>{
+            console.log(error);
+          })
+        },
+    get_configuration_etat_critique(){
+      const newurl = this.url+"etat-critique";
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              // console.log(this.dataToDisplay);
+              this.montant_max = this.dataToDisplay[0].montant_max;
+              this.montant_min = this.dataToDisplay[0].montant_min;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    update_etat_critique_config(e){
+    e.preventDefault();
+    this.isLoadSaveMainButton = true;
+    const newurl = this.url+"update-etat-critique";
+    var form = {
+      "montant_min":this.montant_min,
+      "montant_max":this.montant_max
+    }
+    this.messageError = false;
+    return axios
+          .put(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_configuration_etat_critique();
+                this.isLoadSaveMainButton = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this.isLoadSaveMainButton = false;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+  },
+
+
+
 
     _u_create_line_article(){
       const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/search";
+
       if(this.depots_id ==""){
         this._u_fx_config_error_message_bottom("Message",['Veuillez selectionner un dépôt traiteur'],'alert-danger');
         return;
@@ -721,6 +892,7 @@ var vthis = new Vue({
         return;
       }
       this.messageErrorBottom = false;
+      this.isLoadSaveMainButtonModal = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -730,9 +902,11 @@ var vthis = new Vue({
                 this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
                 this.codeArticle = "";
                 this.qte = 0;
+                this.isLoadSaveMainButtonModal = false;
                 return;
               }
               this._u_fx_config_error_message_bottom("Message",[response.data.message.errors],'alert-danger')
+              this.isLoadSaveMainButtonModal = false;
 
               // this._u_fx_field_multi_form_art();
             }).catch(error =>{
@@ -829,7 +1003,7 @@ var vthis = new Vue({
       this.codeIdArticlePrint = index.id;
       this.detailTab = index;
       this.isShow = !this.isShow;
-      // console.log(this.detailTab.logic_article);
+      console.log(this.detailTab);
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
@@ -853,15 +1027,21 @@ var vthis = new Vue({
 
     },
     _u_fx_get_montant(){
-      const newurl = this.url+"caisse-montant/"+this.users_id;
-      return axios
-            .get(newurl,{headers: this.tokenConfig})
-            .then(response =>{
-              this.montantCaisse = response.data.data;
+      // alert(this.users_id);
+      if(this.users_id !=="undefined"){
+        const newurl = this.url+"caisse-montant/"+this.users_id;
+        return axios
+              .get(newurl,{headers: this.tokenConfig})
+              .then(response =>{
+                this.montantCaisse = response.data.data;
 
-            }).catch(error =>{
-              console.log(error);
-            })
+              }).catch(error =>{
+                console.log(error);
+              })
+      }else{
+        console.log('Session expired!');
+      }
+
     },
     _u_fx_bodyClicked(){
       // this.messageError =false;
@@ -934,6 +1114,11 @@ var vthis = new Vue({
       this.destination ="";
       this.montant ="";
 
+      //FORMULAIRE ADD DEPOT
+      this.nom ="";
+      this.adresse ="";
+
+
     },
     _u_fx_form_data_art(){
      var formData = new FormData();
@@ -973,6 +1158,12 @@ var vthis = new Vue({
     formData.append('note',vthis.note);
     return formData;
   },
+    _u_fx_form_data_depot(){
+     var formData = new FormData();
+     formData.append('nom',vthis.nom);
+     formData.append('adresse',vthis.adresse);
+     return formData;
+   },
     _u_fx_to_load_router(){
     const pth = window.location.pathname.split('/');
     if(pth[1] ==='admin-add-article' || pth[1] ==='admin-list-article'){
@@ -983,6 +1174,7 @@ var vthis = new Vue({
     }
     if(pth[1]=='facturier-add-achat' || pth[1]==='caissier-add-achat'){
       this.get_caissiers();
+      this.get_stock_depots();
     }
     if(pth[1]=='facturier-list-achat'){
       this.get_commande_facturier();
@@ -1012,6 +1204,20 @@ var vthis = new Vue({
     if(pth[1]=='admin-stock'){
       this.get_stock_depots();
     }
+    if(pth[1]=='admin-config-depot'){
+      this.get_depot();
+    }
+    if(pth[1]=='admin-config-etat-critique'){
+      this.get_configuration_etat_critique();
+    }
+    if(pth[1]=='magaz-histo-appro'){
+      this.get_historique_approvisionnement_by_depot();
+    }
+    if(pth[1]=='magaz-stock'){
+      this.get_stock_depots_by_depot();
+    }
+
+
 
   }
 

@@ -50,7 +50,19 @@
                       <li><a href="<?=base_url('admin-add-appro') ?>">Créer</a></li>
                       <li><a href="<?=base_url('admin-histo-appro') ?>">Historique</a></li>
                   </ul>
-                  
+
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-table"></i><span>G-Config</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-config-depot') ?>">C-Dépôt</a></li>
+                      <li><a href="<?=base_url('admin-config-etat-critique') ?>">C-Etat Critique</a></li>
+                      <!-- <li><a href="table-datatable.html">C-Dépôt</a></li> -->
+                      <!-- <li><a href="table-editable.html">Editable Table</a></li>
+                      <li><a href="table-rwdtable.html">RWD Table</a></li> -->
+                  </ul>
               </li>
             <?php endif; ?>
 
@@ -139,6 +151,23 @@
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
                   </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Stock</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('magaz-histo-appro') ?>">Historique</a></li>
+                  </ul>
+
               </li>
             <?php endif; ?>
 

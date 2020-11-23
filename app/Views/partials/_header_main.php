@@ -38,10 +38,11 @@
 
                     <li class="list-inline-item">
                         <div class="dropdown xp-notification mr-3">
-                            <a class="dropdown-toggle user-profile-img text-white" href="#" role="button" id="xp-notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="mdi mdi-currency-usd font-18 v-a-m"></i>
-                                <!-- <span class="badge badge-pill badge-danger xp-badge-up">3</span> -->
-                            </a>
+                            <?php if(session('users')['info'][0]->roles_id == 3): ?>
+                              <a class="dropdown-toggle user-profile-img text-white" href="#" role="button" id="xp-notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="mdi mdi-currency-usd font-18 v-a-m"></i>
+                              </a>
+                            <?php endif; ?>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="xp-notification">
                                 <ul class="list-unstyled">

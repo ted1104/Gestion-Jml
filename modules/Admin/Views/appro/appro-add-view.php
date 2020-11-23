@@ -92,7 +92,7 @@
 														<div class="table-responsive">
 															<table class="table">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th scope="col">Code</th>
 																		<th scope="col">Nom</th>
 																		<th scope="col">Qte</th>

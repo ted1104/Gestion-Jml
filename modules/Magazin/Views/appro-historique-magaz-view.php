@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>DEPOTS STOCK</h4>
+													 <h4>MON HISTORIQUE APPROVISIONNEMENT</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -37,47 +37,40 @@
 
 												<div class="col-md-8 col-lg-8 col-xl-8">
 													<div class="card m-b-30">
-                            <div class="card-header row bg-white">
-                                <h5 class="card-title text-black col-md-6">INFORMATIONS LE STOCK DANS LE DEPOT</h5>
-																<div class="col-md-6">
-																	<div class="row text-center" v-if="CritiqueDataTab.length >0">
-																		<div class="col-md-4" >
-																			<span class="badge badge-pill badge-danger">N</span><br> Qte <= {{CritiqueDataTab[0].montant_min}}
-																		</div>
-																		<div class="col-md-4">
-																			<span class="badge badge-pill badge-warning">N</span><br> {{CritiqueDataTab[0].montant_min}} < Qte < {{CritiqueDataTab[0].montant_max}}
-																		</div>
-																		<div class="col-md-4">
-																			<span class="badge badge-pill badge-success">N</span><br> {{CritiqueDataTab[0].montant_max}} <= Qte
-																		</div>
-																	</div>
-																</div>
+                            <div class="card-header bg-white">
+                                <h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT RECUS</h5>
+
                             </div>
 														<div class="table-responsive card-body">
 															<table class="table">
 																<thead>
 																	<tr class="bg-secondary">
-																		<th scope="col">Dépôt</th>
-																		<th scope="col">Adresse</th>
-																		<th scope="col">Responsable</th>
+																		<th scope="col">Date</th>
+																		<th scope="col">Fait par</th>
+																		<th scope="col">Destionation</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
-																		<td>{{dt.nom}}</td>
-																		<td>{{dt.adresse}}</td>
-																		<td>-</td>
+																		<td>{{dt.date_approvisionnement}}</td>
+																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
+																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
 															</table>
-															<!-- LOAD FOR WAITING DATA -->
-															<div class="text-center" v-if="dataToDisplay.length < 1">
+															<!-- LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
+															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
 																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
 															</div>
+															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
+																<img src="<?=base_url() ?>/load/empty.png" >
+																<h6 class="text-danger">Données vide!!</h6>
+															</div>
+															<!-- FIN LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
 															<!-- PAGINATION -->
-															<!-- <nav aria-label="...">
+															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
                                       <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement)">Previous</button>
@@ -87,7 +80,7 @@
                                       <button class="page-link" @click="_u_next_page(get_historique_approvisionnement)">Next</button>
                                     </li>
                                   </ul>
-                                </nav> -->
+                                </nav>
 														</div>
                         </div>
 												</div>
@@ -96,7 +89,7 @@
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL ARTICLES {{detailTab.nom}}</h5>
+																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT {{detailTab.depots_id[0].nom}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 
@@ -109,18 +102,14 @@
 																				<th scope="col">code</th>
 																				<th scope="col">Article</th>
 																				<th scope="col">Qte</th>
-																				<th scope="col">Etat</th>
 
 																			</tr>
 																		</thead>
 																		<tbody>
-																			<tr v-for="(det,i) in detailTab.logic_article_stock">
+																			<tr v-for="(det,i) in detailTab.logic_data_article">
 																				<td>{{det.articles_id[0].code_article}}</td>
 																				<td>{{det.articles_id[0].nom_article}}</td>
-																				<td>{{det.qte_stock}}</td>
-																				<td>
-																					<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
-																				</td>
+																				<td>{{det.qte}}</td>
 
 																			</tr>
 																		</tbody>

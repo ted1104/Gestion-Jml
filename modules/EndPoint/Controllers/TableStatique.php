@@ -3,6 +3,7 @@
 namespace Modules\EndPoint\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\StDepotModel;
+use App\Models\StEtatCritiqueModel;
 use App\Models\ArticlesModel;
 use App\Models\StockModel;
 
@@ -12,12 +13,14 @@ class TableStatique extends ResourceController {
   protected $depotsModel = null;
   protected $articleModel = null;
   protected $stockModel = null;
+  protected static $stetatcritique = null;
 
   public function __construct(){
     helper(['global']);
     $this->depotsModel = new StDepotModel();
     $this->articleModel = new ArticlesModel();
     $this->stockModel = new StockModel();
+    self::$stetatcritique = new StEtatCritiqueModel();
   }
 
   public function depot_get(){
@@ -87,10 +90,61 @@ class TableStatique extends ResourceController {
     ]);
   }
   public function getStockDepot(){
-    $data = $this->depotsModel->orderBy('id','DESC')->findAll();
+    $data = $this->depotsModel->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
+      'data' => $data,
+      'critique' => self::$stetatcritique->findAll()
+    ]);
+  }
+  public function getStockDepotByDepot($idDepot){
+    $data = $this->depotsModel->find($idDepot);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'critique' => self::$stetatcritique->findAll()
+    ]);
+  }
+  public function getEtatCritique(){
+    $data = self::$stetatcritique->find();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+  }
+  public function updateEtatCritique(){
+    $data = $this->request->getJSON();
+    if($data->montant_min < $data->montant_max){
+      if(!self::$stetatcritique->update(1, $data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>self::$stetatcritique->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' =>'Mise à jour avec succès de la configuration',
+          'errors'=>null
+        ];
+        $data = null;
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['Le nombre maximum doit être superieur au nombre minimum']
+      ];
+      $data = null;
+    }
+
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
       'data' => $data,
     ]);
   }

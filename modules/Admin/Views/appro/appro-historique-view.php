@@ -44,7 +44,7 @@
 														<div class="table-responsive card-body">
 															<table class="table">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th scope="col">Date</th>
 																		<th scope="col">Fait par</th>
 																		<th scope="col">Destionation</th>
@@ -60,10 +60,15 @@
 																	</tr>
 																</tbody>
 															</table>
-															<!-- LOAD FOR WAITING DATA -->
-															<div class="text-center" v-if="dataToDisplay.length < 1">
+															<!-- LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
+															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
 																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
 															</div>
+															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
+																<img src="<?=base_url() ?>/load/empty.png" >
+																<h6 class="text-danger">Données vide!!</h6>
+															</div>
+															<!-- FIN LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
 															<!-- PAGINATION -->
 															<nav aria-label="...">
                                   <ul class="pagination">
@@ -84,7 +89,7 @@
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT</h5>
+																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT {{detailTab.depots_id[0].nom}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 

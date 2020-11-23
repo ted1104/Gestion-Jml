@@ -53,7 +53,7 @@
 														<div class="table-responsive card-body">
 															<table class="table">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th scope="col">Facture</th>
 																		<th scope="col">Nom client</th>
 																		<th scope="col">Date</th>
@@ -82,6 +82,13 @@
 																	</tr>
 																</tbody>
 															</table>
+															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
+																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+															</div>
+															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
+																<img src="<?=base_url() ?>/load/empty.png" >
+																<h6 class="text-danger">Données vide!!</h6>
+															</div>
 														</div>
                         </div>
 												</div>

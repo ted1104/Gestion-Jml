@@ -10,4 +10,18 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\achat-list-magaz-view', $data);
   }
+  public function getHistoriqueAppro(){
+    $data = [
+      'titlePage' => 'APPROVISONNEMENT: Dépôt'
+    ];
+    echo view($this->linkMod.'\appro-historique-magaz-view', $data);
+  }
+  public function getStockDepot(){
+    $data = [
+      'titlePage' => 'MON STOCK: Dépôt'
+    ];
+    echo view($this->linkMod.'\depots-stock-magaz-view', $data);
+  }
+
+
 }

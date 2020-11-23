@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>AJOUT D'UN ARTICLE</h4>
+													 <h4>CONFIGURATION DEPOT</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -37,69 +37,51 @@
 												<div class="col-md-4 col-lg-4 col-xl-4 ">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">Information relative à l'article</h5>
+                                <h5 class="card-title text-black">Information relative au dépôt</h5>
                             </div>
                             <div class="card-body">
                                   <div class="form-group">
-                                    <label for="codeArt">Code Article *</label>
-                                    <input type="text" class="form-control" id="codeArt" aria-describedby="codeArt" v-model="code_article">
+                                    <label for="codeArt">Nom *</label>
+                                    <input type="text" class="form-control" id="nom" aria-describedby="nom" v-model="nom">
                                   </div>
                                   <div class="form-group">
-                                    <label for="nom_article">Nom de l'article *</label>
-                                    <input type="text" class="form-control" id="nom_article" v-model="nom_article">
+                                    <label for="nom_article">Adresse </label>
+                                    <input type="text" class="form-control" id="adresse" v-model="adresse">
                                   </div>
-																	<div class="form-group">
-                                    <label for="poids">Poids en Kg</label>
-                                    <input type="text" class="form-control" id="poids" v-model="poids">
-                                  </div>
-																	<div class="form-group">
-                                    <label for="description">Descrition *</label>
-                                    <textarea class="form-control" name="inputTextarea" id="description" rows="3" v-model="description"></textarea>
-                                  </div>
-                              		<button @click="add_article" class="btn btn-primary">Enregistrer</button>
+                              		<button v-if="!isLoadSaveMainButton" @click="add_depot" class="btn btn-primary">Enregistrer</button>
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
 												<div class="col-md-8 col-lg-8 col-xl-8">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-                              <h5 class="card-title text-black">Articles Recemment ajoutés</h5>
+                              <h5 class="card-title text-black">Dépôts Recemment ajoutés</h5>
                           </div>
                           <div class="card-body">
                               <div class="table-responsive">
                                 <table class="table">
                                   <thead>
                                     <tr class="bg-secondary">
-                                      <th scope="col">Code</th>
-                                      <th scope="col">Nom</th>
-																			<th scope="col">Prix Gros</th>
-                                      <th scope="col">Prix Détail</th>
+                                      <th scope="col">Nom dépôt</th>
+                                      <th scope="col">Adresse</th>
                                       <th scope="col">Action</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr v-for="(dt, index) in dataToDisplay">
-                                      <th>{{dt.code_article}}</th>
-                                      <td>{{dt.nom_article}}</td>
-																			<td>
-																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=1)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[0].prix_unitaire+' USD':''}}</span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}}</span>
-																			</td>
-																			<td>
-																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=2)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,2)"><i class='mdi mdi-plus'></i> </button>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[1].prix_unitaire+' USD':''}}</span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}}</span>
-
-																			</td>
-                                      <td><a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i> </a></td>
+                                      <th>{{dt.nom}}</th>
+                                      <td>{{dt.adresse}}</td>
+                                      <td><a href="#"  class='btn btn-round btn-light' ><i class='mdi mdi-circle-edit-outline text-danger'></i> </a></td>
 
                                     </tr>
                                   </tbody>
                                 </table>
+																<!-- LOAD FOR WAITING DATA -->
+																<div class="text-center" v-if="dataToDisplay.length < 1">
+																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																</div>
+																<!-- PAGINATION -->
                               </div>
                           </div>
                         </div>

@@ -8,4 +8,19 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\dashboard-view', $data);
   }
+
+  public function config_depot(){
+    $data = [
+      'titlePage' => 'Configuration: Administration'
+    ];
+    echo view($this->linkMod.'\config\config-depot-view', $data);
+  }
+  public function config_critique(){
+    $data = [
+      'titlePage' => 'Configuration: Administration'
+    ];
+    echo view($this->linkMod.'\config\config-critique-view', $data);
+  }
+
+
 }

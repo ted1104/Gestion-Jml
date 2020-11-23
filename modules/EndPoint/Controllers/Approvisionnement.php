@@ -105,5 +105,13 @@ class Approvisionnement extends ResourceController {
        'data'=> $data
      ]);
   }
-  
+  public function approvisionnement_get_by_depot($idDepot,$limit, $offset){
+    $data = $this->model->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll($limit,$offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'all'=> count($data = $this->model->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll())
+    ]);
+  }
 }

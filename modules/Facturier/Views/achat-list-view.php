@@ -38,6 +38,7 @@
 												<div class="col-md-9 col-lg-9 col-xl-9">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
+															{{stateStatus}}
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}}</h5>
 																<div class="">
 																	<div @click="get_commande_facturier(1)" class="btn badge-warning padding-4">
@@ -52,6 +53,9 @@
 																	<div @click="get_commande_facturier(4)" class="btn btn-danger padding-4">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
+																	<div class="pull-right">
+																		<span>Recherche par date</span><vuejs-datepicker format="yyyy-MM-dd" :clear-button=true></vuejs-datepicker>
+																	</div>
 																</div>
                             </div>
 														<div class="table-responsive card-body">
@@ -89,6 +93,13 @@
 																	</tr>
 																</tbody>
 															</table>
+															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
+																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+															</div>
+															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
+																<img src="<?=base_url() ?>/load/empty.png" >
+																<h6 class="text-danger">Données vide!!</h6>
+															</div>
 														</div>
                         </div>
 												</div>
