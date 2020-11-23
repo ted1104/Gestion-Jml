@@ -39,7 +39,7 @@
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
 															<div class="row">
-																<h5 class="card-title text-black col-md-9">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYER':(stateStatus==3?'LIVREE':'ANNULEE'))}}</h5>
+																<h5 class="card-title text-black col-md-9">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYER':(stateStatus==3?'LIVREE':'ANNULEE'))}} {{dateFilterDisplay}}</h5>
 																<h5 class="col-md-3 text-right text-secondary">{{montantTotalAllCommandeParTypeVente}} USD</h5>
 															</div>
 																<div class="">
@@ -55,6 +55,26 @@
 																	<div @click="get_commande_admin(4)" class="btn btn-danger padding-4">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
+																	<div class="pull-right row">
+																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+																		<button class="btn btn-round btn-info margin-left-4" @click="_u_formatDateFilter(get_commande_admin)"><i class="mdi mdi-search-web"></i> </button>
+																	</div>
+
+																</div>
+																<div class="margin-top-4">
+																	<span>Rechercher par </span>
+
+																	<div class="custom-control custom-radio custom-control-inline">
+																		<input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" value="1" v-model="RadioCheckedValue"checked>
+																		<label class="custom-control-label" for="customRadioInline1">Code Facture</label>
+																	</div>
+																	<div class="custom-control custom-radio custom-control-inline">
+																		<input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input" value="2" v-model="RadioCheckedValue">
+																		<label class="custom-control-label" for="customRadioInline2">Nom client</label>
+																	</div>
+																	<div class="">
+																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataAdmin">
+																	</div>
 																</div>
                             </div>
 														<div class="table-responsive card-body">

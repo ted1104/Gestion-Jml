@@ -27,6 +27,12 @@ var vthis = new Vue({
       styleModal : 'none',
       display : this.styleModal,
       modalTitle :"",
+      dateFilter :null,
+      dateFilterDisplay : "D'AUJORD'HUI",
+
+      //  Recherche
+      dataToSearch : "",
+      RadioCheckedValue : "",
 
       // //DATA FILTRE
       // attente: 0,
@@ -308,11 +314,12 @@ var vthis = new Vue({
             })
     },
     get_commande_facturier(statut=1){
-      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/facturier";
+      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/"+this.dateFilter+"/facturier";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this._u_set_table_title_with_date();
       this.dataToDisplay =[];
       this.isNoReturnedData = false;
       return axios
@@ -329,11 +336,12 @@ var vthis = new Vue({
             })
     },
     get_commande_caissier(statut=1){
-      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/caissier";
+      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/"+this.dateFilter+"/caissier";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this._u_set_table_title_with_date();
       this.dataToDisplay =[];
       this.isNoReturnedData = false;
       return axios
@@ -374,11 +382,12 @@ var vthis = new Vue({
             })
     },
     get_commande_magazinier(statut=2){
-      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/depot";
+      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/depot";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this._u_set_table_title_with_date();
       this.dataToDisplay =[];
       this.isNoReturnedData = false;
       return axios
@@ -419,11 +428,12 @@ var vthis = new Vue({
             })
     },
     get_commande_admin(statut=1){
-      const newurl = this.url+"commandes-all-by-status/"+statut+"/status";
+      const newurl = this.url+"commandes-all-by-status/"+statut+"/"+this.dateFilter+"/status";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
       }
+      this._u_set_table_title_with_date();
       this.dataToDisplay =[];
       this.isNoReturnedData = false;
       return axios
@@ -878,7 +888,113 @@ var vthis = new Vue({
   },
 
 
+    //FONCTION POUR RECHERCHER
+    _searchDataFacturier(){
+      if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.get_commande_facturier(this.stateStatus);
+        return;
+      }
+      const newurl = this.url+"commandes-get-all-search/"+this.users_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/facturier";
+      // this.stateStatus = statut;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      this._u_set_table_title_with_date();
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.ListFiltreData = response.data.nombreVenteType;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
 
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    _searchDataCaissier(){
+      if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.get_commande_caissier(this.stateStatus);
+        return;
+      }
+      const newurl = this.url+"commandes-get-all-search/"+this.users_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/caissier";
+      // this.stateStatus = statut;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      this._u_set_table_title_with_date();
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.ListFiltreData = response.data.nombreVenteType;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    _searchDataByMagazinier(){
+      if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.get_commande_magazinier(this.stateStatus);
+        return;
+      }
+      const newurl = this.url+"commandes-get-by-depot-search/"+this.dpot_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/depot";
+      // this.stateStatus = statut;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      this._u_set_table_title_with_date();
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.ListFiltreData = response.data.nombreVenteType;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    _searchDataAdmin(){
+      if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.get_commande_admin(this.stateStatus);
+        return;
+      }
+      const newurl = this.url+"commandes-all-by-status-search/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/status";
+      // this.stateStatus = statut;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      this._u_set_table_title_with_date();
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.ListFiltreData = response.data.nombreVenteType;
+              this.montantTotalAllCommandeParTypeVente = response.data.sommesTotalAllCommandes;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    //FONCTION POUR RECHERCHER FIN
 
     _u_create_line_article(){
       const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/search";
@@ -1075,6 +1191,20 @@ var vthis = new Vue({
         var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
         callbackFunctionGetList(this.PerPaged,offset,this.currentIndexPage);
       }
+    },
+    _u_formatDateFilter(callbackFunction){
+      var date = new Date(this.dateFilter);
+      var month = date.getMonth()+1;
+      this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
+      callbackFunction(this.stateStatus);
+    },
+    _u_set_table_title_with_date(){
+      if(this.dateFilter !==null){
+        this.dateFilterDisplay = "DU "+this.dateFilter;
+      }else{
+        this.dateFilterDisplay = "D'AUJORD'HUI";
+      }
+      console.log(this.dateFilter);
     },
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){

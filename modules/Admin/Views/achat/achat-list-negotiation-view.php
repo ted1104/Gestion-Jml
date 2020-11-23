@@ -46,7 +46,7 @@
 																	<div @click="get_commande_attente_negotiation(2)" class="btn btn-info padding-4">
                                       Validé(e)s <span class="badge badge-pill badge-light">{{ListFiltreData.negotiation_valide==undefined?'0':ListFiltreData.negotiation_valide}}</span>
                                   </div>
-
+																	
 
 																</div>
                             </div>

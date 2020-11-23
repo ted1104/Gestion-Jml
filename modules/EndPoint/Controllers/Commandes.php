@@ -2,6 +2,7 @@
 
 namespace Modules\EndPoint\Controllers;
 use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\I18n\Time;
 
 use App\Entities\CommandesEntity;
 use App\Models\CommandesDetailModel;
@@ -107,34 +108,45 @@ class Commandes extends ResourceController {
     ]);
   }
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER : DONC LES COMMANDES CREES PAR UN FACTURIER
-  public function commandes_get_user_facturier($iduser,$statutVente){
-    $data = $this->model->orderBy('id','DESC')->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->findAll();
+  public function commandes_get_user_facturier($iduser,$statutVente,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    $data = $this->model->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->commandeByTypeByuser($iduser,'users_id')
+      'ted' =>$dateFilter,
+      'nombreVenteType' => $this->commandeByTypeByuser($iduser,'users_id',$condition)
     ]);
   }
-  //FONCTION COMPLEMENTAIRE DE commandes_get_user_facturier
-  public function commandeByTypeByuser($iduser,$nomchamps){
+  //FONCTION COMPLEMENTAIRE DE POUR GET LE NOMBRES DES COMMANDES SELON LE USER OU TYPE DU USE OU TYPE DE COMMANDES
+  public function commandeByTypeByuser($iduser,$nomchamps,$condition){
     return $array =[
-      'attente'=>count($this->model->orderBy('id','DESC')->Where($nomchamps,$iduser)->Where('status_vente_id',1)->findAll()),
-      'payer'=>count($this->model->orderBy('id','DESC')->Where($nomchamps,$iduser)->Where('status_vente_id',2)->findAll()),
-      'livrer'=>count($this->model->orderBy('id','DESC')->Where($nomchamps,$iduser)->Where('status_vente_id',3)->findAll()),
-      'annuler'=>count($this->model->orderBy('id','DESC')->Where($nomchamps,$iduser)->Where('status_vente_id',4)->findAll()),
+      'attente'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',1)->findAll()),
+      'payer'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',2)->findAll()),
+      'livrer'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',3)->findAll()),
+      'annuler'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',4)->findAll()),
     ];
 
   }
 
   //LISTE DE COMMANDE PAR UTILISATEUR CAISSIER : DONC LES COMMANDES CREES PAR UN FACTURIER
-  public function commandes_get_user_caissier($iduser,$statutVente){
-    $data = $this->model->orderBy('id','DESC')->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->findAll();
+  public function commandes_get_user_caissier($iduser,$statutVente,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->commandeByTypeByuser($iduser,'payer_a')
+      'nombreVenteType' => $this->commandeByTypeByuser($iduser,'payer_a',$condition)
     ]);
   }
 
@@ -219,13 +231,18 @@ class Commandes extends ResourceController {
   }
 
   //FONCTION POUR AFFICHER LES COMMANDES AFFECTER A UN DEPOT SPECIFIQUE
-  public function commandes_get_by_depot($iddepot,$statutVente){
-    $data = $this->model->orderBy('id','DESC')->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->findAll();
+  public function commandes_get_by_depot($iddepot,$statutVente,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->commandeByTypeByuser($iddepot,'depots_id')
+      'nombreVenteType' => $this->commandeByTypeByuser($iddepot,'depots_id',$condition)
     ]);
   }
 
@@ -488,19 +505,126 @@ class Commandes extends ResourceController {
     ]);
   }
 
-  //################ FONCTION ADMINISTRTION #####################
-  //################ FONCTION ADMINISTRTION #####################
-  //################ FONCTION ADMINISTRTION #####################
-  //################ FONCTION ADMINISTRTION #####################
-  //################ FONCTION ADMINISTRTION #####################
-  public function commandes_all_get_by_status($statutVente){
-    $data = $this->model->orderBy('id','DESC')->where('status_vente_id',$statutVente)->findAll();
+  //############LES FONCTIONS DE LA RECHERCHE @@@@@@@@#############
+
+
+
+
+  //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER LORS DE LA RECHERCHE: DONC LES COMMANDES CREES PAR UN FACTURIER
+  public function search_commandes_get_user_facturier($iduser,$statutVente,$dateFilter,$dataToSearch,$type){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    if($type==1){
+      $conditionLike = ['numero_commande'=>$dataToSearch];
+    }else{
+      $conditionLike = ['nom_client'=>$dataToSearch];
+    }
+
+    $data = $this->model->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article'),
-      'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($statutVente)
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'users_id',$condition,$conditionLike)
+    ]);
+  }
+  //FONCTION COMPLEMENTAIRE DE POUR GET LE NOMBRES DES COMMANDES SELON LE USER OU TYPE DU USE OU TYPE DE COMMANDES EN LA RECHERCHE
+  public function SearchcommandeByTypeByuser($iduser,$nomchamps,$condition,$conditionLike){
+    return $array =[
+      'attente'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',1)->like($conditionLike)->findAll()),
+      'payer'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',2)->like($conditionLike)->findAll()),
+      'livrer'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',3)->like($conditionLike)->findAll()),
+      'annuler'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',4)->like($conditionLike)->findAll()),
+    ];
+
+  }
+  //LISTE DE COMMANDE PAR UTILISATEUR CAISSIER : DONC LES COMMANDES CREES PAR UN FACTURIER
+  public function search_commandes_get_user_caissier($iduser,$statutVente,$dateFilter,$dataToSearch,$type){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    if($type==1){
+      $conditionLike = ['numero_commande'=>$dataToSearch];
+    }else{
+      $conditionLike = ['nom_client'=>$dataToSearch];
+    }
+    $data = $this->model->Where($condition)->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'payer_a',$condition,$conditionLike)
+    ]);
+  }
+
+  //FONCTION POUR AFFICHER LES COMMANDES AFFECTER A UN DEPOT SPECIFIQUE RECHERCHE
+  public function search_commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$dataToSearch,$type){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    if($type==1){
+      $conditionLike = ['numero_commande'=>$dataToSearch];
+    }else{
+      $conditionLike = ['nom_client'=>$dataToSearch];
+    }
+    $data = $this->model->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iddepot,'depots_id',$condition,$conditionLike)
+    ]);
+  }
+
+  //FONCTION RECHERECHER ALL COMMANDES ADMINSTRATION
+  public function search_commandes_all_get_by_status($statutVente,$dateFilter,$dataToSearch,$type){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    if($type==1){
+      $conditionLike = ['numero_commande'=>$dataToSearch];
+    }else{
+      $conditionLike = ['nom_client'=>$dataToSearch];
+    }
+    $data = $this->model->Where($condition)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
+      'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($statutVente,$condition,$conditionLike)
+    ]);
+  }
+  //################ FONCTION ADMINISTRTION #####################
+  //################ FONCTION ADMINISTRTION #####################
+  //################ FONCTION ADMINISTRTION #####################
+  //################ FONCTION ADMINISTRTION #####################
+  //################ FONCTION ADMINISTRTION #####################
+
+  //FONCTION POUR AFFICHER LA LISTE DE TOUTES LES OPERATIONS SANS EXCEPTIONS ADMIN
+  public function commandes_all_get_by_status($statutVente,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    $conditionLike =[];
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->where('status_vente_id',$statutVente)->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
+      'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($statutVente,$condition,$conditionLike)
     ]);
   }
 
@@ -521,9 +645,9 @@ class Commandes extends ResourceController {
 // ###########################SUPPLEMENTAIRES###################
 // ###########################SUPPLEMENTAIRES###################
   //FONCTIONS COMPLEMENTAIRE REUSABLE
-  public function sommesMontantTotalParTypeDeVente($idStatusVente){
+  public function sommesMontantTotalParTypeDeVente($idStatusVente,$condition,$conditionLike){
     $sommesTotal = 0;
-    $allVente = $this->model->Where('status_vente_id',$idStatusVente)->findAll();
+    $allVente = $this->model->Where('status_vente_id',$idStatusVente)->Where($condition)->like($conditionLike)->findAll();
     foreach ($allVente as $key) {
       $detail = $this->commandesDetailModel->Where('vente_id',$key->id)->findAll();
       $sommes= 0;

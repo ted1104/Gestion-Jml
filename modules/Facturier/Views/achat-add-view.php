@@ -104,8 +104,6 @@
 																	<div class="form-group col-md-4 col-lg-4 col-xl-4">
 	                                   <button class="btn btn-round btn-success" v-if="!isLoadSaveMainButtonModal" @click="_u_create_line_article"><i class="mdi mdi-plus"></i> </button>
 																		 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
-
-
 	                                </div>
                                 </div>
                             </div>
