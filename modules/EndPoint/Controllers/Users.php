@@ -76,6 +76,7 @@ class Users extends ResourceController {
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'montantAllCaissier' => $this->model->getSommeAllCaissier()
     ]);
   }
   public function users_get_by_profile_is_main($profile,$ismain){

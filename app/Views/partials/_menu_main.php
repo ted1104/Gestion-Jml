@@ -54,6 +54,17 @@
               </li>
               <li>
                   <a href="javaScript:void();">
+                      <i class="mdi mdi-table"></i><span>G-Caisses</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-caisse') ?>">Caissiers</a></li>
+                      <!-- <li><a href="table-datatable.html">Data Table</a></li>
+                      <li><a href="table-editable.html">Editable Table</a></li>
+                      <li><a href="table-rwdtable.html">RWD Table</a></li> -->
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
                       <i class="mdi mdi-table"></i><span>G-Config</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">

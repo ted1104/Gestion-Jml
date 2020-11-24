@@ -211,4 +211,7 @@ class OperationCaisseEncaissement extends ResourceController {
       'data'=> $data
     ]);
   }
+
+
+
 }

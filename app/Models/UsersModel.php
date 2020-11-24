@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use CodeIgniter\Model;
+use App\Models\CaisseModel;
 
 class UsersModel extends Model{
   protected $table = 'g_users';
@@ -32,7 +33,13 @@ class UsersModel extends Model{
 
   ];
   protected $returnType ='App\Entities\UsersEntity';
+  protected $caisseModel = null;
 
+  public function getSommeAllCaissier(){
+    $this->caisseModel = new CaisseModel();
+    $data = $this->caisseModel->selectSum('montant')->find();
+    return round($data[0]->montant,2);
+  }
 
   // LES TRANSACTIONS
   public function beginTrans(){

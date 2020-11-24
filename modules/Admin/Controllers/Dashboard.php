@@ -21,6 +21,14 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\config\config-critique-view', $data);
   }
+  public function getCaissierMontant(){
+    $data = [
+      'titlePage' => 'Caissiers: Administration'
+    ];
+    echo view($this->linkMod.'\users\caissiers-list-view', $data);
+  }
+
+
 
 
 }

@@ -273,7 +273,9 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.caissierList = response.data.data;
-              console.log(this.caissierList);
+
+              this.montantTotalAllCommandeParTypeVente = response.data.montantAllCaissier;
+              console.log(response.data.montantAllCaissier);
             }).catch(error =>{
               console.log(error);
             })
@@ -1346,6 +1348,10 @@ var vthis = new Vue({
     if(pth[1]=='magaz-stock'){
       this.get_stock_depots_by_depot();
     }
+    if(pth[1]=='admin-caisse'){
+      this.get_caissiers();
+    }
+
 
 
 
