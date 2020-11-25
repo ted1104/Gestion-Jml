@@ -33,6 +33,8 @@ var vthis = new Vue({
       //  Recherche
       dataToSearch : "",
       RadioCheckedValue : "",
+      isParameterAdvanced : 0,
+      isResearchPagination : false,
 
       // //DATA FILTRE
       // attente: 0,
@@ -55,6 +57,7 @@ var vthis = new Vue({
 
       //SHOW BOOLEAN
       isStockIndicator : false,
+      showAdvancedSearch : false,
 
       //VARIABLE LOAD DATE TABLE
       // isDataTableLoad :false,
@@ -134,10 +137,9 @@ var vthis = new Vue({
       pageNumber:0,
       paginationTab:[],
       paginationTabIn:{},
-      isPaginationCreated:false,
       currentIndexPage :0,
+      PerPaged:5,
 
-      PerPaged:5
 
 
 
@@ -506,6 +508,13 @@ var vthis = new Vue({
       const newurl = this.url+"achat-validate-negotiation";
       var form = new FormData();
       form.append('idcommande',cmd);
+      form.append('idcaissier',this.payer_a);
+      if(this.payer_a ==""){
+        this._u_fx_config_error_message_bottom("Message",['Vous devez choisir le caissier'],'alert-danger');
+        this.isLoadNego = false;
+        return;
+      }
+
       if(Object.keys(this.ArticleValidateNego).length < 1){
         this._u_fx_config_error_message_bottom("Message",['Veuillez prédefinir le montant de reduction'],'alert-danger');
         this.isLoadNego = false;
@@ -524,13 +533,14 @@ var vthis = new Vue({
                 this.isLoadNego = false;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
                 this.get_commande_attente_negotiation(2);
-                // this._u_close_mod_form();
+                this.payer_a ="";
                 this.ArticleValidateNego = [];
                 return;
               }
               var err = response.data.message.errors;
               this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
               this.isLoadNego = false;
+
             }).catch(error =>{
               console.log(error);
             })
@@ -643,8 +653,7 @@ var vthis = new Vue({
             this.isDecaissementExterne = false;
             this.dataToDisplay = response.data.data;
 
-            // console.log(this.dataToDisplay);
-            // alert('here');
+            this._u_fx_get_montant();
           }).catch(error =>{
             console.log(error);
           })
@@ -715,7 +724,7 @@ var vthis = new Vue({
             .then(response =>{
               this.isDecaissementExterne = true;
               this.tabListData = response.data.data;
-              console.log(this.tabListData);
+              this._u_fx_get_montant();
             }).catch(error =>{
               console.log(error);
             })
@@ -756,10 +765,9 @@ var vthis = new Vue({
                 this.isNoReturnedData = true;
               }
               this.currentIndexPage = indexPage;
-              if(!this.isPaginationCreated){
-                this._u_fx_generate_pagination(response.data.all);
-                this.isPaginationCreated = true;
-              }
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+
               // console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
@@ -776,12 +784,8 @@ var vthis = new Vue({
                 this.isNoReturnedData = true;
               }
               this.currentIndexPage = indexPage;
-              if(!this.isPaginationCreated){
-                this._u_fx_generate_pagination(response.data.all);
-                this.isPaginationCreated = true;
-
-              }
-              // console.log(this.dataToDisplay);
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
             }).catch(error =>{
               console.log(error);
             })
@@ -891,13 +895,25 @@ var vthis = new Vue({
 
 
     //FONCTION POUR RECHERCHER
-    _searchDataFacturier(){
+    _searchDataFacturier(limit=this.PerPaged,offset=0, indexPage=0){
       if(this.dataToSearch =="" || this.RadioCheckedValue==""){
         this.get_commande_facturier(this.stateStatus);
         return;
       }
-      const newurl = this.url+"commandes-get-all-search/"+this.users_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/facturier";
-      // this.stateStatus = statut;
+      // var isParameterAdvanced = 0; //On a pas coch
+      if(this.checkBoxArticles.length ==2){
+        this.isParameterAdvanced = 3;// POUR TOUS LES PARAMETRES
+      }
+      if(this.checkBoxArticles.length ==1){
+        this.isParameterAdvanced = this.checkBoxArticles[0];
+      }
+      if(this.checkBoxArticles.length ==0){
+        this.isParameterAdvanced = 0;// POUR TOUS LES PARAMETRES
+      }
+      if(this.dateFilter !==null){
+        this._u_formatOnlyDate(this.dateFilter);
+      }
+      const newurl = this.url+"commandes-get-all-search/"+this.users_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/"+this.isParameterAdvanced+"/"+this.PerPaged+"/"+offset+"/facturier";
       if(this.isShow){
         this.isShow = !this.isShow;
       }
@@ -909,6 +925,12 @@ var vthis = new Vue({
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
+              this.currentIndexPage = indexPage;
+              var total = this._u_fx_calculateTotal_Record_Recherche();
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(total);
+              this.isResearchPagination = true;
+
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
@@ -996,8 +1018,30 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    //FONCTION POUR RECHERCHER FIN
 
+
+    _u_fx_calculateTotal_Record_Recherche(){
+      var total = 0;
+      if(this.isParameterAdvanced==3 || this.isParameterAdvanced==2){
+        if(this.stateStatus==1){
+          total = parseInt(this.ListFiltreData.attente);
+        }else{
+          if(this.stateStatus==2){
+            total = parseInt(this.ListFiltreData.payer);
+          }else{
+            if(this.stateStatus==3){
+              total = parseInt(this.ListFiltreData.livrer);
+            }else{
+              total = parseInt(this.ListFiltreData.annuler);
+            }
+          }
+        }
+      }else{
+        total = parseInt(this.ListFiltreData.attente)+parseInt(this.ListFiltreData.payer)+parseInt(this.ListFiltreData.livrer)+parseInt(this.ListFiltreData.annuler);
+      }
+      return total;
+    },
+    //FONCTION POUR RECHERCHER FIN
     _u_create_line_article(){
       const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/search";
 
@@ -1200,6 +1244,11 @@ var vthis = new Vue({
       this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
       callbackFunction(this.stateStatus);
     },
+    _u_formatOnlyDate(date){
+      var date = new Date(this.dateFilter);
+      var month = date.getMonth()+1;
+      this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
+    },
     _u_set_table_title_with_date(){
       if(this.dateFilter !==null){
         this.dateFilterDisplay = "DU "+this.dateFilter;
@@ -1280,6 +1329,7 @@ var vthis = new Vue({
      formData.append('users_id_dest',vthis.caissier);
      formData.append('montant',vthis.montant_decaisse);
      formData.append('note',vthis.note);
+     formData.append('status_operation',0);
      return formData;
    },
     _u_fx_form_data_decaissement_externe(){
@@ -1322,6 +1372,7 @@ var vthis = new Vue({
     }
     if(pth[1]=='admin-list-negotiation-achat'){
       this.get_commande_attente_negotiation();
+      this.get_caissier_main();
     }
     if(pth[1]=='caissier-add-decaissement'){
       this.get_caissier_main();

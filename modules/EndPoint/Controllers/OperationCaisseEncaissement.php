@@ -45,9 +45,9 @@ class OperationCaisseEncaissement extends ResourceController {
 
   //LISTE DE TOUTES LES OPERATIONS DE DECAISSEMENT EN ATTENTE
   public function getDecaissementCaissierPrincipal($idCaissierMain,$idStatus){
-    $data = $this->decaissementModel->Where('users_id_dest',$idCaissierMain)->Where('status_operation',$idStatus)->findAll();
+    $data = $this->decaissementModel->Where('users_id_dest',$idCaissierMain)->Where('status_operation',$idStatus)->orderBy('id','DESC')->findAll();
     if($idStatus !==0 && $idStatus !==1 ):
-        $data = $this->decaissementModel->Where('users_id_dest',$idCaissierMain)->findAll();
+        $data = $this->decaissementModel->Where('users_id_dest',$idCaissierMain)->orderBy('id','DESC')->findAll();
     endif;
     return $this->respond([
       'status' => 200,
@@ -78,7 +78,8 @@ class OperationCaisseEncaissement extends ResourceController {
     return $this->respond([
       'status' => $status,
       'message' =>$message,
-      'data'=> $data
+      'data'=> $data,
+
     ]);
   }
 

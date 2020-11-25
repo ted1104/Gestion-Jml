@@ -68,10 +68,10 @@
                           <div class="card-header bg-white">
                               <h5 class="card-title text-black">{{isDecaissementExterne?'Décaissement Externe':'Décaissement Interne'}}</h5>
 															<div class="">
-																<div @click="get_decaisssement_caissier_principale(2)" class="btn badge-warning padding-4">
+																<div @click="get_decaisssement_caissier_principale(2)" class="btn badge-warning padding-4" :id="!isDecaissementExterne?'border-menu':''">
 																		Decaissement Interne
 																</div>
-																<div @click="get_decaisssement_externe" class="btn btn-info padding-4">
+																<div @click="get_decaisssement_externe" class="btn btn-info padding-4" :id="isDecaissementExterne?'border-menu':''">
 																		Decaissement Externe
 																</div>
 															</div>

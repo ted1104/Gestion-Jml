@@ -40,14 +40,19 @@
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS NEGOCIE(S) {{stateStatus==1?'EN ATTENTE':'VALIDEE(S)'}}</h5>
 																<div class="">
-																	<div @click="get_commande_attente_negotiation(1)" class="btn badge-warning padding-4">
+																	<div @click="get_commande_attente_negotiation(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
                                       En attente <span class="badge badge-pill badge-light">{{ListFiltreData.negotiation_attente==undefined?'0':ListFiltreData.negotiation_attente}}</span>
                                   </div>
-																	<div @click="get_commande_attente_negotiation(2)" class="btn btn-info padding-4">
+																	<div @click="get_commande_attente_negotiation(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
                                       Validé(e)s <span class="badge badge-pill badge-light">{{ListFiltreData.negotiation_valide==undefined?'0':ListFiltreData.negotiation_valide}}</span>
                                   </div>
-																	
-
+																	<div class="form-group col-md-4 pull-right">
+                                    <!-- <label for="payer_a">Caissier Traiteur</label> -->
+																		<select class="form-control" v-model="payer_a">
+																			<option value="">--seletionner Caissier--</option>
+																			<option v-for="(c, i) in caissierList" :value="c.id">{{c.nom+' '+c.prenom}}</option>
+																		</select>
+                                  </div>
 																</div>
                             </div>
 														<div class="table-responsive card-body">

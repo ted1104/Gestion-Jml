@@ -367,9 +367,11 @@ class Commandes extends ResourceController {
   public function commande_validate_negotiation(){
     $idcommande = $this->request->getPost('idcommande');
     $idarticle = $this->request->getPost('idarticle');
+    $idcaissier = $this->request->getPost('idcaissier');
     $montantNegocier = $this->request->getPost('montant');
+    $up = $this->model->update(['id'=>$idcommande],['is_negotiate'=>2,'payer_a'=>$idcaissier]);
     for ($i=0; $i < count($idarticle); $i++) {
-      if($this->model->update(['id'=>$idcommande],['is_negotiate'=>2])){
+      if($up){
         $condition = [
           'vente_id' =>$idcommande,
           'articles_id'=>$idarticle[$i]
@@ -508,36 +510,61 @@ class Commandes extends ResourceController {
   //############LES FONCTIONS DE LA RECHERCHE @@@@@@@@#############
 
 
-
-
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER LORS DE LA RECHERCHE: DONC LES COMMANDES CREES PAR UN FACTURIER
-  public function search_commandes_get_user_facturier($iduser,$statutVente,$dateFilter,$dataToSearch,$type){
-    $d = Time::today();
-    if($dateFilter == "null"){
-      $dateFilter = $d;
+  public function search_commandes_get_user_facturier($iduser,$statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){
+    //$isParameterAdvanced : if 0 donc pas de filtre de date ni de status, si 3 il y a filtre de date et de status, si 1 filtre de date , si 2 filtre de status
+
+    $conditionDate =[];
+    $conditionStatus =[];
+    if($isParameterAdvanced==3)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+      $conditionStatus = ['status_vente_id'=>$statutVente];
     }
-    $condition =['date_vente'=> $dateFilter];
+    if($isParameterAdvanced==1)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+    }
+    if($isParameterAdvanced==2)
+    {
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+
     if($type==1){
       $conditionLike = ['numero_commande'=>$dataToSearch];
     }else{
       $conditionLike = ['nom_client'=>$dataToSearch];
     }
-
-    $data = $this->model->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    $data = $this->model->Where($conditionDate)->Where('users_id',$iduser)->where($conditionStatus)->like($conditionLike)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'users_id',$condition,$conditionLike)
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'users_id',$conditionDate,$conditionLike),
+      'isparam' => $isParameterAdvanced
     ]);
   }
   //FONCTION COMPLEMENTAIRE DE POUR GET LE NOMBRES DES COMMANDES SELON LE USER OU TYPE DU USE OU TYPE DE COMMANDES EN LA RECHERCHE
-  public function SearchcommandeByTypeByuser($iduser,$nomchamps,$condition,$conditionLike){
+  public function SearchcommandeByTypeByuser($iduser,$nomchamps,$conditionDate,$conditionLike){
+    // $conditionAttente =[];
+    // $conditionPayer =[];
+    // $conditionLivrer =[];
+    // $conditionAnnuler =[];
+    // if(count($conditionStatus) > 0){
+      $conditionAttente = ['status_vente_id'=>1];
+      $conditionPayer = ['status_vente_id'=>2];
+      $conditionLivrer = ['status_vente_id'=>3];
+      $conditionAnnuler = ['status_vente_id'=>4];
+    //}
     return $array =[
-      'attente'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',1)->like($conditionLike)->findAll()),
-      'payer'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',2)->like($conditionLike)->findAll()),
-      'livrer'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',3)->like($conditionLike)->findAll()),
-      'annuler'=>count($this->model->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',4)->like($conditionLike)->findAll()),
+      'attente'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAttente)->like($conditionLike)->findAll()),
+      'payer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionPayer)->like($conditionLike)->findAll()),
+      'livrer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionLivrer)->like($conditionLike)->findAll()),
+      'annuler'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAnnuler)->like($conditionLike)->findAll()),
     ];
 
   }

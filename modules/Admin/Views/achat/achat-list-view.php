@@ -43,16 +43,16 @@
 																<h5 class="col-md-3 text-right text-secondary">{{montantTotalAllCommandeParTypeVente}} USD</h5>
 															</div>
 																<div class="">
-																	<div @click="get_commande_admin(1)" class="btn badge-warning padding-4">
+																	<div @click="get_commande_admin(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
                                       En attente <span class="badge badge-pill badge-light">{{ListFiltreData.attente==undefined?'0':ListFiltreData.attente}}</span>
                                   </div>
-																	<div @click="get_commande_admin(2)" class="btn btn-info padding-4">
+																	<div @click="get_commande_admin(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
                                       Payée <span class="badge badge-pill badge-light">{{ListFiltreData.payer==undefined?'0':ListFiltreData.payer}}</span>
                                   </div>
-																	<div @click="get_commande_admin(3)" class="btn btn-success padding-4">
+																	<div @click="get_commande_admin(3)" class="btn btn-success padding-4" :id="stateStatus==3?'border-menu':''">
                                       Livrée <span class="badge badge-pill badge-light">{{ListFiltreData.livrer==undefined?'0':ListFiltreData.livrer}}</span>
                                   </div>
-																	<div @click="get_commande_admin(4)" class="btn btn-danger padding-4">
+																	<div @click="get_commande_admin(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
 																	<div class="pull-right row">
