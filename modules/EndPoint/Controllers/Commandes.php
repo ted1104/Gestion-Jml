@@ -545,7 +545,7 @@ class Commandes extends ResourceController {
       'message' => 'success',
       'data' => $data,
       'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'users_id',$conditionDate,$conditionLike),
-      'isparam' => $isParameterAdvanced
+      // 'isparam' => $isParameterAdvanced
     ]);
   }
   //FONCTION COMPLEMENTAIRE DE POUR GET LE NOMBRES DES COMMANDES SELON LE USER OU TYPE DU USE OU TYPE DE COMMANDES EN LA RECHERCHE
@@ -569,67 +569,126 @@ class Commandes extends ResourceController {
 
   }
   //LISTE DE COMMANDE PAR UTILISATEUR CAISSIER : DONC LES COMMANDES CREES PAR UN FACTURIER
-  public function search_commandes_get_user_caissier($iduser,$statutVente,$dateFilter,$dataToSearch,$type){
-    $d = Time::today();
-    if($dateFilter == "null"){
-      $dateFilter = $d;
+  public function search_commandes_get_user_caissier($iduser,$statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){
+    $conditionDate =[];
+    $conditionStatus =[];
+    if($isParameterAdvanced==3)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+      $conditionStatus = ['status_vente_id'=>$statutVente];
     }
-    $condition =['date_vente'=> $dateFilter];
+    if($isParameterAdvanced==1)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+    }
+    if($isParameterAdvanced==2)
+    {
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+
     if($type==1){
       $conditionLike = ['numero_commande'=>$dataToSearch];
     }else{
       $conditionLike = ['nom_client'=>$dataToSearch];
     }
-    $data = $this->model->Where($condition)->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    $data = $this->model->Where($conditionDate)->Where('payer_a',$iduser)->where($conditionStatus)->like($conditionLike)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'payer_a',$condition,$conditionLike)
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iduser,'payer_a',$conditionDate,$conditionLike)
     ]);
   }
 
   //FONCTION POUR AFFICHER LES COMMANDES AFFECTER A UN DEPOT SPECIFIQUE RECHERCHE
-  public function search_commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$dataToSearch,$type){
-    $d = Time::today();
-    if($dateFilter == "null"){
-      $dateFilter = $d;
+  public function search_commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){
+    $conditionDate =[];
+    $conditionStatus =[];
+    if($isParameterAdvanced==3)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+      $conditionStatus = ['status_vente_id'=>$statutVente];
     }
-    $condition =['date_vente'=> $dateFilter];
+    if($isParameterAdvanced==1)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+    }
+    if($isParameterAdvanced==2)
+    {
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+
     if($type==1){
       $conditionLike = ['numero_commande'=>$dataToSearch];
     }else{
       $conditionLike = ['nom_client'=>$dataToSearch];
     }
-    $data = $this->model->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    $data = $this->model->Where($conditionDate)->Where('depots_id',$iddepot)->where($conditionStatus)->like($conditionLike)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iddepot,'depots_id',$condition,$conditionLike)
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser($iddepot,'depots_id',$conditionDate,$conditionLike)
     ]);
   }
 
   //FONCTION RECHERECHER ALL COMMANDES ADMINSTRATION
-  public function search_commandes_all_get_by_status($statutVente,$dateFilter,$dataToSearch,$type){
-    $d = Time::today();
-    if($dateFilter == "null"){
-      $dateFilter = $d;
+  public function search_commandes_all_get_by_status($statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){
+    $conditionDate =[];
+    $conditionStatus =[];
+    if($isParameterAdvanced==3)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+      $conditionStatus = ['status_vente_id'=>$statutVente];
     }
-    $condition =['date_vente'=> $dateFilter];
+    if($isParameterAdvanced==1)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+    }
+    if($isParameterAdvanced==2)
+    {
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+
     if($type==1){
       $conditionLike = ['numero_commande'=>$dataToSearch];
     }else{
       $conditionLike = ['nom_client'=>$dataToSearch];
     }
-    $data = $this->model->Where($condition)->where('status_vente_id',$statutVente)->like($conditionLike)->orderBy('id','DESC')->findAll();
+    $data = $this->model->Where($conditionDate)->where($conditionStatus)->like($conditionLike)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
-      'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($statutVente,$condition,$conditionLike)
+      'nombreVenteType' => $this->SearchcommandeByTypeByuser(null,'logic_article',$conditionDate,$conditionLike),
+      'sommesTotalAllCommandes' =>$this->searchSommesMontantTotalParTypeDeVente($conditionStatus,$conditionDate,$conditionLike)
     ]);
+  }
+  public function searchSommesMontantTotalParTypeDeVente($conditionStatus,$conditionDate,$conditionLike){
+    $sommesTotal = 0;
+    $allVente = $this->model->Where($conditionStatus)->Where($conditionDate)->like($conditionLike)->findAll();
+    foreach ($allVente as $key) {
+      $detail = $this->commandesDetailModel->Where('vente_id',$key->id)->findAll();
+      $sommes= 0;
+      foreach ($detail as $key => $value) {
+        $montant = ($value->is_negotiate == 0 || $value->is_negotiate == 1) ?$value->qte_vendue * $value->prix_unitaire:$value->qte_vendue * $value->prix_negociation;
+        $sommes +=$montant;
+      }
+      $sommesTotal+=$sommes;
+    }
+    return round($sommesTotal,2);
   }
   //################ FONCTION ADMINISTRTION #####################
   //################ FONCTION ADMINISTRTION #####################

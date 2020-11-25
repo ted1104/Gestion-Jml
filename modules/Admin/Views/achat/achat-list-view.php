@@ -55,24 +55,38 @@
 																	<div @click="get_commande_admin(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
+																	<div class="padding-4 btn">
+																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
+																	</div>
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
 																		<button class="btn btn-round btn-info margin-left-4" @click="_u_formatDateFilter(get_commande_admin)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 
 																</div>
-																<div class="margin-top-4">
-																	<span>Rechercher par </span>
+																<div v-if="showAdvancedSearch" class="margin-top-4 u-animation-FromTop">
+																	<span>Les Options de recherche </span><br>
+																	<!-- {{checkBoxArticles}} -->
+																	<div class="margin-top-7">
+																		<div class="custom-control custom-radio custom-control-inline">
+																			<input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" value="1" v-model="RadioCheckedValue"checked>
+																			<label class="custom-control-label" for="customRadioInline1">Code Facture</label>
+																		</div>
+																		<div class="custom-control custom-radio custom-control-inline">
+																			<input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input" value="2" v-model="RadioCheckedValue">
+																			<label class="custom-control-label" for="customRadioInline2">Nom client</label>
+																		</div>
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="checkBoxArticles" id="1" class="custom-control-input" value="1" v-model="checkBoxArticles">
+																			<label class="custom-control-label" for="1">Date</label>
+																		</div>
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="checkBoxArticles" id="2" class="custom-control-input" value="2" v-model="checkBoxArticles">
+																			<label class="custom-control-label" for="2">Status</label>
+																		</div>
+																	</div>
 
-																	<div class="custom-control custom-radio custom-control-inline">
-																		<input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" value="1" v-model="RadioCheckedValue"checked>
-																		<label class="custom-control-label" for="customRadioInline1">Code Facture</label>
-																	</div>
-																	<div class="custom-control custom-radio custom-control-inline">
-																		<input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input" value="2" v-model="RadioCheckedValue">
-																		<label class="custom-control-label" for="customRadioInline2">Nom client</label>
-																	</div>
-																	<div class="">
+																	<div class="margin-top-7">
 																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataAdmin">
 																	</div>
 																</div>
@@ -128,6 +142,19 @@
 																<img src="<?=base_url() ?>/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
+															<!-- PAGINATION LORS DE LA RECHERRCHE -->
+															<nav aria-label="..." v-if="isResearchPagination">
+																	<ul class="pagination">
+																		<li class="page-item">
+																			<button class="page-link" @click="_u_previous_page(_searchDataAdmin)">Previous</button>
+																		</li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="_searchDataAdmin(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li class="page-item">
+																			<button class="page-link" @click="_u_next_page(_searchDataAdmin)">Next</button>
+																		</li>
+																	</ul>
+																</nav>
+																<!-- FIN PAGINATION LORS DE LA RECHERRCHE -->
 														</div>
                         </div>
 												</div>

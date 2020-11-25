@@ -63,7 +63,7 @@
 																</div>
 																<div v-if="showAdvancedSearch" class="margin-top-4 u-animation-FromTop">
 																	<span>Les Options de recherche </span><br>
-																	{{checkBoxArticles}}
+																	<!-- {{checkBoxArticles}} -->
 																	<div class="margin-top-7">
 																		<div class="custom-control custom-radio custom-control-inline">
 																			<input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" value="1" v-model="RadioCheckedValue"checked>

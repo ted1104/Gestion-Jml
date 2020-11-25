@@ -897,6 +897,7 @@ var vthis = new Vue({
     //FONCTION POUR RECHERCHER
     _searchDataFacturier(limit=this.PerPaged,offset=0, indexPage=0){
       if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.isResearchPagination = false;
         this.get_commande_facturier(this.stateStatus);
         return;
       }
@@ -939,13 +940,26 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    _searchDataCaissier(){
+    _searchDataCaissier(limit=this.PerPaged,offset=0, indexPage=0){
       if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.isResearchPagination = false;
         this.get_commande_caissier(this.stateStatus);
         return;
       }
-      const newurl = this.url+"commandes-get-all-search/"+this.users_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/caissier";
-      // this.stateStatus = statut;
+      // var isParameterAdvanced = 0; //On a pas coch
+      if(this.checkBoxArticles.length ==2){
+        this.isParameterAdvanced = 3;// POUR TOUS LES PARAMETRES
+      }
+      if(this.checkBoxArticles.length ==1){
+        this.isParameterAdvanced = this.checkBoxArticles[0];
+      }
+      if(this.checkBoxArticles.length ==0){
+        this.isParameterAdvanced = 0;// POUR TOUS LES PARAMETRES
+      }
+      if(this.dateFilter !==null){
+        this._u_formatOnlyDate(this.dateFilter);
+      }
+      const newurl = this.url+"commandes-get-all-search/"+this.users_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/"+this.isParameterAdvanced+"/"+this.PerPaged+"/"+offset+"/caissier";
       if(this.isShow){
         this.isShow = !this.isShow;
       }
@@ -957,6 +971,12 @@ var vthis = new Vue({
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
+              this.currentIndexPage = indexPage;
+              var total = this._u_fx_calculateTotal_Record_Recherche();
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(total);
+              this.isResearchPagination = true;
+
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
@@ -965,13 +985,26 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    _searchDataByMagazinier(){
+    _searchDataByMagazinier(limit=this.PerPaged,offset=0, indexPage=0){
       if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.isResearchPagination = false;
         this.get_commande_magazinier(this.stateStatus);
         return;
       }
-      const newurl = this.url+"commandes-get-by-depot-search/"+this.dpot_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/depot";
-      // this.stateStatus = statut;
+      // var isParameterAdvanced = 0; //On a pas coch
+      if(this.checkBoxArticles.length ==2){
+        this.isParameterAdvanced = 3;// POUR TOUS LES PARAMETRES
+      }
+      if(this.checkBoxArticles.length ==1){
+        this.isParameterAdvanced = this.checkBoxArticles[0];
+      }
+      if(this.checkBoxArticles.length ==0){
+        this.isParameterAdvanced = 0;// POUR TOUS LES PARAMETRES
+      }
+      if(this.dateFilter !==null){
+        this._u_formatOnlyDate(this.dateFilter);
+      }
+      const newurl = this.url+"commandes-get-by-depot-search/"+this.dpot_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/"+this.isParameterAdvanced+"/"+this.PerPaged+"/"+offset+"/depot";
       if(this.isShow){
         this.isShow = !this.isShow;
       }
@@ -983,6 +1016,12 @@ var vthis = new Vue({
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
+              this.currentIndexPage = indexPage;
+              var total = this._u_fx_calculateTotal_Record_Recherche();
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(total);
+              this.isResearchPagination = true;
+
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
@@ -991,13 +1030,26 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    _searchDataAdmin(){
+    _searchDataAdmin(limit=this.PerPaged,offset=0, indexPage=0){
       if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.isResearchPagination = false;
         this.get_commande_admin(this.stateStatus);
         return;
       }
-      const newurl = this.url+"commandes-all-by-status-search/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/status";
-      // this.stateStatus = statut;
+      // var isParameterAdvanced = 0; //On a pas coch
+      if(this.checkBoxArticles.length ==2){
+        this.isParameterAdvanced = 3;// POUR TOUS LES PARAMETRES
+      }
+      if(this.checkBoxArticles.length ==1){
+        this.isParameterAdvanced = this.checkBoxArticles[0];
+      }
+      if(this.checkBoxArticles.length ==0){
+        this.isParameterAdvanced = 0;// POUR TOUS LES PARAMETRES
+      }
+      if(this.dateFilter !==null){
+        this._u_formatOnlyDate(this.dateFilter);
+      }
+      const newurl = this.url+"commandes-all-by-status-search/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/"+this.isParameterAdvanced+"/"+this.PerPaged+"/"+offset+"/status";
       if(this.isShow){
         this.isShow = !this.isShow;
       }
@@ -1010,6 +1062,12 @@ var vthis = new Vue({
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
               this.montantTotalAllCommandeParTypeVente = response.data.sommesTotalAllCommandes;
+              this.currentIndexPage = indexPage;
+              var total = this._u_fx_calculateTotal_Record_Recherche();
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(total);
+              this.isResearchPagination = true;
+
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }

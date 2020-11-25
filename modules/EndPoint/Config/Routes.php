@@ -53,9 +53,9 @@ $routes->group('api/v1', function($routes){
   $routes->post('achat-annuler-selection-negotiation','Commandes::commande_annuler_selectionner_validate_negotiation');
 
   $routes->get('commandes-get-all-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/facturier','Commandes::search_commandes_get_user_facturier/$1/$2/$3/$4/$5/$6/$7/$8');
-  $routes->get('commandes-get-all-search/(:num)/(:num)/(:any)/(:any)/(:num)/caissier','Commandes::search_commandes_get_user_caissier/$1/$2/$3/$4/$5');
-  $routes->get('commandes-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/depot','Commandes::search_commandes_get_by_depot/$1/$2/$3/$4/$5');
-  $routes->get('commandes-all-by-status-search/(:num)/(:any)/(:any)/(:num)/status','Commandes::search_commandes_all_get_by_status/$1/$2/$3/$4');
+  $routes->get('commandes-get-all-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/caissier','Commandes::search_commandes_get_user_caissier/$1/$2/$3/$4/$5/$6/$7/$8');
+  $routes->get('commandes-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
+  $routes->get('commandes-all-by-status-search/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/status','Commandes::search_commandes_all_get_by_status/$1/$2/$3/$4/$5/$6/$7');
 
 
 
