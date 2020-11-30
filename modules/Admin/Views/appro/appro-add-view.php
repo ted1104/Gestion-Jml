@@ -52,7 +52,8 @@
                                     <label for="date_approvisionnement">Date</label>
                                     <input type="text" class="form-control" id="date_approvisionnement" v-model="date_approvisionnement" disabled>
                                   </div>
-                                	<button @click="add_approvision" class="btn btn-primary">Enregistrer</button>
+                                	<button v-if="!isLoadSaveMainButton" @click="add_approvision" class="btn btn-primary">Enregistrer</button>
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>

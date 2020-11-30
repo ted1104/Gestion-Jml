@@ -33,13 +33,13 @@
 									 </div>
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
-											<div class="row">
-
-												<div class="col-md-8 col-lg-8 col-xl-8">
+											<div class="row ">
+												<div class="col-md-7 col-lg-7 col-xl-7">
 													<div class="card m-b-30">
-                            <div class="card-header row bg-white">
-                                <h5 class="card-title text-black col-md-6">INFORMATIONS LE STOCK DANS LE DEPOT</h5>
-																<div class="col-md-6">
+                            <div class="card-header bg-white">
+															<div class="row">
+																<h5 class="card-title text-black col-md-4">STOCK EN DEPOT</h5>
+																<div class="col-md-8">
 																	<div class="row text-center" v-if="CritiqueDataTab.length >0">
 																		<div class="col-md-4" >
 																			<span class="badge badge-pill badge-danger">N</span><br> Qte <= {{CritiqueDataTab[0].montant_min}}
@@ -52,6 +52,8 @@
 																		</div>
 																	</div>
 																</div>
+															</div>
+
                             </div>
 														<div class="table-responsive card-body">
 															<table class="table">
@@ -92,7 +94,7 @@
                         </div>
 												</div>
 
-												<div class="col-md-4 col-lg-4 col-xl-4">
+												<div class="col-md-5 col-lg-5 col-xl-5">
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
@@ -108,7 +110,8 @@
 																			<tr>
 																				<th scope="col">code</th>
 																				<th scope="col">Article</th>
-																				<th scope="col">Qte</th>
+																				<th scope="col">Qte Réelle</th>
+																				<th scope="col">Qte Virtuelle</th>
 																				<th scope="col">Etat</th>
 
 																			</tr>
@@ -118,6 +121,7 @@
 																				<td>{{det.articles_id[0].code_article}}</td>
 																				<td>{{det.articles_id[0].nom_article}}</td>
 																				<td>{{det.qte_stock}}</td>
+																				<td>{{det.qte_stock_virtuel}}</td>
 																				<td>
 																					<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
 																				</td>

@@ -6,7 +6,7 @@ class StockModel extends Model{
   protected $table = 'g_interne_stock';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['articles_id','depot_id','qte_stock'];
+  protected $allowedFields = ['articles_id','depot_id','qte_stock','qte_stock_virtuel'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'articles_id' => 'required',

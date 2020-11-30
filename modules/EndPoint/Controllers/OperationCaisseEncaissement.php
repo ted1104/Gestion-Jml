@@ -8,6 +8,7 @@ use App\Entities\DecaissementEntity;
 use App\Entities\DecaissementExterneEntity;
 use App\Models\UsersAuthModel;
 use App\Models\DecaissementExterneModel;
+use CodeIgniter\I18n\Time;
 
 
 
@@ -43,16 +44,25 @@ class OperationCaisseEncaissement extends ResourceController {
     ]);
   }
 
-  //LISTE DE TOUTES LES OPERATIONS DE DECAISSEMENT EN ATTENTE
-  public function getDecaissementCaissierPrincipal($idCaissierMain,$idStatus){
-    $data = $this->decaissementModel->Where('users_id_dest',$idCaissierMain)->Where('status_operation',$idStatus)->orderBy('id','DESC')->findAll();
+  //LISTE DE TOUTES LES OPERATIONS DE DECAISSEMENT EN ATTENTE et VALIDEE
+  public function getDecaissementCaissierPrincipal($idCaissierMain,$idStatus,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_decaissement'=> $dateFilter];
+
+    $conditionUserDest = [];
+    if($idCaissierMain != 0){
+      $conditionUserDest = ['users_id_dest'=>$idCaissierMain];
+    }
+    $data = $this->decaissementModel->Where($conditionUserDest)->Where($conditionDate)->Where('status_operation',$idStatus)->orderBy('id','DESC')->findAll();
     if($idStatus !==0 && $idStatus !==1 ):
-        $data = $this->decaissementModel->Where('users_id_dest',$idCaissierMain)->orderBy('id','DESC')->findAll();
+        $data = $this->decaissementModel->Where($conditionUserDest)->Where($conditionDate)->orderBy('id','DESC')->findAll();
     endif;
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'confition'=>$conditionDate
     ]);
   }
 
@@ -159,8 +169,15 @@ class OperationCaisseEncaissement extends ResourceController {
   }
 
   //LISTE DE DECAIISEMENT EXTERNE EFFECTUE PAR LE CAISSIER PRINCIPAL
-  public function getDecaissementExterne($idCaissier){
-    $data = $this->decaissementExterneModel->Where('users_id_from',$idCaissier)->orderBy('id','DESC')->findAll();
+  public function getDecaissementExterne($idCaissier,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_decaissement'=> $dateFilter];
+    $conditionUserFrom = [];
+    if($idCaissier != 0){
+      $conditionUserDest = ['users_id_from'=>$idCaissier];
+    }
+    $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->orderBy('id','DESC')->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
@@ -170,10 +187,10 @@ class OperationCaisseEncaissement extends ResourceController {
 
   //CREER UN DECAISSEMENT EXTERNTE
   public function createDecaissementExterne(){
-    $data = $this->request->getPost();
-    $userExistCaisse = $this->caisseModel->Where('users_id',$data['users_id_from'])->findAll();
-    $montant = $data['montant'];
-    if($data['montant']=="" && !$userExistCaisse){
+    $data = new DecaissementExterneEntity($this->request->getPost());
+    $userExistCaisse = $this->caisseModel->Where('users_id',$data->users_id_from->id)->find();
+    $montant = $data->montant;
+    if($data->montant=="" && !$userExistCaisse){
       $montant = 0;
     }
 

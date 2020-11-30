@@ -56,6 +56,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('commandes-get-all-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/caissier','Commandes::search_commandes_get_user_caissier/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->get('commandes-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->get('commandes-all-by-status-search/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/status','Commandes::search_commandes_all_get_by_status/$1/$2/$3/$4/$5/$6/$7');
+  $routes->post('achat-annuler','Commandes::annuler_commande_achat');
 
 
 
@@ -74,11 +75,11 @@ $routes->group('api/v1', function($routes){
 
   //4. CAISSE ET ENCAISSEEMENT
   $routes->get('caisse-montant/(:num)','OperationCaisseEncaissement::getMontantCaisse/$1');
-  $routes->get('get-all-decaissement/(:num)/(:num)/decaisse','OperationCaisseEncaissement::getDecaissementCaissierPrincipal/$1/$2');
+  $routes->get('get-all-decaissement/(:num)/(:num)/(:any)/decaisse','OperationCaisseEncaissement::getDecaissementCaissierPrincipal/$1/$2/$3');
   $routes->post('create-decaissement-solde','OperationCaisseEncaissement::createDecaissement');
   $routes->get('get-decaissement-par-caissier/(:num)','OperationCaisseEncaissement::getDecaissementParCaissier/$1');
   $routes->get('validation-decaissement/(:num)/(:num)/(:any)/validate','OperationCaisseEncaissement::validateDecaissement/$1/$2/$3');
-  $routes->get('get-decaissement-externe-par-caissier/(:num)','OperationCaisseEncaissement::getDecaissementExterne/$1');
+  $routes->get('get-decaissement-externe-par-caissier/(:num)/(:any)','OperationCaisseEncaissement::getDecaissementExterne/$1/$2');
   $routes->post('create-decaissement--solde-externe','OperationCaisseEncaissement::createDecaissementExterne');
 
 

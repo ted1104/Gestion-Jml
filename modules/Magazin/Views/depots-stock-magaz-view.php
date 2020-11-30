@@ -60,7 +60,8 @@
 																		<th scope="col">code</th>
 																		<th scope="col">Article</th>
 																		<th scope="col">Descritpion</th>
-																		<th scope="col">Qte</th>
+																		<th scope="col">Qte Réelle</th>
+																		<th scope="col">Qte Physique</th>
 																		<th scope="col">Etat</th>
 
 																	</tr>
@@ -71,6 +72,7 @@
 																		<td>{{det.articles_id[0].nom_article}}</td>
 																		<td>{{det.articles_id[0].description}}</td>
 																		<td>{{det.qte_stock}}</td>
+																		<td>{{det.qte_stock_virtuel}}</td>
 																		<td>
 																			<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
 																		</td>

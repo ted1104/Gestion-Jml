@@ -27,6 +27,15 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\users\caissiers-list-view', $data);
   }
+  public function getDecaissement(){
+    $data = [
+      'titlePage' => 'Decaissement Historique: Administration'
+    ];
+    echo view($this->linkMod.'\caisse\decaissement-historique-view', $data);
+  }
+
+
+
 
 
 

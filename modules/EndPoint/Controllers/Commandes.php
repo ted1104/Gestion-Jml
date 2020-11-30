@@ -152,6 +152,8 @@ class Commandes extends ResourceController {
 
   //FONCTION VALIDATION OPERATION PAR CAISSIER DONC VALIDATION DU PAYEMENT
   public function validation_operation_commande_caissier($pwd,$idcommande,$iduser,$somme){
+    $infoCommande = $this->model->find($idcommande);
+
     if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
       $status = 400;
       $message = [
@@ -197,6 +199,18 @@ class Commandes extends ResourceController {
               ];
               $insertData = $this->caisseModel->insert($dataCaisse);
             }
+
+            //DECOMPTE DE LA QUANTITE VIRTUELLE DU DEPOT SPECIFIQUE
+            $infoCommande = $this->model->find($idcommande);
+            $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
+            foreach ($allArt as $key => $value) {
+              $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id[0]->id,'articles_id'=>$value->articles_id[0]->id])->getRow();
+              $stokinit = $stokdepot->qte_stock_virtuel;
+              $qte_a_retrancher = $value->qte_vendue;
+              $nvlleqte = $stokinit-$qte_a_retrancher;
+              $this->stockModel->update($stokdepot->id,['qte_stock_virtuel'=>$nvlleqte]);
+            }
+            //FIN DECOMPTE DE LA QUANTITE VIRTUELLE DU DEPOT SPECIFIQUE
             $status = 200;
             $message = [
               'success' => 'Validation du payement reussi',
@@ -507,6 +521,67 @@ class Commandes extends ResourceController {
     ]);
   }
 
+  //FONCTIONS POUR ANNULER LA COMMANDE DONC UN ACHAT
+  public function annuler_commande_achat(){
+    $pwd = $this->request->getPost('pwd');
+    $idcommande = $this->request->getPost('idcommande');
+    $iduser = $this->request->getPost('iduser');
+    // print_r($idcommande);
+    // exit();
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+    }else{
+      //SUITES VALIDATIONS
+
+      $nbrAnnule = 1;
+      for ($i=0; $i < count($idcommande); $i++) {
+        $data = ['status_vente_id'=>4];
+        if(!$updateData = $this->model->update($idcommande[$i],$data)){
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => $this->model->erros()
+          ];
+          $data = "";
+        }else {
+          //CREATION HISTORIQUE CHANGEMENT STATUS
+          $dataStatusHistorique=[
+              'vente_id' => $idcommande[$i],
+              'status_vente_id' => 4,
+              'users_id' => $iduser,
+          ];
+          if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+            $status = 200;
+            $message = [
+              'success' => $nbrAnnule++ .' Achat(s) annulé(s) avec succès',
+              'errors' => null
+            ];
+            $data = "";
+
+          }else{
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => $this->commandesStatusHistoriqueModel->erros()
+            ];
+            $data = "";
+          }
+        }
+      }
+
+    }
+    // $this->model->RollbackTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
   //############LES FONCTIONS DE LA RECHERCHE @@@@@@@@#############
 
 
@@ -704,13 +779,17 @@ class Commandes extends ResourceController {
     }
     $condition =['date_vente'=> $dateFilter];
     $conditionLike =[];
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->where('status_vente_id',$statutVente)->findAll();
+    $conditionStatus =[];
+    if($statutVente!=5){
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
       'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
-      'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($statutVente,$condition,$conditionLike)
+      'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($conditionStatus,$condition,$conditionLike)
     ]);
   }
 
@@ -731,9 +810,9 @@ class Commandes extends ResourceController {
 // ###########################SUPPLEMENTAIRES###################
 // ###########################SUPPLEMENTAIRES###################
   //FONCTIONS COMPLEMENTAIRE REUSABLE
-  public function sommesMontantTotalParTypeDeVente($idStatusVente,$condition,$conditionLike){
+  public function sommesMontantTotalParTypeDeVente($conditionStatus,$condition,$conditionLike){
     $sommesTotal = 0;
-    $allVente = $this->model->Where('status_vente_id',$idStatusVente)->Where($condition)->like($conditionLike)->findAll();
+    $allVente = $this->model->Where($conditionStatus)->Where($condition)->like($conditionLike)->findAll();
     foreach ($allVente as $key) {
       $detail = $this->commandesDetailModel->Where('vente_id',$key->id)->findAll();
       $sommes= 0;

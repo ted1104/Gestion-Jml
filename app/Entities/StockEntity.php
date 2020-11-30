@@ -12,6 +12,7 @@ class StockEntity extends Entity{
     'articles_id' => null,
     'depot_id' => null,
     'qte_stock' => null,
+    'qte_stock_virtuel'=>null,
     'logic_etat_critique'=>null,
     'created_at' => null,
     'updated_at' => null,
@@ -36,7 +37,7 @@ class StockEntity extends Entity{
     $etat = self::$etatcritique->find();
     $min = $etat[0]->montant_min;
     $max = $etat[0]->montant_max;
-    $qte = $this->attributes['qte_stock'];
+    $qte = $this->attributes['qte_stock_virtuel'];
     return ($qte <= $min)?'1':($min < $qte && $qte < $max ?'2':'3');
   }
 

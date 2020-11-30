@@ -3,7 +3,8 @@
 use CodeIgniter\Entity;
 use Config\Services;
 use App\Models\UsersModel;
-// use App\Models\ArticlesPrixModel;
+use CodeIgniter\I18n\Time;
+
 
 class DecaissementEntity extends Entity{
 
@@ -30,6 +31,11 @@ class DecaissementEntity extends Entity{
     $this->userModel = new UsersModel();
     // $this->articlesPrixModel = new ArticlesPrixModel();
   }
+  public function setDateDecaissement(){
+    $d = Time::today();
+    $this->attributes['date_decaissement'] = $d;
+    return $this;
+  }
   public function getUsersIdFrom(){
     return $this->userModel->find($this->attributes['users_id_from']);
   }
@@ -41,6 +47,8 @@ class DecaissementEntity extends Entity{
   public function getDateDecaissement(){
     return $this->attributes['created_at'];
   }
+
+
 
 
 

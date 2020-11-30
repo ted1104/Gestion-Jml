@@ -72,6 +72,7 @@ var vthis = new Vue({
       checkBoxArticles: [],
       ArticleValidateNego : {},
       CritiqueDataTab:[],
+      checkBoxAchatSelected:[],
 
 
       //VARIABLE FORM ADD ARTICLE
@@ -298,6 +299,7 @@ var vthis = new Vue({
           this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
           return;
         }
+      this.isLoadSaveMainButton = true;
       this.messageError = false;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
@@ -307,11 +309,13 @@ var vthis = new Vue({
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   // this._u_fx_form_init_field();
                   // this.get_article();
+                  this.isLoadSaveMainButton = false;
                   this.tabListData=[];
                   return;
                 }
                 var err = response.data.message.errors;
                 this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
             })
             .catch(error =>{
               console.log(error);
@@ -634,6 +638,7 @@ var vthis = new Vue({
   },
     get_decaisssement_caissier_secondaire(){
     const newurl = this.url+"get-decaissement-par-caissier/"+this.users_id;
+    this.dataToDisplay = [];
     return axios
           .get(newurl,{headers: this.tokenConfig})
           .then(response =>{
@@ -646,18 +651,49 @@ var vthis = new Vue({
         },
     /*Fx POUR LISTE DE DEMANDES DE DECAISSEMENT COTE CAISSIER PRINCIPAL*/
     get_decaisssement_caissier_principale(status=2){
-    const newurl = this.url+"get-all-decaissement/"+this.users_id+"/"+status+"/decaisse";
+    if(this.dateFilter !==null){
+      this._u_formatOnlyDate();
+    }
+    const newurl = this.url+"get-all-decaissement/"+this.users_id+"/"+status+"/"+this.dateFilter+"/decaisse";
+    this.stateStatus = status;
+    this.dataToDisplay =[];
+    this.isNoReturnedData = false;
+    this.isDecaissementExterne = false;
     return axios
           .get(newurl,{headers: this.tokenConfig})
           .then(response =>{
-            this.isDecaissementExterne = false;
-            this.dataToDisplay = response.data.data;
 
+            this.dataToDisplay = response.data.data;
+            if(this.dataToDisplay.length < 1){
+              this.isNoReturnedData = true;
+            }
             this._u_fx_get_montant();
           }).catch(error =>{
             console.log(error);
           })
         },
+    get_decaisssement_histo_interne_admin(status=2){
+        if(this.dateFilter !==null){
+          this._u_formatOnlyDate();
+        }
+        const newurl = this.url+"get-all-decaissement/0/"+status+"/"+this.dateFilter+"/decaisse";
+        this.stateStatus = status;
+        this.dataToDisplay =[];
+        this.isNoReturnedData = false;
+        this.isDecaissementExterne = false;
+        return axios
+              .get(newurl,{headers: this.tokenConfig})
+              .then(response =>{
+
+                this.dataToDisplay = response.data.data;
+                if(this.dataToDisplay.length < 1){
+                  this.isNoReturnedData = true;
+                }
+                this._u_fx_get_montant();
+              }).catch(error =>{
+                console.log(error);
+              })
+            },
     /*Fx POUR VALIDATION DECAISSEMENT COTE CAISSIER PRINCIPAL*/
     add_validation_decaissement(){
       const newurl = this.url+"validation-decaissement/"+this.decaissement_id+"/"+this.users_id+"/"+this.password_op+"/validate";
@@ -717,13 +753,35 @@ var vthis = new Vue({
             console.log(error);
           })
   },
-    get_decaisssement_externe(){
-      const newurl = this.url+"get-decaissement-externe-par-caissier/"+this.users_id;
+    get_decaisssement_externe(NoVariable=null){
+      const newurl = this.url+"get-decaissement-externe-par-caissier/"+this.users_id+"/"+this.dateFilter;
+      this.tabListData =[];
+      this.isNoReturnedData = false;
+      this.isDecaissementExterne = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
-              this.isDecaissementExterne = true;
               this.tabListData = response.data.data;
+              if(this.tabListData.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this._u_fx_get_montant();
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_decaisssement_externe_admin(NoVariable=null){
+      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.dateFilter;
+      this.tabListData =[];
+      this.isNoReturnedData = false;
+      this.isDecaissementExterne = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.tabListData = response.data.data;
+              if(this.tabListData.length < 1){
+                this.isNoReturnedData = true;
+              }
               this._u_fx_get_montant();
             }).catch(error =>{
               console.log(error);
@@ -892,7 +950,41 @@ var vthis = new Vue({
             console.log(error);
           })
   },
-
+    add_annuler_achat(){
+      const newurl = this.url+"achat-annuler";
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
+      var form = new FormData();
+      form.append('pwd',this.password_op);
+      form.append('iduser',this.users_id);
+      for(var i=0; i< this.checkBoxAchatSelected.length; i++){
+        form.append('idcommande[]', this.checkBoxAchatSelected[i]);
+    	}
+      this.isLoadSaveMainButtonModal = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_commande_facturier(4);
+                this._u_close_mod_form();
+                this.password_op= "";
+                this.isLoadSaveMainButtonModal = false;
+                this.checkBoxAchatSelected = [];
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
     _searchDataFacturier(limit=this.PerPaged,offset=0, indexPage=0){
@@ -1195,6 +1287,10 @@ var vthis = new Vue({
       this.somme_commande = cmd.logic_somme;
       this.styleModal = 'block';
     },
+    _u_open_mod_popup_facturier_annulation(){
+      this.modalTitle = "ANNULER "+this.checkBoxAchatSelected.length+" ACHAT(S)";
+      this.styleModal = 'block';
+    },
     _u_open_mod_popup_caissier_principal_validation_decaissement(dec){
       console.log("===DECAI===");
       console.log(dec);
@@ -1388,6 +1484,7 @@ var vthis = new Vue({
      formData.append('montant',vthis.montant_decaisse);
      formData.append('note',vthis.note);
      formData.append('status_operation',0);
+     formData.append('date_decaissement',"");
      return formData;
    },
     _u_fx_form_data_decaissement_externe(){
@@ -1396,6 +1493,7 @@ var vthis = new Vue({
     formData.append('destination',vthis.destination);
     formData.append('montant',vthis.montant);
     formData.append('note',vthis.note);
+    formData.append('date_decaissement',"");
     return formData;
   },
     _u_fx_form_data_depot(){
@@ -1460,6 +1558,11 @@ var vthis = new Vue({
     if(pth[1]=='admin-caisse'){
       this.get_caissiers();
     }
+    if(pth[1]=='admin-decaissement'){
+      this.get_decaisssement_histo_interne_admin();
+    }
+
+
 
 
 

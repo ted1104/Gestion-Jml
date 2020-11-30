@@ -58,8 +58,8 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-caisse') ?>">Caissiers</a></li>
-                      <!-- <li><a href="table-datatable.html">Data Table</a></li>
-                      <li><a href="table-editable.html">Editable Table</a></li>
+                      <li><a href="<?=base_url('admin-decaissement') ?>">Décaissement</a></li>
+                      <!-- <li><a href="table-editable.html">Editable Table</a></li>
                       <li><a href="table-rwdtable.html">RWD Table</a></li> -->
                   </ul>
               </li>

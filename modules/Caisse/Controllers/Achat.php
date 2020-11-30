@@ -19,7 +19,7 @@ class Achat extends BaseController {
     $data = [
       'titlePage' => 'DECAISSEMENT: Caissier'
     ];
-    echo view($this->linkMod.'\decaissement-add-view', $data);
+    echo view($this->linkMod.'\decaissement-add-caissier-secondaire-view', $data);
   }
 
   //LISTE DE DECAISSEMENT DEMANDES PAR LES CAISSIERS SECONDAIRES ET POSSIBILITE DE FAIRE LE DECAISSEMENT CAISSIER PRINCIPAL

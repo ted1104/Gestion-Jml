@@ -89,10 +89,14 @@
 																</div>
                             </div>
 														<div class="table-responsive card-body">
-															<!-- {{dateFilter}} -->
-															<table class="table">
+															<!-- {{checkBoxAchatSelected}} -->
+															<div v-if="checkBoxAchatSelected.length > 0" class="u-border pull-right u-animation-FromTop">
+																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_facturier_annulation()"><i class="mdi mdi-delete"></i>Annuler</button>
+															</div>
+															<table class="table margin-top-8">
 																<thead>
 																	<tr>
+																		<th>#</th>
 																		<th scope="col">Facture</th>
 																		<th scope="col">Nom client</th>
 																		<th scope="col">Date</th>
@@ -105,7 +109,13 @@
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
-																		<th>{{dt.numero_commande}}</th>
+																		<td>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" name="checkBoxArticles" :id="dt.id" class="custom-control-input" :value="dt.id" v-model="checkBoxAchatSelected">
+																				<label class="custom-control-label" :for="dt.id"></label>
+																			</div>
+																		</td>
+																		<td>{{dt.numero_commande}}</td>
 																		<td>{{dt.nom_client}}</td>
 																		<td>{{dt.date_vente}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
@@ -221,4 +231,32 @@
         <!-- End XP Rightbar -->
     </div>
     <!-- End XP Container -->
+
+
+		<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
+			<div class="modal-dialog" role="document">
+					<div class="modal-content">
+							<div class="modal-header">
+									<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+									<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+									</button>
+							</div>
+							<div class="modal-body">
+								<div class="text-center">
+									<span>Attention!! Vous êtes sur le point d'annuler un ou plusieurs achats,</span>
+									<span>êtes vous le(la) facturier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
+									<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+									<div class="form-group col-md-12 text-center">
+										<label for="password_op">Mot de passe *</label>
+										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+									</div>
+									<button v-if="!isLoadSaveMainButtonModal" @click="add_annuler_achat" class="btn btn-primary">Confirmer</button>
+									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+								</div>
+							</div>
+
+					</div>
+			</div>
+	</div>
 <?=$this->endSection() ?>

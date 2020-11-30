@@ -55,6 +55,9 @@
 																	<div @click="get_commande_admin(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
+																	<div @click="get_commande_admin(5)" class="btn btn-secondary padding-4" :id="stateStatus==5?'border-menu':''">
+                                      Tout <span class="badge badge-pill badge-light">{{parseInt(ListFiltreData.attente)+parseInt(ListFiltreData.payer)+parseInt(ListFiltreData.livrer)+parseInt(ListFiltreData.annuler)}}</span>
+                                  </div>
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
 																	</div>

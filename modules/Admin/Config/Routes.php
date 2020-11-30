@@ -12,6 +12,9 @@ $routes->get('admin-stock','Approv::stockDepots',['filter' => 'isLoggedIn']);
 $routes->get('admin-config-depot','Dashboard::config_depot',['filter' => 'isLoggedIn']);
 $routes->get('admin-config-etat-critique','Dashboard::config_critique',['filter' => 'isLoggedIn']);
 $routes->get('admin-caisse','Dashboard::getCaissierMontant',['filter' => 'isLoggedIn']);
+$routes->get('admin-decaissement','Dashboard::getDecaissement',['filter' => 'isLoggedIn']);
+
+
 
 
 

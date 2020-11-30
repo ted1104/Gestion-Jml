@@ -51,7 +51,7 @@ class CommandesDetailEntity extends Entity{
   public function getLogicQteStockArticleDepot(){
     $depot = $this->commandesModel->Where('id',$this->attributes['vente_id'])->first();
     $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id[0]->id)->Where('articles_id',$this->attributes['articles_id'])->first();
-    return $stockqte->qte_stock;
+    return $stockqte->qte_stock_virtuel;
 
   }
 

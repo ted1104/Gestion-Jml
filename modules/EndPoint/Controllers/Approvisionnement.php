@@ -74,10 +74,11 @@ class Approvisionnement extends ResourceController {
         ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
         $initqte = $this->stockModel->getWhere($condition)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
         $Qte = $initqte->qte_stock + $qte[$i];//ADDITION ANCIENNE + NOUVELLE
+        $QteVirtuel = $initqte->qte_stock_virtuel + $qte[$i];
 
         // return $this->respond([$initqte]);
 
-        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte])){
+        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel])){
           $this->model->RollbackTrans();
           $message = [
             'success' =>null,

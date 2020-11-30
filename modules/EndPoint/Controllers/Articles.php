@@ -134,7 +134,7 @@ class Articles extends ResourceController {
          'articles_id'=>$data[0]->id
        ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
        $initqte = $this->stockModel->getWhere($condition)->getRow();
-       if($Qte <= $initqte->qte_stock){
+       if($Qte <= $initqte->qte_stock_virtuel){
        // return $this->respond([$initqte->qte_stock]);
        if($data[0]->logic_detail_data && count($data[0]->logic_detail_data) > 1){
          $grosprix = null;
@@ -255,7 +255,7 @@ class Articles extends ResourceController {
       'status' => $status,
       'message' =>$message,
       'data'=> $data,
-    
+
     ]);
   }
   public function multitest(){
