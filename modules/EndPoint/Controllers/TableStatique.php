@@ -6,6 +6,7 @@ use App\Models\StDepotModel;
 use App\Models\StEtatCritiqueModel;
 use App\Models\ArticlesModel;
 use App\Models\StockModel;
+use App\Models\StProfileModel;
 
 
 class TableStatique extends ResourceController {
@@ -14,6 +15,7 @@ class TableStatique extends ResourceController {
   protected $articleModel = null;
   protected $stockModel = null;
   protected static $stetatcritique = null;
+  protected static $stProfileModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -21,6 +23,7 @@ class TableStatique extends ResourceController {
     $this->articleModel = new ArticlesModel();
     $this->stockModel = new StockModel();
     self::$stetatcritique = new StEtatCritiqueModel();
+    self::$stProfileModel = new StProfileModel();
   }
 
   public function depot_get(){
@@ -145,6 +148,14 @@ class TableStatique extends ResourceController {
     return $this->respond([
       'status' => $status,
       'message' => $message,
+      'data' => $data,
+    ]);
+  }
+  public function getProfile(){
+    $data = self::$stProfileModel->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
       'data' => $data,
     ]);
   }

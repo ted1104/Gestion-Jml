@@ -12,6 +12,7 @@ class UsersEntity extends Entity{
     'prenom' => null,
     'sexe' => null,
     'dob' => null,
+    'tel' => null,
     'roles_id' => null,
     'depot_id' => null,
     'date_debut_service' =>null,

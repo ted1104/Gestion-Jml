@@ -66,6 +66,7 @@ var vthis = new Vue({
 
       //LIST PARTICULIERES
       depotList : [],
+      profileList:[],
       caissierList :[],
       detailTab : [],
       ListFiltreData : [], //POUR MENU LISTE
@@ -141,6 +142,21 @@ var vthis = new Vue({
       currentIndexPage :0,
       PerPaged:5,
 
+      //VARIABLE CREATION UTILISATEUR
+      nom :"",
+      prenom :"",
+      RadioCheckedSexe :"",
+      tel :"",
+      roles_id :"",
+      dob :"",
+      depot_id :"",
+      date_debut_service :"",
+      RadioCheckedIsMain :"",
+      username :"",
+      password_main :"",
+      password_main_conf :"",
+      password_op :"",
+      password_op_conf :"",
 
 
 
@@ -265,6 +281,17 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.depotList = response.data.data;
+              // console.log(this.depotList);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_profiles(){
+      const newurl = this.url+"roles-get-all";
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.profileList = response.data.data;
               // console.log(this.depotList);
             }).catch(error =>{
               console.log(error);
@@ -984,6 +1011,40 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    add_users(e){
+      e.preventDefault();
+      const newurl = this.url+"users-create-one";
+      var form = this._u_fx_form_data_users();
+      if(this.password_main != this.password_main_conf){
+        this._u_fx_config_error_message("Erreur",["Les 2 mots de passe principal ne corresondent pas"],'alert-danger');
+        return;
+      }
+      if(this.password_op != this.password_op_conf){
+        this._u_fx_config_error_message("Erreur",["Les 2 mots de passe des opérations ne corresondent pas"],'alert-danger');
+        return;
+      }
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  // this.get_article();
+                  this.isLoadSaveMainButton = false;
+                  this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -1403,6 +1464,11 @@ var vthis = new Vue({
       var month = date.getMonth()+1;
       this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
     },
+    _u_formatOnlyDateAndReturn(date){
+      var date = new Date(date);
+      var month = date.getMonth()+1;
+      return date.getFullYear()+'-'+month+'-'+date.getDate();
+    },
     _u_set_table_title_with_date(){
       if(this.dateFilter !==null){
         this.dateFilterDisplay = "DU "+this.dateFilter;
@@ -1453,6 +1519,22 @@ var vthis = new Vue({
       this.nom ="";
       this.adresse ="";
 
+      //VARIANLE ADD Users
+      this.nom ="";
+      this.prenom ="";
+      this.RadioCheckedSexe ="";
+      this.tel ="";
+      this.roles_id ="";
+      this.dob ="";
+      this.depot_id ="";
+      this.date_debut_service ="";
+      this.RadioCheckedIsMain ="";
+      this.username ="";
+      this.password_main ="";
+      this.password_main_conf ="";
+      this.password_op ="";
+      this.password_op_conf ="";
+
 
     },
     _u_fx_form_data_art(){
@@ -1496,6 +1578,22 @@ var vthis = new Vue({
     formData.append('date_decaissement',"");
     return formData;
   },
+    _u_fx_form_data_users(){
+    var formData = new FormData();
+    formData.append('nom',this.nom);
+    formData.append('prenom',this.prenom);
+    formData.append('sexe',this.RadioCheckedSexe);
+    formData.append('tel',this.tel);
+    formData.append('roles_id',this.roles_id);
+    formData.append('dob',this._u_formatOnlyDateAndReturn(this.dob));
+    formData.append('depot_id',this.depot_id);
+    formData.append('date_debut_service',this._u_formatOnlyDateAndReturn(this.date_debut_service));
+    formData.append('is_main',this.RadioCheckedIsMain);
+    formData.append('username',this.username);
+    formData.append('password_main',this.password_main);
+    formData.append('password_op',this.password_op);
+    return formData;
+  },
     _u_fx_form_data_depot(){
      var formData = new FormData();
      formData.append('nom',vthis.nom);
@@ -1507,7 +1605,7 @@ var vthis = new Vue({
     if(pth[1] ==='admin-add-article' || pth[1] ==='admin-list-article'){
       this.get_article();
     }
-    if(pth[1] ==='admin-add-appro' || pth[1] ==='facturier-add-achat' || pth[1]==='caissier-add-achat'){
+    if(pth[1] ==='admin-add-appro' || pth[1] ==='facturier-add-achat' || pth[1]==='caissier-add-achat' ||  pth[1]=='admin-add-users'){
       this.get_depots();
     }
     if(pth[1]=='facturier-add-achat' || pth[1]==='caissier-add-achat'){
@@ -1560,6 +1658,9 @@ var vthis = new Vue({
     }
     if(pth[1]=='admin-decaissement'){
       this.get_decaisssement_histo_interne_admin();
+    }
+    if(pth[1]=='admin-add-users'){
+      this.get_profiles();
     }
 
 

@@ -33,7 +33,12 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\caisse\decaissement-historique-view', $data);
   }
-
+  public function createUsers(){
+    $data = [
+      'titlePage' => 'Utilisateurs: Administration'
+    ];
+    echo view($this->linkMod.'\users\users-add-view', $data);
+  }
 
 
 

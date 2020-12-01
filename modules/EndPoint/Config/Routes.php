@@ -12,6 +12,8 @@ $routes->group('api/v1', function($routes){
   $routes->get('etat-critique','TableStatique::getEtatCritique');
   $routes->put('update-etat-critique','TableStatique::updateEtatCritique');
   $routes->get('stock-depot-by-depot/(:num)/depot','TableStatique::getStockDepotByDepot/$1');
+  $routes->get('roles-get-all','TableStatique::getProfile');
+
 
 
 

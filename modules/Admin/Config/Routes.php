@@ -13,6 +13,9 @@ $routes->get('admin-config-depot','Dashboard::config_depot',['filter' => 'isLogg
 $routes->get('admin-config-etat-critique','Dashboard::config_critique',['filter' => 'isLoggedIn']);
 $routes->get('admin-caisse','Dashboard::getCaissierMontant',['filter' => 'isLoggedIn']);
 $routes->get('admin-decaissement','Dashboard::getDecaissement',['filter' => 'isLoggedIn']);
+$routes->get('admin-add-users','Dashboard::createUsers',['filter' => 'isLoggedIn']);
+
+
 
 
 
