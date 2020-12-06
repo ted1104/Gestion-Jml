@@ -43,12 +43,17 @@
 39. Print
 40. Responsive
 */
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
-/* 
+/* @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"); */
+/*
+
 ===============
     General
 ===============
 */
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/Poppins/Poppins-Light.ttf") format("woff2")
+}
 html {
   overflow-x: hidden;
   position: relative;
@@ -180,7 +185,7 @@ code {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* 
+/*
 ==============
     Helper
 ==============
@@ -798,7 +803,7 @@ code {
   box-shadow: 0 0 30px 0 rgba(200, 200, 200, 0.2);
 }
 
-/* 
+/*
 ============
     Demo
 ============
@@ -884,7 +889,7 @@ code {
     border-width: 0.2rem;
   }
 }
-/* 
+/*
 ============
     Menu
 ============
@@ -1045,7 +1050,7 @@ code {
   color: #4c7cf3;
 }
 
-/* 
+/*
 ==================
     Topbar
 ==================
@@ -1227,10 +1232,10 @@ code {
   color: #777777;
 }
 
-/* 
+/*
 ========================
     Bootstrap Custom
-======================== 
+========================
 */
 /* -----  Breacrumb  ----- */
 .breadcrumb {
@@ -1495,7 +1500,7 @@ a.text-dark:hover {
   margin-top: 0;
 }
 
-/* 
+/*
 ==============
     Alerts
 ==============
@@ -1579,7 +1584,7 @@ a.text-dark:hover {
   color: #313131;
 }
 
-/* 
+/*
 ==============
     Badges
 ==============
@@ -1682,7 +1687,7 @@ a.text-dark:hover {
   background-color: #242424;
 }
 
-/* 
+/*
 ===============
     Buttons
 ===============
@@ -2488,7 +2493,7 @@ a.text-dark:hover {
   background-color: #ff0084;
 }
 
-/* 
+/*
 ============
     Card
 ============
@@ -2589,7 +2594,7 @@ a.text-dark:hover {
   border-top: 1px solid rgba(85, 85, 85, 0.05);
 }
 
-/* 
+/*
 ==================
     Pagination
 ==================
@@ -2613,7 +2618,7 @@ a.text-dark:hover {
   border-color: #4c7cf3;
 }
 
-/* 
+/*
 ===================
     Progressbar
 ===================
@@ -2622,10 +2627,10 @@ a.text-dark:hover {
   background-color: #4c7cf3;
 }
 
-/* 
+/*
 ==========================
     Popover & Tooltips
-========================== 
+==========================
 */
 .popover-title {
   margin-top: 0;
@@ -2635,7 +2640,7 @@ a.text-dark:hover {
   padding: 4px 10px;
 }
 
-/* 
+/*
 ===============
 	Widgets
 ===============
@@ -2763,7 +2768,7 @@ a.text-dark:hover {
   background: #868f9e;
 }
 
-/* 
+/*
 ===================
     Sweet Alert
 ===================
@@ -2849,7 +2854,7 @@ a.text-dark:hover {
   background: #4c7cf3;
 }
 
-/* 
+/*
 ==============
     JSTree
 ==============
@@ -2871,7 +2876,7 @@ a.text-dark:hover {
   background: #c3d3fb;
 }
 
-/* 
+/*
 ================
     Nestable
 ================
@@ -2971,10 +2976,10 @@ a.text-dark:hover {
   border: 1px solid #dbe5fd;
 }
 
-/* 
+/*
 ========================
     Range Slider
-======================== 
+========================
 */
 .irs-line-mid {
   background: url(../plugins/ion-rangeSlider/sprite-skin-flat.png) repeat-x;
@@ -3174,7 +3179,7 @@ a.text-dark:hover {
   color: #777777;
 }
 
-/* 
+/*
 ==============
     Rating
 ==============
@@ -3717,7 +3722,7 @@ a.text-dark:hover {
     color: #4c7cf3;
   }
 }
-/* 
+/*
 ==================
     Switchery
 ==================
@@ -3755,7 +3760,7 @@ a.text-dark:hover {
   width: 40px;
 }
 
-/* 
+/*
 =====================
     Form Elements
 =====================
@@ -3946,10 +3951,10 @@ label {
   padding: 4px 8px;
 }
 
-/* 
+/*
 ========================
     Form Validations
-======================== 
+========================
 */
 .error {
   color: ff0000;
@@ -3975,10 +3980,10 @@ label {
   display: block;
 }
 
-/* 
+/*
 ====================
     File Uploads
-==================== 
+====================
 */
 /* -----  Dropzone  ----- */
 .dropzone {
@@ -3991,7 +3996,7 @@ label {
   font-size: 30px;
 }
 
-/* 
+/*
 =========================
     Form - Datepicker
 =========================
@@ -4173,7 +4178,7 @@ label {
   transition: background 0.2s;
 }
 
-/* 
+/*
 ========================
     Form - Colorpicker
 ========================
@@ -4230,10 +4235,10 @@ label {
   box-shadow: none;
 }
 
-/* 
+/*
 ===================
     Form Editor
-=================== 
+===================
 */
 .mce-panel {
   border-color: #e1e4e9 !important;
@@ -4282,7 +4287,7 @@ label {
   color: #777777 !important;
 }
 
-/* 
+/*
 ========================
     Form - Select
 ========================
@@ -4425,7 +4430,7 @@ label {
   background-color: #4c7cf3;
 }
 
-/* 
+/*
 ===================
     Form Wizard
 ===================
@@ -4637,7 +4642,7 @@ label {
     width: 100%;
   }
 }
-/* 
+/*
 ==================
     Summernote
 ==================
@@ -4709,10 +4714,10 @@ label {
   padding: 5px 0 10px 5px;
 }
 
-/* 
+/*
 =================
     Calendar
-================= 
+=================
 */
 .fc-toolbar h2 {
   margin: 0;
@@ -4816,7 +4821,7 @@ label {
   cursor: move;
 }
 
-/* 
+/*
 =============
     Email
 =============
@@ -4881,7 +4886,7 @@ label {
   color: #4c7cf3;
 }
 
-/* 
+/*
 ==============
     Charts
 ==============
@@ -5516,7 +5521,7 @@ canvas {
 }
 
 /* -----  Rickshaw Chart  ----- */
-/* 
+/*
 ==============
     Tables
 ==============
@@ -5631,7 +5636,7 @@ table.focus-on tfoot tr.focused td {
   display: block;
 }
 
-/* 
+/*
 ============
     Maps
 ============
@@ -5681,7 +5686,7 @@ table.focus-on tfoot tr.focused td {
   border-bottom: 16px solid #4c7cf3;
 }
 
-/* 
+/*
 =========================
   Authentication Pages
 =========================
@@ -5749,7 +5754,7 @@ table.focus-on tfoot tr.focused td {
     width: 100%;
   }
 }
-/* 
+/*
 ===============
     Timeline
 ===============
@@ -5758,7 +5763,7 @@ table.focus-on tfoot tr.focused td {
   padding: 2.5em 0;
 }
 
-/* 
+/*
 ===============
     Pricing
 ===============
@@ -5768,7 +5773,7 @@ table.focus-on tfoot tr.focused td {
   padding: 10px 0;
 }
 
-/* 
+/*
 ===============
     Invoice
 ===============
@@ -5788,7 +5793,7 @@ table.focus-on tfoot tr.focused td {
     text-align: left;
   }
 }
-/* 
+/*
 =============
     Print
 =============
@@ -5814,7 +5819,7 @@ table.focus-on tfoot tr.focused td {
     margin-left: 0;
   }
 }
-/* 
+/*
 ==================
     Responsive
 ==================

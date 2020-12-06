@@ -3,6 +3,9 @@
 use CodeIgniter\Entity;
 use Config\Services;
 use App\Models\CaisseModel;
+use App\Models\StProfileModel;
+use App\Models\StDepotModel;
+use App\Models\UsersAuthModel;
 
 class UsersEntity extends Entity{
 
@@ -15,30 +18,37 @@ class UsersEntity extends Entity{
     'tel' => null,
     'roles_id' => null,
     'depot_id' => null,
+    'logic_role' => null,
     'date_debut_service' =>null,
     'date_fin_service' =>null,
     'is_main'=>null,
+    'photo'=>null,
     'logic_montant_caisse'=>null,
+    'logic_role_depot'=>null,
+    'logic_auth'=>null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
+
   ];
 
-  protected $datamap = [];
   protected static $caisseModel = null;
+  protected static $stProfileModel = null;
+  protected static $stDepotModel = null;
+  protected static $usersAuthModel = null;
 
   public function __construct(array $data = null){
     parent::__construct($data);
     self::$caisseModel = new CaisseModel();
-
-
+    self::$stProfileModel = new StProfileModel();
+    self::$stDepotModel = new StDepotModel();
+    self::$usersAuthModel = new UsersAuthModel();
   }
 
   public function setPassword(String $pass){
     $this->attributes['password'] = password_hash($pass, PASSWORD_DEFAULT);
     return $this;
   }
-
 
   public function getLogicMontantCaisse(){
     $data = self::$caisseModel->Where('users_id',$this->attributes['id'])->find();
@@ -48,10 +58,24 @@ class UsersEntity extends Entity{
     }
     return $montant;
   }
+  public function getLogicRoleDepot(){
+    $array = [
+      'role'=>self::$stProfileModel->Where('id', $this->attributes['roles_id'])->find(),
+      // 'depot' => self::$stDepotModel->Where('id', $this->attributes['depot_id'])->find()
+      'depot' => self::$stDepotModel->getWhere(['id'=>$this->attributes['depot_id']])->getRow()
+    ];
+    return $array;
+  }
+  public function setPhoto(String $photo){
+    // if(empty($pass)){
+    //   return;
+    // }
+    $this->attributes['photo'] = 'default.png';
+    return $this;
 
-  // public function getIsMain(){
-  //   return $this->attributes['is_main']==1?'PRINCIPAL':'SECONDAIRE';
-  // }
-
-
+  }
+  public function getLogicAuth(){
+    $data = self::$usersAuthModel->getWhere(['users_id' => $this->attributes['id']])->getRow();
+    return $data;
+  }
 }

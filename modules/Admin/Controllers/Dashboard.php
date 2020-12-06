@@ -39,6 +39,14 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\users\users-add-view', $data);
   }
+  public function getAllUsers(){
+    $data = [
+      'titlePage' => 'Utilisateurs: Administration'
+    ];
+    echo view($this->linkMod.'\users\users-list-view', $data);
+  }
+
+
 
 
 

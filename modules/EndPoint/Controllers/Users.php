@@ -18,12 +18,13 @@ class Users extends ResourceController {
     $this->userAuthModel = new UsersAuthModel();
   }
 
-  public function users_get(){
-    $data = $this->model->findAll();
+  public function users_get($limit,$offset){
+    $data = $this->model->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all' => count($this->model->findAll())
     ]);
   }
   public function users_create(){
@@ -86,5 +87,52 @@ class Users extends ResourceController {
       'message' => 'success',
       'data' => $data,
     ]);
+  }
+  public function user_account_enable_disable($iduser){
+    $data = $this->userAuthModel->Where('users_id',$iduser)->find();
+    $newStatus = $data[0]->status_users_id==1?2:1;
+    if(!$this->userAuthModel->update($data[0]->id,['status_users_id'=>$newStatus])){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Echec d\update du statut du compte']
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => $newStatus==1?'Compte activé avec succès':'Compte bloqué avec succès',
+        'errors' => null
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => null
+    ]);
+
+  }
+  public function user_account_reset_password($iduser){
+    $data = $this->userAuthModel->Where('users_id',$iduser)->find();
+    $pass = 1234;
+    $newPassword = password_hash($pass, PASSWORD_DEFAULT);
+    if(!$this->userAuthModel->update($data[0]->id,['password_main'=>$newPassword,'password_op'=>$newPassword])){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Echec d\update du mot de passe']
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'Mot de passe principal et des opérations reunitialisés avec succès',
+        'errors' => null
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => null
+    ]);
+
   }
 }

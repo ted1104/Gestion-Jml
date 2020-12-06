@@ -43,7 +43,7 @@ class UsersAuthEntity extends Entity{
     return $this;
   }
   public function getUsersId(){
-    return $this->userModel->Where('id',$this->attributes['users_id'])->findAll();
+    return $this->userModel->Where('id',$this->attributes['users_id'])->find();
   }
 
 

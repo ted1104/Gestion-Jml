@@ -91,7 +91,7 @@
 														<div class="table-responsive card-body">
 															<table class="table">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th scope="col">Facture</th>
 																		<th scope="col">Nom client</th>
 																		<th scope="col">Date achat</th>

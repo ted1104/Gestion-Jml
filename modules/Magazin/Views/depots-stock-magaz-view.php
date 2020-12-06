@@ -56,7 +56,7 @@
 														<div class="table-responsive card-body">
 															<table class="table">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th scope="col">code</th>
 																		<th scope="col">Article</th>
 																		<th scope="col">Descritpion</th>

@@ -78,8 +78,8 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-users') ?>">Créer</a></li>
-                      <!-- <li><a href="table-datatable.html">Data Table</a></li>
-                      <li><a href="table-editable.html">Editable Table</a></li>
+                      <li><a href="<?=base_url('admin-list-users') ?>">Liste</a></li>
+                      <!-- <li><a href="table-editable.html">Editable Table</a></li>
                       <li><a href="table-rwdtable.html">RWD Table</a></li> -->
                   </ul>
               </li>

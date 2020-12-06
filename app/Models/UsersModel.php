@@ -7,7 +7,7 @@ class UsersModel extends Model{
   protected $table = 'g_users';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['nom','prenom','sexe','dob','roles_id','depot_id','date_debut_service','date_fin_service','is_main','tel'];
+  protected $allowedFields = ['nom','prenom','sexe','dob','roles_id','depot_id','date_debut_service','date_fin_service','is_main','tel','photo'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'nom' => 'required',

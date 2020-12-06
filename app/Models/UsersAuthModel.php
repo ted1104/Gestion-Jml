@@ -34,10 +34,15 @@ class UsersAuthModel extends Model{
     if(count($userData) > 0){
       $verify = password_verify($user['password_main'], $userData[0]->password_main);
       if($verify){
-        return [
-          'info'=> $userData[0]->users_id,
-          'isLoggedIn' => true
-        ];
+        if($userData[0]->status_users_id==1){
+          return [
+            'info'=> $userData[0]->users_id,
+            'isLoggedIn' => true
+          ];
+        }else{
+          return 2;//compte bloqué
+        }
+
       }
     }
     return false;
