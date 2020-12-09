@@ -77,7 +77,7 @@
 																	</tbody>
 																</table>
 																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="" >
 																</div>
 																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
 																	<img src="<?=base_url() ?>/load/empty.png" >
@@ -110,7 +110,10 @@
 															<div class="container">
 																<div class="row">
 																	<div class="col-md-4">
-																		<img :src="'uploads/profiles/'+detailTab.photo" alt="Logo ByOseMarket" class="rounded-circle" style="width:100px; height:auto">
+																		<label for="input-file">
+																			<img :src="'uploads/profiles/'+detailTab.photo" alt="Logo ByOseMarket" class="rounded-circle" style="width:100px !important; height:100px !important">
+																		</label>
+																		<input type="file" ref="file" id="input-file" accept="image/*" @change="_u_DisplayImageToUpload">
 																	</div>
 																	<div class="col-md-8">
 																		<span>Nom : {{detailTab.nom}} {{detailTab.prenom}}</span><br>
@@ -164,23 +167,21 @@
 	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
                 <button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-							<div class="form-group">
-								<label for="prix_unitaire">Prix Unitaire *</label>
-								<input type="text" class="form-control" id="prix_unitaire" aria-describedby="prix_unitaire" v-model="prix_unitaire">
+							<div>
+								<img :src="avatarMain" alt="Logo ByOseMarket" class="rounded-circle mx-auto d-block" style="width:200px !important; height:200px !important">
 							</div>
-							<div class="form-group">
-								<label for="qte_decideur">Quantité *</label>
-								<input type="text" class="form-control" id="qte_decideur" aria-describedby="qte_decideur" v-model="qte_decideur">
+							<br>
+							<div class="text-center">
+								<button v-if="!isLoadSaveMainButtonModal" @click="update_image_profile" class="btn btn-secondary">Mettre à jour le profile </button>
+								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
 							</div>
-							<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Enregistrer</button>
-							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
             </div>
 
         </div>

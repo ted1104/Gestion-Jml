@@ -26,6 +26,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-get-all-is-main-by-profile/(:num)/(:num)/is-main','Users::users_get_by_profile_is_main/$1/$2');
   $routes->get('users-update-status-account/(:num)','Users::user_account_enable_disable/$1');
   $routes->get('users-reset-password/(:num)','Users::user_account_reset_password/$1');
+  $routes->post('users-update-profile','Users::user_update_profile_picture');
 
 
 

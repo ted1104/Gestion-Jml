@@ -158,6 +158,10 @@ var vthis = new Vue({
       password_op :"",
       password_op_conf :"",
 
+      avatarMain:"",
+      fileMain :"",
+      iduserToChangeProfile :""
+
 
 
     }
@@ -1116,6 +1120,33 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    update_image_profile(){
+      this.isLoadSaveMainButtonModal = true;
+      const newurl = this.url+"users-update-profile";
+      var form = new FormData();
+
+      form.append('iduser',this.iduserToChangeProfile);
+      form.append('main_image', this.fileMain);
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadSaveMainButtonModal = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_users_admin();
+                this._u_close_mod_form();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_close_mod_form();
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -1441,6 +1472,12 @@ var vthis = new Vue({
       this.somme_commande = cmd.logic_somme;
       this.styleModal = 'block';
     },
+    _u_open_mod_popup_photo(userid){
+      //console.log("=====ARTICLE=====");
+      //console.log(cmd);
+      this.modalTitle = "MODIFICATION DE LA PHOTO DU PROFILE";
+      this.styleModal = 'block';
+    },
     _u_get_today(){
       var currentDate = new Date();
       var currentDateWithFormat = new Date().toJSON().slice(0,10).replace(/-/g,'-');
@@ -1451,7 +1488,10 @@ var vthis = new Vue({
       this.codeIdArticlePrint = index.id;
       this.detailTab = index;
       this.isShow = !this.isShow;
-      console.log(this.detailTab);
+
+      //pour profile Image admin update
+      this.iduserToChangeProfile = index.id;
+      // console.log(this.codeIdArticlePrint);
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
@@ -1547,6 +1587,17 @@ var vthis = new Vue({
         this.dateFilterDisplay = "D'AUJORD'HUI";
       }
       console.log(this.dateFilter);
+    },
+    _u_DisplayImageToUpload(e){
+      const image = e.target.files[0];
+      let reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = e =>{
+        this.avatarMain = e.target.result;
+      }
+      this.fileMain = image;
+      this._u_open_mod_popup_photo();
+
     },
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){

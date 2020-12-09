@@ -97,6 +97,9 @@
 #border-menu{
   border:2px solid #6c7a89;
 }
+#input-file{
+  display: none;
+}
 
 
 

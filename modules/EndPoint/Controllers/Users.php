@@ -135,4 +135,36 @@ class Users extends ResourceController {
     ]);
 
   }
+  public function user_update_profile_picture(){
+    $dataFile = $this->request->getFile('main_image');
+    $iduser = $this->request->getPost('iduser');
+    $nameMainFile = $dataFile->getRandomName();
+    if(!$dataFile->move('uploads/profiles', $nameMainFile)){
+       $status = 400;
+       $message = [
+         'success' => null,
+         'errors' => 'Echec de chargement de l\'image de profile'
+       ];
+       }else{
+         if($this->model->update($iduser,['photo'=> $nameMainFile])){
+           $status = 200;
+           $message = [
+             'success' => 'L\'image du profile a été bien mis à jour',
+             'errors' => null
+           ];
+         }else{
+           $status = 400;
+           $message = [
+             'success' => null,
+             'errors' => 'Echec de chargement de l\'image de profile'
+           ];
+         }
+      }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => null
+    ]);
+  }
+
 }
