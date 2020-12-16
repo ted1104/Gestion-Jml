@@ -207,7 +207,7 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
-              // console.log(this.dataToDisplay);
+              console.log(this.dataToDisplay);
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }

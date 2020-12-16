@@ -73,10 +73,13 @@
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[0].prix_unitaire+' USD':''}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
 
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
+
+																				<!-- <span v-if=""></span> -->
 																			</td>
 																			<td>
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?' > '+dt.logic_detail_data[0].qte_decideur:'-'}}</span>
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{' > '+dt.logic_detail_data[0].qte_decideur}}</span>
+																				<span v-if="dt.logic_detail_data.length < 1 || dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2">-</span>
 																			</td>
 																			<td>
 																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=2)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,2)"><i class='mdi mdi-plus'></i> </button>
@@ -90,6 +93,8 @@
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?'<= '+dt.logic_detail_data[1].qte_decideur:''}}</span>
 
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{'<= '+dt.logic_detail_data[0].qte_decideur}}</span>
+
+																				<span v-if="dt.logic_detail_data.length < 1 || dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1">-</span>
 																			</td>
                                       <td>
 																				<a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i></a>
