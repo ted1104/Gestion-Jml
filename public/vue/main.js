@@ -162,6 +162,9 @@ var vthis = new Vue({
       fileMain :"",
       iduserToChangeProfile :"",
 
+      //LOGIQUE SHOW OR HIDDEN BUTON SAVE AND UPDATE CONFIG PRICE ARTICLE,
+      isAction : true,
+
 
 
 
@@ -184,6 +187,7 @@ var vthis = new Vue({
     const newurl = this.url+"articles-create-one";
     var form = this._u_fx_form_data_art();
     this.messageError = false;
+    this.isLoadSaveMainButtonModal = true;
     return axios
           .post(newurl,form,{headers: this.tokenConfig})
           .then(response =>{
@@ -192,10 +196,12 @@ var vthis = new Vue({
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
                 this._u_fx_form_init_field();
                 this.get_article();
+                this.isLoadSaveMainButtonModal = false;
                 return;
               }
               var err = response.data.message.errors;
               this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
           })
           .catch(error =>{
             console.log(error);
@@ -220,6 +226,7 @@ var vthis = new Vue({
       const newurl = this.url+"articles-create-price";
       var form = this._u_fx_form_data_art_price();
       this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
       return axios
             .post(newurl,form,{headers: this.tokenConfig})
             .then(response =>{
@@ -228,10 +235,12 @@ var vthis = new Vue({
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   this._u_fx_form_init_field();
                   this.get_article();
+                  this.isLoadSaveMainButtonModal = false;
                   return;
                 }
                 var err = response.data.message.errors;
                 this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
             })
             .catch(error =>{
               console.log(error);
@@ -1430,7 +1439,9 @@ var vthis = new Vue({
       this._u_fx_form_init_field();
       this.type_prix = type;
       this.articles_id = art.id;
+      this.isAction = true;
       if(from !=null){
+        this.isAction = false;
         var typePrix = type;
         type = type == 1 ?'Gros':'Détail';
         this.modalTitle = "Modifier le prix de l'article "+art.nom_article+" en "+type;
@@ -1442,13 +1453,14 @@ var vthis = new Vue({
           }
         }
         this.styleModal = 'block';
-
-        console.log(art);
+        console.log(this.isAction);
         return;
       }
       type = type == 1 ?'Gros':'Détail';
       this.modalTitle = "Fixer le prix de l'article "+art.nom_article+" en "+type;
       this.styleModal = 'block';
+
+      console.log(this.isAction);
     },
     _u_close_mod_form(){
       this.styleModal = 'none';
