@@ -46,6 +46,7 @@
                           </div>
                           <div class="card-body">
                               <div class="table-responsive">
+														<!-- {{dataToDisplay}} -->
 																<table class="table">
 																	<thead>
 																		<tr class="bg-secondary">

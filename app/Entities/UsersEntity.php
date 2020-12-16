@@ -61,15 +61,12 @@ class UsersEntity extends Entity{
   public function getLogicRoleDepot(){
     $array = [
       'role'=>self::$stProfileModel->Where('id', $this->attributes['roles_id'])->find(),
-      // 'depot' => self::$stDepotModel->Where('id', $this->attributes['depot_id'])->find()
       'depot' => self::$stDepotModel->getWhere(['id'=>$this->attributes['depot_id']])->getRow()
     ];
     return $array;
   }
   public function setPhoto(String $photo){
-    // if(empty($pass)){
-    //   return;
-    // }
+
     $this->attributes['photo'] = 'default.png';
     return $this;
 

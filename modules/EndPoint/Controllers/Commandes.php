@@ -94,12 +94,17 @@ class Commandes extends ResourceController {
   }
   public function commande_generate_facture_code(){
     $data = $this->model->orderBy('id','DESC')->first();
-    $data = $data->id + 1;
-    if($data < 10){
-      $data = 'FACT-0'.$data;
+    if($data){
+      $data = $data->id + 1;
+      if($data < 10){
+        $data = 'FACT-0'.$data;
+      }else{
+          $data = 'FACT-'.$data;
+      }
     }else{
-        $data = 'FACT-'.$data;
+        $data = 'FACT-01';
     }
+
 
     return $this->respond([
       'status' => 200,

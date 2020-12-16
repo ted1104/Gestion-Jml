@@ -72,6 +72,13 @@
 																		</tr>
 																	</tbody>
 																</table>
+																<div class="text-center" v-if="caissierList.length < 1 && !isNoReturnedData">
+																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="" >
+																</div>
+																<div class="text-center" alt="" v-if="caissierList.length < 1 && isNoReturnedData">
+																	<img src="<?=base_url() ?>/load/empty.png" >
+																	<h6 class="text-danger">Données vide!!</h6>
+																</div>
                               </div>
                           </div>
                         </div>

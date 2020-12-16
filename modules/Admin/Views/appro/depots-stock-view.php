@@ -75,8 +75,12 @@
 																</tbody>
 															</table>
 															<!-- LOAD FOR WAITING DATA -->
-															<div class="text-center" v-if="dataToDisplay.length < 1">
+															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
 																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+															</div>
+															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
+																<img src="<?=base_url() ?>/load/empty.png" >
+																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- PAGINATION -->
 															<!-- <nav aria-label="...">

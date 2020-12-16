@@ -160,7 +160,9 @@ var vthis = new Vue({
 
       avatarMain:"",
       fileMain :"",
-      iduserToChangeProfile :""
+      iduserToChangeProfile :"",
+
+
 
 
 
@@ -172,6 +174,7 @@ var vthis = new Vue({
     this._u_get_code_facture();
     this._u_get_today();
     this._u_fx_get_montant();
+
     // console.log(this.detailTab.logic_article);
     // this._u_next_page(this._u_previous_page);
   },
@@ -204,7 +207,10 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
-              console.log(this.dataToDisplay);
+              // console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
             }).catch(error =>{
               console.log(error);
             })
@@ -307,9 +313,12 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.caissierList = response.data.data;
-
               this.montantTotalAllCommandeParTypeVente = response.data.montantAllCaissier;
-              console.log(response.data.montantAllCaissier);
+
+              if(this.caissierList.length < 1){
+                this.isNoReturnedData = true;
+              }
+
             }).catch(error =>{
               console.log(error);
             })
@@ -922,7 +931,9 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
-              console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
             }).catch(error =>{
               console.log(error);
             })
@@ -1062,7 +1073,7 @@ var vthis = new Vue({
               this.currentIndexPage = indexPage;
               this.paginationTab=[];
               this._u_fx_generate_pagination(response.data.all);
-              console.log(response.data.all);
+              console.log(this.dataToDisplay);
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
