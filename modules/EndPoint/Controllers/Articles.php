@@ -223,7 +223,6 @@ class Articles extends ResourceController {
     $newPrice = $this->request->getPost('prix_unitaire');
     $type = $this->request->getPost('type_prix');
     $newQte = $this->request->getPost('qte_decideur');
-
     if(is_numeric ($newPrice) && is_numeric($newQte)){
       $condition =[
         'articles_id'=>$idarticle,
@@ -235,12 +234,30 @@ class Articles extends ResourceController {
       ];
       $info = $this->articlesPrixModel->Where($condition)->find();
       if($this->articlesPrixModel->update($info[0]->id,$data)){
-        $status = 400;
-        $message = [
-          'success' =>'Modification avec succès',
-          'errors'=>null
+
+        $dataHistorique =[
+          'prix_id'=>$info[0]->id,
+          'type_prix'=>$type,
+          'prix_unitaire'=>$newPrice,
+          'qte_decideur'=>$newQte,
+          'users_id'=>$this->request->getPost('users_id'),
         ];
-        $data = null;
+        if(!$this->articlesPrixHistoriqueModel->insert($dataHistorique)){
+          // $this->articlesPrixModel->RollbackTrans();
+          $status = 400;
+          $message = [
+            'success' =>null,
+            'errors'=>$this->articlesPrixHistoriqueModel->errors()
+          ];
+          $data = null;
+        }else{
+          $status = 400;
+          $message = [
+            'success' =>'Modification avec succès',
+            'errors'=>null
+          ];
+          $data = null;
+        }
       }
 
     }else{
