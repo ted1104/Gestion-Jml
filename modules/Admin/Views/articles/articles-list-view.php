@@ -70,27 +70,27 @@
 																			<td>
 																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=1)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
 
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[0].prix_unitaire+' USD':''}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
+																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[0].prix_unitaire+' USD':dt.logic_detail_data[1].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
 
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
 
-																				<!-- <span v-if=""></span> -->
+
 																			</td>
 																			<td>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?' > '+dt.logic_detail_data[0].qte_decideur:'-'}}</span>
+																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?' > '+dt.logic_detail_data[0].qte_decideur:' > '+dt.logic_detail_data[1].qte_decideur}}</span>
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{' > '+dt.logic_detail_data[0].qte_decideur}}</span>
 																				<span v-if="dt.logic_detail_data.length < 1 || dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2">-</span>
 																			</td>
 																			<td>
 																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=2)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,2)"><i class='mdi mdi-plus'></i> </button>
 
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[1].prix_unitaire+' USD':''}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,2,1)"></i></span>
+																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[1].prix_unitaire+' USD':dt.logic_detail_data[0].prix_unitaire +' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,2,1)"></i></span>
 
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,2,1)"></i></span>
 
 																			</td>
 																			<td>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?'<= '+dt.logic_detail_data[1].qte_decideur:''}}</span>
+																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?'<= '+dt.logic_detail_data[1].qte_decideur:'<= '+dt.logic_detail_data[0].qte_decideur}}</span>
 
 																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{'<= '+dt.logic_detail_data[0].qte_decideur}}</span>
 
@@ -149,7 +149,8 @@
 								<label for="qte_decideur">Quantité *</label>
 								<input type="text" class="form-control" id="qte_decideur" aria-describedby="qte_decideur" v-model="qte_decideur">
 							</div>
-							<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Enregistrer</button>
+							<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Modifier</button>
+							<button v-if="!isLoadSaveMainButtonModal" @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
 							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
             </div>
 
