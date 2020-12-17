@@ -2,8 +2,8 @@
 <div class="xp-sidebar">
 
     <!-- Start XP Logobar -->
-    <div class="xp-logobar text-center">
-        <a href="index.html" class="xp-logo"><img src="assets/images/logo.svg" class="img-fluid" alt="logo"></a>
+    <div class="xp-logobar text-center" style="width:150px; height:auto">
+        <a href="index.html" class="xp-logo"><img src="assets/images/logo.jpg" class="img-fluid" alt="logo"></a>
     </div>
     <!-- End XP Logobar -->
 

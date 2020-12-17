@@ -19,9 +19,12 @@
                   <div class="xp-auth-box">
                       <div class="card">
                           <div class="card-body">
-                              <h3 class="text-center mt-0 m-b-15">
-                                  <a href="<?=base_url() ?>" class="xp-web-logo"><img src="assets/images/logo.svg" height="40" alt="logo"></a>
+                              <h3 class="text-center">
+                                  <a href="<?=base_url() ?>" class="xp-web-logo"><img src="<?=base_url() ?>/assets/images/logo.jpg" height="40" alt="logo"></a>
                               </h3>
+															<div class="text-center">
+																<span >Version : 1.0</span>
+															</div>
                               <div class="p-3">
                                   <form action="<?=base_url('login') ?>" autocomplete="off" method="POST">
 																			<?=csrf_field()?>

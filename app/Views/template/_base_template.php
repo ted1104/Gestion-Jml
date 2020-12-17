@@ -7,7 +7,7 @@
     <meta name="keywords" content="admin, admin dashboard, admin panel, admin template, admin theme, bootstrap 4, laravel, crm, analytics, responsive, sass support, ui kits, web app, clean design, creative">
     <meta name="author" content="Themesbox17"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>GESTION BOUTIQUE : <?=$this->renderSection('title') ?> </title>
+    <title>JML : <?=$this->renderSection('title') ?> </title>
     <!-- Fevicon -->
     <link rel="shortcut icon" href="<?=base_url() ?>/assets/images/favicon.ico">
     <!-- Start CSS -->
