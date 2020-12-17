@@ -95,7 +95,7 @@
 																</div>
                             </div>
 														<div class="table-responsive card-body">
-															{{stateStatus}}
+															<!-- {{stateStatus}} -->
 															<table class="table">
 																<thead>
 																	<tr class="bg-secondary">
