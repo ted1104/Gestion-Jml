@@ -164,6 +164,7 @@ var vthis = new Vue({
 
       //LOGIQUE SHOW OR HIDDEN BUTON SAVE AND UPDATE CONFIG PRICE ARTICLE,
       isAction : true,
+      isShowBlocHistoFactureStatus : false
 
 
 
@@ -502,7 +503,7 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
-              console.log(this.ListFiltreData);
+              console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
             })
@@ -1306,6 +1307,7 @@ var vthis = new Vue({
             })
     },
     _searchDataAdmin(limit=this.PerPaged,offset=0, indexPage=0){
+
       if(this.dataToSearch =="" || this.RadioCheckedValue==""){
         this.isResearchPagination = false;
         this.get_commande_admin(this.stateStatus);

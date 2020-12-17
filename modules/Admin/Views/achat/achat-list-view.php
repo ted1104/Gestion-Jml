@@ -95,13 +95,14 @@
 																</div>
                             </div>
 														<div class="table-responsive card-body">
+															{{stateStatus}}
 															<table class="table">
 																<thead>
 																	<tr class="bg-secondary">
 																		<th scope="col">Facture</th>
 																		<th scope="col">Nom client</th>
 																		<th scope="col">Date commande</th>
-																		<th scope="col">{{stateStatus==1?'Commander par':(stateStatus==2?'Payer à':(stateStatus==3?'Livrer par':'Annuler par'))}}</th>
+																		<th scope="col">{{stateStatus==1?'Commander par':(stateStatus==2?'Payer à':(stateStatus==3?'Livrer par':(stateStatus==4?'Annuler par':'Utilisateur')))}}</th>
 																		<th scope="col">Montant</th>
 																		<th scope="col">Status</th>
 																		<th scope="col">{{stateStatus !=3?'Valider':'Print'}}</th>
@@ -118,6 +119,7 @@
 																		<td v-if="stateStatus==2">{{dt.payer_a[0].nom+' '+dt.payer_a[0].prenom}}</td>
 																		<td v-if="stateStatus==3">{{dt.logic_status_histo[2].livre_par.user}}</td>
 																		<td v-if="stateStatus==4">{{dt.logic_status_histo[3].annuler_par.user}}</td>
+																		<td v-if="stateStatus==5">{{dt.status_vente_id.id==1?dt.logic_status_histo[0].attente.user:(dt.status_vente_id.id==2?dt.payer_a[0].nom+' '+dt.payer_a[0].prenom:(dt.status_vente_id.id==3?dt.logic_status_histo[2].livre_par.user:dt.logic_status_histo[3].annuler_par.user))}}</td>
 																		<!--  -->
 																		<td>{{dt.logic_somme}} USD</td>
 																		<td>
@@ -164,10 +166,17 @@
 
 												<div class="col-md-3 col-lg-3 col-xl-3">
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
-														<div class="container">
+														<div class="container" v-if="!isShowBlocHistoFactureStatus">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
-																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
+																<div class="col-md-1">
+																	<i class="mdi mdi-eye  text-right text-success cursor" @click="isShowBlocHistoFactureStatus=!isShowBlocHistoFactureStatus"></i>
+																</div>
+																<div class="col-md-9">
+																	<h5 class="card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
+																</div>
+																<div class="col-md-1">
+																	<i class="mdi mdi-close-circle  text-right text-danger cursor" @click="isShow=!isShow"></i>
+																</div>
 															</div>
 															<div v-for="(det,i) in detailTab.logic_article" class="">
 																<div class="row">
@@ -194,6 +203,48 @@
 																<hr>
 															</div>
 
+														</div>
+														<div class="container" v-if="isShowBlocHistoFactureStatus">
+															<div class="row">
+																<div class="col-md-1">
+																	<i class="mdi mdi-eye  text-right text-success cursor" @click="isShowBlocHistoFactureStatus=!isShowBlocHistoFactureStatus"></i>
+																</div>
+																<div class="col-md-9">
+																	<h5 class="card-title">HISTORIQUE STATUS FACTURE {{detailTab.numero_commande}}</h5>
+																</div>
+																<div class="col-md-1">
+																	<i class="mdi mdi-close-circle  text-right text-danger cursor" @click="isShow=!isShow"></i>
+																</div>
+															</div>
+															<div class="row">
+																<div class="container" v-if="detailTab.status_vente_id.id >= 1">
+																	<span>Status : <span class="badge badge-warning">ATTENTE</span></span><br>
+																	<span>Créer par : {{detailTab.logic_status_histo[0].attente.user}}</span><br>
+																	<span>Date : {{detailTab.logic_status_histo[0].attente.date}}</span><br>
+																	<hr>
+																</div>
+
+																<div class="container margin-top-8" v-if="detailTab.status_vente_id.id >= 2">
+																	<span>Status : <span class="badge badge-info">PAYER</span></span><br>
+																	<span>Payé à : {{detailTab.logic_status_histo[1].payer_par.user}}</span><br>
+																	<span>Date : {{detailTab.logic_status_histo[1].payer_par.date}}</span><br>
+																	<hr>
+																</div>
+
+																<div class="container margin-top-8" v-if="detailTab.status_vente_id.id >= 3">
+																	<span>Status : <span class="badge badge-success">LIVER</span></span><br>
+																	<span>Livré par : {{detailTab.logic_status_histo[2].livre_par.user}}</span><br>
+																	<span>Date : {{detailTab.logic_status_histo[2].livre_par.date}}</span><br>
+																	<hr>
+																</div>
+
+																<div class="container margin-top-8" v-if="detailTab.status_vente_id.id >= 4">
+																	<span>Status : <span class="badge badge-danger">ANNULER</span></span><br>
+																	<span>Annulé par : {{detailTab.logic_status_histo[3].annuler_par.user}}</span><br>
+																	<span>Date : {{detailTab.logic_status_histo[3].annuler_par.date}}</span><br>
+																</div>
+
+															</div>
 														</div>
 													</div>
 												</div>
