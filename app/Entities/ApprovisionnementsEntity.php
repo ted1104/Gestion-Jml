@@ -12,6 +12,10 @@ class ApprovisionnementsEntity extends Entity{
 
   protected $attributes = [
     'id' => null,
+    'plaque_vehicule'=>null,
+    'nom_chauffeur' => null,
+    'telephone_chauffeur' => null,
+    'numero_bordereau' => null,
     'date_approvisionnement' => null,
     'depots_id' => null,
     'users_id' => null,

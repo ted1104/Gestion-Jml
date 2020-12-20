@@ -44,12 +44,18 @@
                                     <label for="codeArt">Nom *</label>
                                     <input type="text" class="form-control" id="nom" aria-describedby="nom" v-model="nom">
                                   </div>
+																	<div class="form-group">
+																		<select class="form-control" v-model="responsable_id">
+																			<option value="">--seletionner Responsable--</option>
+																			<option v-for="(c, i) in dataToDisplay" :value="c.id">{{c.nom+' '+c.prenom}}</option>
+																		</select>
+																	</div>
                                   <div class="form-group">
                                     <label for="nom_article">Adresse </label>
                                     <input type="text" class="form-control" id="adresse" v-model="adresse">
                                   </div>
                               		<button v-if="!isLoadSaveMainButton" @click="add_depot" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
@@ -64,25 +70,27 @@
                                   <thead>
                                     <tr class="bg-secondary">
                                       <th scope="col">Nom dépôt</th>
-                                      <th scope="col">Adresse</th>
+																			<th scope="col">Adresse</th>
+                                      <th scope="col">Responsable</th>
                                       <th scope="col">Action</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr v-for="(dt, index) in dataToDisplay">
+                                    <tr v-for="(dt, index) in depotList">
                                       <th>{{dt.nom}}</th>
                                       <td>{{dt.adresse}}</td>
+																			<td>{{dt.responsable_id}}</td>
                                       <td><a href="#"  class='btn btn-round btn-light' ><i class='mdi mdi-circle-edit-outline text-danger'></i> </a></td>
 
                                     </tr>
                                   </tbody>
                                 </table>
 																<!-- LOAD FOR WAITING DATA -->
-																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<div class="text-center" v-if="depotList.length < 1 && !isNoReturnedData">
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
-																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/empty.png" >
+																<div class="text-center" alt="" v-if="depotList.length < 1 && isNoReturnedData">
+																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
 																<!-- PAGINATION -->

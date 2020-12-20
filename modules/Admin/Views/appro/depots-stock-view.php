@@ -69,17 +69,17 @@
 																	<tr v-for="(dt, index) in dataToDisplay">
 																		<td>{{dt.nom}}</td>
 																		<td>{{dt.adresse}}</td>
-																		<td>-</td>
+																		<td>{{dt.responsable_id}}</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
 															</table>
 															<!-- LOAD FOR WAITING DATA -->
 															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																<img src="<?=base_url() ?>/load/empty.png" >
+																<img src="<?=base_url() ?>/public/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- PAGINATION -->
@@ -105,35 +105,35 @@
 																<h5 class="col-md-9 card-title">DETAIL ARTICLES {{detailTab.nom}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
-
 															<!-- {{checkBoxArticles}} -->
 															<div  class="">
 																<div class="row">
-																	<table class="table">
-																		<thead>
-																			<tr>
-																				<th scope="col">code</th>
-																				<th scope="col">Article</th>
-																				<th scope="col">Qte Réelle</th>
-																				<th scope="col">Qte Virtuelle</th>
-																				<th scope="col">Etat</th>
+																	<div class="table-responsive container">
+																		<table class="table">
+																			<thead>
+																				<tr class="bg-secondary">
+																					<th scope="col">code</th>
+																					<th scope="col">Article</th>
+																					<th scope="col">Qte Réelle</th>
+																					<th scope="col">Qte Virtuelle</th>
+																					<th scope="col">Etat</th>
 
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr v-for="(det,i) in detailTab.logic_article_stock">
-																				<td>{{det.articles_id[0].code_article}}</td>
-																				<td>{{det.articles_id[0].nom_article}}</td>
-																				<td>{{det.qte_stock}}</td>
-																				<td>{{det.qte_stock_virtuel}}</td>
-																				<td>
-																					<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
-																				</td>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr v-for="(det,i) in detailTab.logic_article_stock">
+																					<td>{{det.articles_id[0].code_article}}</td>
+																					<td>{{det.articles_id[0].nom_article}}</td>
+																					<td>{{det.qte_stock}}</td>
+																					<td>{{det.qte_stock_virtuel}}</td>
+																					<td>
+																						<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
+																					</td>
 
-																			</tr>
-																		</tbody>
-																	</table>
-
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
 
 																</div>
 

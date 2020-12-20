@@ -47,7 +47,7 @@
 																	<tr class="bg-secondary">
 																		<th scope="col">Date</th>
 																		<th scope="col">Fait par</th>
-																		<th scope="col">Destionation</th>
+																		<th scope="col">Destination</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
@@ -89,33 +89,43 @@
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT {{detailTab.depots_id[0].nom}}</h5>
+																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 
 															<!-- {{checkBoxArticles}} -->
 															<div  class="">
 																<div class="row">
-																	<table class="table">
-																		<thead>
-																			<tr>
-																				<th scope="col">code</th>
-																				<th scope="col">Article</th>
-																				<th scope="col">Qte</th>
+																	<div class="table-responsive container">
+																		<div class="row">
+																			<div class="col-md-6 col-lg-6 col-xl-6">
+																				<span>Chauffeur : {{detailTab.nom_chauffeur}}</span><br>
+																				<span>Téléphone : {{detailTab.telephone_chauffeur}}</span><br>
+																			</div>
+																			<div class="col-md-6 col-lg-6 col-xl-6">
+																				<span>Plaque : {{detailTab.plaque_vehicule}}</span><br>
+																				<span>Num Bordereau : {{detailTab.numero_bordereau}}</span><br>
+																			</div>
+																		</div>
+																		<table class="table">
+																			<thead>
+																				<tr class="bg-secondary">
+																					<th scope="col">code</th>
+																					<th scope="col">Article</th>
+																					<th scope="col">Qte</th>
 
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr v-for="(det,i) in detailTab.logic_data_article">
-																				<td>{{det.articles_id[0].code_article}}</td>
-																				<td>{{det.articles_id[0].nom_article}}</td>
-																				<td>{{det.qte}}</td>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr v-for="(det,i) in detailTab.logic_data_article">
+																					<td>{{det.articles_id[0].code_article}}</td>
+																					<td>{{det.articles_id[0].nom_article}}</td>
+																					<td>{{det.qte}}</td>
 
-																			</tr>
-																		</tbody>
-																	</table>
-
-
+																				</tr>
+																			</tbody>
+																		</table>
+																</div>
 																</div>
 
 																<hr>

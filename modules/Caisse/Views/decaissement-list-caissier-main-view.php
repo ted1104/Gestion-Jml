@@ -59,7 +59,7 @@
                                     <textarea class="form-control" name="inputTextarea" id="description" rows="3" v-model="note"></textarea>
                                   </div>
                               		<button v-if="!isLoadSaveMainButton" @click="add_decaissement_externe" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
@@ -116,10 +116,10 @@
                                   </tbody>
                                 </table>
 																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
 																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/empty.png" >
+																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
 															</div>
@@ -148,10 +148,10 @@
 																	</tbody>
 																</table>
 																<div class="text-center" v-if="tabListData.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
 																<div class="text-center" alt="" v-if="tabListData.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/empty.png" >
+																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
                               </div>
@@ -194,7 +194,7 @@
 									<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 								</div>
 								<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_decaissement" class="btn btn-primary">Confirmer</button>
-								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 							</div>
             </div>
         </div>

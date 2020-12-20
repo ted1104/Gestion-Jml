@@ -20,7 +20,7 @@
                       <div class="card">
                           <div class="card-body">
                               <h3 class="text-center">
-                                  <a href="<?=base_url() ?>" class="xp-web-logo"><img src="<?=base_url() ?>/assets/images/logo.jpg" height="40" alt="logo"></a>
+                                  <a href="<?=base_url() ?>" class="xp-web-logo"><img src="<?=base_url() ?>/public/assets/images/logo.jpg" height="40" alt="logo"></a>
                               </h3>
 															<div class="text-center">
 																<span >Version : 1.0</span>

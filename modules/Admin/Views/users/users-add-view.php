@@ -141,7 +141,7 @@
 																			</div>
 
 																			<button v-if="!isLoadSaveMainButton" @click="add_users" class="btn btn-primary">Enregistrer</button>
-																			<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
+																			<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 
 																		</div>
 																	</div>

@@ -50,13 +50,13 @@
                                     <input type="text" class="form-control" id="adresse" v-model="montant_max">
                                   </div>
                               		<button v-if="!isLoadSaveMainButton" @click="update_etat_critique_config" class="btn btn-primary">Modifier</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
 												<div class="col-md-8 col-lg-8 col-xl-8">
 												<div class="card m-b-30">
-													<div class="card-header row bg-white">
+													<div class="card-header bg-white">
 															<h5 class="card-title text-black col-md-6">CONFIGURATIONS ACTUELLES ETAT CRITIQUE</h5>
 															<div class="col-md-6">
 																<div class="row text-center" v-if="dataToDisplay.length >0">
@@ -93,7 +93,7 @@
                                 </table>
 																<!-- LOAD FOR WAITING DATA -->
 																<div class="text-center" v-if="dataToDisplay.length < 1">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
 																<!-- PAGINATION -->
                               </div>

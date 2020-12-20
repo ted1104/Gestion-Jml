@@ -8,7 +8,7 @@ class CommandesModel extends Model{
   protected $table = 'g_interne_vente';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['numero_commande','nom_client','date_vente','status_vente_id','users_id','depots_id','payer_a','is_negotiate'];
+  protected $allowedFields = ['numero_commande','nom_client','telephone_client','date_vente','status_vente_id','users_id','depots_id','payer_a','is_negotiate'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'numero_commande' => 'required|is_unique[g_interne_vente.numero_commande]',
@@ -64,7 +64,25 @@ class CommandesModel extends Model{
     return $is;
 
   }
+  public function createUniqueAchatID(){
+        $alpha  = '1234567890932893208394238439408230948234023482309483094830948230';
+        $length = 6;
+        $tip = array();
+        $alphaLength = strlen($alpha) - 1;
+        for($i = 0; $i< $length; $i++){
+                $n = rand(0, $alphaLength);
+                $tip[] = $alpha[$n];
+        }
+        return implode($tip);
+  }
+  public function checkIfUniqueAchatIDExist($uniqueID){
+    $data = $this->Where('numero_commande',$uniqueID)->find();
+    if($data){
+      return $this->checkIfUniqueAchatIDExist($this->createUniqueAchatID());
+    }
+    return $uniqueID;
 
+  }
 
   // LES TRANSACTIONS
   public function beginTrans(){

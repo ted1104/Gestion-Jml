@@ -73,10 +73,10 @@
 																	</tbody>
 																</table>
 																<div class="text-center" v-if="caissierList.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="" >
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="" >
 																</div>
 																<div class="text-center" alt="" v-if="caissierList.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/empty.png" >
+																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
                               </div>
@@ -118,7 +118,7 @@
 								<input type="text" class="form-control" id="qte_decideur" aria-describedby="qte_decideur" v-model="qte_decideur">
 							</div>
 							<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Enregistrer</button>
-							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
             </div>
 
         </div>

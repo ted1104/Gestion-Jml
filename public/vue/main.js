@@ -5,7 +5,7 @@ var vthis = new Vue({
   },
   data () {
     return {
-      url : 'http://gestionboutique.local/api/v1/',
+      url : 'http://127.0.0.1/GestionBoutique/api/v1/',
       tokenConfig : {
         'authorization' : '3bacb9ec-9fbc-4442-ab76-3a6e35b0a627',
         'Content-Type':'multipart/form-data'
@@ -24,6 +24,7 @@ var vthis = new Vue({
         "message":[],
       },
       dataToDisplay : [],
+      dataToDisplaySecond : [],
       styleModal : 'none',
       display : this.styleModal,
       modalTitle :"",
@@ -91,17 +92,24 @@ var vthis = new Vue({
 
       //VARIABLE ADD COMMANDES PETIT FORMULAIRE ARTICLES
       codeArticle :"",
+      qteTotal : 0,
+      qtePv : 0,
       qte : 0,
 
       //VARIABLE CREATE COMMANDE
       numero_commande:"",
       nom_client:"",
+      telephone_client: "",
       date_vente:"",
       payer_a : "",
 
       //VARIABLE FORM APPROVISIONNEMENT
       depots_id :"",
       date_approvisionnement :"",
+      plaque : "",
+      nom_chauffeur : "",
+      num_chauffeur : "",
+      num_bordereau : "",
 
       //VALIDATION PAYEMENT CAISSIER
       password_op : "",
@@ -129,6 +137,7 @@ var vthis = new Vue({
 
       //VARIABLE AJOUT DEPOTS
       nom :"",
+      responsable_id : "",
       adresse :"",
 
       //  VARIABLE
@@ -178,6 +187,8 @@ var vthis = new Vue({
     this._u_get_code_facture();
     this._u_get_today();
     this._u_fx_get_montant();
+
+    // alert(this.dpot_id);
 
     // console.log(this.detailTab.logic_article);
     // this._u_next_page(this._u_previous_page);
@@ -260,6 +271,7 @@ var vthis = new Vue({
       form.append('status_vente_id',1);
       form.append('depots_id',this.depots_id);
       form.append('payer_a',this.payer_a);
+      form.append('telephone_client', this.telephone_client);
 
       for(var i=0; i< this.tabListData.length; i++){
         form.append('articles_id[]', this.tabListData[i]['id']);
@@ -282,6 +294,7 @@ var vthis = new Vue({
                   this._u_get_code_facture();
                   this.tabListData=[];
                   this.nom_client = "";
+                  this.telephone_client = "";
                   this.depots_id = "";
                   this.payer_a = "";
                   this.isLoadSaveMainButton = false;
@@ -338,12 +351,18 @@ var vthis = new Vue({
       const newurl = this.url+"approvisionnement-create";
       var form = new FormData();
       form.append('date_approvisionnement',this.date_approvisionnement);
-      form.append('depots_id',this.depots_id);
+      form.append('depots_id',this.dpot_id);
       form.append('users_id',this.users_id);
+      form.append('plaque_vehicule',this.plaque);
+      form.append('nom_chauffeur',this.nom_chauffeur);
+      form.append('telephone_chauffeur',this.num_chauffeur);
+      form.append('numero_bordereau',this.num_bordereau);
         for(var i=0; i< this.tabListData.length; i++){
           console.log(this.tabListData[i].qtea);
           form.append('articles_id[]', this.tabListData[i].info[0].id);
           form.append('qte[]', this.tabListData[i].qtea);
+          form.append('qte_total[]', this.tabListData[i].qteTotal);
+          form.append('qte_pv[]', this.tabListData[i].qtePv);
   			}
         if(this.tabListData.length < 1){
           this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
@@ -357,7 +376,7 @@ var vthis = new Vue({
                 if(response.data.message.success !=null){
                   var err = response.data.message.success;
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
-                  // this._u_fx_form_init_field();
+                  this._u_fx_form_init_field();
                   // this.get_article();
                   this.isLoadSaveMainButton = false;
                   this.tabListData=[];
@@ -428,7 +447,7 @@ var vthis = new Vue({
               if(response.data.message.success !=null){
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
-                this.get_commande_caissier(2);
+                this.get_commande_caissier(1);
                 this._u_close_mod_form();
                 this.password_op= "";
                 return;
@@ -693,8 +712,9 @@ var vthis = new Vue({
           .get(newurl,{headers: this.tokenConfig})
           .then(response =>{
             this.dataToDisplay = response.data.data;
-            console.log(this.dataToDisplay);
-            // alert('here');
+            if(this.dataToDisplay.length < 1){
+              this.isNoReturnedData = true;
+            }
           }).catch(error =>{
             console.log(error);
           })
@@ -923,7 +943,7 @@ var vthis = new Vue({
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
                 this._u_fx_form_init_field();
-                this.get_depot();
+                this.get_depots();
                 this.isLoadSaveMainButton = false;
                 return;
               }
@@ -934,20 +954,7 @@ var vthis = new Vue({
           .catch(error =>{
             console.log(error);
           })
-  },
-    get_depot(){
-      const newurl = this.url+"depot-get-all";
-      return axios
-            .get(newurl,{headers: this.tokenConfig})
-            .then(response =>{
-              this.dataToDisplay = response.data.data;
-              if(this.dataToDisplay.length < 1){
-                this.isNoReturnedData = true;
-              }
-            }).catch(error =>{
-              console.log(error);
-            })
-    },
+        },
     get_stock_depots_by_depot(){
     const newurl = this.url+"stock-depot-by-depot/"+this.dpot_id+"/depot";
     this.dataToDisplay=[];
@@ -1355,6 +1362,12 @@ var vthis = new Vue({
     },
 
 
+    _refrechData(callbackFunction){
+      // console.log(this.stateStatus);
+      callbackFunction(this.stateStatus);
+    },
+
+
     _u_fx_calculateTotal_Record_Recherche(){
       var total = 0;
       if(this.isParameterAdvanced==3 || this.isParameterAdvanced==2){
@@ -1418,21 +1431,28 @@ var vthis = new Vue({
     },
     _u_create_line_article_appro(){
       const newurl = this.url+"articles-search-by-code/"+this.codeArticle+"/code";
-      if(this.qte < 1){
+      if(this.qte < 1 || this.qteTotal < 1 || this.qtePv < 0){
         this._u_fx_config_error_message_bottom("Message",['La quantité doit être superieure à 1'],'alert-danger');
         return;
       }
+      if(Number(this.qte) + Number(this.qtePv) != Number(this.qteTotal)){
+        this._u_fx_config_error_message_bottom("Message",['La somme de quantités bonne et PV doit être egale à la quantité totale'],'alert-danger');
+        return;
+      }
+      this.isLoadSaveMainButtonModal = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               if(response.data.data.length <1){
                 this._u_fx_config_error_message_bottom("Message",['Le code article n\'existe pas'],'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
                 return;
               };
-              this.tabListData.push({'info':response.data.data,'qtea':this.qte})
-              console.log(this.tabListData[0].info[0].code_article);
+              this.tabListData.push({info:response.data.data,qteTotal:this.qteTotal,qtePv:this.qtePv,qtea:this.qte})
+              console.log(this.tabListData);
               this.messageErrorBottom = false;
               this._u_fx_field_multi_form_art();
+              this.isLoadSaveMainButtonModal = false;
             }).catch(error =>{
               console.log(error);
             })
@@ -1516,7 +1536,7 @@ var vthis = new Vue({
 
       //pour profile Image admin update
       this.iduserToChangeProfile = index.id;
-      // console.log(this.codeIdArticlePrint);
+      console.log(this.detailTab);
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
@@ -1664,6 +1684,7 @@ var vthis = new Vue({
 
       //FORMULAIRE ADD DEPOT
       this.nom ="";
+      this.responsable_id ="";
       this.adresse ="";
 
       //VARIANLE ADD Users
@@ -1681,6 +1702,14 @@ var vthis = new Vue({
       this.password_main_conf ="";
       this.password_op ="";
       this.password_op_conf ="";
+
+
+      //CHAMPS APPROVISONNEMENT
+      this.plaque = "";
+      this.nom_chauffeur = "";
+      this.num_chauffeur = "";
+      this.num_bordereau ="";
+
 
 
     },
@@ -1704,7 +1733,9 @@ var vthis = new Vue({
     },
     _u_fx_field_multi_form_art(){
       this.codeArticle ="";
-      this.qte = "";
+      this.qte = 0;
+      this.qteTotal = 0;
+      this.qtePv = 0;
     },
     _u_fx_form_data_decaissement(){
      var formData = new FormData();
@@ -1746,71 +1777,76 @@ var vthis = new Vue({
      var formData = new FormData();
      formData.append('nom',vthis.nom);
      formData.append('adresse',vthis.adresse);
+     formData.append('responsable_id', this.responsable_id);
      return formData;
    },
     _u_fx_to_load_router(){
-    const pth = window.location.pathname.split('/');
-    if(pth[1] ==='admin-add-article' || pth[1] ==='admin-list-article'){
+    let pth = window.location.pathname.split('/');
+    //pth = pth.split(',');
+    console.log(pth);
+    if(pth[2] ==='admin-add-article' || pth[2] ==='admin-list-article'){
       this.get_article();
     }
-    if(pth[1] ==='admin-add-appro' || pth[1] ==='facturier-add-achat' || pth[1]==='caissier-add-achat' ||  pth[1]=='admin-add-users'){
+    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users'){
       this.get_depots();
     }
-    if(pth[1]=='facturier-add-achat' || pth[1]==='caissier-add-achat'){
+    if(pth[2]=='facturier-add-achat' || pth[2]==='caissier-add-achat'){
       this.get_caissiers();
       this.get_stock_depots();
     }
-    if(pth[1]=='facturier-list-achat'){
+    if(pth[2]=='facturier-list-achat'){
       this.get_commande_facturier();
     }
-    if(pth[1]=='caissier-list-achat'){
+    if(pth[2]=='caissier-list-achat'){
       this.get_commande_caissier();
     }
-    if(pth[1]=='magaz-list-achat'){
+    if(pth[2]=='magaz-list-achat'){
       this.get_commande_magazinier();
     }
-    if(pth[1]=='admin-list-achat'){
+    if(pth[2]=='admin-list-achat'){
       this.get_commande_admin();
     }
-    if(pth[1]=='admin-list-negotiation-achat'){
+    if(pth[2]=='admin-list-negotiation-achat'){
       this.get_commande_attente_negotiation();
       this.get_caissier_main();
     }
-    if(pth[1]=='caissier-add-decaissement'){
+    if(pth[2]=='caissier-add-decaissement'){
       this.get_caissier_main();
       this.get_decaisssement_caissier_secondaire();
     }
-    if(pth[1]=='caissier-list-decaissement'){
+    if(pth[2]=='caissier-list-decaissement'){
       this.get_decaisssement_caissier_principale();
     }
-    if(pth[1]=='admin-histo-appro'){
+    if(pth[2]=='admin-histo-appro'){
       this.get_historique_approvisionnement();
     }
-    if(pth[1]=='admin-stock'){
+    if(pth[2]=='admin-stock'){
       this.get_stock_depots();
     }
-    if(pth[1]=='admin-config-depot'){
-      this.get_depot();
+    if(pth[2]=='admin-config-depot'){
+      this.get_depots();
+      this.get_users_admin(100000000000);
+      // get_users_admin(limit=this.PerPaged,offset=0, indexPage=0)
     }
-    if(pth[1]=='admin-config-etat-critique'){
+    if(pth[2]=='admin-config-etat-critique'){
       this.get_configuration_etat_critique();
     }
-    if(pth[1]=='magaz-histo-appro'){
+    if(pth[2]=='magaz-histo-appro'){
       this.get_historique_approvisionnement_by_depot();
     }
-    if(pth[1]=='magaz-stock'){
+    if(pth[2]=='magaz-stock'){
       this.get_stock_depots_by_depot();
     }
-    if(pth[1]=='admin-caisse'){
+    if(pth[2]=='admin-caisse'){
       this.get_caissiers();
     }
-    if(pth[1]=='admin-decaissement'){
+    if(pth[2]=='admin-decaissement'){
       this.get_decaisssement_histo_interne_admin();
     }
-    if(pth[1]=='admin-add-users'){
+    if(pth[2]=='admin-add-users'){
       this.get_profiles();
     }
-    if(pth[1]=='admin-list-users'){
+    if(pth[2]=='admin-list-users'){
       this.get_users_admin();
     }
 

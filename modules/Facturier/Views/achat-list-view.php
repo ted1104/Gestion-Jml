@@ -55,6 +55,8 @@
                                   </div>
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
+
+																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_facturier)"><i class="mdi mdi-restore"></i> </button>
 																	</div>
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
@@ -90,12 +92,12 @@
                             </div>
 														<div class="table-responsive card-body">
 															<!-- {{checkBoxAchatSelected}} -->
-															<div v-if="checkBoxAchatSelected.length > 0" class="u-border pull-right u-animation-FromTop">
+															<div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
 																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_facturier_annulation()"><i class="mdi mdi-delete"></i>Annuler</button>
 															</div>
 															<table class="table margin-top-8">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th>#</th>
 																		<th scope="col">Facture</th>
 																		<th scope="col">Nom client</th>
@@ -116,7 +118,7 @@
 																			</div>
 																		</td>
 																		<td>{{dt.numero_commande}}</td>
-																		<td>{{dt.nom_client}}</td>
+																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td v-if="stateStatus==3">
@@ -135,10 +137,10 @@
 																</tbody>
 															</table>
 															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																<img src="<?=base_url() ?>/load/empty.png" >
+																<img src="<?=base_url() ?>/public/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- PAGINATION LORS DE LA RECHERRCHE -->
@@ -176,7 +178,7 @@
 																<div class="row">
 																	<div class="col-md-6">
 																		<button v-if="!isLoadNego" type="button" @click="add_ask_negotiation(detailTab.id)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-call-made mr-2"></i> Negocier</button>
-																		<img v-if="isLoadNego" src="<?=base_url() ?>/load/loader.gif" alt="">
+																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																	<div class="col-md-6 text-right">
 																		<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2"><i class="mdi mdi-delete mr-2"></i> Annuler</button>
@@ -252,7 +254,7 @@
 										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 									</div>
 									<button v-if="!isLoadSaveMainButtonModal" @click="add_annuler_achat" class="btn btn-primary">Confirmer</button>
-									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 								</div>
 							</div>
 

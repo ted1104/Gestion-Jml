@@ -47,11 +47,23 @@
                             <div class="card-body">
                                   <div class="form-group">
                                     <label for="numero_commande">Numéro Facture</label>
-                                    <input type="text" class="form-control" id="numero_commande" aria-describedby="numero_commande" v-model="numero_commande" disabled>
+																		<div class="row">
+																			<div class="col-md-10 col-lg-10 col-xl-10 ">
+																				<input type="text" class="form-control" id="numero_commande" aria-describedby="numero_commande" v-model="numero_commande" disabled>
+																			</div>
+																			<div class="col-md-2 col-lg-2 col-xl-2">
+																				<button class="btn btn-round btn-outline-info" @click="_u_get_code_facture"><i class="mdi mdi-restart"></i> </button>
+																			</div>
+																		</div>
+
                                   </div>
                                   <div class="form-group">
                                     <label for="nom_client">Nom du client</label>
                                     <input type="text" class="form-control" id="nom_client" v-model="nom_client">
+                                  </div>
+																	<div class="form-group">
+                                    <label for="telephone_client">Nom Téléphone client</label>
+                                    <input type="text" class="form-control" id="telephone_client" v-model="telephone_client">
                                   </div>
 																	<div class="form-group">
                                     <label for="depots_id">Dépôt Traiteur</label>
@@ -70,7 +82,7 @@
                                     <input type="text" class="form-control" id="date_vente" v-model="date_vente" disabled>
                                   </div>
                                 	<button v-if="!isLoadSaveMainButton" @click="add_commande" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
@@ -103,14 +115,14 @@
 	                                </div>
 																	<div class="form-group col-md-4 col-lg-4 col-xl-4">
 	                                   <button class="btn btn-round btn-success" v-if="!isLoadSaveMainButtonModal" @click="_u_create_line_article"><i class="mdi mdi-plus"></i> </button>
-																		 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+																		 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 	                                </div>
                                 </div>
                             </div>
 														<div class="table-responsive">
 															<table class="table">
 																<thead>
-																	<tr>
+																	<tr class="bg-secondary">
 																		<th scope="col">Code</th>
 																		<th scope="col">Nom</th>
 																		<th scope="col">Qte</th>
@@ -168,14 +180,14 @@
 																	<tr v-for="(dt, index) in dataToDisplay">
 																		<td>{{dt.nom}}</td>
 																		<td>{{dt.adresse}}</td>
-																		<td>-</td>
+																		<td>{{dt.responsable_id}}</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
 															</table>
 															<!-- LOAD FOR WAITING DATA -->
 															<div class="text-center" v-if="dataToDisplay.length < 1">
-																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<!-- PAGINATION -->
 															<!-- <nav aria-label="...">

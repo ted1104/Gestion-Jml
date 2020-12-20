@@ -78,10 +78,10 @@
 																	</tbody>
 																</table>
 																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="" >
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="" >
 																</div>
 																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/empty.png" >
+																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
 																<!-- PAGINATION -->
@@ -112,7 +112,7 @@
 																<div class="row">
 																	<div class="col-md-4">
 																		<label for="input-file">
-																			<img :src="'uploads/profiles/'+detailTab.photo" alt="Logo ByOseMarket" class="rounded-circle" style="width:100px !important; height:100px !important">
+																			<img :src="'<?=base_url() ?>/public/uploads/profiles/'+detailTab.photo" alt="Logo ByOseMarket" class="rounded-circle" style="width:100px !important; height:100px !important">
 																		</label>
 																		<input type="file" ref="file" id="input-file" accept="image/*" @change="_u_DisplayImageToUpload">
 																	</div>
@@ -181,7 +181,7 @@
 							<br>
 							<div class="text-center">
 								<button v-if="!isLoadSaveMainButtonModal" @click="update_image_profile" class="btn btn-secondary">Mettre à jour le profile </button>
-								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 							</div>
             </div>
 

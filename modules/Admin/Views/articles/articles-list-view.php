@@ -105,10 +105,10 @@
                                   </tbody>
                                 </table>
 																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
 																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/load/empty.png" >
+																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
                               </div>
@@ -155,7 +155,7 @@
 							<div v-if="isAction">
 								<button v-if="!isLoadSaveMainButtonModal" @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
 							</div>
-							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
             </div>
 
         </div>

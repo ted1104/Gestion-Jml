@@ -54,10 +54,11 @@
                                   </div>
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
+																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_magazinier)"><i class="mdi mdi-restore"></i> </button>
 																	</div>
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Rechercher par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-info margin-left-4" @click="_u_formatDateFilter(get_commande_magazinier)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_magazinier)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 																<div v-if="showAdvancedSearch" class="margin-top-4 u-animation-FromTop">
@@ -105,7 +106,7 @@
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
 																		<th>{{dt.numero_commande}}</th>
-																		<td>{{dt.nom_client}}</td>
+																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
 																		<td v-if="stateStatus==1">
@@ -142,10 +143,10 @@
 																</tbody>
 															</table>
 															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																<img src="<?=base_url() ?>/load/empty.png" >
+																<img src="<?=base_url() ?>/public/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- PAGINATION LORS DE LA RECHERRCHE -->

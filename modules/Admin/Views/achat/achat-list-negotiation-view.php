@@ -46,6 +46,7 @@
 																	<div @click="get_commande_attente_negotiation(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
                                       Validé(e)s <span class="badge badge-pill badge-light">{{ListFiltreData.negotiation_valide==undefined?'0':ListFiltreData.negotiation_valide}}</span>
                                   </div>
+																	<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_attente_negotiation)"><i class="mdi mdi-restore"></i> </button>
 																	<div class="form-group col-md-4 pull-right">
                                     <!-- <label for="payer_a">Caissier Traiteur</label> -->
 																		<select class="form-control" v-model="payer_a">
@@ -72,7 +73,7 @@
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
 																		<th>{{dt.numero_commande}}</th>
-																		<td>{{dt.nom_client}}</td>
+																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td>
@@ -88,10 +89,10 @@
 																</tbody>
 															</table>
 															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																<img src="<?=base_url() ?>/load/empty.png" >
+																<img src="<?=base_url() ?>/public/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 														</div>
@@ -109,12 +110,12 @@
 																<div class="row">
 																	<div class="col-md-6">
 																		<button v-if="!isLoadNego" type="button" class="btn btn-rounded btn-success padding-4-l-g font-size-2" @click="add_validate_negotiation(detailTab.id)"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Valider</button>
-																		<img v-if="isLoadNego" src="<?=base_url() ?>/load/loader.gif" alt="">
+																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																	<div class="col-md-6 text-right">
 																		<button type="button" v-if="!isLoadNegoAnnuler && checkBoxArticles.length < 1" @click="add_annuler_tout_validate_negotiation(detailTab.id)" class="btn btn-rounded btn-danger padding-4-l-g font-size-2"><i class="mdi mdi-delete mr-2"></i>Annuler Tout</button>
 																		<button type="button" v-if="!isLoadNegoAnnuler && checkBoxArticles.length > 0" @click="add_annuler_validate_negotiation_selectionneer(detailTab.id)" class="btn btn-rounded btn-danger padding-4-l-g font-size-2"><i class="mdi mdi-delete mr-2"></i>Annuler({{checkBoxArticles.length}})</button>
-																		<img v-if="isLoadNegoAnnuler" src="<?=base_url() ?>/load/loader.gif" alt="">
+																		<img v-if="isLoadNegoAnnuler" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																</div>
 																<hr>

@@ -69,22 +69,35 @@ class OperationCaisseEncaissement extends ResourceController {
   //AJOUTER UNE DEMANDE DE DECAISSEMENT
   public function createDecaissement(){
     $data = new DecaissementEntity($this->request->getPost());
-    if(!$this->decaissementModel->insert($data)){
-      $status = 400;
-      $message = [
-        'success' =>null,
-        'errors'=>$this->decaissementModel->errors()
-      ];
-      $data = null;
+    $userExistCaisse = $this->caisseModel->Where('users_id',$data->users_id_from->id)->find();
+    $montant = $data->montant;
+    if($data->montant=="" && !$userExistCaisse){
+      $montant = 0;
+    }
+    if($userExistCaisse[0]->montant >= $montant){
+        if(!$this->decaissementModel->insert($data)){
+          $status = 400;
+          $message = [
+            'success' =>null,
+            'errors'=>$this->decaissementModel->errors()
+          ];
+          $data = null;
+        }else{
+          $status = 200;
+          $message = [
+            'success' => 'Demande de décaissement envoyée et reste en attente',
+            'errors' => null
+          ];
+          $data = 'null';
+        }
     }else{
       $status = 200;
       $message = [
-        'success' => 'Demande de décaissement envoyée et reste en attente',
-        'errors' => null
+        'success' => null,
+        'errors' => ["Vous n'avez pas ce montant dans votre caisse"]
       ];
       $data = 'null';
     }
-
     return $this->respond([
       'status' => $status,
       'message' =>$message,
@@ -193,7 +206,6 @@ class OperationCaisseEncaissement extends ResourceController {
     if($data->montant=="" && !$userExistCaisse){
       $montant = 0;
     }
-
     if($userExistCaisse[0]->montant >= $montant){
       if(!$this->decaissementExterneModel->insert($data)){
 

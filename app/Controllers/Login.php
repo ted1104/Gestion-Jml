@@ -46,7 +46,7 @@ class Login extends BaseController {
   public function logout(){
     $this->session->remove('users');
     $this->session->setFlashData('message',['title' => 'Deconnexion Info', 'content' => 'Vous vous êtes deconnecté! Bye A plus tard','color'=>'alert-info']);
-    return redirect()->to('/');
+    return redirect()->to(base_url());
   }
 
 }

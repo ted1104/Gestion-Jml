@@ -63,7 +63,7 @@
                     </li>
                     <li class="list-inline-item mr-0">
                         <div class="dropdown xp-userprofile">
-                            <a class="dropdown-toggle user-profile-img" href="#" role="button" id="xp-userprofile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="uploads/profiles/<?=session('users')['info'][0]->photo ?>" alt="user-profile" class="rounded-circle img-fluid" style="width:50px !important; height:50px !important"><span class="xp-user-live"></span></a>
+                            <a class="dropdown-toggle user-profile-img" href="#" role="button" id="xp-userprofile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?=base_url() ?>/public/uploads/profiles/<?=session('users')['info'][0]->photo ?>" alt="user-profile" class="rounded-circle img-fluid" style="width:50px !important; height:50px !important"><span class="xp-user-live"></span></a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="xp-userprofile">
                                 <a class="dropdown-item" href="#">Bienvenu, <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></a>

@@ -48,12 +48,16 @@ class Approvisionnement extends ResourceController {
       $nArt = count($data->articles_id);
       $article = $data->articles_id;
       $qte = $data->qte;
+      $qte_total = $data->qte_total;
+      $qte_pv = $data->qte_pv;
 
       for ($i=0; $i < $nArt; $i++) {
         $dataDetail = [
           'approvisionnement_id'=>$insertData,
           'articles_id'=>$article[$i],
           'qte'=>$qte[$i],
+          'qte_total'=>$qte_total[$i],
+          'qte_pv'=>$qte_pv[$i]
         ];
         if(!$this->approvisionnementsDetailModel->insert($dataDetail)){
           $this->model->RollbackTrans();
@@ -97,7 +101,7 @@ class Approvisionnement extends ResourceController {
         'success' => 'Le dépôt a été bien approvisionné',
         'errors' => null
       ];
-      $data = 'null';
+      $data = null;
     }
     $this->model->commitTrans();
      return $this->respond([

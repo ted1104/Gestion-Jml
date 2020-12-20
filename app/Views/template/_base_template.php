@@ -9,17 +9,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <title>JML : <?=$this->renderSection('title') ?> </title>
     <!-- Fevicon -->
-    <link rel="shortcut icon" href="<?=base_url() ?>/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="<?=base_url() ?>/public/assets/images/favicon.ico">
     <!-- Start CSS -->
-    <link href="<?=base_url() ?>/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="<?=base_url() ?>/assets/css/icons.css" rel="stylesheet" type="text/css">
-    <link href="<?=base_url() ?>/assets/css/style.css" rel="stylesheet" type="text/css">
-    <link href="<?=base_url() ?>/css/monstyle.css" rel="stylesheet" type="text/css">
-    <link href="<?=base_url() ?>/assets/plugins/animate/animate.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="<?=base_url() ?>/vue/others.js" defer></script>
-    <script type="text/javascript" src="<?=base_url() ?>/lib/vue.js" defer></script>
-    <script type="text/javascript" src="<?=base_url() ?>/lib/axios.min.js" defer></script>
-    <script type="text/javascript" src="<?=base_url() ?>/vue/main.js" defer></script>
+    <link href="<?=base_url() ?>/public/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/public/assets/css/icons.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/public/assets/css/style.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/public/css/monstyle.css" rel="stylesheet" type="text/css">
+    <link href="<?=base_url() ?>/public/assets/plugins/animate/animate.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="<?=base_url() ?>/public/vue/others.js" defer></script>
+    <script type="text/javascript" src="<?=base_url() ?>/public/lib/vue.js" defer></script>
+    <script type="text/javascript" src="<?=base_url() ?>/public/lib/axios.min.js" defer></script>
+    <script type="text/javascript" src="<?=base_url() ?>/public/vue/main.js" defer></script>
 
 
     <!-- End CSS -->
@@ -77,19 +77,19 @@
     </div>
 
     <!-- Start JS -->
-    <script src="<?=base_url() ?>/assets/js/jquery.min.js"></script>
-    <script src="<?=base_url() ?>/assets/js/popper.min.js"></script>
-    <script src="<?=base_url() ?>/assets/js/bootstrap.min.js"></script>
-    <script src="<?=base_url() ?>/assets/js/modernizr.min.js"></script>
-    <script src="<?=base_url() ?>/assets/js/detect.js"></script>
-    <script src="<?=base_url() ?>/assets/js/jquery.slimscroll.js"></script>
-    <script src="<?=base_url() ?>/assets/js/sidebar-menu.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/jquery.min.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/popper.min.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/bootstrap.min.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/modernizr.min.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/detect.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/jquery.slimscroll.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/sidebar-menu.js"></script>
 
     <!-- Main JS -->
-    <script src="<?=base_url() ?>/assets/js/main.js"></script>
+    <script src="<?=base_url() ?>/public/assets/js/main.js"></script>
     <!-- End JS -->
 
-    <script src="<?=base_url() ?>/lib/vuejs-datepicker.min.js"></script>
+    <script src="<?=base_url() ?>/public/lib/vuejs-datepicker.min.js"></script>
 
   </body>
 

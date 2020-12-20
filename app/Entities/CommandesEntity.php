@@ -9,6 +9,7 @@ use App\Models\StDepotModel;
 use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\StockModel;
 use CodeIgniter\I18n\Time;
+use App\Models\CommandesModel;
 
 
 
@@ -19,6 +20,7 @@ class CommandesEntity extends Entity{
     'id' => null,
     'numero_commande' => null,
     'nom_client' => null,
+    'telephone_client' => null,
     'date_vente' => null,
     'status_vente_id' => null,
     'users_id ' => null,
@@ -42,7 +44,9 @@ class CommandesEntity extends Entity{
   protected $commandeDetail = null;
   protected $commandesStatusHistoriqueModel = null;
   protected $stockModel = null;
+  protected $commandesModel = null;
   protected $encrypter;
+
 
 
 
@@ -55,7 +59,9 @@ class CommandesEntity extends Entity{
     $this->commandesStatusHistoriqueModel = new CommandesStatusHistoriqueModel();
     $this->stockModel = new StockModel();
     $this->encrypter = Services::encrypter();
+    $this->commandesModel = new CommandesModel();
   }
+  
   public function getStatusVenteId(){
     $db = \Config\Database::connect();
     $query = $db->table('st_status_vente')->getWhere(['id' => $this->attributes['status_vente_id']]);
@@ -132,6 +138,8 @@ class CommandesEntity extends Entity{
     //echo $this->encrypter->decrypt(base64_decode($ciphertext));
     return $ciphertext;
   }
+
+  //HELPER
 
 
 

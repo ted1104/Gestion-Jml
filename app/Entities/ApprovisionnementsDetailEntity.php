@@ -13,6 +13,8 @@ class ApprovisionnementsDetailEntity extends Entity{
     'approvisionnement_id' => null,
     'articles_id' => null,
     'qte' => null,
+    'qte_total'=> null,
+    'qte_pv'=> null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

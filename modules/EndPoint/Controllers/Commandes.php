@@ -93,23 +93,11 @@ class Commandes extends ResourceController {
      ]);
   }
   public function commande_generate_facture_code(){
-    $data = $this->model->orderBy('id','DESC')->first();
-    if($data){
-      $data = $data->id + 1;
-      if($data < 10){
-        $data = 'FACT-0'.$data;
-      }else{
-          $data = 'FACT-'.$data;
-      }
-    }else{
-        $data = 'FACT-01';
-    }
-
-
+    $uniqueAchatID = $this->model->createUniqueAchatID();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
-      'data' => $data,
+      'data' => $this->model->checkIfUniqueAchatIDExist($uniqueAchatID),
     ]);
   }
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER : DONC LES COMMANDES CREES PAR UN FACTURIER
@@ -836,4 +824,10 @@ class Commandes extends ResourceController {
     ];
 
   }
+
+
+//HELPER MODEL FUNCTION
+  // public function
+
+
 }

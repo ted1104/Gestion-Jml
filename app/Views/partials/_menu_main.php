@@ -3,7 +3,7 @@
 
     <!-- Start XP Logobar -->
     <div class="xp-logobar text-center" style="width:150px; height:auto">
-        <a href="index.html" class="xp-logo"><img src="assets/images/logo.jpg" class="img-fluid" alt="logo"></a>
+        <a href="index.html" class="xp-logo"><img src="<?=base_url() ?>/public/assets/images/logo.jpg" class="img-fluid" alt="logo"></a>
     </div>
     <!-- End XP Logobar -->
 
@@ -47,7 +47,7 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('admin-add-appro') ?>">Créer</a></li>
+                      <!-- <li><a href="<?=base_url('admin-add-appro') ?>">Créer</a></li> -->
                       <li><a href="<?=base_url('admin-histo-appro') ?>">Historique</a></li>
                   </ul>
 
@@ -184,6 +184,7 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('magaz-add-appro') ?>">Créer</a></li>
                       <li><a href="<?=base_url('magaz-histo-appro') ?>">Historique</a></li>
                   </ul>
 

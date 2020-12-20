@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-8 col-lg-8 col-xl-8">
+												<div class="col-md-7 col-lg-7 col-xl-7">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT EFFECTUES</h5>
@@ -62,10 +62,10 @@
 															</table>
 															<!-- LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
 															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																<img src="<?=base_url() ?>/load/load-tab.gif" alt="">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																<img src="<?=base_url() ?>/load/empty.png" >
+																<img src="<?=base_url() ?>/public/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- FIN LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
@@ -85,37 +85,51 @@
                         </div>
 												</div>
 
-												<div class="col-md-4 col-lg-4 col-xl-4">
-													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
+												<div class="col-md-5 col-lg-5 col-xl-5">
+													<div class="card u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT {{detailTab.depots_id[0].nom}}</h5>
+																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 
 															<!-- {{checkBoxArticles}} -->
 															<div  class="">
 																<div class="row">
-																	<table class="table">
-																		<thead>
-																			<tr>
-																				<th scope="col">code</th>
-																				<th scope="col">Article</th>
-																				<th scope="col">Qte</th>
-
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr v-for="(det,i) in detailTab.logic_data_article">
-																				<td>{{det.articles_id[0].code_article}}</td>
-																				<td>{{det.articles_id[0].nom_article}}</td>
-																				<td>{{det.qte}}</td>
-
-																			</tr>
-																		</tbody>
-																	</table>
-
-
+																	<div class="table-responsive container">
+																		<div class="row">
+																			<div class="col-md-6 col-lg-6 col-xl-6">
+																				<span>Chauffeur : {{detailTab.nom_chauffeur}}</span><br>
+																				<span>Téléphone : {{detailTab.telephone_chauffeur}}</span><br>
+																			</div>
+																			<div class="col-md-6 col-lg-6 col-xl-6">
+																				<span>Plaque : {{detailTab.plaque_vehicule}}</span><br>
+																				<span>Num Bordereau : {{detailTab.numero_bordereau}}</span><br>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="table-responsive card-body">
+																		<table class="table">
+																			<thead>
+																				<tr class="bg-secondary">
+																					<th scope="col">code</th>
+																					<th scope="col">Article</th>
+																					<th scope="col">Qte Bonne</th>
+																					<th scope="col">Qte PV</th>
+																					<th scope="col">Qte Total</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr v-for="(det,i) in detailTab.logic_data_article">
+																					<td>{{det.articles_id[0].code_article}}</td>
+																					<td>{{det.articles_id[0].nom_article}}</td>
+																					<td>{{det.qte}}</td>
+																					<td>{{det.qte_pv}}</td>
+																					<td>{{det.qte_total}}</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
 																</div>
 
 																<hr>
