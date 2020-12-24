@@ -67,7 +67,7 @@
                                     <input type="text" class="form-control" id="date_approvisionnement" v-model="date_approvisionnement" disabled>
                                   </div>
                                 	<button v-if="!isLoadSaveMainButton" @click="add_approvision" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/load/loader.gif" alt="">
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
@@ -111,7 +111,7 @@
 	                                </div>
 																	<div class="form-group col-md-3 col-lg-3 col-xl-3">
 	                                   <button v-if="!isLoadSaveMainButtonModal" class="btn btn-round btn-success" @click="_u_create_line_article_appro"><i class="mdi mdi-plus"></i> </button>
-																		 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/load/loader.gif" alt="">
+																		 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 
 	                                </div>
                                 </div>

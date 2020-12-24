@@ -239,7 +239,8 @@
 										<label for="password_op">Mot de passe *</label>
 										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 									</div>
-									<button @click="add_validation_livraison" class="btn btn-primary">Confirmer</button>
+									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_livraison" class="btn btn-primary">Confirmer</button>
+									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 								</div>
 								<div v-if="isNoQuantity" class="text-center">
 									<span class="text-danger">

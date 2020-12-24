@@ -61,7 +61,7 @@
 																		<th scope="col">Article</th>
 																		<th scope="col">Descritpion</th>
 																		<th scope="col">Qte Réelle</th>
-																		<th scope="col">Qte Physique</th>
+																		<th scope="col">Qte Virtuelle</th>
 																		<th scope="col">Etat</th>
 
 																	</tr>

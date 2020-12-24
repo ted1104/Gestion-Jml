@@ -43,6 +43,8 @@
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">Information relative à l'achat</h5>
+																<!-- {{checkIsFaveur}}
+																{{ListIdArticleFaveur}} -->
                             </div>
                             <div class="card-body">
                                   <div class="form-group">
@@ -55,8 +57,53 @@
 																				<button class="btn btn-round btn-outline-info" @click="_u_get_code_facture"><i class="mdi mdi-restart"></i> </button>
 																			</div>
 																		</div>
-
                                   </div>
+																	<div class="form-group">
+																		<label for="depots_id">Dépôt Traiteur</label>
+																		<select class="form-control" v-model="depots_id">
+																			<option v-for="(dp, i) in depotList" :value="dp.id">{{dp.nom}}</option>
+																		</select>
+																	</div>
+																	<div class="form-group bg-light">
+																		<div class="container" style="padding-bottom:-200px!important">
+																				<div class="row bg-secondary">
+																					<div class="col-md-4 col-lg-4 col-xl-4">
+																						<span>Code Art</span>
+																					</div>
+																					<div class="col-md-4 col-lg-4 col-xl-4">
+																						<span>Qte Art</span>
+																					</div>
+																					<div class="col-md-2 col-lg-2 col-xl-2">
+																						<span>Faveur</span>
+																					</div>
+																					<div class="col-md-2 col-lg-2 col-xl-2">
+																						<span>Action</span>
+																					</div>
+																				</div>
+																		</div>
+				                            <div class="margin-top-7 container">
+				                                <div class="row">
+																					<div class="form-group col-md-4 col-lg-4 col-xl-4">
+																						<input type="text" class="form-control" v-model="codeArticle">
+					                                </div>
+					                                <div class="form-group col-md-4 col-lg-4 col-xl-4">
+					                                  <input type="text" class="form-control" id="qte" v-model="qte">
+					                                </div>
+																					<div class="col-md-2 col-lg-2 col-xl-2">
+																						<div class="custom-control custom-checkbox custom-control-inline ">
+																							<input type="checkbox" name="checkIsFaveur" :id="1" class="custom-control-input" :value="1" v-model="checkIsFaveur">
+																							<label class="custom-control-label" :for="1"></label>
+																						</div>
+																					</div>
+
+																					<div class="form-group col-md-2 col-lg-2 col-xl-2">
+					                                   <button class="btn btn-round btn-success" v-if="!isLoadSaveMainButtonModal" @click="_u_create_line_article"><i class="mdi mdi-plus"></i> </button>
+																						 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+					                                </div>
+				                                </div>
+				                            </div>
+																	</div>
+
                                   <div class="form-group">
                                     <label for="nom_client">Nom du client</label>
                                     <input type="text" class="form-control" id="nom_client" v-model="nom_client">
@@ -65,12 +112,7 @@
                                     <label for="telephone_client">Nom Téléphone client</label>
                                     <input type="text" class="form-control" id="telephone_client" v-model="telephone_client">
                                   </div>
-																	<div class="form-group">
-                                    <label for="depots_id">Dépôt Traiteur</label>
-																		<select class="form-control" v-model="depots_id">
-																			<option v-for="(dp, i) in depotList" :value="dp.id">{{dp.nom}}</option>
-																		</select>
-                                  </div>
+
 																	<div class="form-group">
                                     <label for="payer_a">Payer à</label>
 																		<select class="form-control" v-model="payer_a">
@@ -89,59 +131,40 @@
 												<div class="col-md-7 col-lg-7 col-xl-7">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">Information relative aux articles</h5>
+                                <h5 class="card-title text-black">Information relative aux articles dans le pannier</h5>
                             </div>
-														<div class="card-body row" style="padding-bottom:-200px!important">
-																<div class="form-group col-md-4 col-lg-4 col-xl-4">
-																	<span>Code Art</span>
-																</div>
-																<div class="form-group col-md-4 col-lg-4 col-xl-4">
-																	<span>Qte Art</span>
-																</div>
-																<div class="form-group col-md-4 col-lg-4 col-xl-4">
-																	<span>Action</span>
-																</div>
 
-
-														</div>
-                            <div class="card-body">
-                                <div class="row">
-																	<div class="form-group col-md-4 col-lg-4 col-xl-4">
-																		<input type="text" class="form-control" v-model="codeArticle">
-
-	                                </div>
-	                                <div class="form-group col-md-4 col-lg-4 col-xl-4">
-	                                  <input type="text" class="form-control" id="qte" v-model="qte">
-	                                </div>
-																	<div class="form-group col-md-4 col-lg-4 col-xl-4">
-	                                   <button class="btn btn-round btn-success" v-if="!isLoadSaveMainButtonModal" @click="_u_create_line_article"><i class="mdi mdi-plus"></i> </button>
-																		 <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-	                                </div>
-                                </div>
-                            </div>
 														<div class="table-responsive">
-															<table class="table">
-																<thead>
-																	<tr class="bg-secondary">
-																		<th scope="col">Code</th>
-																		<th scope="col">Nom</th>
-																		<th scope="col">Qte</th>
-																		<th scope="col">PU</th>
-																		<th scope="col">Type</th>
-																		<th scope="col">Action</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr v-for="(dt, index) in tabListData">
-																		<th>{{dt.code}}</th>
-																		<td>{{dt.nom_article}}</td>
-																		<td>{{dt.qte}}</td>
-																		<td>{{dt.prix_unit}}</td>
-																		<td>{{dt.type_prix}}</td>
-																		<td><button  class="btn btn-round btn-danger" @click="_u_remove_line_list_art(index)"><i class="mdi mdi-delete-sweep" ></i></button></td>
-																	</tr>
-																</tbody>
-															</table>
+															<div class="container">
+																<table class="table">
+																	<thead>
+																		<tr class="bg-secondary">
+																			<th scope="col">Code</th>
+																			<th scope="col">Nom</th>
+																			<th scope="col">Qte</th>
+																			<th scope="col">PU</th>
+																			<th scope="col">Type</th>
+																			<th scope="col">Faveur</th>
+																			<th scope="col">Action</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr v-for="(dt, index) in tabListData">
+																			<th>{{dt.code}}</th>
+																			<td>{{dt.nom_article}}</td>
+																			<td>{{dt.qte}}</td>
+																			<td>{{dt.prix_unit}}</td>
+																			<td>{{dt.type_prix}}</td>
+																			<td><span :class="dt.isfaveur == 1?'text-success':'text-danger'">{{dt.isfaveur == 1?'Oui':'Non'}}</span></td>
+																			<td><button  class="btn btn-round btn-danger" @click="_u_remove_line_list_art(index)"><i class="mdi mdi-delete-sweep" ></i></button></td>
+																		</tr>
+																	</tbody>
+																</table>
+																<div v-if="tabListData.length < 1" class="text-center">
+																	<span >Aucun article dans le pannier</span><br>
+																	<i class="mdi mdi-cancel" style="font-size:40px"></i>
+																</div>
+															</div>
 														</div>
                         </div>
 												</div>

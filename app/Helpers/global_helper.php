@@ -20,4 +20,13 @@ if(! function_exists('checkroleandredirect')){
     return $data;
   }
 }
+
+if(! function_exists('getLieuAffectationDetail')){
+  function getLieuAffectationDetail($idDepot){
+    $db = \Config\Database::connect();
+    $query = $db->table('st_depots')->getWhere(['id' => $idDepot]);
+    $data = $query->getRow();
+    return $data;
+  }
+}
 //$tableSecondaire,$id

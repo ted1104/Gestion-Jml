@@ -122,10 +122,12 @@ class Articles extends ResourceController {
        'data'=> $data
      ]);
   }
-  public function article_search_data_commande($codeArticle,$qte,$depotid){
+  public function article_search_data_commande($codeArticle,$qte,$depotid,$isFaveur){
      $codeArt = $codeArticle;
      $Qte = $qte;
      $depot = $depotid;
+     $isFaveur = $isFaveur;
+     $QteToOfferFaveur = 2;
      $data = $this->model->Where('code_article',$codeArt)->find();
      if($data){
        //CHECK IF DEPOT HAS THIS QUANTIY
@@ -140,7 +142,6 @@ class Articles extends ResourceController {
          $grosprix = null;
          $detailUnit = null;
          $qteDetail = null;
-
              foreach ($data[0]->logic_detail_data as $key => $value) {
                 if($value->type_prix==1){
                   $grosprix = $value->prix_unitaire;
@@ -152,6 +153,7 @@ class Articles extends ResourceController {
                 }
              }
                $PU = null;
+               $message = null;
                if($Qte <= $qteDetail){
                  $PU = $detailUnit;
                  $type = 'En détail';
@@ -162,9 +164,16 @@ class Articles extends ResourceController {
                  $type = 'En Gros';
                  $t_id = 1;
                }
-               $status = 400;
+               //CHECK IF FAVEUR THEN APPLY GROS PRICE
+               if($isFaveur == 1 and $Qte <= $QteToOfferFaveur){
+                 $PU = $grosprix;
+                 $type = 'En Gros';
+                 $t_id = 1;
+                 $message = "avec une reduction";
+               }
+               $status = 200;
                $message = [
-                 'success' =>'Bien ajouté',
+                 'success' =>'Bien ajouté '.$message,
                  'errors'=> null
                ];
 
@@ -177,6 +186,15 @@ class Articles extends ResourceController {
                  'type_prix' => $type,
                  'type_id' =>$t_id
                ];
+               //ERROR SI FAVEUR MAIS QUANTITE N'EST PAS LA BONNE
+               if($isFaveur == 1 and $Qte > $QteToOfferFaveur){
+                 $status = 400;
+                 $message = [
+                   'success' =>null,
+                   'errors'=>'En activant Faveur sur un article la quantité ne doit pas depasser 2'
+                 ];
+                 $data = null;
+               }
 
        }else{
          $status = 400;

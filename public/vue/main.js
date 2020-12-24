@@ -75,6 +75,8 @@ var vthis = new Vue({
       ArticleValidateNego : {},
       CritiqueDataTab:[],
       checkBoxAchatSelected:[],
+      checkIsFaveur : [],
+      ListIdArticleFaveur : new Array(), //La liste de tous les artilces qui possede une faveur
 
 
       //VARIABLE FORM ADD ARTICLE
@@ -272,12 +274,14 @@ var vthis = new Vue({
       form.append('depots_id',this.depots_id);
       form.append('payer_a',this.payer_a);
       form.append('telephone_client', this.telephone_client);
+      form.append('container_faveur',this.ListIdArticleFaveur.length > 0 ? 1 : 0);
 
       for(var i=0; i< this.tabListData.length; i++){
         form.append('articles_id[]', this.tabListData[i]['id']);
         form.append('qte_vendue[]', this.tabListData[i]['qte']);
         form.append('prix_unitaire[]', this.tabListData[i]['prix_unit']);
 				form.append('type_prix[]', this.tabListData[i]['type_id']);
+        form.append('is_faveur[]', this.tabListData[i]['isfaveur']);
 			}
       if(this.tabListData.length < 1){
         this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
@@ -298,6 +302,8 @@ var vthis = new Vue({
                   this.depots_id = "";
                   this.payer_a = "";
                   this.isLoadSaveMainButton = false;
+                  this.checkIsFaveur = new Array();
+                  this.ListIdArticleFaveur = new Array();
                   return;
                 }
                 var err = response.data.message.errors;
@@ -441,6 +447,7 @@ var vthis = new Vue({
         return;
       }
       this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -450,10 +457,12 @@ var vthis = new Vue({
                 this.get_commande_caissier(1);
                 this._u_close_mod_form();
                 this.password_op= "";
+                this.isLoadSaveMainButtonModal = false;
                 return;
               }
               var err = response.data.message.errors;
               this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
             }).catch(error =>{
               console.log(error);
             })
@@ -487,6 +496,7 @@ var vthis = new Vue({
         return;
       }
       this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -496,10 +506,12 @@ var vthis = new Vue({
                 this.get_commande_magazinier(3);
                 this._u_close_mod_form();
                 this.password_op= "";
+                this.isLoadSaveMainButtonModal = false;
                 return;
               }
               var err = response.data.message.errors;
               this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
             }).catch(error =>{
               console.log(error);
             })
@@ -1391,8 +1403,8 @@ var vthis = new Vue({
     },
     //FONCTION POUR RECHERCHER FIN
     _u_create_line_article(){
-      const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/search";
-
+    const isFaveur = this.checkIsFaveur.length > 0 ? 1 : 0;
+    const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/"+isFaveur+"/search";
       if(this.depots_id ==""){
         this._u_fx_config_error_message_bottom("Message",['Veuillez selectionner un dépôt traiteur'],'alert-danger');
         return;
@@ -1407,12 +1419,17 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               if(response.data.message.success !=null){
+                response.data.data.isfaveur = isFaveur;
                 this.tabListData.push(response.data.data);
-                console.log(response.data.message.success);
+                console.log(this.tabListData);
                 this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
                 this.codeArticle = "";
                 this.qte = 0;
                 this.isLoadSaveMainButtonModal = false;
+                if(isFaveur == 1){
+                  this.ListIdArticleFaveur.push(Number(response.data.data.id));
+                }
+                this.checkIsFaveur = new Array();
                 return;
               }
               this._u_fx_config_error_message_bottom("Message",[response.data.message.errors],'alert-danger')
@@ -1426,6 +1443,12 @@ var vthis = new Vue({
 
     },
     _u_remove_line_list_art(index){
+
+      if(this.tabListData[index].isfaveur == 1){
+        const idArticle = Number(this.tabListData[index].id);
+        let i = this.ListIdArticleFaveur.indexOf(idArticle);
+        this.ListIdArticleFaveur.splice(i,1);
+      }
       this.tabListData.splice(index,1);
       this._u_fx_config_error_message_bottom("Message",['Bien supprimer'],'alert-info');
     },
@@ -1644,6 +1667,7 @@ var vthis = new Vue({
       this._u_open_mod_popup_photo();
 
     },
+    // _u_hidden_display_message_error(){}
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){
      this.errorPopupClass.splice(1,1);
@@ -1652,7 +1676,12 @@ var vthis = new Vue({
      this.messageAlertConfig.message = [];
      this.messageAlertConfig.message.push(message);
      this.messageError = true;
-     // console.log(this.messageAlertConfig);
+     // console.log(this.messageError);
+     setTimeout(function(){
+       this.messageError = false;
+       console.log(this.messageError);
+
+     },5000);
    },
     _u_fx_config_error_message_bottom(title, message, classError){
     this.errorPopupClassBottom.splice(1,1);
@@ -1778,6 +1807,7 @@ var vthis = new Vue({
      formData.append('nom',vthis.nom);
      formData.append('adresse',vthis.adresse);
      formData.append('responsable_id', this.responsable_id);
+     formData.append('is_central', this.RadioCheckedIsMain);
      return formData;
    },
     _u_fx_to_load_router(){
@@ -1857,8 +1887,11 @@ var vthis = new Vue({
 
   }
 
-
-
+  },
+  watch : {
+    messageError : function(val){
+      console.log("change to "+this.messageError);
+    }
   }
 })
 

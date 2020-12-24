@@ -7,11 +7,12 @@ class StDepotModel extends Model{
   protected $table = 'st_depots';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['nom','adresse','responsable_id'];
+  protected $allowedFields = ['nom','adresse','responsable_id','is_central'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'nom' => 'required|is_unique[st_depots.nom]',
-    'responsable_id' => 'required'
+    'responsable_id' => 'required',
+    'is_central' => 'required'
   ];
   protected $validationMessages = [
     'nom'=>[
@@ -20,6 +21,9 @@ class StDepotModel extends Model{
             ],
     'responsable_id'=>[
               'required' => 'Le responsable est obligatoire',
+            ],
+    'is_central'=>[
+              'required' => 'Le Type du dépôt est obligatoire',
             ],
 ];
   protected $returnType ='App\Entities\StDepotEntity';

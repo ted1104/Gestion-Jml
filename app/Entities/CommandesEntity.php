@@ -26,6 +26,7 @@ class CommandesEntity extends Entity{
     'users_id ' => null,
     'depots_id ' => null,
     'payer_a'=>null,
+    'container_faveur' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
@@ -61,7 +62,7 @@ class CommandesEntity extends Entity{
     $this->encrypter = Services::encrypter();
     $this->commandesModel = new CommandesModel();
   }
-  
+
   public function getStatusVenteId(){
     $db = \Config\Database::connect();
     $query = $db->table('st_status_vente')->getWhere(['id' => $this->attributes['status_vente_id']]);

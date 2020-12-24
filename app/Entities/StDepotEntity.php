@@ -12,6 +12,7 @@ class StDepotEntity extends Entity{
     'id' => null,
     'nom' => null,
     'responsable_id' => null,
+    'is_central' => null,
     'adresse'=> null,
     'logic_article_stock'=>null,
     'created_at' => null,

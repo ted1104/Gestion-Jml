@@ -38,6 +38,7 @@
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">Information relative au dépôt</h5>
+																{{RadioCheckedIsMain}}
                             </div>
                             <div class="card-body">
                                   <div class="form-group">
@@ -45,6 +46,20 @@
                                     <input type="text" class="form-control" id="nom" aria-describedby="nom" v-model="nom">
                                   </div>
 																	<div class="form-group">
+																		<label for="codeArt">Le Dépôt est central ? *</label>
+																		<div class="">
+																			<div class="custom-control custom-radio custom-control-inline">
+																				<input type="radio" id="customRadioInline3" name="customRadioInline3" class="custom-control-input" value="1" v-model="RadioCheckedIsMain"checked>
+																				<label class="custom-control-label" for="customRadioInline3">Oui</label>
+																			</div>
+																			<div class="custom-control custom-radio custom-control-inline">
+																				<input type="radio" id="customRadioInline4" name="customRadioInline4" class="custom-control-input" value="0" v-model="RadioCheckedIsMain">
+																				<label class="custom-control-label" for="customRadioInline4">Non</label>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="form-group">
+																		<label for="codeArt">Responsable *</label>
 																		<select class="form-control" v-model="responsable_id">
 																			<option value="">--seletionner Responsable--</option>
 																			<option v-for="(c, i) in dataToDisplay" :value="c.id">{{c.nom+' '+c.prenom}}</option>
@@ -72,6 +87,7 @@
                                       <th scope="col">Nom dépôt</th>
 																			<th scope="col">Adresse</th>
                                       <th scope="col">Responsable</th>
+																			<th scope="col">Central</th>
                                       <th scope="col">Action</th>
                                     </tr>
                                   </thead>
@@ -80,6 +96,7 @@
                                       <th>{{dt.nom}}</th>
                                       <td>{{dt.adresse}}</td>
 																			<td>{{dt.responsable_id}}</td>
+																			<td>{{dt.is_central ==1 ?'Oui':'Non'}}</td>
                                       <td><a href="#"  class='btn btn-round btn-light' ><i class='mdi mdi-circle-edit-outline text-danger'></i> </a></td>
 
                                     </tr>

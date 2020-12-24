@@ -58,6 +58,7 @@ class Commandes extends ResourceController {
       $qte_vendue = $data->qte_vendue;
       $prix_unitaire = $data->prix_unitaire;
       $type_prix = $data->type_prix;
+      $is_faveur = $data->is_faveur;
 
       for ($i=0; $i < $nArt; $i++) {
         $dataDetail = [
@@ -66,6 +67,7 @@ class Commandes extends ResourceController {
           'qte_vendue'=>$qte_vendue[$i],
           'prix_unitaire' =>$prix_unitaire[$i],
           'type_prix' =>$type_prix[$i],
+          'is_faveur' => $is_faveur[$i]
         ];
         // print_r($dataDetail);
         // exit();
@@ -80,7 +82,7 @@ class Commandes extends ResourceController {
       $this->commandesStatusHistoriqueModel->insert($dataStatusHistorique);
       $status = 200;
       $message = [
-        'success' => 'Enregistrement de la commande avec succès',
+        'success' => 'La commande a été effectuée avec succès',
         'errors' => null
       ];
       $data = 'null';

@@ -36,7 +36,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('articles-get-all','Articles::articles_get');
   $routes->post('articles-create-one','Articles::articles_create');
   $routes->post('articles-create-price','Articles::articles_set_price');
-  $routes->get('articles-search-data-commande/(:any)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3');
+  $routes->get('articles-search-data-commande/(:any)/(:num)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3/$4');
   $routes->get('articles-search-by-code/(:any)code','Articles::article_search_by_code/$1');
   $routes->post('articles-update-price','Articles::article_update_price');
 

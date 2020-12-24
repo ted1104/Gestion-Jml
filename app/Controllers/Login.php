@@ -25,20 +25,21 @@ class Login extends BaseController {
         $redirectLink = checkroleandredirect($auth['info'][0]->roles_id);
         $this->session->set('users', $auth);
         $this->session->set('profile', $redirectLink->description);
+        $this->session->set('lieuAffectation', getLieuAffectationDetail($auth['info'][0]->depot_id));
         return redirect()->to($redirectLink->routes);
       }else{
         $data = [
           'titlePage' => $this->title,
         ];
         $this->session->setFlashData('message',['title' => 'Compte bloqué', 'content' => 'Ce compte est bloqué temporairement; veuillez contacter l\'administrateur principal du système!!','color'=>'alert-info']);
-        return redirect()->to('/')->withInput();
+        return redirect()->to(base_url())->withInput();
       }
       }else{
         $data = [
           'titlePage' => $this->title,
         ];
         $this->session->setFlashData('message',['title' => 'Connexion Erreur', 'content' => 'Identifiants ou Mot de passe incorrects!!','color'=>'alert-danger']);
-        return redirect()->to('/')->withInput();
+        return redirect()->to(base_url())->withInput();
 
       }
   }
