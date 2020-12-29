@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>LISTE DES ACHATS</h4>
+													 <h4>LISTE DES ACHATS FAVEURS</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -38,27 +38,27 @@
 												<div class="col-md-9 col-lg-9 col-xl-9">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
+                                <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS FAVEURS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
 																<div class="">
-																	<div @click="get_commande_magazinier(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
+																	<div @click="get_commande_faveur_magazinier(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
                                       En attente <span class="badge badge-pill badge-light">{{ListFiltreData.attente==undefined?'0':ListFiltreData.attente}}</span>
                                   </div>
-																	<div @click="get_commande_magazinier(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
+																	<div @click="get_commande_faveur_magazinier(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
                                       Payée <span class="badge badge-pill badge-light">{{ListFiltreData.payer==undefined?'0':ListFiltreData.payer}}</span>
                                   </div>
-																	<div @click="get_commande_magazinier(3)" class="btn btn-success padding-4" :id="stateStatus==3?'border-menu':''">
+																	<div @click="get_commande_faveur_magazinier(3)" class="btn btn-success padding-4" :id="stateStatus==3?'border-menu':''">
                                       Livrée <span class="badge badge-pill badge-light">{{ListFiltreData.livrer==undefined?'0':ListFiltreData.livrer}}</span>
                                   </div>
-																	<div @click="get_commande_magazinier(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
+																	<div @click="get_commande_faveur_magazinier(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
-																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_magazinier)"><i class="mdi mdi-restore"></i> </button>
+																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_faveur_magazinier)"><i class="mdi mdi-restore"></i> </button>
 																	</div>
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Rechercher par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_magazinier)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_faveur_magazinier)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 																<div v-if="showAdvancedSearch" class="margin-top-4 u-animation-FromTop">
@@ -84,7 +84,7 @@
 																	</div>
 
 																	<div class="margin-top-7">
-																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataByMagazinier">
+																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataByMagazinierFaveur">
 																	</div>
 																</div>
 
@@ -105,9 +105,7 @@
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
-																		<th>
-																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
-																		</th>
+																		<th><span class="text-danger font-bold">{{dt.numero_commande}}</span></th>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
@@ -174,22 +172,24 @@
 																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
 																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
-															<div v-for="(det,i) in detailTab.logic_article" v-if="det.is_faveur==0">
+															<div v-for="(det,i) in detailTab.logic_article" v-if="det.is_faveur==1">
 																<div class="row">
-																	<span class="col-md-4">{{det.articles_id[0].code_article}}</span>
-																	<span class="col-md-6">{{det.articles_id[0].nom_article}}</span>
+																	<div class="col-md-4">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}<span>
+																		</div>
+																	<div class="col-md-6">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
+																	</div>
 																	<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
 																	</span>
 																</div>
 																<br>
 																<div class="row">
-																	<span class="col-md-12">Achat Normal</span>
+																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Qte: <br> {{det.qte_vendue}}</span>
 																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
 																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
-																	<span class="col-md-3" v-if="stateStatus==2">Stock<br>
-																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
-																	</span>
+																	<span class="col-md-3" v-if="stateStatus==2">Stock <br><span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span></span>
 
 																</div>
 																<br>
@@ -243,11 +243,10 @@
 										<label for="password_op">Mot de passe *</label>
 										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 									</div>
-									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_livraison(2)" class="btn btn-primary">Confirmer</button>
+									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_livraison(1)" class="btn btn-primary">Confirmer</button>
 									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 								</div>
 								<div v-if="isNoQuantity" class="text-center">
-									<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
 									<span class="text-danger">
 										Impossible de valider cette commande, car il y a un ou plusieurs articles dont leur quantité ne se trouve pas de votre stock! Veuillez svp consulter le détail de la commande pour plus de precision.
 									</span>

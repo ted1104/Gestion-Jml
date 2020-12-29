@@ -168,7 +168,12 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
+                    <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
+                    <?php if(session('lieuAffectation')->is_central == 1):  ?>
+                    <li><a href="<?=base_url('magaz-list-achat-faveur') ?>">Mes Achats Faveurs</a></li>
+                    <?php endif; ?>
+
+
                   </ul>
               </li>
               <li>
@@ -184,8 +189,25 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('magaz-add-appro') ?>">Créer</a></li>
-                      <li><a href="<?=base_url('magaz-histo-appro') ?>">Historique</a></li>
+
+                      <li>
+                          <a href="javaScript:void();">
+                              <span>Appro Général</span><i class="mdi mdi-chevron-right pull-right"></i>
+                          </a>
+                          <ul class="xp-vertical-submenu">
+                            <li><a href="<?=base_url('magaz-add-appro') ?>">Créer</a></li>
+                            <li><a href="<?=base_url('magaz-histo-appro') ?>">Historique</a></li>
+                          </ul>
+                      </li>
+                      <li>
+                        <a href="javaScript:void();">
+                            <span>Inter-Dépôt</span><i class="mdi mdi-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="xp-vertical-submenu">
+                            <li><a href="<?=base_url('magaz-add-appro-to-depot') ?>">Créer</a></li>
+                            <li><a href="<?=base_url('magaz-histo-appro-inter-depot') ?>">Historique</a></li>
+                        </ul>
+                      </li>
                   </ul>
 
               </li>

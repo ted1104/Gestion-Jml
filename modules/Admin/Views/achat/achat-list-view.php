@@ -113,7 +113,9 @@
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
-																		<th>{{dt.numero_commande}}</th>
+																		<th>
+																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
+																		</th>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
@@ -182,12 +184,16 @@
 															</div>
 															<div v-for="(det,i) in detailTab.logic_article" class="">
 																<div class="row">
-																	<span class="col-md-4">{{det.articles_id[0].code_article}}</span>
-																	<span class="col-md-8">{{det.articles_id[0].nom_article}}</span>
+																	<div class="col-md-4">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}</span>
+																	</div>
+																	<div class="col-md-8">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}</span>
+																	</div>
 																</div>
 																<br>
 																<div class="row">
-																	<span class="col-md-12">Achat Normal</span>
+																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 																	<span class="col-md-4">Qte: <br> {{det.qte_vendue}}</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>

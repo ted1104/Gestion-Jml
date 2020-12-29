@@ -19,6 +19,7 @@ class CommandesDetailEntity extends Entity{
     'is_negotiate ' => null,
     'prix_negociation'=>null,
     'is_faveur' => null,
+    'is_livrer' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
@@ -51,8 +52,16 @@ class CommandesDetailEntity extends Entity{
   }
   public function getLogicQteStockArticleDepot(){
     $depot = $this->commandesModel->Where('id',$this->attributes['vente_id'])->first();
-    $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id[0]->id)->Where('articles_id',$this->attributes['articles_id'])->first();
-    return $stockqte->qte_stock_virtuel;
+    if ($this->attributes['is_faveur'] == 0) {
+      $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id[0]->id)->Where('articles_id',$this->attributes['articles_id'])->first();
+    }else{
+      $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id_faveur)->Where('articles_id',$this->attributes['articles_id'])->first();
+    }
+
+    return array(
+      'stock_virtuel' => $stockqte->qte_stock_virtuel,
+      'stock_reel' => $stockqte->qte_stock
+    );
 
   }
 

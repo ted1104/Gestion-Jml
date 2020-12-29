@@ -27,6 +27,8 @@ class CommandesEntity extends Entity{
     'depots_id ' => null,
     'payer_a'=>null,
     'container_faveur' => null,
+    'depots_id_faveur' => null,
+    'depots_id_first_livrer' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
@@ -118,17 +120,35 @@ class CommandesEntity extends Entity{
   }
 
   public function getLogicIs(){
+    //CONTAIN EN SE BASANT SUR VIRTUELLE
     $is = false;
+    $isReel = false;
+
     $depot = $this->attributes['depots_id'];
+    $depotCentral = $this->attributes['depots_id_faveur'];
     $detail = $this->commandeDetail->Where('vente_id',$this->attributes['id'])->findAll();
     foreach ($detail as $key => $value) {
+      //print_r($depotCentral);
       $qte_vendue = $value->qte_vendue;
-      $stockqte = $this->stockModel->Where('depot_id',$depot)->Where('articles_id',$value->articles_id[0]->id)->first();
-      if($qte_vendue > $stockqte->qte_stock){
-        $is = true;
+      if($value->is_faveur == 0){
+        $stockqte = $this->stockModel->Where('depot_id',$depot)->Where('articles_id',$value->articles_id[0]->id)->first();
+      }else{
+        $stockqte = $this->stockModel->Where('depot_id',$depotCentral)->Where('articles_id',$value->articles_id[0]->id)->first();
       }
+      if($depotCentral !=""){
+        if($qte_vendue > $stockqte->qte_stock_virtuel){
+          $is = true;
+        }
+        if($qte_vendue > $stockqte->qte_stock){
+          $isReel = true;
+        }
+      }
+
     }
-    return $is;
+    return array(
+      'virtuel' => $is,
+      'reel' => $isReel
+    );
   }
 
   public function getLogicCodeFacture(){

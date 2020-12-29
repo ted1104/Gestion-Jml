@@ -15,4 +15,5 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\achat-list-view', $data);
   }
+
 }

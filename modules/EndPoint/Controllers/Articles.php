@@ -134,83 +134,93 @@ class Articles extends ResourceController {
        $condition =[
          'depot_id'=>$depot,
          'articles_id'=>$data[0]->id
-       ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+       ];
+       //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
        $initqte = $this->stockModel->getWhere($condition)->getRow();
-       if($Qte <= $initqte->qte_stock_virtuel){
-       // return $this->respond([$initqte->qte_stock]);
-       if($data[0]->logic_detail_data && count($data[0]->logic_detail_data) > 1){
-         $grosprix = null;
-         $detailUnit = null;
-         $qteDetail = null;
-             foreach ($data[0]->logic_detail_data as $key => $value) {
-                if($value->type_prix==1){
-                  $grosprix = $value->prix_unitaire;
-                  $qteDetail = $value->qte_decideur;
-                }
-                if($value->type_prix==2){
-                  $detailUnit = $value->prix_unitaire;
-                  $qteDetail = $value->qte_decideur;
-                }
-             }
-               $PU = null;
-               $message = null;
-               if($Qte <= $qteDetail){
-                 $PU = $detailUnit;
-                 $type = 'En détail';
-                 $t_id = 2;
-                }
-               if($qteDetail < $Qte){
-                 $PU = $grosprix;
-                 $type = 'En Gros';
-                 $t_id = 1;
+       if(!$initqte){
+         $status = 400;
+         $message = [
+           'success' =>null,
+           'errors'=>'Impossible de trouver cet article dans le dépot central veuillez contacter l\'administrateur du système'
+         ];
+         $data = null;
+       }else{
+         if($Qte <= $initqte->qte_stock_virtuel){
+         // return $this->respond([$initqte->qte_stock]);
+         if($data[0]->logic_detail_data && count($data[0]->logic_detail_data) > 1){
+           $grosprix = null;
+           $detailUnit = null;
+           $qteDetail = null;
+               foreach ($data[0]->logic_detail_data as $key => $value) {
+                  if($value->type_prix==1){
+                    $grosprix = $value->prix_unitaire;
+                    $qteDetail = $value->qte_decideur;
+                  }
+                  if($value->type_prix==2){
+                    $detailUnit = $value->prix_unitaire;
+                    $qteDetail = $value->qte_decideur;
+                  }
                }
-               //CHECK IF FAVEUR THEN APPLY GROS PRICE
-               if($isFaveur == 1 and $Qte <= $QteToOfferFaveur){
-                 $PU = $grosprix;
-                 $type = 'En Gros';
-                 $t_id = 1;
-                 $message = "avec une reduction";
-               }
-               $status = 200;
-               $message = [
-                 'success' =>'Bien ajouté '.$message,
-                 'errors'=> null
-               ];
-
-               $data = [
-                 'id'=>$data[0]->id,
-                 'code' => $codeArt,
-                 'nom_article' => $data[0]->nom_article,
-                 'qte' => $Qte,
-                 'prix_unit' =>$PU,
-                 'type_prix' => $type,
-                 'type_id' =>$t_id
-               ];
-               //ERROR SI FAVEUR MAIS QUANTITE N'EST PAS LA BONNE
-               if($isFaveur == 1 and $Qte > $QteToOfferFaveur){
-                 $status = 400;
+                 $PU = null;
+                 $message = null;
+                 if($Qte <= $qteDetail){
+                   $PU = $detailUnit;
+                   $type = 'En détail';
+                   $t_id = 2;
+                  }
+                 if($qteDetail < $Qte){
+                   $PU = $grosprix;
+                   $type = 'En Gros';
+                   $t_id = 1;
+                 }
+                 //CHECK IF FAVEUR THEN APPLY GROS PRICE
+                 if($isFaveur == 1 and $Qte <= $QteToOfferFaveur){
+                   $PU = $grosprix;
+                   $type = 'En Gros';
+                   $t_id = 1;
+                   $message = "avec une reduction";
+                 }
+                 $status = 200;
                  $message = [
-                   'success' =>null,
-                   'errors'=>'En activant Faveur sur un article la quantité ne doit pas depasser 2'
+                   'success' =>'Bien ajouté '.$message,
+                   'errors'=> null
                  ];
-                 $data = null;
-               }
 
+                 $data = [
+                   'id'=>$data[0]->id,
+                   'code' => $codeArt,
+                   'nom_article' => $data[0]->nom_article,
+                   'qte' => $Qte,
+                   'prix_unit' =>$PU,
+                   'type_prix' => $type,
+                   'type_id' =>$t_id
+                 ];
+                 //ERROR SI FAVEUR MAIS QUANTITE N'EST PAS LA BONNE
+                 if($isFaveur == 1 and $Qte > $QteToOfferFaveur){
+                   $status = 400;
+                   $message = [
+                     'success' =>null,
+                     'errors'=>'En activant Faveur sur un article la quantité ne doit pas depasser 2'
+                   ];
+                   $data = null;
+                 }
+
+         }else{
+           $status = 400;
+           $message = [
+             'success' =>null,
+             'errors'=>'Cet article ne possède pas toutes les configurations des prix! Veuillez svp contacter l\'administrateur ou le manager'
+           ];
+           $data = null;
+         }
        }else{
          $status = 400;
          $message = [
            'success' =>null,
-           'errors'=>'Cet article ne possède pas toutes les configurations des prix! Veuillez svp contacter l\'administrateur ou le manager'
+           'errors'=>'Ce dépôt ne possède pas cette quantité d\'article en stock'
          ];
          $data = null;
        }
-     }else{
-       $status = 400;
-       $message = [
-         'success' =>null,
-         'errors'=>'Ce dépôt ne possède pas cette quantité d\'article en stock'
-       ];
-       $data = null;
      }
      }else{
        $status = 400;
@@ -291,6 +301,65 @@ class Articles extends ResourceController {
       'message' =>$message,
       'data'=> $data,
 
+    ]);
+  }
+  public function article_search_for_appro_inter_depot($codeArticle,$qte,$depotid){
+    $codeArt = $codeArticle;
+    $Qte = $qte;
+    $depot = $depotid;
+    $data = $this->model->Where('code_article',$codeArt)->find();
+    if($data){
+      //CHECK IF DEPOT HAS THIS QUANTIY
+      $condition =[
+        'depot_id'=>$depot,
+        'articles_id'=>$data[0]->id
+      ];
+      //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+      $initqte = $this->stockModel->getWhere($condition)->getRow();
+      if(!$initqte){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'Impossible de trouver cet article dans le dépôt veuillez contacter l\'administrateur du système'
+        ];
+        $data = null;
+      }else{
+        if($Qte <= $initqte->qte_stock_virtuel and $Qte <= $initqte->qte_stock){
+        // return $this->respond([$initqte->qte_stock]);
+            $status = 200;
+            $message = [
+              'success' =>'Bien ajouté ',
+              'errors'=> null
+            ];
+            $data = [
+              'id'=>$data[0]->id,
+              'code' => $codeArt,
+              'nom_article' => $data[0]->nom_article,
+              'qte' => $Qte,
+            ];
+
+      }else{
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'La quantité à approvisionner doit être inférieure ou égale à votre quantité physique et réelle'
+        ];
+        $data = null;
+      }
+    }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>'Aucun Article trouvé avec ce code'
+      ];
+      $data = null;
+    }
+
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
     ]);
   }
   public function multitest(){

@@ -29,5 +29,25 @@ class Achat extends BaseController {
     echo view($this->linkMod.'\depots-stock-magaz-view', $data);
   }
 
+  public function getAchatFaveur(){
+    $data = [
+      'titlePage' => 'ACHAT FAVEURS: Dépôt'
+    ];
+    echo view($this->linkMod.'\achat-list-magaz-faveur-view', $data);
+  }
+
+  public function addApproInterDepot(){
+    $data = [
+      'titlePage' => 'APPROVISONNEMENT: Inter-Dépôt'
+    ];
+    echo view($this->linkMod.'\appro\appro-inter-depot-add-view', $data);
+  }
+  public function getHistoriqueApproInterDepot(){
+    $data = [
+      'titlePage' => 'APPROVISONNEMENT: Inter-Dépôt'
+    ];
+    echo view($this->linkMod.'\appro\appro-inter-depot-historique-view', $data);
+  }
+
 
 }

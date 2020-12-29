@@ -50,6 +50,7 @@ var vthis = new Vue({
       isShow : false,
       isNoQuantity : false,
       isLoadNego : false,
+      isLoadDelete : false,
       isLoadNegoAnnuler : false,
       isLoadSaveMainButton : false,
       isLoadSaveMainButtonModal : false,
@@ -120,6 +121,7 @@ var vthis = new Vue({
 
       //LISTE COMMANDE MAGAZ
       dpot_id : localStorage.dp,
+      depot_central_id : "",
 
       //VARIABLE LOGIQUE FILTRE SUR LISTE ATTENTE, PAYER, LIVRER ADMIN
       stateStatus :"",
@@ -175,8 +177,10 @@ var vthis = new Vue({
 
       //LOGIQUE SHOW OR HIDDEN BUTON SAVE AND UPDATE CONFIG PRICE ARTICLE,
       isAction : true,
-      isShowBlocHistoFactureStatus : false
+      isShowBlocHistoFactureStatus : false,
 
+      //SI CE DEPOT A DEJA LIVRER UNE PARTIE DE LA COMMANDE
+      hasAlreadyDelivered : false
 
 
 
@@ -275,6 +279,7 @@ var vthis = new Vue({
       form.append('payer_a',this.payer_a);
       form.append('telephone_client', this.telephone_client);
       form.append('container_faveur',this.ListIdArticleFaveur.length > 0 ? 1 : 0);
+      form.append('depots_id_faveur', this.depot_central_id);
 
       for(var i=0; i< this.tabListData.length; i++){
         form.append('articles_id[]', this.tabListData[i]['id']);
@@ -413,6 +418,8 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
+              this._u_reset_checkBoxSelected();
+
 
             }).catch(error =>{
               console.log(error);
@@ -484,12 +491,35 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
+              this._u_reset_checkBoxSelected();
               // console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
             })
     },
-    add_validation_livraison(){
+    get_commande_faveur_magazinier(statut=2){
+      const newurl = this.url+"commandes-faveur-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/depot";
+      this.stateStatus = statut;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      this._u_set_table_title_with_date();
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.ListFiltreData = response.data.nombreVenteType;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this._u_reset_checkBoxSelected();
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    add_validation_livraison(from){ //from : 1 faveur ou 2 achat normal
       const newurl = this.url+"commandes-validation-magaz/"+this.password_op+"/"+this.commande_id+"/"+this.users_id+"/"+this.dpot_id+"/validation";
       if(this.password_op ==""){
         this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
@@ -503,7 +533,12 @@ var vthis = new Vue({
               if(response.data.message.success !=null){
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
-                this.get_commande_magazinier(3);
+                if(from == 1){
+                  this.get_commande_faveur_magazinier(2);
+                }else {
+                  this.get_commande_magazinier(2);
+                }
+
                 this._u_close_mod_form();
                 this.password_op= "";
                 this.isLoadSaveMainButtonModal = false;
@@ -557,7 +592,7 @@ var vthis = new Vue({
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
                 this.get_commande_facturier(1);
                 this._u_close_mod_form();
-                this.checkBoxArticles = [];
+                this._u_reset_checkBoxSelected();
                 return;
               }
               var err = response.data.message.errors;
@@ -1187,6 +1222,91 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    delete_article_commande(cmd){
+      this.isLoadDelete = true;
+      const newurl = this.url+"delete-article-commande";
+      var form = new FormData();
+      form.append('idcommande',cmd);
+      for(var i=0; i< this.checkBoxArticles.length; i++){
+        form.append('idarticle[]', this.checkBoxArticles[i]);
+    	}
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadDelete = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_commande_facturier(1);
+                this._u_close_mod_form();
+                this._u_reset_checkBoxSelected();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadDelete = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    add_approvision_inter_depot(e){
+      e.preventDefault();
+      const newurl = this.url+"approvisionnement-inter-depot-create";
+      var form = new FormData();
+      form.append('date_approvisionnement',this.date_approvisionnement);
+      form.append('depots_id_source',this.dpot_id);
+      form.append('depots_id_dest',this.depots_id);
+      form.append('users_id',this.users_id);
+
+        for(var i=0; i< this.tabListData.length; i++){
+          form.append('articles_id[]', this.tabListData[i]['id']);
+          form.append('qte[]', this.tabListData[i]['qte']);
+  			}
+        if(this.tabListData.length < 1){
+          this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
+          return;
+        }
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  // this.get_article();
+                  this.isLoadSaveMainButton = false;
+                  this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+    get_historique_approvisionnement_inter_depot_by_depot(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"approvisionnement-inter-depot-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset;
+      this.dataToDisplay=[];
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -1373,13 +1493,55 @@ var vthis = new Vue({
             })
     },
 
+    _searchDataByMagazinierFaveur(limit=this.PerPaged,offset=0, indexPage=0){
+      if(this.dataToSearch =="" || this.RadioCheckedValue==""){
+        this.isResearchPagination = false;
+        this.get_commande_faveur_magazinier(this.stateStatus);
+        return;
+      }
+      // var isParameterAdvanced = 0; //On a pas coch
+      if(this.checkBoxArticles.length ==2){
+        this.isParameterAdvanced = 3;// POUR TOUS LES PARAMETRES
+      }
+      if(this.checkBoxArticles.length ==1){
+        this.isParameterAdvanced = this.checkBoxArticles[0];
+      }
+      if(this.checkBoxArticles.length ==0){
+        this.isParameterAdvanced = 0;// POUR TOUS LES PARAMETRES
+      }
+      if(this.dateFilter !==null){
+        this._u_formatOnlyDate(this.dateFilter);
+      }
+      const newurl = this.url+"commandes-faveur-get-by-depot-search/"+this.dpot_id+"/"+this.stateStatus+"/"+this.dateFilter+"/"+this.dataToSearch+"/"+this.RadioCheckedValue+"/"+this.isParameterAdvanced+"/"+this.PerPaged+"/"+offset+"/depot";
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      this._u_set_table_title_with_date();
+      this.dataToDisplay =[];
+      this.isNoReturnedData = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.ListFiltreData = response.data.nombreVenteType;
+              this.currentIndexPage = indexPage;
+              var total = this._u_fx_calculateTotal_Record_Recherche();
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(total);
+              this.isResearchPagination = true;
 
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     _refrechData(callbackFunction){
       // console.log(this.stateStatus);
       callbackFunction(this.stateStatus);
     },
-
-
     _u_fx_calculateTotal_Record_Recherche(){
       var total = 0;
       if(this.isParameterAdvanced==3 || this.isParameterAdvanced==2){
@@ -1404,7 +1566,8 @@ var vthis = new Vue({
     //FONCTION POUR RECHERCHER FIN
     _u_create_line_article(){
     const isFaveur = this.checkIsFaveur.length > 0 ? 1 : 0;
-    const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/"+isFaveur+"/search";
+    const depots = isFaveur == 1 ? this.depot_central_id : this.depots_id;
+    const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+depots+"/"+isFaveur+"/search";
       if(this.depots_id ==""){
         this._u_fx_config_error_message_bottom("Message",['Veuillez selectionner un dépôt traiteur'],'alert-danger');
         return;
@@ -1480,6 +1643,27 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    _u_create_line_article_appro_inter_depot(){
+        const newurl = this.url+"articles-search-data-appro-inte-depot/"+this.codeArticle+"/"+this.qte+"/"+this.dpot_id+"/search";
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                this.tabListData.push(response.data.data);
+                this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
+                this.codeArticle = "";
+                this.qte = 0;
+                this.isLoadSaveMainButtonModal = false;
+                console.log(this.tabListData);
+                return;
+              }
+              this._u_fx_config_error_message_bottom("Message",[response.data.message.errors],'alert-danger')
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     _u_open_mod_form(art,type, from=null){
       this._u_fx_form_init_field();
       this.type_prix = type;
@@ -1510,10 +1694,14 @@ var vthis = new Vue({
     _u_close_mod_form(){
       this.styleModal = 'none';
     },
-    _u_open_mod_popup_caisse(cmd){
-      //console.log("=====ARTICLE=====");
-      //console.log(cmd);
-      this.modalTitle = "VALIDATION DU PAYEMENT DE LA FACTURE"+cmd.numero_commande+" DU CLIENT "+cmd.nom_client;
+    _u_open_mod_popup_caisse(cmd,val){
+      if(val==3){
+        this.isNoQuantity = true;
+      }else{
+        this.isNoQuantity = false;
+      }
+      console.log(val);
+      this.modalTitle = "VALIDATION DU PAYEMENT DE LA FACTURE "+cmd.numero_commande+" DU CLIENT "+cmd.nom_client;
       this.commande_id = cmd.id;
       this.somme_commande = cmd.logic_somme;
       this.styleModal = 'block';
@@ -1535,10 +1723,15 @@ var vthis = new Vue({
       }else{
         this.isNoQuantity = false;
       }
+      this.hasAlreadyDelivered = false;
       this.modalTitle = "VALIDATION DE LA LIVRAISON DE LA FACTURE "+cmd.numero_commande+" DU CLIENT "+cmd.nom_client;
       this.commande_id = cmd.id;
       this.somme_commande = cmd.logic_somme;
       this.styleModal = 'block';
+      if(cmd.depots_id_first_livrer == this.dpot_id){
+        this.hasAlreadyDelivered = !this.hasAlreadyDelivered;
+      }
+      console.log(cmd);
     },
     _u_open_mod_popup_photo(userid){
       //console.log("=====ARTICLE=====");
@@ -1567,6 +1760,7 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.numero_commande =response.data.data;
+              this.depot_central_id = response.data.depot_central;
               // console.log(this.depotList);
             }).catch(error =>{
               console.log(error);
@@ -1667,6 +1861,10 @@ var vthis = new Vue({
       this._u_open_mod_popup_photo();
 
     },
+    _u_reset_checkBoxSelected(){
+      this.checkBoxArticles = new Array();
+      this.checkBoxAchatSelected = new Array();
+    },
     // _u_hidden_display_message_error(){}
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){
@@ -1738,6 +1936,9 @@ var vthis = new Vue({
       this.nom_chauffeur = "";
       this.num_chauffeur = "";
       this.num_bordereau ="";
+
+      //CHAMPS APPRO INTER-Depot
+      this.depots_id = "";
 
 
 
@@ -1817,7 +2018,7 @@ var vthis = new Vue({
     if(pth[2] ==='admin-add-article' || pth[2] ==='admin-list-article'){
       this.get_article();
     }
-    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users'){
+    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users' || pth[2] === 'magaz-add-appro-to-depot'){
       this.get_depots();
     }
     if(pth[2]=='facturier-add-achat' || pth[2]==='caissier-add-achat'){
@@ -1833,12 +2034,16 @@ var vthis = new Vue({
     if(pth[2]=='magaz-list-achat'){
       this.get_commande_magazinier();
     }
+    if(pth[2]=='magaz-list-achat-faveur'){
+      this.get_commande_faveur_magazinier();
+    }
     if(pth[2]=='admin-list-achat'){
       this.get_commande_admin();
     }
     if(pth[2]=='admin-list-negotiation-achat'){
       this.get_commande_attente_negotiation();
-      this.get_caissier_main();
+      // this.get_caissier_main();
+      this.get_caissiers();
     }
     if(pth[2]=='caissier-add-decaissement'){
       this.get_caissier_main();
@@ -1878,6 +2083,9 @@ var vthis = new Vue({
     }
     if(pth[2]=='admin-list-users'){
       this.get_users_admin();
+    }
+    if(pth[2] == 'magaz-histo-appro-inter-depot'){
+      this.get_historique_approvisionnement_inter_depot_by_depot();
     }
 
 

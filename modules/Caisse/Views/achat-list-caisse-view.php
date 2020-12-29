@@ -109,7 +109,9 @@
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay">
-																		<th>{{dt.numero_commande}}</th>
+																		<th>
+																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
+																		</th>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>
 																			{{dt.date_vente}}
@@ -123,9 +125,11 @@
 																			<span v-if="dt.status_vente_id.id==4" class="badge badge-danger">{{dt.status_vente_id.description}}</span>
 																		</td>
 																		<th scope="col">
-																			<button v-if="dt.status_vente_id.id==1" class='btn btn-round btn-success' @click="_u_open_mod_popup_caisse(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
+																			<button v-if="dt.status_vente_id.id==1 && !dt.logic_is.virtuel" class='btn btn-round btn-success' @click="_u_open_mod_popup_caisse(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 																			<i v-if="dt.status_vente_id.id==2" class='mdi mdi-checkbox-marked-circle-outline'></i>
 																			<span>{{dt.logic_status_histo[2].livre_par.user}}</span>
+
+																			<button v-if="dt.status_vente_id.id==1 && dt.logic_is.virtuel" class='btn btn-round btn-warning' @click="_u_open_mod_popup_caisse(dt,3)"><i class='mdi mdi-alert-circle'></i></button>
 																		</th>
 																		<td>
 																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
@@ -186,12 +190,19 @@
 															</div>
 															<div v-for="(det,i) in detailTab.logic_article" class="">
 																<div class="row">
-																	<span class="col-md-4">{{det.articles_id[0].code_article}}</span>
-																	<span class="col-md-8">{{det.articles_id[0].nom_article}}</span>
+																	<div class="col-md-4">
+																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_virtuel) < parseFloat(det.qte_vendue)" class="text-danger text-right"><i class="mdi mdi-alert-circle cursor"></i></span>
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}</span>
+																	</div>
+																	<div class="col-md-7">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}</span>
+																	</div>
+
+
 																</div>
 																<br>
 																<div class="row">
-																	<span class="col-md-12">Achat Normal</span>
+																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 																	<span class="col-md-4">Qte: <br> {{det.qte_vendue}}</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseInt(det.qte_vendue)* parseInt(det.prix_unitaire)}} USD</span>
@@ -238,7 +249,7 @@
 									</button>
 							</div>
 							<div class="modal-body">
-								<div class="text-center">
+								<div class="text-center" v-if="!isNoQuantity">
 									<span>Vous êtes sur le point de faire la validation du payement,</span>
 									<span>êtes vous le(la) caissier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
 									<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
@@ -248,6 +259,12 @@
 									</div>
 									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_payement" class="btn btn-primary">Confirmer</button>
 									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+								</div>
+								<div v-if="isNoQuantity" class="text-center">
+									<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
+									<span class="text-danger">
+										Impossible de valider cette commande, car il y a un ou plusieurs articles dont leur quantité ne se trouve pas de votre stock! Veuillez svp consulter le détail de la commande pour plus de precision.
+									</span>
 								</div>
 							</div>
 

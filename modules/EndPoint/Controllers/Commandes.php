@@ -100,6 +100,7 @@ class Commandes extends ResourceController {
       'status' => 200,
       'message' => 'success',
       'data' => $this->model->checkIfUniqueAchatIDExist($uniqueAchatID),
+      'depot_central' => getDepotCentral(1)
     ]);
   }
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER : DONC LES COMMANDES CREES PAR UN FACTURIER
@@ -199,7 +200,14 @@ class Commandes extends ResourceController {
             $infoCommande = $this->model->find($idcommande);
             $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
             foreach ($allArt as $key => $value) {
-              $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id[0]->id,'articles_id'=>$value->articles_id[0]->id])->getRow();
+
+              if($value->is_faveur == 0){
+                $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id[0]->id,'articles_id'=>$value->articles_id[0]->id])->getRow();
+              }else{
+                $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id_faveur,'articles_id'=>$value->articles_id[0]->id])->getRow();
+              }
+
+
               $stokinit = $stokdepot->qte_stock_virtuel;
               $qte_a_retrancher = $value->qte_vendue;
               $nvlleqte = $stokinit-$qte_a_retrancher;
@@ -246,6 +254,10 @@ class Commandes extends ResourceController {
       $dateFilter = $d;
     }
     $condition =['date_vente'=> $dateFilter];
+    $conditionAllAchatFaveur = [];
+    if(getTypeDepot($iddepot)){
+      $conditionAllAchatFaveur = ['container_faveur' => 1];
+    }
     $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->findAll();
     return $this->respond([
       'status' => 200,
@@ -253,6 +265,34 @@ class Commandes extends ResourceController {
       'data' => $data,
       'nombreVenteType' => $this->commandeByTypeByuser($iddepot,'depots_id',$condition)
     ]);
+  }
+
+  //FONCTION POUR AFFICHER LES COMMANDES FAVEURS AFFECTER A UN DEPOT CENTRAL
+  public function commandes_faveurs_get_by_depot($iddepot,$statutVente,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $condition =['date_vente'=> $dateFilter];
+    $conditionAllAchatFaveur = ['container_faveur' => 1];
+    $conditionDepotCentralTraiteurFaveur = ['depots_id_faveur' => $iddepot];
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where($conditionDepotCentralTraiteurFaveur)->Where($conditionAllAchatFaveur)->where('status_vente_id',$statutVente)->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'nombreVenteType' => $this->commandeByTypeByuserFaveur($iddepot,'depots_id_faveur',$condition,$conditionAllAchatFaveur)
+    ]);
+  }
+
+  public function commandeByTypeByuserFaveur($iduser,$nomchamps,$condition,$conditionAllAchatFaveur){
+    return $array =[
+      'attente'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',1)->Where($conditionAllAchatFaveur)->findAll()),
+      'payer'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',2)->Where($conditionAllAchatFaveur)->findAll()),
+      'livrer'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',3)->Where($conditionAllAchatFaveur)->findAll()),
+      'annuler'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',4)->Where($conditionAllAchatFaveur)->findAll()),
+    ];
+
   }
 
   //FONCTION POUR VALIDATION LIVRAISON COMMANDE MAGAZINIER
@@ -266,59 +306,243 @@ class Commandes extends ResourceController {
       ];
       $data = "";
     }else{
-      if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanity($iddepot,$idcommande)){
-        //SUITES VALIDATIONS
-        $data = ['status_vente_id'=>3];
-        // $this->model->beginTrans();
-        if(!$updateData = $this->model->update($idcommande,$data)){
-          $status = 400;
-          $message = [
-            'success' => null,
-            'errors' => $this->model->erros()
-          ];
-          $data = "";
-        }else {
-          //CREATION HISTORIQUE CHANGEMENT STATUS
-          $dataStatusHistorique=[
-              'vente_id' => $idcommande,
-              'status_vente_id' => 3,
-              'users_id' => $iduser,
-          ];
-          if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
-            //DECOMPTE DU STOCK DEOPOTS
-            $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
-            foreach ($allArt as $key => $value) {
-              $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
-              $stokinit = $stokdepot->qte_stock;
-              $qte_a_retrancher = $value->qte_vendue;
-              $nvlleqte = $stokinit-$qte_a_retrancher;
-              $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+      $infoCommande = $this->model->find($idcommande);
+      if($infoCommande->container_faveur ==1){
+        //ACHAT FAVEUR ET DEPOT CENTRAL VALIDATION
+        if(getTypeDepot($iddepot)){
+          //VALIDATION DEPOT CENTRAL
+          //Check if all isNotFaveur are isLivrer
+          $allIsNotFaveur = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
+          $allIsNotFaveurAnLivrer = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->Where('is_livrer',1)->findAll();
+          if(count($allIsNotFaveur) == count($allIsNotFaveurAnLivrer)){
+            //MEANS all not Faveur are delivred
+            $data = ['status_vente_id'=>3];
+            if(!$updateData = $this->model->update($idcommande,$data)){
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->model->erros()
+              ];
+              $data = "";
+            }else {
+              if(!$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update()){
+                $status = 400;
+                $message = [
+                  'success' => null,
+                  'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+                ];
+                $data = "";
+              }else{
+                $dataStatusHistorique=[
+                    'vente_id' => $idcommande,
+                    'status_vente_id' => 3,
+                    'users_id' => $iduser,
+                ];
+                if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+                  //DECOMPTE DU STOCK DEOPOTS
+                  $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
+                  foreach ($allArt as $key => $value) {
+                    $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+                    $stokinit = $stokdepot->qte_stock;
+                    $qte_a_retrancher = $value->qte_vendue;
+                    $nvlleqte = $stokinit-$qte_a_retrancher;
+                    $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+                  }
+                  $status = 200;
+                  $message = [
+                    'success' => 'Livraison effectué avec succès',
+                    'errors' => null
+                  ];
+                  $data = "";
+                }
+              }
             }
-            $status = 400;
-            $message = [
-              'success' => 'Livraison effectué avec succès',
-              'errors' => null
-            ];
-            $data = "";
-
           }else{
+            //WHEN NO DELIVERY YET
+            $dataUpdate = ['is_livrer' => 1];
+            $dataUpt = ['depots_id_first_livrer' => $iddepot];
+            $upDetailCommande = $this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update();
+            $upCommandeFirstDepotLivrer = $this->model->set('depots_id_first_livrer',$iddepot)->Where('id',$idcommande)->update();
+            if(!$upDetailCommande and !$upCommandeFirstDepotLivrer){
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+              ];
+              $data = "";
+            }else{
+              $dataStatusHistorique=[
+                  'vente_id' => $idcommande,
+                  'status_vente_id' => 3,
+                  'users_id' => $iduser,
+              ];
+              if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+                //DECOMPTE DU STOCK DEOPOTS
+                $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
+                foreach ($allArt as $key => $value) {
+                  $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+                  $stokinit = $stokdepot->qte_stock;
+                  $qte_a_retrancher = $value->qte_vendue;
+                  $nvlleqte = $stokinit-$qte_a_retrancher;
+                  $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+                }
+                $status = 200;
+                $message = [
+                  'success' => 'Livraison d\'une partie de l\'achat a été effectué avec succès',
+                  'errors' => null
+                ];
+                $data = "";
+
+              }
+            }
+
+          }
+
+        }else{
+          //VALIDATION DEPOT SECONDAIRE
+          //Check if all isNotFaveur are isLivrer
+          $allIsNotFaveur = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
+          $allIsNotFaveurAnLivrer = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->Where('is_livrer',1)->findAll();
+          if(count($allIsNotFaveur) == count($allIsNotFaveurAnLivrer)){
+            //MEAN ALL FAVEUR ARE delivred
+            $data = ['status_vente_id'=>3];
+            if(!$updateData = $this->model->update($idcommande,$data)){
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->model->erros()
+              ];
+              $data = "";
+            }else {
+              if(!$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',0)->update()){
+                $status = 400;
+                $message = [
+                  'success' => null,
+                  'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+                ];
+                $data = "";
+              }else{
+                $dataStatusHistorique=[
+                    'vente_id' => $idcommande,
+                    'status_vente_id' => 3,
+                    'users_id' => $iduser,
+                ];
+                if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+                  //DECOMPTE DU STOCK DEOPOTS
+                  $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
+                  foreach ($allArt as $key => $value) {
+                    $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+                    $stokinit = $stokdepot->qte_stock;
+                    $qte_a_retrancher = $value->qte_vendue;
+                    $nvlleqte = $stokinit-$qte_a_retrancher;
+                    $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+                  }
+                  $status = 200;
+                  $message = [
+                    'success' => 'Livraison effectué avec succès',
+                    'errors' => null
+                  ];
+                  $data = "";
+
+                }
+              }
+            }
+          }else{
+            //WHEN NO DELIVERY YET
+            $upDetailCommande = $this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',0)->update();
+            $upCommandeFirstDepotLivrer = $this->model->set('depots_id_first_livrer',$iddepot)->Where('id',$idcommande)->update();
+            if(!$upDetailCommande and !$upCommandeFirstDepotLivrer){
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+              ];
+              $data = "";
+            }else{
+              $dataStatusHistorique=[
+                  'vente_id' => $idcommande,
+                  'status_vente_id' => 3,
+                  'users_id' => $iduser,
+              ];
+              if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+                //DECOMPTE DU STOCK DEOPOTS
+                $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
+                foreach ($allArt as $key => $value) {
+                  $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+                  $stokinit = $stokdepot->qte_stock;
+                  $qte_a_retrancher = $value->qte_vendue;
+                  $nvlleqte = $stokinit-$qte_a_retrancher;
+                  $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+                }
+                $status = 200;
+                $message = [
+                  'success' => 'Livraison d\'une partie de l\'achat a été effectué avec succès',
+                  'errors' => null
+                ];
+                $data = "";
+
+              }
+            }
+          }
+        }
+
+      }else {
+        //ACHAT ET VALIDATION NORMAL
+        if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanity($iddepot,$idcommande)){
+          //SUITES VALIDATIONS
+          $data = ['status_vente_id'=>3];
+          // $this->model->beginTrans();
+          if(!$updateData = $this->model->update($idcommande,$data)){
             $status = 400;
             $message = [
               'success' => null,
-              'errors' => $this->commandesStatusHistoriqueModel->erros()
+              'errors' => $this->model->erros()
             ];
             $data = "";
+          }else {
+            //CREATION HISTORIQUE CHANGEMENT STATUS
+            $dataStatusHistorique=[
+                'vente_id' => $idcommande,
+                'status_vente_id' => 3,
+                'users_id' => $iduser,
+            ];
+            if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+              //DECOMPTE DU STOCK DEOPOTS
+              $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
+              foreach ($allArt as $key => $value) {
+                $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+                $stokinit = $stokdepot->qte_stock;
+                $qte_a_retrancher = $value->qte_vendue;
+                $nvlleqte = $stokinit-$qte_a_retrancher;
+                $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+              }
+              $status = 200;
+              $message = [
+                'success' => 'Livraison effectué avec succès',
+                'errors' => null
+              ];
+              $data = "";
+
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->commandesStatusHistoriqueModel->erros()
+              ];
+              $data = "";
+            }
           }
+        }else{
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => ['Impossible d\'executer cet achat vu que vous n\'avez pas une quantité suffisante pour certains articles! Consulter le détail de l\'achat']
+          ];
+          $data = "";
         }
-      }else{
-        $status = 400;
-        $message = [
-          'success' => null,
-          'errors' => ['Impossible d\'executer cet achat vu que vous n\'avez pas une quantité suffisante pour certains articles! Consulter le détail de l\'achat']
-        ];
-        $data = "";
       }
-    }
+      }
+
     // $this->model->RollbackTrans();
     return $this->respond([
       'status' => $status,
@@ -364,6 +588,53 @@ class Commandes extends ResourceController {
         ];
         $data = "";
       }
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+
+  //FONCTION POUR SUPPRIMER ARTICLE SUR UNE COMMANDE
+  public function commandes_delete_articles(){
+    $idcommande = $this->request->getPost('idcommande');
+    $idarticle = $this->request->getPost('idarticle');
+
+    $getAllarticleDeLaCommande = $this->commandesDetailModel->Where('vente_id', $idcommande)->findAll();
+    if(count($idarticle) < count($getAllarticleDeLaCommande)){
+    for ($i=0; $i < count($idarticle); $i++) {
+        $condition = [
+          'vente_id' =>$idcommande,
+          'articles_id'=>$idarticle[$i]
+        ];
+        $data = $this->commandesDetailModel->getWhere($condition)->getRow();
+        if($this->commandesDetailModel->delete(['id' =>$data->id ])){
+          $textArt = $i > 1 ? 'ont':'a';
+          $status = 200;
+          $message = [
+            'success' => ($i+1).' article(s) de cet achat '.$textArt.' été supprimer avec succès',
+            'errors' => null
+          ];
+          $data = "";
+
+        }else{
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => "Echec de la suppression d'article"
+          ];
+          $data = "";
+        }
+
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Impossible de supprimer tous les articles de l\'achat!']
+      ];
+      $data = "";
     }
     return $this->respond([
       'status' => $status,
@@ -709,6 +980,44 @@ class Commandes extends ResourceController {
       'nombreVenteType' => $this->SearchcommandeByTypeByuser($iddepot,'depots_id',$conditionDate,$conditionLike)
     ]);
   }
+
+  //FONCTION POUR RECHERCHER LES COMMANDES FAVEURS AFFECTER A UN DEPOT CENTRAL RECHERCHE
+  public function search_commandes_faveur_get_by_depot($iddepot,$statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){
+    $conditionDate =[];
+    $conditionStatus =[];
+    $conditionDepotCentralTraiteurFaveur = ['depots_id_faveur' => $iddepot];
+    if($isParameterAdvanced==3)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+    if($isParameterAdvanced==1)
+    {
+      $d = Time::today();
+      if($dateFilter == "null"){ $dateFilter = $d; }
+      $conditionDate =['date_vente'=> $dateFilter];
+    }
+    if($isParameterAdvanced==2)
+    {
+      $conditionStatus = ['status_vente_id'=>$statutVente];
+    }
+
+    if($type==1){
+      $conditionLike = ['numero_commande'=>$dataToSearch];
+    }else{
+      $conditionLike = ['nom_client'=>$dataToSearch];
+    }
+    $data = $this->model->Where($conditionDate)->Where('container_faveur',1)->Where($conditionDepotCentralTraiteurFaveur)->where($conditionStatus)->like($conditionLike)->orderBy('id','DESC')->findAll($limit,$offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'nombreVenteType' => $this->commandeByTypeByuserFaveur($iddepot,'depots_id_faveur',$conditionDate,$conditionLike,$conditionDepotCentralTraiteurFaveur)
+    ]);
+  }
+
 
   //FONCTION RECHERECHER ALL COMMANDES ADMINSTRATION
   public function search_commandes_all_get_by_status($statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){

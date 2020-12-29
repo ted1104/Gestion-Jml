@@ -39,6 +39,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('articles-search-data-commande/(:any)/(:num)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3/$4');
   $routes->get('articles-search-by-code/(:any)code','Articles::article_search_by_code/$1');
   $routes->post('articles-update-price','Articles::article_update_price');
+  $routes->get('articles-search-data-appro-inte-depot/(:any)/(:num)/(:num)/search','Articles::article_search_for_appro_inter_depot/$1/$2/$3');
 
 
   $routes->post('art-test','Articles::multitest');
@@ -66,6 +67,13 @@ $routes->group('api/v1', function($routes){
   $routes->post('achat-annuler','Commandes::annuler_commande_achat');
 
 
+  $routes->get('commandes-faveur-get-by-depot/(:num)/(:num)/(:any)/depot','Commandes::commandes_faveurs_get_by_depot/$1/$2/$3');
+  $routes->get('commandes-faveur-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_faveur_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
+
+  $routes->post('delete-article-commande','Commandes::commandes_delete_articles');
+
+
+
 
 
 
@@ -77,6 +85,13 @@ $routes->group('api/v1', function($routes){
   $routes->get('approvisionnement-get-all/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2');
   $routes->get('approvisionnement-get-by-depot/(:num)/(:num)/(:num)','Approvisionnement::approvisionnement_get_by_depot/$1/$2/$3');
   $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
+
+  $routes->get('approvisionnement-inter-depot-get-all/(:num)/(:num)','ApprovisionnementInterDepot::approvisionnementInterDepot_get/$1/$2');
+  $routes->post('approvisionnement-inter-depot-create','ApprovisionnementInterDepot::approvisionnementInterDepot_create');
+
+  $routes->get('approvisionnement-inter-depot-get-by-depot/(:num)/(:num)/(:num)','ApprovisionnementInterDepot::approvisionnementInterDepot_get_by_depot/$1/$2/$3');
+
+
 
 
 

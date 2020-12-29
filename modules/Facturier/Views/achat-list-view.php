@@ -93,7 +93,7 @@
 														<div class="table-responsive card-body">
 															<!-- {{checkBoxAchatSelected}} -->
 															<div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
-																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_facturier_annulation()"><i class="mdi mdi-delete"></i>Annuler</button>
+																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_facturier_annulation()"><i class="mdi mdi-delete"></i>Annuler achat</button>
 															</div>
 															<table class="table margin-top-8">
 																<thead>
@@ -117,7 +117,10 @@
 																				<label class="custom-control-label" :for="dt.id"></label>
 																			</div>
 																		</td>
-																		<td>{{dt.numero_commande}}</td>
+																		<td>
+																			<span :class="dt.container_faveur==1?'text-danger font-bold':''">{{dt.numero_commande}}</span>
+																			<!-- <span class="badge badge-pill badge-info div-carre-1">F</span> -->
+																		</td>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
@@ -171,6 +174,7 @@
 																</div>
 																<div class="col-md-8">
 																	<h5 class=" card-title margin-top-4">FACTURE {{detailTab.numero_commande}}</h5>
+																	<!-- {{checkBoxArticles}} -->
 																</div>
 																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
@@ -181,7 +185,8 @@
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																	<div class="col-md-6 text-right">
-																		<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2"><i class="mdi mdi-delete mr-2"></i> Annuler</button>
+																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_commande(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
+																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																</div>
 																<hr>
@@ -189,9 +194,15 @@
 															<!-- {{checkBoxArticles}} -->
 															<div v-for="(det,i) in detailTab.logic_article" class="">
 																<div class="row">
-																	<span class="col-md-4">{{det.articles_id[0].code_article}}</span>
-																	<span class="col-md-6">{{det.articles_id[0].nom_article}}</span>
-																	<div class="col-md-2">
+																	<div class="col-md-4">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}</span>
+																		<!-- <span v-if="det.is_faveur==1" class="badge badge-pill badge-warning">F</span> -->
+																	</div>
+																	<div class="col-md-6">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}</span>
+
+																	</div>
+																	<div class="col-md-2" v-if="stateStatus==1">
 																		<div class="custom-control custom-checkbox custom-control-inline">
 																			<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles">
 		                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
@@ -201,7 +212,7 @@
 																</div>
 																<br>
 																<div class="row">
-																	<span class="col-md-12">Achat Normal</span>
+																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 																	<span class="col-md-4">Qte: <br> {{det.qte_vendue}}</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
