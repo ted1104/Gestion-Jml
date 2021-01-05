@@ -15,6 +15,9 @@ $routes->get('admin-caisse','Dashboard::getCaissierMontant',['filter' => 'isLogg
 $routes->get('admin-decaissement','Dashboard::getDecaissement',['filter' => 'isLoggedIn']);
 $routes->get('admin-add-users','Dashboard::createUsers',['filter' => 'isLoggedIn']);
 $routes->get('admin-list-users','Dashboard::getAllUsers',['filter' => 'isLoggedIn']);
+$routes->get('admin-histo-appro-inter-depot','Approv::historiqueInterDepot',['filter' => 'isLoggedIn']);
+
+
 
 
 

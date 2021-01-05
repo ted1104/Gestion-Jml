@@ -38,7 +38,7 @@
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">Information relative au dépôt</h5>
-																{{RadioCheckedIsMain}}
+																<!-- {{RadioCheckedIsMain}} -->
                             </div>
                             <div class="card-body">
                                   <div class="form-group">

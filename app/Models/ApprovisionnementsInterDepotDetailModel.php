@@ -9,7 +9,7 @@ class ApprovisionnementsInterDepotDetailModel extends Model{
   protected $allowedFields = ['approvisionnement_id','articles_id','qte'];
   protected $useTimestamps = true;
   protected $validationRules = [
-    'approvisionnement_id' => 'required|checkingForeignKeyExist[g_interne_approvisionnement,id]',
+    'approvisionnement_id' => 'required|checkingForeignKeyExist[g_interne_approvisionnement_inter_depot,id]',
     'articles_id' => 'required|checkingForeignKeyExist[g_articles,id]',
     'qte'=>'required|numeric'
   ];

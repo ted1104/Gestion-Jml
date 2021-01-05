@@ -29,7 +29,7 @@
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
 													 <h4>CREER UN ACHAT D'UN CLIENT</h4>
-													 {{depot_central_id}}
+													 <!-- {{depot_central_id}} -->
 													 <button  class="btn btn-round btn-danger pull-right" @click="isStockIndicator=!isStockIndicator"><i class="mdi mdi-shopping"></i></button>
 
 

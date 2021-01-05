@@ -36,33 +36,42 @@ class TableStatique extends ResourceController {
   }
   public function depot_create(){
     $data = $this->request->getPost();
-    $insertData = $this->depotsModel->insert($data);
-     if(!$insertData){
-       $status = 400;
-       $message = [
-         'success' =>null,
-         'errors'=>$this->depotsModel->errors()
-       ];
-       $data = null;
-     }else{
-       $article = $this->articleModel->findAll();
-       foreach ($article as $key => $value) {
-         $datStock = [
-           'articles_id'=>$value->id,
-           'depot_id'=>$insertData,
-           'qte_stock'=>0
+      if($this->depotsModel->checkingIfAnotherDepotCentralExit($data['is_central'])){
+            $insertData = $this->depotsModel->insert($data);
+             if(!$insertData){
+               $status = 400;
+               $message = [
+                 'success' =>null,
+                 'errors'=>$this->depotsModel->errors()
+               ];
+               $data = null;
+             }else{
+               $article = $this->articleModel->findAll();
+               foreach ($article as $key => $value) {
+                 $datStock = [
+                   'articles_id'=>$value->id,
+                   'depot_id'=>$insertData,
+                   'qte_stock'=>0
+                 ];
+                 if(!$this->stockModel->insert($datStock)){
+                   $this->depotsModel->RollbackTrans();
+                 }
+               }
+               $status = 200;
+               $message = [
+                 'success' => 'Enregistrement reussi',
+                 'errors' => null
+               ];
+               $data = $insertData;
+             }
+      }else{
+         $status = 400;
+         $message = [
+           'success' =>null,
+           'errors'=>['un autre dépôt central existe déjà']
          ];
-         if(!$this->stockModel->insert($datStock)){
-           $this->depotsModel->RollbackTrans();
-         }
-       }
-       $status = 200;
-       $message = [
-         'success' => 'Enregistrement reussi',
-         'errors' => null
-       ];
-       $data = $insertData;
-     }
+         $data = null;
+    }
      return $this->respond([
        'status' => $status,
        'message' =>$message,

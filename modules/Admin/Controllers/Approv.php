@@ -21,6 +21,13 @@ class Approv extends BaseController {
     echo view($this->linkMod.'\appro\depots-stock-view', $data);
   }
 
+  public function historiqueInterDepot(){
+    $data = [
+      'titlePage' => 'Approvisionnement Inter-Dépôt: Administration'
+    ];
+    echo view($this->linkMod.'\appro\appro-inter-depot-historique-view', $data);
+  }
+
 
 
 }

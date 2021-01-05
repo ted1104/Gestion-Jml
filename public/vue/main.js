@@ -5,7 +5,7 @@ var vthis = new Vue({
   },
   data () {
     return {
-      url : 'http://127.0.0.1/GestionBoutique/api/v1/',
+      url : 'http://172.18.100.205/GestionBoutique/api/v1/',
       tokenConfig : {
         'authorization' : '3bacb9ec-9fbc-4442-ab76-3a6e35b0a627',
         'Content-Type':'multipart/form-data'
@@ -1307,6 +1307,24 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_historique_approvisionnement_inter_depot_admin(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"approvisionnement-inter-depot-get-all/"+limit+"/"+offset;
+      this.dataToDisplay=[];
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -2086,6 +2104,9 @@ var vthis = new Vue({
     }
     if(pth[2] == 'magaz-histo-appro-inter-depot'){
       this.get_historique_approvisionnement_inter_depot_by_depot();
+    }
+    if(pth[2] == 'admin-histo-appro-inter-depot'){
+      this.get_historique_approvisionnement_inter_depot_admin();
     }
 
 

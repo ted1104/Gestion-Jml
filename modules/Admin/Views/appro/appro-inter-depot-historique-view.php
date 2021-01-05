@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>MON HISTORIQUE APPROVISIONNEMENT INTER-DEPOT</h4>
+													 <h4>HISTORIQUE GENERAL DES APPROVISIONNEMENT INTER-DEPOT</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -49,7 +49,6 @@
 																		<th scope="col">Source</th>
 																		<th scope="col">Destination</th>
 																		<th scope="col">Fait par</th>
-																		<th scope="col">Type</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
@@ -59,11 +58,6 @@
 																		<td>{{dt.depots_id_source[0].nom}}</td>
 																		<td>{{dt.depots_id_dest[0].nom}}</td>
 																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
-																		<td>
-																			<span :class="dt.depots_id_source[0].id == dpot_id?'text-success':'text-danger'">
-																				<i :class="dt.depots_id_source[0].id == dpot_id?'mdi mdi-arrow-right-thick':'mdi mdi-arrow-left-thick'"></i>
-																			</span>
-																	</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
@@ -81,11 +75,11 @@
 															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement_inter_depot_by_depot)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement_inter_depot_admin)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement_inter_depot_by_depot(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement_inter_depot_admin(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement_inter_depot_by_depot)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement_inter_depot_admin)">Next</button>
                                     </li>
                                   </ul>
                                 </nav>

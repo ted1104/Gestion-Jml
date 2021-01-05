@@ -41,6 +41,8 @@ class StDepotEntity extends Entity{
     return $data[0]->nom.' '.$data[0]->prenom;
   }
 
+  
+
 
 
 

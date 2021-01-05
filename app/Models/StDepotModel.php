@@ -24,8 +24,19 @@ class StDepotModel extends Model{
             ],
     'is_central'=>[
               'required' => 'Le Type du dépôt est obligatoire',
+
             ],
 ];
   protected $returnType ='App\Entities\StDepotEntity';
+
+
+  public function checkingIfAnotherDepotCentralExit($isCentral){
+    if($isCentral==1){
+      if($this->Where('is_central',$isCentral)->find()){
+        return false;
+      }
+    }
+    return true;
+  }
 
 }
