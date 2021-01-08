@@ -5,7 +5,7 @@ var vthis = new Vue({
   },
   data () {
     return {
-      url : 'http://172.18.100.205/GestionBoutique/api/v1/',
+      url : 'http://127.0.0.1/GestionBoutique/api/v1/',
       tokenConfig : {
         'authorization' : '3bacb9ec-9fbc-4442-ab76-3a6e35b0a627',
         'Content-Type':'multipart/form-data'
