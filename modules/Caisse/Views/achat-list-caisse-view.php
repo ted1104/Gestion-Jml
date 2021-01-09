@@ -223,7 +223,7 @@
 																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 																	<span class="col-md-4">Qte: <br> {{det.qte_vendue}}</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
-																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseInt(det.qte_vendue)* parseInt(det.prix_unitaire)}} USD</span>
+																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
 																</div>
 																<br>
 																<div class="row">

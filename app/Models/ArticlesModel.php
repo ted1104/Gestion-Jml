@@ -6,7 +6,7 @@ class ArticlesModel extends Model{
   protected $table = 'g_articles';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['code_article','nom_article','date_vente','description','users_id','logic_detail_data'];
+  protected $allowedFields = ['code_article','nom_article','date_vente','description','nombre_piece','users_id','logic_detail_data'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'code_article' => 'required|is_unique[g_articles.code_article]',

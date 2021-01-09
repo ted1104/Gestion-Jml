@@ -28,92 +28,169 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>LISTE DE TOUS LES ARTICLE</h4>
+													 <h4>LISTE DE TOUS LES ARTICLE ET PRIX</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
-											<div class="row">
+											<div class="row ">
+												<div class="col-md-8 col-lg-8 col-xl-8">
+													<div class="card m-b-30">
+                            <div class="card-header bg-white">
+															<div class="row">
+																<h5 class="card-title text-black col-md-8 col-lg-8 col-xl-8">TOUS LES ARTICLES ET LEUR PRIX ( {{dataToDisplay.length}} )</h5>
+															</div>
 
-												<div class="col-md-12 col-lg-12 col-xl-12">
-												<div class="card m-b-30">
-                          <div class="card-header bg-white">
-                              <div class="row">
-																<h5 class="card-title text-black col-md-8 col-lg-8 col-xl-8">Lite de tous les articles</h5>
-																<div class="col-md-4 col-lg-4 col-xl-4 ">
-																	<div class="custom-control custom-checkbox custom-control-inline">
-																		<input type="checkbox" name="checkBoxArticles" id="1" class="custom-control-input" value="1" v-model="checkBoxArticles">
-																		<label class="custom-control-label" for="1">Modifier</label>
+                            </div>
+														<div class="table-responsive card-body">
+															<table class="table">
+																<thead>
+																	<tr class="bg-secondary">
+																		<th scope="col">#</th>
+																		<th scope="col">Code</th>
+																		<th scope="col">Nom Article</th>
+																		<th scope="col">Pièces</th>
+																		<th scope="col">Config Prix</th>
+																		<th scope="col">Config Faveur</th>
+																		<th scope="col">Détail</th>
+
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr v-for="(dt, index) in dataToDisplay">
+																		<td>{{index+1}}</td>
+																		<td>{{dt.code_article}}</td>
+																		<td>{{dt.nom_article}}</td>
+																		<td>{{dt.nombre_piece}}</td>
+																		<td>
+																			<button class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																		</td>
+																		<td>
+																			<button v-if="dt.logic_config_article_faveur.length < 1" class='btn btn-round btn-success' @click="_u_open_mod_form_config_faveur(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																			<button class="btn btn-round btn-light" v-if="dt.logic_config_article_faveur.length > 0" @click="_u_open_mod_form_config_faveur(dt,2)">
+																				<i class="mdi mdi-circle-edit-outline text-danger"></i>
+																			</button>
+																		</td>
+																		<td>
+																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+															<!-- LOAD FOR WAITING DATA -->
+															<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
+																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
+															</div>
+															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
+																<img src="<?=base_url() ?>/public/load/empty.png" >
+																<h6 class="text-danger">Données vide!!</h6>
+															</div>
+															<!-- PAGINATION -->
+															<!-- <nav aria-label="...">
+                                  <ul class="pagination">
+                                    <li class="page-item">
+                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement)">Previous</button>
+                                    </li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li class="page-item">
+                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement)">Next</button>
+                                    </li>
+                                  </ul>
+                                </nav> -->
+														</div>
+                        </div>
+												</div>
+
+												<div class="col-md-4 col-lg-4 col-xl-4">
+													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
+														<div class="container">
+															<div class="row">
+																<h5 class="col-md-9 card-title">DETAIL PRIX ARTICLES {{detailTab.nom_article}}</h5>
+																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
+															</div>
+															<!-- {{checkBoxArticles}} -->
+															<div  class="">
+																<div class="row">
+																	<div class="table-responsive container">
+																		<table class="table">
+																			<thead>
+																				<tr class="bg-secondary">
+																					<th scope="col">Interval</th>
+																					<th scope="col">Prix</th>
+																					<th scope="col">Action</th>
+																					<!-- <th scope="col">Qte Virtuelle</th>
+																					<th scope="col">Etat</th> -->
+
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr v-for="(det,i) in detailTab.logic_detail_data">
+																					<td>{{det.qte_decideur_min+' - '+det.qte_decideur_max}}</td>
+																					<td>{{det.prix_unitaire}} USD</td>
+																					<td>
+																						<span class="btn btn-round btn-light">
+																							<i class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(det,2)"></i>
+																						</span>
+																						<button v-if = "+i+1 == detailTab.logic_detail_data.length" class="btn btn-round btn-danger" @click="_u_open_mod_form(det,3)"><i class="mdi mdi-delete-sweep" ></i></button>
+																					</td>
+
+																				</tr>
+																			</tbody>
+																		</table>
+																		<div v-if="detailTab.logic_detail_data.length < 1" class="text-center">
+																			<span >Aucune configuration des prix pour cet article </span><br>
+																			<i class="mdi mdi-cancel" style="font-size:40px"></i>
+																		</div>
 																	</div>
 																</div>
-                              </div>
-                          </div>
-                          <div class="card-body">
-                              <div class="table-responsive">
-                                <table class="table">
-                                  <thead>
-                                    <tr class="bg-secondary">
-                                      <th scope="col">Code</th>
-                                      <th scope="col">Nom</th>
-																			<th scope="col">Prix Gros</th>
-																			<th scope="col">Qte Gros</th>
-                                      <th scope="col">Prix Détail</th>
-																			<th scope="col">Qte Detail</th>
-                                      <th scope="col">Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr v-for="(dt, index) in dataToDisplay">
-                                      <th>{{dt.code_article}}</th>
-                                      <td>{{dt.nom_article}}</td>
 
-																			<td>
-																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=1)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[0].prix_unitaire+' USD':dt.logic_detail_data[1].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,1,1)"></i></span>
+																<!-- CONFIGURATION FAVEURS -->
+																<div class="row">
+																	<h5 class="col-md-9 card-title">DETAIL CONFIGURATION FAVEUR</h5>
+																	<!-- <i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i> -->
 
 
-																			</td>
-																			<td>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?' > '+dt.logic_detail_data[0].qte_decideur:' > '+dt.logic_detail_data[1].qte_decideur}}</span>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{' > '+dt.logic_detail_data[0].qte_decideur}}</span>
-																				<span v-if="dt.logic_detail_data.length < 1 || dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2">-</span>
-																			</td>
-																			<td>
-																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=2)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,2)"><i class='mdi mdi-plus'></i> </button>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[1].prix_unitaire+' USD':dt.logic_detail_data[0].prix_unitaire +' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,2,1)"></i></span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}} <i v-if="checkBoxArticles.length>0" class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(dt,2,1)"></i></span>
-
-																			</td>
-																			<td>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?'<= '+dt.logic_detail_data[1].qte_decideur:'<= '+dt.logic_detail_data[0].qte_decideur}}</span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{'<= '+dt.logic_detail_data[0].qte_decideur}}</span>
-
-																				<span v-if="dt.logic_detail_data.length < 1 || dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1">-</span>
-																			</td>
-                                      <td>
-																				<a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i></a>
-																				<a href="#" v-if="checkBoxArticles.length>0"  class='btn btn-round btn-info' ><i class="mdi mdi-circle-edit-outline text-white"></i></a>
-																			</td>
-
-                                    </tr>
-                                  </tbody>
-                                </table>
-																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
-																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/public/load/empty.png" >
-																	<h6 class="text-danger">Données vide!!</h6>
+																<div class="row">
+																	<div class="table-responsive container">
+																	</div>
 																</div>
-                              </div>
-                          </div>
-                        </div>
+																<table class="table">
+																	<thead>
+																		<tr class="bg-secondary">
+																			<th scope="col">Qte Faveur</th>
+																			<th scope="col">Interval</th>
+																			<th scope="col">PU</th>
+
+																			<!-- <th scope="col">Qte Virtuelle</th>
+																			<th scope="col">Etat</th> -->
+
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr v-for="(det,i) in detailTab.logic_config_article_faveur">
+																			<td>{{det.qte_faveur}}</td>
+																			<td>{{det.prix_id[0].qte_decideur_min+' - '+det.prix_id[0].qte_decideur_max}}</td>
+																			<td>{{det.prix_id[0].prix_unitaire}} USD</td>
+
+																			<!-- <td>
+																				<span class="btn btn-round btn-light">
+																					<i class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(det,2)"></i>
+																				</span>
+																				<button v-if = "+i+1 == detailTab.logic_detail_data.length" class="btn btn-round btn-danger" @click="_u_open_mod_form(det,3)"><i class="mdi mdi-delete-sweep" ></i></button>
+																			</td> -->
+																		</tr>
+																	</tbody>
+																</table>
+																<div v-if="detailTab.logic_config_article_faveur.length < 1" class="text-center">
+																	<span >Aucune configuration faveur pour cet article </span><br>
+																	<i class="mdi mdi-cancel" style="font-size:40px"></i>
+																</div>
+																<hr>
+															</div>
+
+														</div>
+													</div>
 												</div>
 											</div>
                     </div>
@@ -130,25 +207,32 @@
     </div>
     <!-- End XP Container -->
 
-		<!-- MODAL -->
+
+		<!-- MODAL PRICE-->
 	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
-                <button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h5 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body" v-if="!isWantBeDeleted">
+							<div class="form-group" v-if="isAction">
+								<label for="qte_decideur_min">Quantité Min Inclue*</label>
+								<input type="text" class="form-control" id="qte_decideur_min" aria-describedby="qte_decideur_min" v-model="qte_decideur_min" disabled>
+							</div>
+							<div class="form-group" v-if="isAction">
+								<label for="qte_decideur_max">Quantité Max Exclue*</label>
+								<input type="text" class="form-control" id="qte_decideur_max" aria-describedby="qte_decideur_max" v-model="qte_decideur_max">
+							</div>
 							<div class="form-group">
+
 								<label for="prix_unitaire">Prix Unitaire *</label>
 								<input type="text" class="form-control" id="prix_unitaire" aria-describedby="prix_unitaire" v-model="prix_unitaire">
 							</div>
-							<div class="form-group">
-								<label for="qte_decideur">Quantité *</label>
-								<input type="text" class="form-control" id="qte_decideur" aria-describedby="qte_decideur" v-model="qte_decideur">
-							</div>
+
 							<div v-if="!isAction">
 								<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Modifier</button>
 							</div>
@@ -156,9 +240,57 @@
 								<button v-if="!isLoadSaveMainButtonModal" @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
 							</div>
 							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-            </div>
+						</div>
 
-        </div>
-    </div>
+						<div class="modal-body text-center" v-if="isWantBeDeleted">
+							<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
+							<span class="text-danger">
+								Vous êtes sur le point de supprimer definitivement cette configuration du prix, cette action est irreversible. Si vous l'executer sans connaissance de cause ça peut causer un dysfonctionnement du système surtout coté prix de l'article!
+							</span>
+							<div class="">
+								<button v-if="!isLoadDelete" @click="delete_article_price" class="btn btn-danger">Supprimer</button>
+								<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+							</div>
+						</div>
+
+				</div>
+		</div>
 </div>
+
+<!-- MODAL CONFIGURATION FAVEUR A APPLIQUER -->
+<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalFaveur}">
+<div class="modal-dialog" role="document">
+		<div class="modal-content">
+				<div class="modal-header">
+						<h5 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
+						<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+						</button>
+				</div>
+				<div class="modal-body" v-if="!isWantBeDeleted">
+					<div class="form-group">
+						<label for="depots_id">Type Interval prix</label>
+						<select class="form-control" v-model="prix_id">
+							<option v-for="(dtPrice, i) in ListPricesArticle" :value="dtPrice.id">{{'Interval : '+dtPrice.qte_decideur_min+' - '+dtPrice.qte_decideur_max+' : Montant : '+dtPrice.prix_unitaire+' USD'}}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="prix_unitaire">Quantité conditionnelle *</label>
+						<input type="text" class="form-control" id="qte_faveur" aria-describedby="qte_faveur" v-model="qte_faveur">
+					</div>
+
+					<div v-if="!isActionFaveur">
+						<button v-if="!isLoadSaveMainButtonModal" @click="udpate_article_config_faveur" class="btn btn-primary">Modifier</button>
+					</div>
+					<div v-if="isActionFaveur">
+						<button v-if="!isLoadSaveMainButtonModal" @click="add_article_config_faveur" class="btn btn-primary">Enregistrer</button>
+					</div>
+					<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+				</div>
+		</div>
+</div>
+</div>
+
+
+
 <?=$this->endSection() ?>

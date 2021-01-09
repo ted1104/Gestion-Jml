@@ -53,6 +53,10 @@
                                     <input type="text" class="form-control" id="poids" v-model="poids">
                                   </div>
 																	<div class="form-group">
+                                    <label for="nombre_piece">Nombre Piece dans Boite</label>
+                                    <input type="text" class="form-control" id="nombre_piece" v-model="nombre_piece">
+                                  </div>
+																	<div class="form-group">
                                     <label for="description">Descrition *</label>
                                     <textarea class="form-control" name="inputTextarea" id="description" rows="3" v-model="description"></textarea>
                                   </div>
@@ -71,32 +75,25 @@
                                 <table class="table">
                                   <thead>
                                     <tr class="bg-secondary">
-                                      <th scope="col">Code</th>
-                                      <th scope="col">Nom</th>
-																			<th scope="col">Prix Gros</th>
-                                      <th scope="col">Prix Détail</th>
-                                      <th scope="col">Action</th>
+																			<th>#</th>
+                                      <th>Code</th>
+																			<th>Nom</th>
+                                      <th>Pièces</th>
+																			<th>Description</th>
+                                      <th>Action</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <tr v-for="(dt, index) in dataToDisplay">
+																			<th>{{+index+1}}</th>
                                       <th>{{dt.code_article}}</th>
-                                      <td>{{dt.nom_article}}</td>
+																			<td>{{dt.nom_article}}</td>
+																			<td>{{dt.nombre_piece}}</td>
+                                      <td>{{dt.description}}</td>
 																			<td>
-																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=1)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[0].prix_unitaire+' USD':dt.logic_detail_data[1].prix_unitaire+' USD'}}</span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==1" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}}</span>
+																				<button class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																			</td>
-																			<td>
-																				<button  v-if="dt.logic_detail_data.length < 1 || (dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix !=2)" class='btn btn-round btn-success' @click="_u_open_mod_form(dt,2)"><i class='mdi mdi-plus'></i> </button>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==2" >{{dt.logic_detail_data[0].type_prix==1 ?dt.logic_detail_data[1].prix_unitaire+' USD':dt.logic_detail_data[0].prix_unitaire+' USD'}}</span>
-
-																				<span v-if="dt.logic_detail_data.length > 0 && dt.logic_detail_data.length==1 && dt.logic_detail_data[0].type_prix ==2" >{{dt.logic_detail_data[0].prix_unitaire+' USD'}}</span>
-
 																			</td>
-                                      <td><a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i> </a></td>
 
                                     </tr>
                                   </tbody>
@@ -129,32 +126,49 @@
 
 		<!-- MODAL -->
 	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
-                <button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h5 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body" v-if="!isWantBeDeleted">
+							<div class="form-group" v-if="isAction">
+								<label for="qte_decideur_min">Quantité Min *</label>
+								<input type="text" class="form-control" id="qte_decideur_min" aria-describedby="qte_decideur_min" v-model="qte_decideur_min">
+							</div>
+							<div class="form-group" v-if="isAction">
+								<label for="qte_decideur_max">Quantité Max *</label>
+								<input type="text" class="form-control" id="qte_decideur_max" aria-describedby="qte_decideur_max" v-model="qte_decideur_max">
+							</div>
 							<div class="form-group">
 								<label for="prix_unitaire">Prix Unitaire *</label>
 								<input type="text" class="form-control" id="prix_unitaire" aria-describedby="prix_unitaire" v-model="prix_unitaire">
 							</div>
-							<div class="form-group">
-								<label for="qte_decideur">Quantité *</label>
-								<input type="text" class="form-control" id="qte_decideur" aria-describedby="qte_decideur" v-model="qte_decideur">
+
+							<div v-if="!isAction">
+								<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Modifier</button>
 							</div>
-							<button v-if="!isLoadSaveMainButtonModal" @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
+							<div v-if="isAction">
+								<button v-if="!isLoadSaveMainButtonModal" @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
+							</div>
 							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-            </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Ok</button>
-            </div> -->
-        </div>
-    </div>
+						</div>
+
+						<div class="modal-body text-center" v-if="isWantBeDeleted">
+							<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
+							<span class="text-danger">
+								Vous êtes sur le point de supprimer definitivement cette configuration du prix, cette action est irreversible. Si vous l'executer sans connaissance de cause ça peut causer un dysfonctionnement du système surtout coté prix de l'article!
+							</span>
+							<div class="">
+								<button v-if="!isLoadDelete" @click="delete_article_price" class="btn btn-danger">Supprimer</button>
+								<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+							</div>
+						</div>
+
+				</div>
+		</div>
 </div>
 <?=$this->endSection() ?>

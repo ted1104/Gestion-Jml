@@ -26,6 +26,7 @@ var vthis = new Vue({
       dataToDisplay : [],
       dataToDisplaySecond : [],
       styleModal : 'none',
+      styleModalFaveur : 'none',
       display : this.styleModal,
       modalTitle :"",
       dateFilter :null,
@@ -48,6 +49,7 @@ var vthis = new Vue({
 
       //VARIABLE  LOAD BUTTON ACTION
       isShow : false,
+      isWantBeDeleted : false,
       isNoQuantity : false,
       isLoadNego : false,
       isLoadDelete : false,
@@ -78,20 +80,23 @@ var vthis = new Vue({
       checkBoxAchatSelected:[],
       checkIsFaveur : [],
       ListIdArticleFaveur : new Array(), //La liste de tous les artilces qui possede une faveur
-
+      ListPricesArticle : new Array(),
 
       //VARIABLE FORM ADD ARTICLE
       code_article :"",
       nom_article :"",
       poids :"",
       description  :"",
+      nombre_piece : 1,
       users_id : localStorage.u,
 
       //VARIABLE FORM ADD ARTICLE PRIX ARTICLE
       articles_id:"",
       type_prix:"",
-      qte_decideur:"",
+      qte_decideur_min:"",
+      qte_decideur_max:"",
       prix_unitaire:"",
+      price_id : "",
 
       //VARIABLE ADD COMMANDES PETIT FORMULAIRE ARTICLES
       codeArticle :"",
@@ -126,6 +131,7 @@ var vthis = new Vue({
       //VARIABLE LOGIQUE FILTRE SUR LISTE ATTENTE, PAYER, LIVRER ADMIN
       stateStatus :"",
       montantTotalAllCommandeParTypeVente : "",
+      montantTotalAchat : 0,
 
       //VARIABLE DEMANDE DECAISSSEMENT
       caissier:"",
@@ -178,9 +184,16 @@ var vthis = new Vue({
       //LOGIQUE SHOW OR HIDDEN BUTON SAVE AND UPDATE CONFIG PRICE ARTICLE,
       isAction : true,
       isShowBlocHistoFactureStatus : false,
+      isActionFaveur : true,
 
       //SI CE DEPOT A DEJA LIVRER UNE PARTIE DE LA COMMANDE
-      hasAlreadyDelivered : false
+      hasAlreadyDelivered : false,
+
+      //CREATE CONFIGURATION FAVEUR ARTICLE
+      prix_id : "",
+      qte_faveur : "",
+      prix_id_saved : "",// for UPDATE
+      config_faveur_id : "",  // for UPDATE
 
 
 
@@ -231,7 +244,8 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
-              console.log(this.dataToDisplay);
+              // console.log(this.dataToDisplay);
+              this.isShow = false;
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
@@ -254,6 +268,8 @@ var vthis = new Vue({
                   this._u_fx_form_init_field();
                   this.get_article();
                   this.isLoadSaveMainButtonModal = false;
+                  this._u_close_mod_form();
+                  this.isShow = false;
                   return;
                 }
                 var err = response.data.message.errors;
@@ -1325,6 +1341,86 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+
+    delete_article_price(){
+      this.isLoadDelete = true;
+      const newurl = this.url+"articles-delete-price/"+this.price_id+"/del";
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadDelete = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.get_article();
+                this._u_close_mod_form();
+                this.isWantBeDeleted = false;
+                this.isShow = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadDelete = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    add_article_config_faveur(e){
+      e.preventDefault();
+      const newurl = this.url+"articles-create-config-faveur";
+      var form = this._u_fx_form_data_art_config_faveur();
+      this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  this.get_article();
+                  this.isLoadSaveMainButtonModal = false;
+                  this._u_close_mod_form();
+                  this.isShow = false;
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+    udpate_article_config_faveur(e){
+      e.preventDefault();
+      const newurl = this.url+"articles-update-configuration-faveur";
+      var form = this._u_fx_form_data_art_config_faveur();
+      this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  this.get_article();
+                  this.isLoadSaveMainButtonModal = false;
+                  this._u_close_mod_form();
+                  this.isShow = false;
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -1602,7 +1698,12 @@ var vthis = new Vue({
               if(response.data.message.success !=null){
                 response.data.data.isfaveur = isFaveur;
                 this.tabListData.push(response.data.data);
-                console.log(this.tabListData);
+                var mntAchatUni = parseFloat(response.data.data.prix_unit)*parseFloat(response.data.data.qte);
+                this.montantTotalAchat += mntAchatUni;
+                // mntAchatUni = 0;
+                // console.log("=====#####=======");
+                // console.log(response.data.data.prix_unit);
+                // console.log(this.tabListData[0].qte);
                 this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
                 this.codeArticle = "";
                 this.qte = 0;
@@ -1624,6 +1725,8 @@ var vthis = new Vue({
 
     },
     _u_remove_line_list_art(index){
+      var montantAretrancher = parseFloat(this.tabListData[index].prix_unit) * parseInt(this.tabListData[index].qte);
+      this.montantTotalAchat -= montantAretrancher;
 
       if(this.tabListData[index].isfaveur == 1){
         const idArticle = Number(this.tabListData[index].id);
@@ -1632,6 +1735,8 @@ var vthis = new Vue({
       }
       this.tabListData.splice(index,1);
       this._u_fx_config_error_message_bottom("Message",['Bien supprimer'],'alert-info');
+
+
     },
     _u_create_line_article_appro(){
       const newurl = this.url+"articles-search-by-code/"+this.codeArticle+"/code";
@@ -1682,35 +1787,83 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    _u_open_mod_form(art,type, from=null){
+    _u_open_mod_form(art, from=null){
       this._u_fx_form_init_field();
-      this.type_prix = type;
-      this.articles_id = art.id;
       this.isAction = true;
-      if(from !=null){
+      if(from ==2){
         this.isAction = false;
-        var typePrix = type;
-        type = type == 1 ?'Gros':'Détail';
-        this.modalTitle = "Modifier le prix de l'article "+art.nom_article+" en "+type;
-
-        for (var i = 0; i < art.logic_detail_data.length; i++) {
-          if(art.logic_detail_data[i].type_prix==typePrix){
-            this.prix_unitaire = art.logic_detail_data[i].prix_unitaire;
-            this.qte_decideur = art.logic_detail_data[i].qte_decideur;
-          }
-        }
+        this.modalTitle = "MODIFIER LE PRIX DE L'ARTICLE DANS L'INTERVAL DE "+art.qte_decideur_min+ " - "+art.qte_decideur_max;
+        this.prix_unitaire = art.prix_unitaire;
+        this.price_id = art.id;
         this.styleModal = 'block';
-        console.log(this.isAction);
+        console.log(art);
         return;
       }
-      type = type == 1 ?'Gros':'Détail';
-      this.modalTitle = "Fixer le prix de l'article "+art.nom_article+" en "+type;
-      this.styleModal = 'block';
+      if(from ==1){
+        this.articles_id = art.id;
+        this.modalTitle = "FIXER LE PRIX DE L'ARTICLE "+art.nom_article;
+        this.styleModal = 'block';
 
-      console.log(this.isAction);
+        //Take last configuration for price
+        this.qte_decideur_min = 0;
+        if(art.logic_detail_data.length >0){
+          const ind = parseInt(art.logic_detail_data.length -1);
+          this.qte_decideur_min = +art.logic_detail_data[ind].qte_decideur_max;
+        }
+      }
+      if(from ==3){
+        this.isWantBeDeleted = true;
+        this.price_id = art.id;
+        this.modalTitle = "SUPPRESSION DEFINITIVE DU PRIX DE L'ARTICLE";
+        this.styleModal = 'block';
+      }
+
+
+      console.log(art.logic_detail_data);
+    },
+    _u_open_mod_form_config_faveur(art, from=null){
+
+
+      // this._u_fx_form_init_field();
+      this.isActionFaveur = true;
+      this.ListPricesArticle = art.logic_detail_data;
+
+      if(from ==1){
+        this.articles_id = art.id;
+        this.modalTitle = "CONFIGURATION FAVEUR DE L'ARTICLE "+art.nom_article;
+
+
+        //Take last configuration for price
+        // this.qte_decideur_min = 0;
+        // if(art.logic_detail_data.length >0){
+        //   const ind = parseInt(art.logic_detail_data.length -1);
+        //   this.qte_decideur_min = +art.logic_detail_data[ind].qte_decideur_max+1;
+        // }
+      }
+      if(from ==2){
+        this.isActionFaveur = false;
+        this.modalTitle = "MODIFIER CONFIGURATION FAVEUR DE L'ARTICLE "+art.nom_article;
+        this.qte_faveur = art.logic_config_article_faveur[0].qte_faveur;
+        this.prix_id = art.logic_config_article_faveur[0].prix_id[0].id;
+        this.config_faveur_id = art.logic_config_article_faveur[0].id;
+        this.styleModalFaveur = 'block';
+        console.log(art);
+        return;
+      }
+      //
+      // if(from ==3){
+      //   this.isWantBeDeleted = true;
+      //   this.price_id = art.id;
+      //   this.modalTitle = "SUPPRESSION DEFINITIVE DU PRIX DE L'ARTICLE";
+      //   this.styleModal = 'block';
+      // }
+
+      this.styleModalFaveur = 'block';
+      console.log(this.ListPricesArticle);
     },
     _u_close_mod_form(){
       this.styleModal = 'none';
+      this.styleModalFaveur = 'none';
     },
     _u_open_mod_popup_caisse(cmd,val){
       if(val==3){
@@ -1770,7 +1923,7 @@ var vthis = new Vue({
 
       //pour profile Image admin update
       this.iduserToChangeProfile = index.id;
-      console.log(this.detailTab);
+      // console.log(this.detailTab);
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
@@ -1914,9 +2067,10 @@ var vthis = new Vue({
       this.poids = "";
       this.description = "";
 
-      this.articles_id = "";
-      this.type_prix = "";
-      this.qte_decideur = "";
+      // this.articles_id = "";
+      // this.type_prix = "";
+      this.qte_decideur_min = "";
+      this.qte_decideur_max = "";
       this.prix_unitaire = "";
 
       //FORMULAIRE DEMANDE DECAISSEMENT
@@ -1958,6 +2112,9 @@ var vthis = new Vue({
       //CHAMPS APPRO INTER-Depot
       this.depots_id = "";
 
+      //CHAMPS CONFIG FAVEUR
+      this.prix_id = "";
+      this.qte_faveur = "";
 
 
     },
@@ -1968,6 +2125,7 @@ var vthis = new Vue({
      formData.append('description',vthis.description);
      formData.append('poids',vthis.poids);
      formData.append('users_id',vthis.users_id);
+     formData.append('nombre_piece',vthis.nombre_piece);
      return formData;
    },
     _u_fx_form_data_art_price(){
@@ -1975,8 +2133,19 @@ var vthis = new Vue({
       formData.append('articles_id',vthis.articles_id);
       formData.append('type_prix',vthis.type_prix);
       formData.append('prix_unitaire',vthis.prix_unitaire);
-      formData.append('qte_decideur',vthis.qte_decideur);
+      formData.append('qte_decideur_min',vthis.qte_decideur_min);
+      formData.append('qte_decideur_max',vthis.qte_decideur_max);
       formData.append('users_id',vthis.users_id);
+      formData.append('price_id', this.price_id);
+      return formData;
+    },
+    _u_fx_form_data_art_config_faveur(){
+      var formData = new FormData();
+      formData.append('articles_id',vthis.articles_id);
+      formData.append('prix_id',vthis.prix_id);
+      formData.append('qte_faveur',vthis.qte_faveur);
+      formData.append('users_id',vthis.users_id);
+      formData.append('config_faveur_id',vthis.users_id);
       return formData;
     },
     _u_fx_field_multi_form_art(){

@@ -40,6 +40,13 @@ $routes->group('api/v1', function($routes){
   $routes->get('articles-search-by-code/(:any)code','Articles::article_search_by_code/$1');
   $routes->post('articles-update-price','Articles::article_update_price');
   $routes->get('articles-search-data-appro-inte-depot/(:any)/(:num)/(:num)/search','Articles::article_search_for_appro_inter_depot/$1/$2/$3');
+  $routes->get('articles-delete-price/(:num)/del','Articles::article_delete_price/$1');
+  $routes->post('articles-create-config-faveur','Articles::create_configuration_faveur_article');
+  $routes->post('articles-update-configuration-faveur','Articles::article_configuration_faveur_article');
+
+
+
+
 
 
   $routes->post('art-test','Articles::multitest');

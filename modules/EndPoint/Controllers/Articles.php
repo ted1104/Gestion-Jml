@@ -7,6 +7,7 @@ use App\Models\ArticlesPrixModel;
 use App\Models\ArticlesPrixHistoriqueModel;
 use App\Models\StockModel;
 use App\Models\StDepotModel;
+use App\Models\ArticlesConfigFaveurModel;
 
 class Articles extends ResourceController {
   protected $format = 'json';
@@ -15,6 +16,7 @@ class Articles extends ResourceController {
   protected $articlesPrixHistoriqueModel = null;
   protected $stockModel = null;
   protected $depotModel = null;
+  protected $articlesConfigFaveurModel = null;
 
 
   public function __construct(){
@@ -23,6 +25,7 @@ class Articles extends ResourceController {
     $this->articlesPrixHistoriqueModel = new ArticlesPrixHistoriqueModel();
     $this->stockModel = new StockModel();
     $this->depotModel = new StDepotModel();
+    $this->articlesConfigFaveurModel = new ArticlesConfigFaveurModel();
   }
   public function articles_get(){
     $data = $this->model->findAll();
@@ -72,49 +75,57 @@ class Articles extends ResourceController {
   public function articles_set_price(){
     $this->articlesPrixModel->beginTrans();
     $data = $this->request->getPost();
-    if(!$this->articlesPrixModel->getWhere(['articles_id'=>$data['articles_id'],'type_prix'=>$data['type_prix']])->getRow()){
-        $insertData = $this->articlesPrixModel->insert($data);
-        if(!$insertData){
-          $status = 400;
-          $message = [
-            'success' =>null,
-            'errors'=>$this->articlesPrixModel->errors()
-          ];
-          $data = null;
-        }else{
-          $dataHistorique =[
-          'prix_id'=>$this->articlesPrixModel->insertID(),
-          'type_prix'=>$this->request->getPost('type_prix'),
-          'prix_unitaire'=>$this->request->getPost('prix_unitaire'),
-          'qte_decideur'=>$this->request->getPost('qte_decideur'),
-          'users_id'=>$this->request->getPost('users_id'),
-          ];
-          if(!$this->articlesPrixHistoriqueModel->insert($dataHistorique)){
-            $this->articlesPrixModel->RollbackTrans();
+
+    if($this->request->getPost('qte_decideur_min') < $this->request->getPost('qte_decideur_max')){
+    if($this->articlesPrixModel->checkIfAnotherConfigExistWithSameParam($this->request->getPost('articles_id'),$this->request->getPost('qte_decideur_min'),$this->request->getPost('qte_decideur_max'))){
+          $insertData = $this->articlesPrixModel->insert($data);
+          if(!$insertData){
             $status = 400;
             $message = [
               'success' =>null,
-              'errors'=>$this->articlesPrixHistoriqueModel->errors()
+              'errors'=>$this->articlesPrixModel->errors()
             ];
             $data = null;
           }else{
-            $status = 200;
-            $message = [
-              'success' => 'Enregistrement reussi',
-              'errors' => null
+            $dataHistorique =[
+            'prix_id'=>$this->articlesPrixModel->insertID(),
+            'prix_unitaire'=>$this->request->getPost('prix_unitaire'),
+            'users_id'=>$this->request->getPost('users_id'),
             ];
-            $data = 'null';
+            if(!$this->articlesPrixHistoriqueModel->insert($dataHistorique)){
+              $this->articlesPrixModel->RollbackTrans();
+              $status = 400;
+              $message = [
+                'success' =>null,
+                'errors'=>$this->articlesPrixHistoriqueModel->errors()
+              ];
+              $data = null;
+            }else{
+              $status = 200;
+              $message = [
+                'success' => 'Le prix a été enregistré avec succès',
+                'errors' => null
+              ];
+              $data = 'null';
+            }
           }
-
+        }else{
+          $status = 400;
+          $message = [
+            'success' =>null,
+            'errors'=>['Cet article possède déjà un prix configuré à cet interval']
+          ];
+          $data = null;
         }
     }else{
       $status = 400;
       $message = [
         'success' =>null,
-        'errors'=>'Cet article possède déjà un prix configuré'
+        'errors'=>['La quantité min doit être strictement inférieure à la quantité max']
       ];
       $data = null;
     }
+
     $this->articlesPrixModel->commitTrans();
      return $this->respond([
        'status' => $status,
@@ -127,8 +138,9 @@ class Articles extends ResourceController {
      $Qte = $qte;
      $depot = $depotid;
      $isFaveur = $isFaveur;
-     $QteToOfferFaveur = 2;
+
      $data = $this->model->Where('code_article',$codeArt)->find();
+
      if($data){
        //CHECK IF DEPOT HAS THIS QUANTIY
        $condition =[
@@ -141,69 +153,102 @@ class Articles extends ResourceController {
          $status = 400;
          $message = [
            'success' =>null,
-           'errors'=>'Impossible de trouver cet article dans le dépot central veuillez contacter l\'administrateur du système'
+           'errors'=>'Impossible de trouver cet article dans le dépot veuillez contacter l\'administrateur du système'
          ];
          $data = null;
        }else{
          if($Qte <= $initqte->qte_stock_virtuel){
          // return $this->respond([$initqte->qte_stock]);
          if($data[0]->logic_detail_data && count($data[0]->logic_detail_data) > 1){
-           $grosprix = null;
-           $detailUnit = null;
-           $qteDetail = null;
+               $PU = null;
+               $interval = null;
+               $message = null;
                foreach ($data[0]->logic_detail_data as $key => $value) {
-                  if($value->type_prix==1){
-                    $grosprix = $value->prix_unitaire;
-                    $qteDetail = $value->qte_decideur;
-                  }
-                  if($value->type_prix==2){
-                    $detailUnit = $value->prix_unitaire;
-                    $qteDetail = $value->qte_decideur;
+                  if($value->qte_decideur_min <= $Qte and $Qte < $value->qte_decideur_max){
+                    $PU = $value->prix_unitaire;
+                    $interval = $value->qte_decideur_min.' - '.$value->qte_decideur_max;
                   }
                }
-                 $PU = null;
-                 $message = null;
-                 if($Qte <= $qteDetail){
-                   $PU = $detailUnit;
-                   $type = 'En détail';
-                   $t_id = 2;
-                  }
-                 if($qteDetail < $Qte){
-                   $PU = $grosprix;
-                   $type = 'En Gros';
-                   $t_id = 1;
-                 }
-                 //CHECK IF FAVEUR THEN APPLY GROS PRICE
-                 if($isFaveur == 1 and $Qte <= $QteToOfferFaveur){
-                   $PU = $grosprix;
-                   $type = 'En Gros';
-                   $t_id = 1;
-                   $message = "avec une reduction";
-                 }
-                 $status = 200;
+               //CHECK IF THIS SPECIFIC CONFIG EXIST
+               if (!$PU and !$interval) {
+                 // code...
+                 $status = 400;
                  $message = [
-                   'success' =>'Bien ajouté '.$message,
-                   'errors'=> null
+                   'success' =>null,
+                   'errors'=>'Cet article ne possède pas les configurations de prix pour cette quantité! Veuillez svp contacter l\'administrateur ou le manager'
                  ];
+                 $data = null;
+               }else{
+                 //CHECK IF FAVEUR THEN APPLY GROS PRICE
+                 if($isFaveur == 1){
+                   $ConfigFaveur = $this->articlesConfigFaveurModel->Where('articles_id',$data[0]->id)->findAll();
+                   if($ConfigFaveur){
+                     $QteToOfferFaveur = $ConfigFaveur[0]->qte_faveur;
+                     if($Qte <= $QteToOfferFaveur){
+                       $PU =  $ConfigFaveur[0]->prix_id[0]->prix_unitaire;
+                       $interval = $ConfigFaveur[0]->prix_id[0]->qte_decideur_min.' - '.$ConfigFaveur[0]->prix_id[0]->qte_decideur_max;
+                       $message = "avec une reduction";
+                       $status = 200;
+                       $message = [
+                         'success' =>'Bien ajouté '.$message,
+                         'errors'=> null
+                       ];
+                       $data = [
+                         'id'=>$data[0]->id,
+                         'code' => $codeArt,
+                         'nom_article' => $data[0]->nom_article,
+                         'qte' => $Qte,
+                         'prix_unit' =>$PU,
+                         'interval' => $interval,
 
-                 $data = [
-                   'id'=>$data[0]->id,
-                   'code' => $codeArt,
-                   'nom_article' => $data[0]->nom_article,
-                   'qte' => $Qte,
-                   'prix_unit' =>$PU,
-                   'type_prix' => $type,
-                   'type_id' =>$t_id
-                 ];
-                 //ERROR SI FAVEUR MAIS QUANTITE N'EST PAS LA BONNE
-                 if($isFaveur == 1 and $Qte > $QteToOfferFaveur){
-                   $status = 400;
+                       ];
+                     }else{
+                       $status = 400;
+                         $message = [
+                           'success' =>null,
+                           'errors'=>'En activant Faveur sur cet article la quantité ne doit pas depasser '.$QteToOfferFaveur
+                         ];
+                         $data = null;
+                     }
+                   }else{
+                       $status = 400;
+                       $message = [
+                         'success' =>null,
+                         'errors'=>'Cet article ne possède des configurations faveur, veuillez contacter l\'administrateur ou le manager'
+                       ];
+                       $data = null;
+
+                   }
+
+                 }else{
+                   $status = 200;
                    $message = [
-                     'success' =>null,
-                     'errors'=>'En activant Faveur sur un article la quantité ne doit pas depasser 2'
+                     'success' =>'Bien ajouté '.$message,
+                     'errors'=> null
                    ];
-                   $data = null;
+                   $data = [
+                     'id'=>$data[0]->id,
+                     'code' => $codeArt,
+                     'nom_article' => $data[0]->nom_article,
+                     'qte' => $Qte,
+                     'prix_unit' =>$PU,
+                     'interval' => $interval,
+
+                   ];
                  }
+
+                 //ERROR SI FAVEUR MAIS QUANTITE N'EST PAS LA BONNE
+                 // if($isFaveur == 1 and $Qte > $QteToOfferFaveur){
+                 //   $status = 400;
+                 //   $message = [
+                 //     'success' =>null,
+                 //     'errors'=>'En activant Faveur sur un article la quantité ne doit pas depasser 2'
+                 //   ];
+                 //   $data = null;
+                 // }
+
+               }
+
 
          }else{
            $status = 400;
@@ -236,6 +281,7 @@ class Articles extends ResourceController {
        'message' =>$message,
        'data'=> $data
      ]);
+     // print_r($ConfigFaveur[0]->articles_id);
 
   }
   public function article_search_by_code($code){
@@ -247,27 +293,18 @@ class Articles extends ResourceController {
     ]);
   }
   public function article_update_price(){
-    $idarticle = $this->request->getPost('articles_id');
+    $idprice = $this->request->getPost('price_id');
     $newPrice = $this->request->getPost('prix_unitaire');
-    $type = $this->request->getPost('type_prix');
-    $newQte = $this->request->getPost('qte_decideur');
-    if(is_numeric ($newPrice) && is_numeric($newQte)){
-      $condition =[
-        'articles_id'=>$idarticle,
-        'type_prix' =>$type,
-      ];
+    if(is_numeric ($newPrice)){
       $data =[
         'prix_unitaire'=>$newPrice,
-        'qte_decideur'=>$newQte
       ];
-      $info = $this->articlesPrixModel->Where($condition)->find();
-      if($this->articlesPrixModel->update($info[0]->id,$data)){
+      $info = $this->articlesPrixModel->find($idprice);
+      if($this->articlesPrixModel->update($info->id,$data)){
 
         $dataHistorique =[
-          'prix_id'=>$info[0]->id,
-          'type_prix'=>$type,
+          'prix_id'=>$info->id,
           'prix_unitaire'=>$newPrice,
-          'qte_decideur'=>$newQte,
           'users_id'=>$this->request->getPost('users_id'),
         ];
         if(!$this->articlesPrixHistoriqueModel->insert($dataHistorique)){
@@ -281,7 +318,7 @@ class Articles extends ResourceController {
         }else{
           $status = 400;
           $message = [
-            'success' =>'Modification avec succès',
+            'success' =>'Modification du prix avec succès',
             'errors'=>null
           ];
           $data = null;
@@ -302,6 +339,30 @@ class Articles extends ResourceController {
       'data'=> $data,
 
     ]);
+  }
+  public function article_delete_price($idprice){
+    if($this->articlesPrixModel->delete(['id' =>$idprice ])){
+      $status = 400;
+      $message = [
+        'success' =>'La configuration du prix d\'article a été supprimée',
+        'errors'=>null
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' =>null,
+        'errors'=>['Echec de la supprission contacter le concepteur système']
+      ];
+      $data = null;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data,
+
+    ]);
+
   }
   public function article_search_for_appro_inter_depot($codeArticle,$qte,$depotid){
     $codeArt = $codeArticle;
@@ -360,6 +421,75 @@ class Articles extends ResourceController {
       'status' => $status,
       'message' =>$message,
       'data'=> $data
+    ]);
+  }
+  public function create_configuration_faveur_article(){
+    $this->model->beginTrans();
+    $data = $this->request->getPost();
+    $insertData = $this->articlesConfigFaveurModel->insert($data);
+    if(!$insertData){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->articlesConfigFaveurModel->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'Enregistrement de la configuration faveur avec succès',
+        'errors' => null
+      ];
+      $data = 'null';
+    }
+    $this->model->commitTrans();
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> $data
+     ]);
+  }
+  public function article_configuration_faveur_article(){
+    $idprice = $this->request->getPost('config_faveur_id');
+    $prix_id = $this->request->getPost('prix_id');
+    $qte_faveur = $this->request->getPost('qte_faveur');
+
+    if(is_numeric ($qte_faveur)){
+      $data =[
+        'prix_id'=>$prix_id,
+        'qte_faveur'=>$qte_faveur,
+      ];
+      // $info = $this->articlesPrixModel->find($idprice);
+      if(!$this->articlesConfigFaveurModel->update($idprice,$data)){
+          $status = 400;
+          $message = [
+            'success' =>null,
+            'errors'=>$this->articlesConfigFaveurModel->errors()
+          ];
+          $data = null;
+
+      }else{
+        $status = 200;
+        $message = [
+          'success' =>'La modification de la configuration faveur reussie avec succès',
+          'errors'=>null
+        ];
+        $data = null;
+      }
+
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['La quantité Faveur est invalide']
+      ];
+      $data = null;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data,
+
     ]);
   }
   public function multitest(){

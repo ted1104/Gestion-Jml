@@ -131,9 +131,12 @@
 												</div>
 												<div class="col-md-7 col-lg-7 col-xl-7">
 													<div class="card m-b-30">
-                            <div class="card-header bg-white">
-                                <h5 class="card-title text-black">Information relative aux articles dans le pannier</h5>
-                            </div>
+														<div class="container">
+															<div class="row margin-top-8">
+																<h5 class="card-title text-black col-md-9">PANNIER DES ARTICLES</h5>
+																<h5 class="col-md-3 text-right text-secondary">{{montantTotalAchat}} USD</h5>
+															</div>
+														</div>
 
 														<div class="table-responsive">
 															<div class="container">
@@ -144,7 +147,7 @@
 																			<th scope="col">Nom</th>
 																			<th scope="col">Qte</th>
 																			<th scope="col">PU</th>
-																			<th scope="col">Type</th>
+																			<th scope="col">PT</th>
 																			<th scope="col">Faveur</th>
 																			<th scope="col">Action</th>
 																		</tr>
@@ -155,7 +158,8 @@
 																			<td>{{dt.nom_article}}</td>
 																			<td>{{dt.qte}}</td>
 																			<td>{{dt.prix_unit}}</td>
-																			<td>{{dt.type_prix}}</td>
+																			<!-- <td>{{dt.interval}}</td> -->
+																			<td>{{parseFloat(dt.prix_unit) * dt.qte}}</td>
 																			<td><span :class="dt.isfaveur == 1?'text-success':'text-danger'">{{dt.isfaveur == 1?'Oui':'Non'}}</span></td>
 																			<td><button  class="btn btn-round btn-danger" @click="_u_remove_line_list_art(index)"><i class="mdi mdi-delete-sweep" ></i></button></td>
 																		</tr>

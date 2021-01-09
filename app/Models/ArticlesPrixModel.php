@@ -6,13 +6,13 @@ class ArticlesPrixModel extends Model{
   protected $table = 'g_articles_prix';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['articles_id','type_prix','prix_unitaire','qte_decideur','users_id'];
+  protected $allowedFields = ['articles_id','prix_unitaire','qte_decideur_min','qte_decideur_max','users_id'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'articles_id' => 'required|checkingForeignKeyExist[g_articles,id]',
-    'type_prix' => 'required|checkingForeignKeyExist[st_type_prix,id]',
     'prix_unitaire' => 'required|numeric',
-    'qte_decideur' => 'required|integer',
+    'qte_decideur_min' => 'required|integer',
+    'qte_decideur_max' => 'required|integer',
     'users_id' => 'required|checkingForeignKeyExist[g_users,id]'
   ];
 	protected $validationMessages = [
@@ -32,14 +32,33 @@ class ArticlesPrixModel extends Model{
       'required' => 'L\'utilisateur est obligatoire',
       'checkingForeignKeyExist' => 'Cet utilisateur n\'existe pas'
     ],
-    'qte_decideur'=>[
-      'required' => 'La Quantité determinante est obligatoire',
-      'integer' => 'La Quantité decideur est invalide'
+    'qte_decideur_min'=>[
+      'required' => 'La Quantité minimum',
+      'integer' => 'La Quantité minimum est invalide'
+    ],
+    'qte_decideur_max'=>[
+      'required' => 'La Quantité max',
+      'integer' => 'La Quantité max est invalide'
     ],
 
   ];
   protected $returnType ='object';
 
+  public function checkIfAnotherConfigExistWithSameParam($idArticle,$qteMin,$qteMax){
+    $lastConfigPrice = $this->Where('articles_id', $idArticle)->orderBy('id','DESC')->first();
+    $response = false;
+    if($lastConfigPrice){
+      $vMin = $lastConfigPrice->qte_decideur_min;//1 = 15
+      $vMax = $lastConfigPrice->qte_decideur_max;//15 = 20
+      if($vMin < $qteMin && $vMax <= $qteMin){
+        $response = true;
+      }
+    }else{
+      $response = true;
+    }
+    return $response;
+
+  }
 
   // LES TRANSACTIONS
   public function beginTrans(){
