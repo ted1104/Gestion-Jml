@@ -17,17 +17,20 @@ class PdfGenerate extends BaseController {
   public function index($code){
     $data = $this->commande->find($code);
     $this->pdf = new FPDF("L","pt", array(300,300));
-    $this->pdf->SetFont('Helvetica','B',10);
+    $this->pdf->SetFont('Helvetica','B',8);
     $this->pdf->SetMargins(5,5,5);
     $this->pdf->AddPage();
     $this->pdf->Cell(190,10,'Date : '.$data->created_at,0,1,'C');
-    $this->pdf->Ln();
+    // $this->pdf->Ln();
     $this->pdf->Cell(190,10,'Client : '.$data->nom_client,0,1,'C');
+    // $this->pdf->Ln();
+    $this->pdf->Cell(190,10,utf8_decode('Dépôt : '.$data->depots_id[0]->nom),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',20);
     $this->pdf->Cell(190,40,$data->numero_commande,0,1,'C');
     $this->pdf->Ln();
 
     $this->outPut();
+
 
   }
 
@@ -45,6 +48,7 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(120,15,utf8_decode('FACTURE N° : '.$data->numero_commande),0,0,'L');
     $this->pdf->Cell(80,15,'Date : '.$data->created_at,0,1,'L');
     $this->pdf->Cell(200,15,'Nom du Client : '.$data->nom_client,0,1,'L');
+
 
     $this->pdf->Cell(200,15,'DETAIL ACHAT ',0,1,'C');
     $this->pdf->Ln();
@@ -68,7 +72,7 @@ class PdfGenerate extends BaseController {
 
       $montantTotalAchat += $montantTotalParArticle;
     }
-    
+
     $this->pdf->SetFont('Helvetica','B',6);
     $this->pdf->Cell(175,30,'TOTAL ',0,0,'R');
     $this->pdf->Cell(25,30,$montantTotalAchat.' USD',0,1,'L');

@@ -58,6 +58,16 @@ class UsersAuthModel extends Model{
     }
     return false;
   }
+  public function authPasswordConnexion($iduser,$password){
+    $userData = $this->Where('users_id',$iduser)->findAll();
+    if(count($userData) > 0){
+      $verify = password_verify($password, $userData[0]->password_main);
+      if($verify){
+        return true;
+      }
+    }
+    return false;
+  }
   // LES TRANSACTIONS
   public function beginTrans(){
     $this->db->transBegin();

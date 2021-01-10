@@ -32,10 +32,18 @@
 
 
         <?php if(session()->getFlashData('message')): ?>
-        <div class="message-alert u-animation-FromTop">
+        <div class="message-alert u-animation-FromTop cursor-div" v-if="isShowLoginMessage" @click="isShowLoginMessage=false">
         <div class="xp-alert">
               <div class="alert <?=session()->getFlashData('message')['color'] ?>" role="alert">
-                <h6 class="alert-heading"><?=session()->getFlashData('message')['title'] ?></h6>
+                <div class="row">
+                  <div class="col-md-11">
+                    <h6 class="alert-heading"><?=session()->getFlashData('message')['title'] ?></h6>
+                  </div>
+                  <div class="col-md-1">
+                    <span @click="isShowLoginMessage=false"> <i class="mdi mdi-close"></i></span>
+                  </div>
+                </div>
+
                 <hr>
                 <p><?=session()->getFlashData('message')['content'] ?></p>
               </div>
@@ -43,11 +51,16 @@
         </div>
         <?php endif; ?>
         <!-- ALERT POUR DB MESSAGE -->
-        <div v-if="messageError" class="message-alert u-animation-FromTop" @click="messageError=!messageError">
+        <div v-if="messageError" class="message-alert u-animation-FromTop cursor-div" @click="messageError=false">
         <div class="xp-alert">
               <div :class="errorPopupClass" role="alert">
                 <div class="row">
-                  <h6 class="alert-heading col-md-11">{{messageAlertConfig.title}}</h6>
+                    <div class="col-md-11">
+                        <h6 class="alert-heading">{{messageAlertConfig.title}}</h6>
+                    </div>
+                    <div class="col-md-1">
+                      <span @click="messageError=false"> <i class="mdi mdi-close"></i></span>
+                    </div>
                   <!-- <i class="mdi mdi-close col-md-1 cursor" @click="messageError=!messageError"></i> -->
                 </div>
                 <ul class="ul-error" v-if="messageAlertConfig.message[0].length ==1">
@@ -61,11 +74,17 @@
         </div>
 
         <!-- ALERT BOTTOM POUR RECHERCHE MESSAGE -->
-        <div v-if="messageErrorBottom" class="message-alert u-animation-FromBottom" style="width:20%;top:80%" @click="messageErrorBottom=!messageErrorBottom">
+        <div v-if="messageErrorBottom" class="message-alert u-animation-FromBottom cursor-div" style="width:20%;top:80%" @click="messageErrorBottom=false">
         <div class="xp-alert">
               <div :class="errorPopupClassBottom" role="alert">
                 <div class="row">
-                  <span class="col-md-10">{{messageAlertConfigBottom.title}}</span>
+                  <div class="col-md-10">
+                    <span class="">{{messageAlertConfigBottom.title}}</span>
+                  </div>
+                  <div class="col-md-1">
+                    <span @click="messageErrorBottom=false"> <i class="mdi mdi-close"></i></span>
+                  </div>
+                  <!-- <span class="col-md-10">{{messageAlertConfigBottom.title}}</span> -->
                   <!-- <i class="mdi mdi-close col-md-2 cursor" @click="messageErrorBottom=!messageErrorBottom"></i> -->
                 </div>
                 <span>{{messageAlertConfigBottom.message[0][0]}}</span>

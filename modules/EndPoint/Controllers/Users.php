@@ -167,4 +167,74 @@ class Users extends ResourceController {
     ]);
   }
 
+  public function user_account_reset_password_connexion($iduser, $oldPassword, $newPassword){
+    $data = $this->userAuthModel->Where('users_id',$iduser)->find();
+    $newPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    //   authPasswordOperation
+    //
+
+    //TEST IF PASSWORD OLD IS SAME
+    if($this->userAuthModel->authPasswordConnexion($iduser,$oldPassword)){
+          if(!$this->userAuthModel->update($data[0]->id,['password_main'=>$newPassword])){
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => ['Echec d\update du mot de passe']
+              ];
+          }else{
+              $status = 200;
+              $message = [
+                'success' => 'Mot de passe de connexion a été reunitialisé avec succès',
+                'errors' => null
+              ];
+          }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Ancien mot de passe incorrect']
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => null
+    ]);
+
+  }
+  public function user_account_reset_password_operation($iduser, $oldPassword, $newPassword){
+    $data = $this->userAuthModel->Where('users_id',$iduser)->find();
+    $newPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    //   authPasswordOperation
+    //
+    //TEST IF PASSWORD OLD IS SAME
+    if($this->userAuthModel->authPasswordOperation($iduser,$oldPassword)){
+          if(!$this->userAuthModel->update($data[0]->id,['password_op'=>$newPassword])){
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => ['Echec d\update du mot de passe']
+              ];
+          }else{
+              $status = 200;
+              $message = [
+                'success' => 'Mot de passe des opérations a été reunitialisé avec succès',
+                'errors' => null
+              ];
+          }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Ancien mot de passe des opérations incorrect']
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => null
+    ]);
+
+  }
 }

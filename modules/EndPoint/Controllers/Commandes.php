@@ -52,7 +52,7 @@ class Commandes extends ResourceController {
       ];
       $data = null;
     }else{
-      //CREATE HISTORIQUE ARTICLE VENDU
+      //CREATE DETAIL ARTICLE VENDU
       $nArt = count($data->articles_id);
       $article = $data->articles_id;
       $qte_vendue = $data->qte_vendue;

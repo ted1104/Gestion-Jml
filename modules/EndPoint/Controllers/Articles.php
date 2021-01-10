@@ -153,7 +153,7 @@ class Articles extends ResourceController {
          $status = 400;
          $message = [
            'success' =>null,
-           'errors'=>'Impossible de trouver cet article dans le dépot veuillez contacter l\'administrateur du système'
+           'errors'=>'Impossible de trouver cet article dans le dépot, veuillez contacter l\'administrateur du système'
          ];
          $data = null;
        }else{

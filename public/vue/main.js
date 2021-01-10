@@ -62,6 +62,7 @@ var vthis = new Vue({
       //SHOW BOOLEAN
       isStockIndicator : false,
       showAdvancedSearch : false,
+      isShowLoginMessage : true,
 
       //VARIABLE LOAD DATE TABLE
       // isDataTableLoad :false,
@@ -176,6 +177,9 @@ var vthis = new Vue({
       password_main_conf :"",
       password_op :"",
       password_op_conf :"",
+      ancien_password_main : "",
+      ancien_password_op : "",
+
 
       avatarMain:"",
       fileMain :"",
@@ -1421,6 +1425,74 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+
+    change_password_account_users_connexion(){
+      // console.log(iduser);
+      const newurl = this.url+"users-reset-password-connexion/"+this.users_id+"/"+this.ancien_password_main+"/"+this.password_main+"/update";
+      if(this.password_main != this.password_main_conf){
+        this._u_fx_config_error_message("Erreur",["Les 2 nouveaux mot de passes doivent correspondre"],'alert-danger');
+        return;
+      }
+      if(this.password_main =="" || this.password_main_conf == "" || this.ancien_password_main == ""){
+        this._u_fx_config_error_message("Erreur",["Tous les champs sont obligatoire"],'alert-danger');
+        return;
+      }
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_users_admin();
+                  this._u_fx_form_init_field();
+                  this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+    change_password_account_users_operations(){
+      // console.log(iduser);
+      const newurl = this.url+"users-reset-password-operation/"+this.users_id+"/"+this.ancien_password_op+"/"+this.password_op+"/update";
+      if(this.password_op != this.password_op_conf){
+        this._u_fx_config_error_message("Erreur",["Les 2 nouveaux mot de passes des opérations doivent correspondre"],'alert-danger');
+        return;
+      }
+      if(this.password_op =="" || this.password_op_conf == "" || this.ancien_password_op == ""){
+        this._u_fx_config_error_message("Erreur",["Tous les champs sont obligatoire"],'alert-danger');
+        return;
+      }
+      this.isLoadSaveMainButtonModal = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_users_admin();
+                  this._u_fx_form_init_field();
+                  this.isLoadSaveMainButtonModal = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -2101,6 +2173,8 @@ var vthis = new Vue({
       this.password_main_conf ="";
       this.password_op ="";
       this.password_op_conf ="";
+      this.ancien_password_op = "";
+      this.ancien_password_main = "";
 
 
       //CHAMPS APPROVISONNEMENT
@@ -2259,7 +2333,7 @@ var vthis = new Vue({
     if(pth[2]=='magaz-stock'){
       this.get_stock_depots_by_depot();
     }
-    if(pth[2]=='admin-caisse'){
+    if(pth[2]=='admin-caisse' || pth[2]=='caissier-list-caissier'){
       this.get_caissiers();
     }
     if(pth[2]=='admin-decaissement'){

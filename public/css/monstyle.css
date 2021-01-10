@@ -34,6 +34,9 @@
   cursor: pointer;
   font-size: 17px;
 }
+.cursor-div{
+  cursor: pointer;
+}
 .cursor-normal{
   cursor: pointer;
 }

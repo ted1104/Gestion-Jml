@@ -29,4 +29,10 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\decaissement-list-caissier-main-view', $data);
   }
+  public function listCaissier(){
+    $data = [
+      'titlePage' => 'ACHAT: Caissier'
+    ];
+    echo view('Modules\Admin\Views\users\caissiers-list-view', $data);
+  }
 }

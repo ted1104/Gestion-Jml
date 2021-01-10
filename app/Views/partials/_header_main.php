@@ -67,10 +67,10 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="xp-userprofile">
                                 <a class="dropdown-item" href="#">Bienvenu, <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></a>
-                                <a class="dropdown-item" href="#"><i class="mdi mdi-account mr-2"></i> Profile</a>
-                                <a class="dropdown-item" href="#"><i class="mdi mdi-credit-card mr-2"></i> Billing</a>
-                                <a class="dropdown-item" href="#"><i class="mdi mdi-settings mr-2"></i> Setting</a>
-                                <a class="dropdown-item" href="#"><i class="mdi mdi-lock mr-2"></i> Lock Screen</a>
+                                <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-account mr-2"></i> Profile</a> -->
+                                <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-credit-card mr-2"></i> Billing</a> -->
+                                <a class="dropdown-item" href="<?=base_url('config-pass-profile') ?>"><i class="mdi mdi-account mr-2"></i> Mon compte</a>
+                                <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-lock mr-2"></i> Lock Screen</a> -->
                                 <a class="dropdown-item" href="<?=base_url('logout') ?>"><i class="mdi mdi-logout mr-2"></i> Deconnexion</a>
                             </div>
                         </div>
