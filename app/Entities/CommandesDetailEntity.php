@@ -52,11 +52,11 @@ class CommandesDetailEntity extends Entity{
   }
   public function getLogicQteStockArticleDepot(){
     $depot = $this->commandesModel->Where('id',$this->attributes['vente_id'])->first();
-    if ($this->attributes['is_faveur'] == 0) {
+    // if ($this->attributes['is_faveur'] == 0) {
       $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id[0]->id)->Where('articles_id',$this->attributes['articles_id'])->first();
-    }else{
-      $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id_faveur)->Where('articles_id',$this->attributes['articles_id'])->first();
-    }
+    // }else{
+    //   $stockqte = $this->stockModel->Where('depot_id',$depot->depots_id_faveur)->Where('articles_id',$this->attributes['articles_id'])->first();
+    // }
 
     return array(
       'stock_virtuel' => $stockqte->qte_stock_virtuel,

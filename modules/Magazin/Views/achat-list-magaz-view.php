@@ -174,16 +174,20 @@
 																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
 																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
-															<div v-for="(det,i) in detailTab.logic_article" v-if="det.is_faveur==0">
+															<div v-for="(det,i) in detailTab.logic_article">
 																<div class="row">
-																	<span class="col-md-4">{{det.articles_id[0].code_article}}</span>
-																	<span class="col-md-6">{{det.articles_id[0].nom_article}}</span>
+																	<div class="col-md-4">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}<span>
+																	</div>
+																	<div class="col-md-6">
+																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
+																	</div>
 																	<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
 																	</span>
 																</div>
 																<br>
 																<div class="row">
-																	<span class="col-md-12">Achat Normal</span>
+																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Qte: <br> {{det.qte_vendue}}</span>
 																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
 																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>

@@ -199,11 +199,11 @@ class Commandes extends ResourceController {
             $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
             foreach ($allArt as $key => $value) {
 
-              if($value->is_faveur == 0){
+              // if($value->is_faveur == 0){
                 $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id[0]->id,'articles_id'=>$value->articles_id[0]->id])->getRow();
-              }else{
-                $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id_faveur,'articles_id'=>$value->articles_id[0]->id])->getRow();
-              }
+              // }else{
+              //   $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id_faveur,'articles_id'=>$value->articles_id[0]->id])->getRow();
+              // }
 
 
               $stokinit = $stokdepot->qte_stock_virtuel;
@@ -305,186 +305,186 @@ class Commandes extends ResourceController {
       $data = "";
     }else{
       $infoCommande = $this->model->find($idcommande);
-      if($infoCommande->container_faveur ==1){
-        //ACHAT FAVEUR ET DEPOT CENTRAL VALIDATION
-        if(getTypeDepot($iddepot)){
-          //VALIDATION DEPOT CENTRAL
-          //Check if all isNotFaveur are isLivrer
-          $allIsNotFaveur = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
-          $allIsNotFaveurAnLivrer = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->Where('is_livrer',1)->findAll();
-          if(count($allIsNotFaveur) == count($allIsNotFaveurAnLivrer)){
-            //MEANS all not Faveur are delivred
-            $data = ['status_vente_id'=>3];
-            if(!$updateData = $this->model->update($idcommande,$data)){
-              $status = 400;
-              $message = [
-                'success' => null,
-                'errors' => $this->model->erros()
-              ];
-              $data = "";
-            }else {
-              if(!$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update()){
-                $status = 400;
-                $message = [
-                  'success' => null,
-                  'errors' => 'Echec de livraison, contactez l\'administrateur principal'
-                ];
-                $data = "";
-              }else{
-                $dataStatusHistorique=[
-                    'vente_id' => $idcommande,
-                    'status_vente_id' => 3,
-                    'users_id' => $iduser,
-                ];
-                if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
-                  //DECOMPTE DU STOCK DEOPOTS
-                  $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
-                  foreach ($allArt as $key => $value) {
-                    $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
-                    $stokinit = $stokdepot->qte_stock;
-                    $qte_a_retrancher = $value->qte_vendue;
-                    $nvlleqte = $stokinit-$qte_a_retrancher;
-                    $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
-                  }
-                  $status = 200;
-                  $message = [
-                    'success' => 'Livraison effectué avec succès',
-                    'errors' => null
-                  ];
-                  $data = "";
-                }
-              }
-            }
-          }else{
-            //WHEN NO DELIVERY YET
-            $dataUpdate = ['is_livrer' => 1];
-            $dataUpt = ['depots_id_first_livrer' => $iddepot];
-            $upDetailCommande = $this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update();
-            $upCommandeFirstDepotLivrer = $this->model->set('depots_id_first_livrer',$iddepot)->Where('id',$idcommande)->update();
-            if(!$upDetailCommande and !$upCommandeFirstDepotLivrer){
-              $status = 400;
-              $message = [
-                'success' => null,
-                'errors' => 'Echec de livraison, contactez l\'administrateur principal'
-              ];
-              $data = "";
-            }else{
-              $dataStatusHistorique=[
-                  'vente_id' => $idcommande,
-                  'status_vente_id' => 3,
-                  'users_id' => $iduser,
-              ];
-              if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
-                //DECOMPTE DU STOCK DEOPOTS
-                $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
-                foreach ($allArt as $key => $value) {
-                  $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
-                  $stokinit = $stokdepot->qte_stock;
-                  $qte_a_retrancher = $value->qte_vendue;
-                  $nvlleqte = $stokinit-$qte_a_retrancher;
-                  $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
-                }
-                $status = 200;
-                $message = [
-                  'success' => 'Livraison d\'une partie de l\'achat a été effectué avec succès',
-                  'errors' => null
-                ];
-                $data = "";
-
-              }
-            }
-
-          }
-
-        }else{
-          //VALIDATION DEPOT SECONDAIRE
-          //Check if all isNotFaveur are isLivrer
-          $allIsNotFaveur = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
-          $allIsNotFaveurAnLivrer = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->Where('is_livrer',1)->findAll();
-          if(count($allIsNotFaveur) == count($allIsNotFaveurAnLivrer)){
-            //MEAN ALL FAVEUR ARE delivred
-            $data = ['status_vente_id'=>3];
-            if(!$updateData = $this->model->update($idcommande,$data)){
-              $status = 400;
-              $message = [
-                'success' => null,
-                'errors' => $this->model->erros()
-              ];
-              $data = "";
-            }else {
-              if(!$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',0)->update()){
-                $status = 400;
-                $message = [
-                  'success' => null,
-                  'errors' => 'Echec de livraison, contactez l\'administrateur principal'
-                ];
-                $data = "";
-              }else{
-                $dataStatusHistorique=[
-                    'vente_id' => $idcommande,
-                    'status_vente_id' => 3,
-                    'users_id' => $iduser,
-                ];
-                if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
-                  //DECOMPTE DU STOCK DEOPOTS
-                  $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
-                  foreach ($allArt as $key => $value) {
-                    $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
-                    $stokinit = $stokdepot->qte_stock;
-                    $qte_a_retrancher = $value->qte_vendue;
-                    $nvlleqte = $stokinit-$qte_a_retrancher;
-                    $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
-                  }
-                  $status = 200;
-                  $message = [
-                    'success' => 'Livraison effectué avec succès',
-                    'errors' => null
-                  ];
-                  $data = "";
-
-                }
-              }
-            }
-          }else{
-            //WHEN NO DELIVERY YET
-            $upDetailCommande = $this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',0)->update();
-            $upCommandeFirstDepotLivrer = $this->model->set('depots_id_first_livrer',$iddepot)->Where('id',$idcommande)->update();
-            if(!$upDetailCommande and !$upCommandeFirstDepotLivrer){
-              $status = 400;
-              $message = [
-                'success' => null,
-                'errors' => 'Echec de livraison, contactez l\'administrateur principal'
-              ];
-              $data = "";
-            }else{
-              $dataStatusHistorique=[
-                  'vente_id' => $idcommande,
-                  'status_vente_id' => 3,
-                  'users_id' => $iduser,
-              ];
-              if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
-                //DECOMPTE DU STOCK DEOPOTS
-                $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
-                foreach ($allArt as $key => $value) {
-                  $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
-                  $stokinit = $stokdepot->qte_stock;
-                  $qte_a_retrancher = $value->qte_vendue;
-                  $nvlleqte = $stokinit-$qte_a_retrancher;
-                  $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
-                }
-                $status = 200;
-                $message = [
-                  'success' => 'Livraison d\'une partie de l\'achat a été effectué avec succès',
-                  'errors' => null
-                ];
-                $data = "";
-
-              }
-            }
-          }
-        }
-
-      }else {
+      // if($infoCommande->container_faveur ==1){
+      //   //ACHAT FAVEUR ET DEPOT CENTRAL VALIDATION
+      //   if(getTypeDepot($iddepot)){
+      //     //VALIDATION DEPOT CENTRAL
+      //     //Check if all isNotFaveur are isLivrer
+      //     $allIsNotFaveur = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
+      //     $allIsNotFaveurAnLivrer = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->Where('is_livrer',1)->findAll();
+      //     if(count($allIsNotFaveur) == count($allIsNotFaveurAnLivrer)){
+      //       //MEANS all not Faveur are delivred
+      //       $data = ['status_vente_id'=>3];
+      //       if(!$updateData = $this->model->update($idcommande,$data)){
+      //         $status = 400;
+      //         $message = [
+      //           'success' => null,
+      //           'errors' => $this->model->erros()
+      //         ];
+      //         $data = "";
+      //       }else {
+      //         if(!$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update()){
+      //           $status = 400;
+      //           $message = [
+      //             'success' => null,
+      //             'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+      //           ];
+      //           $data = "";
+      //         }else{
+      //           $dataStatusHistorique=[
+      //               'vente_id' => $idcommande,
+      //               'status_vente_id' => 3,
+      //               'users_id' => $iduser,
+      //           ];
+      //           if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+      //             //DECOMPTE DU STOCK DEOPOTS
+      //             $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
+      //             foreach ($allArt as $key => $value) {
+      //               $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+      //               $stokinit = $stokdepot->qte_stock;
+      //               $qte_a_retrancher = $value->qte_vendue;
+      //               $nvlleqte = $stokinit-$qte_a_retrancher;
+      //               $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+      //             }
+      //             $status = 200;
+      //             $message = [
+      //               'success' => 'Livraison effectué avec succès',
+      //               'errors' => null
+      //             ];
+      //             $data = "";
+      //           }
+      //         }
+      //       }
+      //     }else{
+      //       //WHEN NO DELIVERY YET
+      //       $dataUpdate = ['is_livrer' => 1];
+      //       $dataUpt = ['depots_id_first_livrer' => $iddepot];
+      //       $upDetailCommande = $this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update();
+      //       $upCommandeFirstDepotLivrer = $this->model->set('depots_id_first_livrer',$iddepot)->Where('id',$idcommande)->update();
+      //       if(!$upDetailCommande and !$upCommandeFirstDepotLivrer){
+      //         $status = 400;
+      //         $message = [
+      //           'success' => null,
+      //           'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+      //         ];
+      //         $data = "";
+      //       }else{
+      //         $dataStatusHistorique=[
+      //             'vente_id' => $idcommande,
+      //             'status_vente_id' => 3,
+      //             'users_id' => $iduser,
+      //         ];
+      //         if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+      //           //DECOMPTE DU STOCK DEOPOTS
+      //           $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
+      //           foreach ($allArt as $key => $value) {
+      //             $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+      //             $stokinit = $stokdepot->qte_stock;
+      //             $qte_a_retrancher = $value->qte_vendue;
+      //             $nvlleqte = $stokinit-$qte_a_retrancher;
+      //             $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+      //           }
+      //           $status = 200;
+      //           $message = [
+      //             'success' => 'Livraison d\'une partie de l\'achat a été effectué avec succès',
+      //             'errors' => null
+      //           ];
+      //           $data = "";
+      //
+      //         }
+      //       }
+      //
+      //     }
+      //
+      //   }else{
+      //     //VALIDATION DEPOT SECONDAIRE
+      //     //Check if all isNotFaveur are isLivrer
+      //     $allIsNotFaveur = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->findAll();
+      //     $allIsNotFaveurAnLivrer = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',1)->Where('is_livrer',1)->findAll();
+      //     if(count($allIsNotFaveur) == count($allIsNotFaveurAnLivrer)){
+      //       //MEAN ALL FAVEUR ARE delivred
+      //       $data = ['status_vente_id'=>3];
+      //       if(!$updateData = $this->model->update($idcommande,$data)){
+      //         $status = 400;
+      //         $message = [
+      //           'success' => null,
+      //           'errors' => $this->model->erros()
+      //         ];
+      //         $data = "";
+      //       }else {
+      //         if(!$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',0)->update()){
+      //           $status = 400;
+      //           $message = [
+      //             'success' => null,
+      //             'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+      //           ];
+      //           $data = "";
+      //         }else{
+      //           $dataStatusHistorique=[
+      //               'vente_id' => $idcommande,
+      //               'status_vente_id' => 3,
+      //               'users_id' => $iduser,
+      //           ];
+      //           if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+      //             //DECOMPTE DU STOCK DEOPOTS
+      //             $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
+      //             foreach ($allArt as $key => $value) {
+      //               $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+      //               $stokinit = $stokdepot->qte_stock;
+      //               $qte_a_retrancher = $value->qte_vendue;
+      //               $nvlleqte = $stokinit-$qte_a_retrancher;
+      //               $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+      //             }
+      //             $status = 200;
+      //             $message = [
+      //               'success' => 'Livraison effectué avec succès',
+      //               'errors' => null
+      //             ];
+      //             $data = "";
+      //
+      //           }
+      //         }
+      //       }
+      //     }else{
+      //       //WHEN NO DELIVERY YET
+      //       $upDetailCommande = $this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',0)->update();
+      //       $upCommandeFirstDepotLivrer = $this->model->set('depots_id_first_livrer',$iddepot)->Where('id',$idcommande)->update();
+      //       if(!$upDetailCommande and !$upCommandeFirstDepotLivrer){
+      //         $status = 400;
+      //         $message = [
+      //           'success' => null,
+      //           'errors' => 'Echec de livraison, contactez l\'administrateur principal'
+      //         ];
+      //         $data = "";
+      //       }else{
+      //         $dataStatusHistorique=[
+      //             'vente_id' => $idcommande,
+      //             'status_vente_id' => 3,
+      //             'users_id' => $iduser,
+      //         ];
+      //         if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+      //           //DECOMPTE DU STOCK DEOPOTS
+      //           $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_faveur',0)->findAll();
+      //           foreach ($allArt as $key => $value) {
+      //             $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
+      //             $stokinit = $stokdepot->qte_stock;
+      //             $qte_a_retrancher = $value->qte_vendue;
+      //             $nvlleqte = $stokinit-$qte_a_retrancher;
+      //             $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+      //           }
+      //           $status = 200;
+      //           $message = [
+      //             'success' => 'Livraison d\'une partie de l\'achat a été effectué avec succès',
+      //             'errors' => null
+      //           ];
+      //           $data = "";
+      //
+      //         }
+      //       }
+      //     }
+      //   }
+      //
+      // }else {
         //ACHAT ET VALIDATION NORMAL
         if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanity($iddepot,$idcommande)){
           //SUITES VALIDATIONS
@@ -538,7 +538,7 @@ class Commandes extends ResourceController {
           ];
           $data = "";
         }
-      }
+      //}
       }
 
     // $this->model->RollbackTrans();

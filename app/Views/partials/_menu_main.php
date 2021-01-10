@@ -172,9 +172,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
-                    <?php if(session('lieuAffectation')->is_central == 1):  ?>
-                    <li><a href="<?=base_url('magaz-list-achat-faveur') ?>">Mes Achats Faveurs</a></li>
-                    <?php endif; ?>
+                    <?php //if(session('lieuAffectation')->is_central == 1):  ?>
+                    <!-- <li><a href="<?=base_url('magaz-list-achat-faveur') ?>">Mes Achats Faveurs</a></li> -->
+                    <?php //endif; ?>
 
 
                   </ul>

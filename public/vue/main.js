@@ -1095,7 +1095,7 @@ var vthis = new Vue({
               if(response.data.message.success !=null){
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
-                this.get_commande_facturier(4);
+                this.get_commande_facturier(1);
                 this._u_close_mod_form();
                 this.password_op= "";
                 this.isLoadSaveMainButtonModal = false;
@@ -1752,7 +1752,8 @@ var vthis = new Vue({
     //FONCTION POUR RECHERCHER FIN
     _u_create_line_article(){
     const isFaveur = this.checkIsFaveur.length > 0 ? 1 : 0;
-    const depots = isFaveur == 1 ? this.depot_central_id : this.depots_id;
+    // const depots = isFaveur == 1 ? this.depot_central_id : this.depots_id;
+    const depots = this.depots_id;
     const newurl = this.url+"articles-search-data-commande/"+this.codeArticle+"/"+this.qte+"/"+depots+"/"+isFaveur+"/search";
       if(this.depots_id ==""){
         this._u_fx_config_error_message_bottom("Message",['Veuillez selectionner un dépôt traiteur'],'alert-danger');

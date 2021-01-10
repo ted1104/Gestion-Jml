@@ -130,11 +130,11 @@ class CommandesEntity extends Entity{
     foreach ($detail as $key => $value) {
       //print_r($depotCentral);
       $qte_vendue = $value->qte_vendue;
-      if($value->is_faveur == 0){
+      // if($value->is_faveur == 0){
         $stockqte = $this->stockModel->Where('depot_id',$depot)->Where('articles_id',$value->articles_id[0]->id)->first();
-      }else{
-        $stockqte = $this->stockModel->Where('depot_id',$depotCentral)->Where('articles_id',$value->articles_id[0]->id)->first();
-      }
+      // }else{
+      //   $stockqte = $this->stockModel->Where('depot_id',$depotCentral)->Where('articles_id',$value->articles_id[0]->id)->first();
+      // }
       if($depotCentral !=""){
         if($qte_vendue > $stockqte->qte_stock_virtuel){
           $is = true;
