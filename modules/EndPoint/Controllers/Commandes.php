@@ -57,7 +57,6 @@ class Commandes extends ResourceController {
       $article = $data->articles_id;
       $qte_vendue = $data->qte_vendue;
       $prix_unitaire = $data->prix_unitaire;
-      $type_prix = $data->type_prix;
       $is_faveur = $data->is_faveur;
 
       for ($i=0; $i < $nArt; $i++) {
@@ -66,7 +65,6 @@ class Commandes extends ResourceController {
           'articles_id'=>$article[$i],
           'qte_vendue'=>$qte_vendue[$i],
           'prix_unitaire' =>$prix_unitaire[$i],
-          'type_prix' =>$type_prix[$i],
           'is_faveur' => $is_faveur[$i]
         ];
         // print_r($dataDetail);

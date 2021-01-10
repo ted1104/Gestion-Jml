@@ -64,6 +64,6 @@ class Autoload extends AutoloadConfig
 	 * @var array
 	 */
 	public $classmap = [
-		'FPDF'=> APPPATH.'Libraries\Fpdf\fpdf.php'
+		'FPDF'=> APPPATH.'Libraries/Fpdf/FPDF.php'
 	];
 }

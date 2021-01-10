@@ -63,12 +63,12 @@
 																		<td>{{dt.nom_article}}</td>
 																		<td>{{dt.nombre_piece}}</td>
 																		<td>
-																			<button class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																			<button :class="dt.logic_detail_data.length > 0?'btn btn-round btn-success':'btn btn-round btn-light'" @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																		</td>
 																		<td>
 																			<button v-if="dt.logic_config_article_faveur.length < 1" class='btn btn-round btn-success' @click="_u_open_mod_form_config_faveur(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																			<button class="btn btn-round btn-light" v-if="dt.logic_config_article_faveur.length > 0" @click="_u_open_mod_form_config_faveur(dt,2)">
-																				<i class="mdi mdi-circle-edit-outline text-danger"></i>
+																				<i class="mdi mdi-circle-edit-outline"></i>
 																			</button>
 																		</td>
 																		<td>
@@ -129,7 +129,7 @@
 																					<td>{{det.prix_unitaire}} USD</td>
 																					<td>
 																						<span class="btn btn-round btn-light">
-																							<i class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(det,2)"></i>
+																							<i class="mdi mdi-circle-edit-outline" @click="_u_open_mod_form(det,2)"></i>
 																						</span>
 																						<button v-if = "+i+1 == detailTab.logic_detail_data.length" class="btn btn-round btn-danger" @click="_u_open_mod_form(det,3)"><i class="mdi mdi-delete-sweep" ></i></button>
 																					</td>

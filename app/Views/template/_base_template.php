@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <title>JML : <?=$this->renderSection('title') ?> </title>
     <!-- Fevicon -->
-    <link rel="shortcut icon" href="<?=base_url() ?>/public/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="<?=base_url() ?>/public/assets/images/logo.ico">
     <!-- Start CSS -->
     <link href="<?=base_url() ?>/public/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url() ?>/public/assets/css/icons.css" rel="stylesheet" type="text/css">
