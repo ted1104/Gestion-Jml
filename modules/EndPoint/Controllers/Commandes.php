@@ -117,6 +117,21 @@ class Commandes extends ResourceController {
       'nombreVenteType' => $this->commandeByTypeByuser($iduser,'users_id',$condition)
     ]);
   }
+
+  //RETOURNE LA DERNIERE COMMANDE CREER PAR UN FACTURIER USAGE PRINTING
+  public function commandes_get_user_facturier_last_one($iduser){
+    $data = $this->model->Where('users_id',$iduser)->orderBy('id','DESC')->first();
+
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => [
+        'code' =>$data?$data->id:0,
+        'numero' =>$data?$data->numero_commande:0
+      ],
+    ]);
+  }
+
   //FONCTION COMPLEMENTAIRE DE POUR GET LE NOMBRES DES COMMANDES SELON LE USER OU TYPE DU USE OU TYPE DE COMMANDES
   public function commandeByTypeByuser($iduser,$nomchamps,$condition){
     return $array =[

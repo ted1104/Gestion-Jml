@@ -6,6 +6,7 @@ var vthis = new Vue({
   data () {
     return {
       url : 'http://127.0.0.1/GestionBoutique/api/v1/',
+      //url : 'http://172.18.0.11/api/v1/',
       tokenConfig : {
         'authorization' : '3bacb9ec-9fbc-4442-ab76-3a6e35b0a627',
         'Content-Type':'multipart/form-data'
@@ -66,6 +67,9 @@ var vthis = new Vue({
 
       //VARIABLE LOAD DATE TABLE
       // isDataTableLoad :false,
+
+      //DEFAUL VALEUER
+      lastFactureEncodede : "",
 
 
 
@@ -321,6 +325,7 @@ var vthis = new Vue({
                   var err = response.data.message.success;
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   this._u_get_code_facture();
+                  this._u_get_last_achat_facturier();
                   this.tabListData=[];
                   this.nom_client = "";
                   this.telephone_client = "";
@@ -2109,6 +2114,20 @@ var vthis = new Vue({
       this.checkBoxArticles = new Array();
       this.checkBoxAchatSelected = new Array();
     },
+    _u_get_last_achat_facturier(){
+      const newurl = this.url+"achat-last-one-facturier/"+this.users_id;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              // this.dataToDisplay = response.data.data;
+              this.lastFactureEncodede = response.data.data;
+              console.log(response.data.data);
+
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     // _u_hidden_display_message_error(){}
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){
@@ -2286,6 +2305,10 @@ var vthis = new Vue({
     if(pth[2]=='facturier-add-achat' || pth[2]==='caissier-add-achat'){
       this.get_caissiers();
       this.get_stock_depots();
+
+      if(pth[2]=='facturier-add-achat'){
+        this._u_get_last_achat_facturier();
+      }
     }
     if(pth[2]=='facturier-list-achat'){
       this.get_commande_facturier();

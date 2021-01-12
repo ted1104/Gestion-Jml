@@ -27,17 +27,21 @@
                 <div class="row">
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
-											 <div class="text-center mt-3 mb-5">
+											 <div class="text-center mt-3 mb-2">
 													 <h4>CREER UN ACHAT D'UN CLIENT</h4>
 													 <!-- {{depot_central_id}} -->
-													 <button  class="btn btn-round btn-danger pull-right" @click="isStockIndicator=!isStockIndicator"><i class="mdi mdi-shopping"></i></button>
+													 <!-- lastFactureEncodede -->
 
+													 <div class="">
 
+														 <button  class="btn btn-round btn-danger pull-right" @click="isStockIndicator=!isStockIndicator"><i class="mdi mdi-shopping"></i></button>
+														 <a :href="'<?=base_url()?>/print-code/'+lastFactureEncodede.code+'/code'" target="_blank" class='btn btn-info pull-right'><i class='mdi mdi-printer'></i> Imprimer Facture : {{lastFactureEncodede.numero}} </a>
+													 </div>
 
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
-                    <div class="col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-md-12 col-lg-12 col-xl-12 margin-top-5">
 											<!-- OPERATION ADD COMMANDE -->
 											<div class="row" v-show="!isStockIndicator">
 												<div class="col-md-5 col-lg-5 col-xl-5 ">
@@ -124,8 +128,16 @@
                                     <label for="date_vente">Date commande</label>
                                     <input type="text" class="form-control" id="date_vente" v-model="date_vente" disabled>
                                   </div>
-                                	<button v-if="!isLoadSaveMainButton" @click="add_commande" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	<div class="row">
+																		<div class="col-md-6">
+																			<button v-if="!isLoadSaveMainButton" @click="add_commande" class="btn btn-primary">Enregistrer</button>
+																			<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																		</div>
+																		<div class="col-md-6">
+																			<a :href="'<?=base_url()?>/print-code/'+lastFactureEncodede.code+'/code'" target="_blank" class='btn btn-info pull-right'><i class='mdi mdi-printer'></i> Imprimer : {{lastFactureEncodede.numero}} </a>
+																		</div>
+																	</div>
+
                             </div>
                         </div>
 												</div>
