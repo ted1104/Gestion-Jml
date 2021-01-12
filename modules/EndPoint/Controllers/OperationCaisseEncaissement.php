@@ -312,7 +312,13 @@ class OperationCaisseEncaissement extends ResourceController {
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'sommeEncaissement' => $this->sommesMontantEncaissement($conditionUserSource,$conditionDate)
     ]);
   }
 
+  public function sommesMontantEncaissement($conditionUserSource,$conditionDate){
+    $SommeEncaissement = $this->encaissementExterneModel->selectSum('montant_encaissement')->Where($conditionUserSource)->Where($conditionDate)->find();
+    return round($SommeEncaissement[0]->montant_encaissement,2);
+
+  }
 }

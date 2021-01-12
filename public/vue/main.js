@@ -205,7 +205,8 @@ var vthis = new Vue({
 
       //CREATE ENCAISSEMENT EXTERNE
       montant_encaissement : "",
-      motif : ""
+      motif : "",
+      montantTotalAllEncaissement : ""
 
 
 
@@ -1554,6 +1555,7 @@ var vthis = new Vue({
               this.isNoReturnedData = true;
             }
             this._u_fx_get_montant();
+            this.montantTotalAllEncaissement = response.data.sommeEncaissement;
             // console.log(this.dataToDisplay);
           }).catch(error =>{
             console.log(error);

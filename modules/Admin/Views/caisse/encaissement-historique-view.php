@@ -37,7 +37,10 @@
 												<div class="col-md-10 col-lg-10 col-xl-10">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-                              <h5 class="card-title text-black">INFORMATIONS SUR LES ENCAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+															<div class="row">
+																<h5 class="card-title text-black col-md-9">INFORMATIONS SUR LES ENCAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+																<h5 class="col-md-3 text-right text-secondary">{{montantTotalAllEncaissement}} USD</h5>
+															</div>
 															<div class="">
 
 																<div class="pull-right row">
