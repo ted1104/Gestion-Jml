@@ -177,9 +177,13 @@
 															<div v-for="(det,i) in detailTab.logic_article">
 																<div class="row">
 																	<div class="col-md-4">
-																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}<span>
+																		<!-- <span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}<span> -->
+																		<span>Qte:</span>
+																		<br>
+																		<span>{{det.qte_vendue}}</span>
 																	</div>
 																	<div class="col-md-6">
+																		<span>Produit</span><br>
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
 																	</div>
 																	<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
@@ -188,16 +192,15 @@
 																<br>
 																<div class="row">
 																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
-																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Qte: <br> {{det.qte_vendue}}</span>
-																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
-																	<span :class="stateStatus==2?'col-md-3':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
-																	<span class="col-md-3" v-if="stateStatus==2">Stock<br>
+																	<span :class="stateStatus==2?'col-md-4':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
+																	<span :class="stateStatus==2?'col-md-4':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
+																	<span class="col-md-4" v-if="stateStatus==2">Stock<br>
 																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
 																	</span>
 
 																</div>
 																<br>
-																<div class="row">
+																<!-- <div class="row">
 																	<span class="col-md-12">Avec Négociation
 																		<span v-if="detailTab.status_vente_id.id==1" :class="det.is_negotiate==0?'badge badge-info':(det.is_negotiate==1?'badge badge-warning':'badge badge-success')">{{det.is_negotiate==0?'Non':(det.is_negotiate==1?'En attente':'Valider')}}</span>
 																		<span v-if="detailTab.status_vente_id.id !=1 && det.is_negotiate==2" class="badge badge-success">valider</span>
@@ -206,7 +209,7 @@
 																	<span v-if="det.is_negotiate==2" class="col-md-4 margin-top-3"></span>
 																	<span v-if="det.is_negotiate==2" class="col-md-4 margin-top-3">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_negociation)}} USD</span>
 
-																</div>
+																</div> -->
 																<hr>
 															</div>
 
