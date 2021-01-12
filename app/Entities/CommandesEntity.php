@@ -135,14 +135,14 @@ class CommandesEntity extends Entity{
       // }else{
       //   $stockqte = $this->stockModel->Where('depot_id',$depotCentral)->Where('articles_id',$value->articles_id[0]->id)->first();
       // }
-      if($depotCentral !=""){
+      // if($depotCentral !=""){
         if($qte_vendue > $stockqte->qte_stock_virtuel){
           $is = true;
         }
         if($qte_vendue > $stockqte->qte_stock){
           $isReel = true;
         }
-      }
+      // }
 
     }
     return array(
