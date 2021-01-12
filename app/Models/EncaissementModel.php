@@ -3,7 +3,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 class EncaissementModel extends Model{
-  protected $table = 'g_interne_encaissement';
+  protected $table = 'g_interne_encaissement_vente';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
   protected $allowedFields = ['vente_id','users_id','montant_encaissement','date_encaissement'];
@@ -21,7 +21,7 @@ class EncaissementModel extends Model{
     'montant_encaissement'=>[
       'required' => 'Le montant encaissement est obligatoire',
     ],
-  
+
   ];
   protected $returnType ='object';
 

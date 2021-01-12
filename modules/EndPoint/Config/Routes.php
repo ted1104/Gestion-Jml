@@ -84,8 +84,6 @@ $routes->group('api/v1', function($routes){
   $routes->get('commandes-faveur-get-by-depot/(:num)/(:num)/(:any)/depot','Commandes::commandes_faveurs_get_by_depot/$1/$2/$3');
   $routes->get('commandes-faveur-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_faveur_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->post('delete-article-commande','Commandes::commandes_delete_articles');
-
-
   $routes->get('achat-last-one-facturier/(:num)','Commandes::commandes_get_user_facturier_last_one/$1');
 
 
@@ -119,6 +117,8 @@ $routes->group('api/v1', function($routes){
   $routes->get('validation-decaissement/(:num)/(:num)/(:any)/validate','OperationCaisseEncaissement::validateDecaissement/$1/$2/$3');
   $routes->get('get-decaissement-externe-par-caissier/(:num)/(:any)','OperationCaisseEncaissement::getDecaissementExterne/$1/$2');
   $routes->post('create-decaissement--solde-externe','OperationCaisseEncaissement::createDecaissementExterne');
+  $routes->get('get-all-encaissement-externe/(:num)/(:any)/enc','OperationCaisseEncaissement::getEncaissementExterne/$1/$2');
+  $routes->post('create-encaissement-externe','OperationCaisseEncaissement::createEncaissementExterne');
 
 
 });

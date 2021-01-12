@@ -35,4 +35,11 @@ class Achat extends BaseController {
     ];
     echo view('Modules\Admin\Views\users\caissiers-list-view', $data);
   }
+
+  public function getEncaissementExterne(){
+    $data = [
+      'titlePage' => 'ENCAISSEMENT EXTERNE: Caissier'
+    ];
+    echo view($this->linkMod.'\encaissement-caissier-main-view', $data);
+  }
 }

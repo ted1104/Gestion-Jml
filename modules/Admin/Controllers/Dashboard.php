@@ -45,6 +45,12 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\users\users-list-view', $data);
   }
+  public function getEncaissementExterne(){
+    $data = [
+      'titlePage' => 'Encaissement Externe Historique: Administration'
+    ];
+    echo view($this->linkMod.'\caisse\encaissement-historique-view', $data);
+  }
 
 
 

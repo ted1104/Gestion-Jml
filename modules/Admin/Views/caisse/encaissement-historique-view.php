@@ -28,58 +28,62 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>LISTE DE TOUS LES CAISSIERS</h4>
+													 <h4>HISTORIQUE ENCAISSMENT EXTERNE</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
-
-												<div class="col-md-8 col-lg-8 col-xl-8">
+												<div class="col-md-10 col-lg-10 col-xl-10">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-														<div class="row">
-															<h5 class="card-title text-black col-md-9">CAISSE</h5>
-															<h5 class="col-md-3 text-right text-secondary">{{montantTotalAllCommandeParTypeVente}} USD</h5>
-														</div>
+                              <h5 class="card-title text-black">INFORMATIONS SUR LES ENCAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+															<div class="">
 
+																<div class="pull-right row">
+																	<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+																	<!-- BOUTTON DECAISSEMENT INTERNTE -->
+																	<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_encaisssement_externe)"><i class="mdi mdi-search-web"></i></button>
+
+
+																</div>
+															</div>
                           </div>
+
                           <div class="card-body">
                               <div class="table-responsive">
-																<table class="table">
+																<table class="table" >
 																	<thead>
 																		<tr class="bg-secondary">
-																			<th scope="col">Nom</th>
-																			<th scope="col">Prenom</th>
-																			<th scope="col">Sexe</th>
-																			<th scope="col">Type</th>
+																			<th scope="col">Date</th>
+																			<th scope="col">Caissier</th>
 																			<th scope="col">Montant</th>
-																			<th scope="col">Action</th>
+																			<th scope="col">Motif source</th>
+																			<th scope="col">Valider</th>
 																		</tr>
 																	</thead>
 																	<tbody>
-																		<tr v-for="(dt, index) in caissierList">
-																			<th>{{dt.nom}}</th>
-																			<td>{{dt.prenom}}</td>
-																			<td>{{dt.sexe}}</td>
-																			<td>CAISSIER {{dt.is_main==1?'PRINCIPAL':'SECONDAIRE'}}</td>
-																			<td>{{dt.logic_montant_caisse}} USD</td>
+																		<tr v-for="(dt, index) in dataToDisplay">
+																			<td>{{dt.date_encaissement}}</td>
+																			<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
+																			<td>{{dt.montant_encaissement}} USD</td>
+																			<td>{{dt.motif}}</td>
 																			<td>
-																				<a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i></a>
-																				<a href="#" v-if="checkBoxArticles.length>0"  class='btn btn-round btn-info' ><i class="mdi mdi-circle-edit-outline text-white"></i></a>
+																				<i class='mdi mdi-checkbox-marked-circle-outline'>
 																			</td>
 
 																		</tr>
 																	</tbody>
 																</table>
-																<div class="text-center" v-if="caissierList.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="" >
+																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
+																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
-																<div class="text-center" alt="" v-if="caissierList.length < 1 && isNoReturnedData">
+																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
 																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
-                              </div>
+															</div>
+
                           </div>
                         </div>
 												</div>
@@ -99,7 +103,7 @@
     <!-- End XP Container -->
 
 		<!-- MODAL -->
-	<!-- <div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
+	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -109,19 +113,20 @@
                 </button>
             </div>
             <div class="modal-body">
-							<div class="form-group">
-								<label for="prix_unitaire">Prix Unitaire *</label>
-								<input type="text" class="form-control" id="prix_unitaire" aria-describedby="prix_unitaire" v-model="prix_unitaire">
+							<div class="text-center">
+								<span>Vous êtes sur le point de valider la récéption du decaissement,</span>
+								<span>êtes vous le(la) caissier(e) principal(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?> ?</span>
+								<span>Acceptez vous avoir reçu physiquement cette somme d'argent ?</span>
+								<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+								<div class="form-group col-md-12 text-center">
+									<label for="password_op">Mot de passe *</label>
+									<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+								</div>
+								<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_decaissement" class="btn btn-primary">Confirmer</button>
+								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 							</div>
-							<div class="form-group">
-								<label for="qte_decideur">Quantité *</label>
-								<input type="text" class="form-control" id="qte_decideur" aria-describedby="qte_decideur" v-model="qte_decideur">
-							</div>
-							<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Enregistrer</button>
-							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
             </div>
-
         </div>
     </div>
-</div> -->
+</div>
 <?=$this->endSection() ?>

@@ -8,6 +8,8 @@ use App\Entities\DecaissementEntity;
 use App\Entities\DecaissementExterneEntity;
 use App\Models\UsersAuthModel;
 use App\Models\DecaissementExterneModel;
+use App\Models\EncaissementExterneModel;
+use App\Entities\EncaissementExterneEntity;
 use CodeIgniter\I18n\Time;
 
 
@@ -20,6 +22,7 @@ class OperationCaisseEncaissement extends ResourceController {
   protected $decaissementModel  = null;
   protected $usersAuthModel = null;
   protected $decaissementExterneModel = null;
+  protected $encaissementExterneModel = null;
 
 
 
@@ -29,6 +32,7 @@ class OperationCaisseEncaissement extends ResourceController {
     $this->decaissementModel = new DecaissementModel();
     $this->decaissementExterneModel = new DecaissementExterneModel();
     $this->usersAuthModel = new UsersAuthModel();
+    $this->encaissementExterneModel = new EncaissementExterneModel();
   }
   //MONTANT SOLDE DU CAISSIER
   public function getMontantCaisse($idCaissier){
@@ -243,5 +247,72 @@ class OperationCaisseEncaissement extends ResourceController {
   }
 
 
+  ###########OPERATIONS ENCAISSEMENT EXTERNE ####################
+  //GET ALL ENCAISSEMENT EXTERNE
+//  public function getEncaissementExterne(){
+  //   $data = $this->encaissementExterneModel->orderBy('id','DESC')->findAll();
+  //   return $this->respond([
+  //     'status' => 200,
+  //     'message' => 'success',
+  //     'data' => $data,
+  //   ]);
+  // }
+  public function createEncaissementExterne(){
+    $data = new EncaissementExterneEntity($this->request->getPost());
+    $this->encaissementExterneModel->beginTrans();
+    if(!$this->encaissementExterneModel->insert($data)){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->encaissementExterneModel->errors()
+      ];
+      $data = null;
+    }else{
+      //Si caissier principal existe, update son montant si non on cree sa caisse
+      $userExistCaisse = $this->caisseModel->Where('users_id',$data->users_id->id)->findAll();
+      if($userExistCaisse){
+        $nvo = $userExistCaisse[0]->montant + $data->montant_encaissement;
+        $this->caisseModel->update($userExistCaisse[0]->id, ['montant'=>$nvo]);
+      }else{
+        $dataCaisse = [
+          'users_id'=>$data->users_id->id,
+          'montant' => $data->montant_encaissement
+        ];
+        $insertData = $this->caisseModel->insert($dataCaisse);
+      }
+
+      $status = 200;
+      $message = [
+        'success' => 'Encaissemennt effectué avec succès',
+        'errors' => null
+      ];
+      $data = null;
+    }
+
+    $this->encaissementExterneModel->commitTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data,
+    ]);
+  }
+
+  public function getEncaissementExterne($idCaissierMain,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_encaissement'=> $dateFilter];
+
+    $conditionUserSource = [];
+    if($idCaissierMain != 0){
+      $conditionUserSource = ['users_id'=>$idCaissierMain];
+    }
+    $data = $this->encaissementExterneModel->select("id,users_id,date_encaissement,motif,created_at,montant_encaissement")->Where($conditionUserSource)->Where($conditionDate)->orderBy('id','DESC')->findAll();
+
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+  }
 
 }

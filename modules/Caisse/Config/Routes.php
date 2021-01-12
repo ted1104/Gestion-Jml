@@ -7,3 +7,4 @@ $routes->get('caissier-add-achat','Achat::achatCaissier',['filter' => 'isLoggedI
 $routes->get('caissier-add-decaissement','Achat::decaissementSend',['filter' => 'isLoggedIn']);
 $routes->get('caissier-list-decaissement','Achat::decaissementListCaissierMain',['filter' => 'isLoggedIn']);
 $routes->get('caissier-list-caissier','Achat::listCaissier',['filter' => 'isLoggedIn']);
+$routes->get('caissier-encaissement-externe','Achat::getEncaissementExterne',['filter' => 'isLoggedIn']);

@@ -203,6 +203,10 @@ var vthis = new Vue({
       prix_id_saved : "",// for UPDATE
       config_faveur_id : "",  // for UPDATE
 
+      //CREATE ENCAISSEMENT EXTERNE
+      montant_encaissement : "",
+      motif : ""
+
 
 
 
@@ -1497,6 +1501,64 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    add_encaissement_externe(e){
+    e.preventDefault();
+    const newurl = this.url+"create-encaissement-externe";
+    var form = this._u_fx_form_data_encaissement_externe();
+    // console.log(this.montant);
+    if(this.montant_encaissement ==""){
+      this._u_fx_config_error_message_bottom("Message",['Le montant est obligatoire'],'alert-danger');
+      return;
+    }
+    this.messageError = false;
+    this.isLoadSaveMainButton = true;
+    return axios
+          .post(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.get_encaisssement_externe(1);
+                this._u_fx_get_montant();
+                this.isLoadSaveMainButton = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButton = false;
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+  },
+    get_encaisssement_externe(users=null){
+    if(this.dateFilter !==null){
+      this._u_formatOnlyDate();
+    }
+    var u = !users? 0 : this.users_id;
+    // this.stateStatus = users;
+    // console.log(this.stateStatus);
+    // console.log(u);
+    const newurl = this.url+"get-all-encaissement-externe/"+u+"/"+this.dateFilter+"/enc";
+    // this.stateStatus = status;
+    this.dataToDisplay =[];
+    this.isNoReturnedData = false;
+    this.isDecaissementExterne = false;
+    return axios
+          .get(newurl,{headers: this.tokenConfig})
+          .then(response =>{
+
+            this.dataToDisplay = response.data.data;
+            if(this.dataToDisplay.length < 1){
+              this.isNoReturnedData = true;
+            }
+            this._u_fx_get_montant();
+            // console.log(this.dataToDisplay);
+          }).catch(error =>{
+            console.log(error);
+          })
+        },
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -2079,6 +2141,8 @@ var vthis = new Vue({
       var date = new Date(this.dateFilter);
       var month = date.getMonth()+1;
       this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
+      // console.log(this.stateStatus);
+      this._u_set_table_title_with_date();
       callbackFunction(this.stateStatus);
     },
     _u_formatOnlyDate(date){
@@ -2210,6 +2274,10 @@ var vthis = new Vue({
       this.prix_id = "";
       this.qte_faveur = "";
 
+      //champs encaissement EXTERNE
+      this.motif = "";
+      this.montant_encaissement = "";
+
 
     },
     _u_fx_form_data_art(){
@@ -2267,6 +2335,14 @@ var vthis = new Vue({
     formData.append('date_decaissement',"");
     return formData;
   },
+    _u_fx_form_data_encaissement_externe(){
+      var formData = new FormData();
+      formData.append('users_id',vthis.users_id);
+      formData.append('montant_encaissement',vthis.montant_encaissement);
+      formData.append('motif',vthis.motif);
+      formData.append('date_encaissement',"");
+      return formData;
+    },
     _u_fx_form_data_users(){
     var formData = new FormData();
     formData.append('nom',this.nom);
@@ -2375,8 +2451,14 @@ var vthis = new Vue({
     if(pth[2] == 'admin-histo-appro-inter-depot'){
       this.get_historique_approvisionnement_inter_depot_admin();
     }
-
-
+    if(pth[2] == 'caissier-encaissement-externe'){
+      this.stateStatus = 1;
+      this.get_encaisssement_externe(this.stateStatus);
+    }
+    if(pth[2] == 'admin-encaissement'){
+      this.stateStatus = null;
+      this.get_encaisssement_externe(this.stateStatus);
+    }
 
 
 
