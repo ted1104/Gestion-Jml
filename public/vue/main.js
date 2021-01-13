@@ -431,8 +431,8 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_commande_facturier(statut=1){
-      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/"+this.dateFilter+"/facturier";
+    get_commande_facturier(statut=1,limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/facturier";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -449,14 +449,19 @@ var vthis = new Vue({
                 this.isNoReturnedData = true;
               }
               this._u_reset_checkBoxSelected();
+              //CREATION PAGINATION
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this.isResearchPagination = false;
+              this._u_fx_generate_pagination(response.data.all);
 
 
             }).catch(error =>{
               console.log(error);
             })
     },
-    get_commande_caissier(statut=1){
-      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/"+this.dateFilter+"/caissier";
+    get_commande_caissier(statut=1,limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"commandes-get-all/"+this.users_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/caissier";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -473,6 +478,11 @@ var vthis = new Vue({
                 this.isNoReturnedData = true;
               }
               this._u_fx_get_montant();
+              //CREATION PAGINATION
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this.isResearchPagination = false;
+              this._u_fx_generate_pagination(response.data.all);
             }).catch(error =>{
               console.log(error);
             })
@@ -504,8 +514,8 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_commande_magazinier(statut=2){
-      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/depot";
+    get_commande_magazinier(statut=2,limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/depot";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -523,6 +533,11 @@ var vthis = new Vue({
               }
               this._u_reset_checkBoxSelected();
               // console.log(this.dataToDisplay);
+              //CREATION PAGINATION
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this.isResearchPagination = false;
+              this._u_fx_generate_pagination(response.data.all);
             }).catch(error =>{
               console.log(error);
             })
@@ -581,8 +596,8 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_commande_admin(statut=1){
-      const newurl = this.url+"commandes-all-by-status/"+statut+"/"+this.dateFilter+"/status";
+    get_commande_admin(statut=1,limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"commandes-all-by-status/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/status";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -599,7 +614,12 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
-              console.log(this.dataToDisplay);
+              //CREATION PAGINATION
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this.isResearchPagination = false;
+              this._u_fx_generate_pagination(response.data.all);
+              // console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
             })
@@ -969,9 +989,6 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
-
-
-
               // console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
@@ -1601,7 +1618,6 @@ var vthis = new Vue({
               this.paginationTab=[];
               this._u_fx_generate_pagination(total);
               this.isResearchPagination = true;
-
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
@@ -2137,6 +2153,24 @@ var vthis = new Vue({
         this.currentIndexPage -=1;
         var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
         callbackFunctionGetList(this.PerPaged,offset,this.currentIndexPage);
+      }
+    },
+
+    _u_next_page_for_list_achat(callbackFunctionGetList){
+      var i = (this.currentIndexPage+1)+1;
+      if(i <= this.pageNumber){
+        this.currentIndexPage +=1;
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        callbackFunctionGetList(this.stateStatus,this.PerPaged,offset,this.currentIndexPage);
+      }
+    },
+    _u_previous_page_for_list_achat(callbackFunctionGetList){
+      var i = this.currentIndexPage;
+      console.log(this.currentIndexPage);
+      if(i < this.pageNumber && 0 < i){
+        this.currentIndexPage -=1;
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        callbackFunctionGetList(this.stateStatus,this.PerPaged,offset,this.currentIndexPage);
       }
     },
     _u_formatDateFilter(callbackFunction){

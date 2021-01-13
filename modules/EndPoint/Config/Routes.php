@@ -61,13 +61,13 @@ $routes->group('api/v1', function($routes){
   //2.COMMANDES
   $routes->get('commandes-get-all','Commandes::commandes_get');
   $routes->post('commandes-create','Commandes::commandes_create');
-  $routes->get('commandes-get-all/(:num)/(:num)/(:any)/facturier','Commandes::commandes_get_user_facturier/$1/$2/$3');
+  $routes->get('commandes-get-all/(:num)/(:num)/(:any)/(:num)/(:num)/facturier','Commandes::commandes_get_user_facturier/$1/$2/$3/$4/$5');
   $routes->get('commandes-generate-code','Commandes::commande_generate_facture_code');
-  $routes->get('commandes-get-all/(:num)/(:num)/(:any)/caissier','Commandes::commandes_get_user_caissier/$1/$2/$3');
+  $routes->get('commandes-get-all/(:num)/(:num)/(:any)/(:num)/(:num)/caissier','Commandes::commandes_get_user_caissier/$1/$2/$3/$4/$5');
   $routes->get('commandes-validation-caissier/(:any)/(:num)/(:num)/(:any)/validation','Commandes::validation_operation_commande_caissier/$1/$2/$3/$4');
-  $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/depot','Commandes::commandes_get_by_depot/$1/$2/$3');
+  $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2/$3/$4/$5');
   $routes->get('commandes-validation-magaz/(:any)/(:num)/(:num)/(:num)/validation','Commandes::validation_operation_commande_magasinier/$1/$2/$3/$4');
-  $routes->get('commandes-all-by-status/(:num)/(:any)/status','Commandes::commandes_all_get_by_status/$1/$2');
+  $routes->get('commandes-all-by-status/(:num)/(:any)/(:num)/(:num)/status','Commandes::commandes_all_get_by_status/$1/$2/$3/$4');
   $routes->post('demande-negotiation','Commandes::commandes_negotiate');
   $routes->get('achat-get-all-negotiation/(:num)/negotiation','Commandes::commandes_get_en_negotiation/$1');
   $routes->post('achat-validate-negotiation','Commandes::commande_validate_negotiation');

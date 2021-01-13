@@ -102,19 +102,20 @@ class Commandes extends ResourceController {
     ]);
   }
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER : DONC LES COMMANDES CREES PAR UN FACTURIER
-  public function commandes_get_user_facturier($iduser,$statutVente,$dateFilter){
+  public function commandes_get_user_facturier($iduser,$statutVente,$dateFilter,$limit,$offset){
     $d = Time::today();
     if($dateFilter == "null"){
       $dateFilter = $d;
     }
     $condition =['date_vente'=> $dateFilter];
-    $data = $this->model->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll();
+    $data = $this->model->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'ted' =>$dateFilter,
-      'nombreVenteType' => $this->commandeByTypeByuser($iduser,'users_id',$condition)
+      'all'=> $this->model->selectCount('id')->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll()[0]->id,
+      'nombreVenteType' => $this->commandeByTypeByuser($iduser,'users_id',$condition),
+
     ]);
   }
 
@@ -144,17 +145,18 @@ class Commandes extends ResourceController {
   }
 
   //LISTE DE COMMANDE PAR UTILISATEUR CAISSIER : DONC LES COMMANDES CREES PAR UN FACTURIER
-  public function commandes_get_user_caissier($iduser,$statutVente,$dateFilter){
+  public function commandes_get_user_caissier($iduser,$statutVente,$dateFilter,$limit,$offset){
     $d = Time::today();
     if($dateFilter == "null"){
       $dateFilter = $d;
     }
     $condition =['date_vente'=> $dateFilter];
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->findAll();
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all'=> $this->model->selectCount('id')->Where($condition)->Where('payer_a',$iduser)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll()[0]->id,
       'nombreVenteType' => $this->commandeByTypeByuser($iduser,'payer_a',$condition)
     ]);
   }
@@ -261,7 +263,7 @@ class Commandes extends ResourceController {
   }
 
   //FONCTION POUR AFFICHER LES COMMANDES AFFECTER A UN DEPOT SPECIFIQUE
-  public function commandes_get_by_depot($iddepot,$statutVente,$dateFilter){
+  public function commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$limit,$offset){
     $d = Time::today();
     if($dateFilter == "null"){
       $dateFilter = $d;
@@ -271,11 +273,12 @@ class Commandes extends ResourceController {
     if(getTypeDepot($iddepot)){
       $conditionAllAchatFaveur = ['container_faveur' => 1];
     }
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->findAll();
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all'=> $this->model->selectCount('id')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll()[0]->id,
       'nombreVenteType' => $this->commandeByTypeByuser($iddepot,'depots_id',$condition)
     ]);
   }
@@ -1089,7 +1092,7 @@ class Commandes extends ResourceController {
   //################ FONCTION ADMINISTRTION #####################
 
   //FONCTION POUR AFFICHER LA LISTE DE TOUTES LES OPERATIONS SANS EXCEPTIONS ADMIN
-  public function commandes_all_get_by_status($statutVente,$dateFilter){
+  public function commandes_all_get_by_status($statutVente,$dateFilter,$limit,$offset){
     $d = Time::today();
     if($dateFilter == "null"){
       $dateFilter = $d;
@@ -1100,11 +1103,12 @@ class Commandes extends ResourceController {
     if($statutVente!=5){
       $conditionStatus = ['status_vente_id'=>$statutVente];
     }
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->findAll();
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all'=> $this->model->selectCount('id')->Where($condition)->Where($conditionStatus)->orderBy('id','DESC')->findAll()[0]->id,
       'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
       'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($conditionStatus,$condition,$conditionLike)
     ]);

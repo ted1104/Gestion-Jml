@@ -176,7 +176,7 @@
 																<div class="row">
 																	<div class="col-md-4">
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}<span>
-																		</div>
+																	</div>
 																	<div class="col-md-6">
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
 																	</div>

@@ -144,6 +144,20 @@
 																<img src="<?=base_url() ?>/public/load/empty.png" >
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
+															<!-- PAGINATION LISTE NORMALE -->
+															<!-- PAGINATION -->
+															<nav aria-label="..." v-if="!isResearchPagination">
+																	<ul class="pagination">
+																		<li class="page-item">
+																			<button class="page-link" @click="_u_previous_page_for_list_achat(get_commande_caissier)">Previous</button>
+																		</li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_caissier(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li class="page-item">
+																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_caissier)">Next</button>
+																		</li>
+																	</ul>
+																</nav>
+																<!-- FIN PAGINATION LISTE NORMALE -->
 															<!-- PAGINATION LORS DE LA RECHERRCHE -->
 															<nav aria-label="..." v-if="isResearchPagination">
 																	<ul class="pagination">
