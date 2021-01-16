@@ -38,8 +38,15 @@
 												<div class="col-md-8 col-lg-8 col-xl-8">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT INTER-DEPOT</h5>
-
+															<div class="row">
+																<h5 class="card-title text-black col-md-7">APPROVISONNEMENT INTER-DEPOT {{dateFilterDisplay}}</h5>
+																<div class="col-md-5">
+																	<div class="pull-right row">
+																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_approvisionnement_inter_depot_admin)"><i class="mdi mdi-search-web"></i> </button>
+																	</div>
+																</div>
+															</div>
                             </div>
 														<div class="table-responsive card-body">
 															<table class="table">
@@ -49,6 +56,7 @@
 																		<th scope="col">Source</th>
 																		<th scope="col">Destination</th>
 																		<th scope="col">Fait par</th>
+																		<th scope="col">Status</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
@@ -58,6 +66,11 @@
 																		<td>{{dt.depots_id_source[0].nom}}</td>
 																		<td>{{dt.depots_id_dest[0].nom}}</td>
 																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
+																		<td>
+																			<span v-if="dt.status_operation==0" class="badge badge-warning">EN ATTENTE</span>
+																			<span v-if="dt.status_operation==1" class="badge badge-success">VALIDE</span>
+																			<span v-if="dt.status_operation==2" class="badge badge-danger">ANNULER</span>
+																		</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>

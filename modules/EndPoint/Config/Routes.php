@@ -88,22 +88,18 @@ $routes->group('api/v1', function($routes){
 
 
 
-
-
-
-
-
-
-
   //3. APPROVISIONNEMENT
   $routes->get('approvisionnement-get-all/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2');
   $routes->get('approvisionnement-get-by-depot/(:num)/(:num)/(:num)','Approvisionnement::approvisionnement_get_by_depot/$1/$2/$3');
   $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
 
-  $routes->get('approvisionnement-inter-depot-get-all/(:num)/(:num)','ApprovisionnementInterDepot::approvisionnementInterDepot_get/$1/$2');
+  $routes->get('approvisionnement-inter-depot-get-all/(:num)/(:num)/(:any)','ApprovisionnementInterDepot::approvisionnementInterDepot_get/$1/$2/$3');
   $routes->post('approvisionnement-inter-depot-create','ApprovisionnementInterDepot::approvisionnementInterDepot_create');
 
-  $routes->get('approvisionnement-inter-depot-get-by-depot/(:num)/(:num)/(:num)','ApprovisionnementInterDepot::approvisionnementInterDepot_get_by_depot/$1/$2/$3');
+  $routes->get('approvisionnement-inter-depot-get-by-depot/(:num)/(:num)/(:num)/(:any)','ApprovisionnementInterDepot::approvisionnementInterDepot_get_by_depot/$1/$2/$3/$4');
+  $routes->get('approvisionnement-inter-depot-validate/(:any)/(:num)/(:num)/validate','ApprovisionnementInterDepot::validateApprovisionnementInterDepot/$1/$2/$3');
+  $routes->post('approvisionnement-annuler','ApprovisionnementInterDepot::annuler_approvisionnement_inter_depot');
+  $routes->post('delete-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_delete_articles');
 
 
 

@@ -1305,6 +1305,7 @@ var vthis = new Vue({
       form.append('depots_id_source',this.dpot_id);
       form.append('depots_id_dest',this.depots_id);
       form.append('users_id',this.users_id);
+      form.append('status_operation',0);
 
         for(var i=0; i< this.tabListData.length; i++){
           form.append('articles_id[]', this.tabListData[i]['id']);
@@ -1337,8 +1338,11 @@ var vthis = new Vue({
             })
     },
     get_historique_approvisionnement_inter_depot_by_depot(limit=this.PerPaged,offset=0, indexPage=0){
-      const newurl = this.url+"approvisionnement-inter-depot-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset;
+      const newurl = this.url+"approvisionnement-inter-depot-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset+"/"+this.dateFilter;
       this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -1355,7 +1359,7 @@ var vthis = new Vue({
             })
     },
     get_historique_approvisionnement_inter_depot_admin(limit=this.PerPaged,offset=0, indexPage=0){
-      const newurl = this.url+"approvisionnement-inter-depot-get-all/"+limit+"/"+offset;
+      const newurl = this.url+"approvisionnement-inter-depot-get-all/"+limit+"/"+offset+"/"+this.dateFilter;
       this.dataToDisplay=[];
       return axios
             .get(newurl,{headers: this.tokenConfig})
@@ -1578,6 +1582,102 @@ var vthis = new Vue({
             console.log(error);
           })
         },
+
+    add_validation_appro_inter_depot(){ //from : 1 faveur ou 2 achat normal
+      const newurl = this.url+"approvisionnement-inter-depot-validate/"+this.password_op+"/"+this.commande_id+"/"+this.users_id+"/validate";
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
+      this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_historique_approvisionnement_inter_depot_by_depot();
+                // if(from == 1){
+                //   this.get_commande_faveur_magazinier(2);
+                // }else {
+                //   this.get_commande_magazinier(2);
+                // }
+
+              this._u_close_mod_form();
+              this.password_op= "";
+              this.isLoadSaveMainButtonModal = false;
+              return;
+            }
+            var err = response.data.message.errors;
+            this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+            this.isLoadSaveMainButtonModal = false;
+          }).catch(error =>{
+            console.log(error);
+          })
+  },
+    add_annuler_approvisionnement(){
+      const newurl = this.url+"approvisionnement-annuler";
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
+      var form = new FormData();
+      form.append('pwd',this.password_op);
+      form.append('iduser',this.users_id);
+      for(var i=0; i< this.checkBoxAchatSelected.length; i++){
+        form.append('idappro[]', this.checkBoxAchatSelected[i]);
+      }
+      this.isLoadSaveMainButtonModal = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_historique_approvisionnement_inter_depot_by_depot();
+                this._u_close_mod_form();
+                this.password_op= "";
+                this.isLoadSaveMainButtonModal = false;
+                this.checkBoxAchatSelected = [];
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    delete_article_approvisionnement_inter_depot(cmd){
+      this.isLoadDelete = true;
+      const newurl = this.url+"delete-article-approvisionnement";
+      var form = new FormData();
+      form.append('idappro',cmd);
+      for(var i=0; i< this.checkBoxArticles.length; i++){
+        form.append('idarticle[]', this.checkBoxArticles[i]);
+    	}
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadDelete = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_historique_approvisionnement_inter_depot_by_depot();
+                this._u_close_mod_form();
+                this._u_reset_checkBoxSelected();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadDelete = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -1925,7 +2025,12 @@ var vthis = new Vue({
             })
     },
     _u_create_line_article_appro_inter_depot(){
-        const newurl = this.url+"articles-search-data-appro-inte-depot/"+this.codeArticle+"/"+this.qte+"/"+this.dpot_id+"/search";
+      const newurl = this.url+"articles-search-data-appro-inte-depot/"+this.codeArticle+"/"+this.qte+"/"+this.dpot_id+"/search";
+
+      if(this.codeArticle ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le champs article ne doit pas être vide'],'alert-danger');
+        return;
+      }
       this.isLoadSaveMainButtonModal = true;
       return axios
             .get(newurl,{headers: this.tokenConfig})
@@ -1989,14 +2094,6 @@ var vthis = new Vue({
       if(from ==1){
         this.articles_id = art.id;
         this.modalTitle = "CONFIGURATION FAVEUR DE L'ARTICLE "+art.nom_article;
-
-
-        //Take last configuration for price
-        // this.qte_decideur_min = 0;
-        // if(art.logic_detail_data.length >0){
-        //   const ind = parseInt(art.logic_detail_data.length -1);
-        //   this.qte_decideur_min = +art.logic_detail_data[ind].qte_decideur_max+1;
-        // }
       }
       if(from ==2){
         this.isActionFaveur = false;
@@ -2008,13 +2105,7 @@ var vthis = new Vue({
         console.log(art);
         return;
       }
-      //
-      // if(from ==3){
-      //   this.isWantBeDeleted = true;
-      //   this.price_id = art.id;
-      //   this.modalTitle = "SUPPRESSION DEFINITIVE DU PRIX DE L'ARTICLE";
-      //   this.styleModal = 'block';
-      // }
+
 
       this.styleModalFaveur = 'block';
       console.log(this.ListPricesArticle);
@@ -2039,6 +2130,10 @@ var vthis = new Vue({
       this.modalTitle = "ANNULER "+this.checkBoxAchatSelected.length+" ACHAT(S)";
       this.styleModal = 'block';
     },
+    _u_open_mod_popup_appro_annulation(){
+      this.modalTitle = "ANNULER "+this.checkBoxAchatSelected.length+" APPROVISIONNEMENT(S)";
+      this.styleModalFaveur = 'block';
+    },
     _u_open_mod_popup_caissier_principal_validation_decaissement(dec){
       console.log("===DECAI===");
       console.log(dec);
@@ -2060,6 +2155,12 @@ var vthis = new Vue({
       if(cmd.depots_id_first_livrer == this.dpot_id){
         this.hasAlreadyDelivered = !this.hasAlreadyDelivered;
       }
+      // console.log(cmd);
+    },
+    _u_open_mod_popup_magaz_validate_appro_inter_depot(cmd,val){
+      this.modalTitle = "VALIDATION DE L'APPROVISIONNEMENT VENANT DU "+cmd.depots_id_source[0].nom+" EN DATE DU "+cmd.date_approvisionnement;
+      this.commande_id = cmd.id;
+      this.styleModal = 'block';
       console.log(cmd);
     },
     _u_open_mod_popup_photo(userid){
@@ -2078,7 +2179,6 @@ var vthis = new Vue({
       this.codeIdArticlePrint = index.id;
       this.detailTab = index;
       this.isShow = !this.isShow;
-
       //pour profile Image admin update
       this.iduserToChangeProfile = index.id;
       // console.log(this.detailTab);
@@ -2180,6 +2280,13 @@ var vthis = new Vue({
       // console.log(this.stateStatus);
       this._u_set_table_title_with_date();
       callbackFunction(this.stateStatus);
+    },
+    _u_formatDateFilterWithoutStatus(callbackFunction){
+      var date = new Date(this.dateFilter);
+      var month = date.getMonth()+1;
+      this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
+      this._u_set_table_title_with_date();
+      callbackFunction();
     },
     _u_formatOnlyDate(date){
       var date = new Date(this.dateFilter);

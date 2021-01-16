@@ -16,6 +16,7 @@ class ApprovisionnementsInterDepotEntity extends Entity{
     'depots_id_source' => null,
     'depots_id_dest' => null,
     'users_id' => null,
+    'status_operation' => null,
     'logic_data_article'=>null,
     'created_at' => null,
     'updated_at' => null,

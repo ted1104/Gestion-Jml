@@ -37,24 +37,45 @@
 
 												<div class="col-md-8 col-lg-8 col-xl-8">
 													<div class="card m-b-30">
-                            <div class="card-header bg-white">
-                                <h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT INTER-DEPOT</h5>
-
-                            </div>
+														<div class="card-header bg-white">
+															<div class="row">
+																<h5 class="card-title text-black col-md-7">APPROVISONNEMENT INTER-DEPOT {{dateFilterDisplay}}</h5>
+																<div class="col-md-5">
+																	<div class="pull-right row">
+																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_approvisionnement_inter_depot_by_depot)"><i class="mdi mdi-search-web"></i> </button>
+																	</div>
+																</div>
+															</div>
+														</div>
 														<div class="table-responsive card-body">
-															<table class="table">
+															<!-- {{checkBoxAchatSelected}} -->
+															<div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
+																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_appro_annulation()"><i class="mdi mdi-delete"></i>Annuler approvisionnement</button>
+															</div>
+															<table class="table margin-top-8">
 																<thead>
 																	<tr class="bg-secondary">
+																		<th>#</th>
 																		<th scope="col">Date</th>
 																		<th scope="col">Source</th>
 																		<th scope="col">Destination</th>
 																		<th scope="col">Fait par</th>
 																		<th scope="col">Type</th>
+																		<th scope="col">Status</th>
+																		<th scope="col">Valider</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
 																<tbody>
+
 																	<tr v-for="(dt, index) in dataToDisplay">
+																		<td>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" name="checkBoxArticles" :id="dt.id" class="custom-control-input" :value="dt.id" v-model="checkBoxAchatSelected" :disabled="dt.status_operation != 0">
+																				<label class="custom-control-label" :for="dt.id"></label>
+																			</div>
+																		</td>
 																		<td>{{dt.date_approvisionnement}}</td>
 																		<td>{{dt.depots_id_source[0].nom}}</td>
 																		<td>{{dt.depots_id_dest[0].nom}}</td>
@@ -63,7 +84,17 @@
 																			<span :class="dt.depots_id_source[0].id == dpot_id?'text-success':'text-danger'">
 																				<i :class="dt.depots_id_source[0].id == dpot_id?'mdi mdi-arrow-right-thick':'mdi mdi-arrow-left-thick'"></i>
 																			</span>
-																	</td>
+																		</td>
+																		<td>
+																			<span v-if="dt.status_operation==0" class="badge badge-warning">EN ATTENTE</span>
+																			<span v-if="dt.status_operation==1" class="badge badge-success">VALIDE</span>
+																			<span v-if="dt.status_operation==2" class="badge badge-danger">ANNULER</span>
+																		</td>
+																		<td>
+																			<button v-if="dt.depots_id_dest[0].id == dpot_id && dt.status_operation ==0" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_validate_appro_inter_depot(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
+
+																			<i v-if="dt.depots_id_source[0].id == dpot_id || dt.status_operation !=0" class='mdi mdi-checkbox-marked-circle-outline'></i>
+																		</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
@@ -100,36 +131,44 @@
 																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
+															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
+																<div class="row">
+																	<!-- <div class="col-md-6">
+																		<button v-if="!isLoadNego" type="button" @click="add_ask_negotiation(detailTab.id)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-call-made mr-2"></i> Negocier</button>
+																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div> -->
+																	<div class="col-md-12 text-right">
+																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
+																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div>
+																</div>
+															</div>
 
 															<!-- {{checkBoxArticles}} -->
 															<div  class="">
 																<div class="row">
 																	<div class="table-responsive container">
-																		<!-- <div class="row">
-																			<div class="col-md-6 col-lg-6 col-xl-6">
-																				<span>Chauffeur : {{detailTab.nom_chauffeur}}</span><br>
-																				<span>Téléphone : {{detailTab.telephone_chauffeur}}</span><br>
-																			</div>
-																			<div class="col-md-6 col-lg-6 col-xl-6">
-																				<span>Plaque : {{detailTab.plaque_vehicule}}</span><br>
-																				<span>Num Bordereau : {{detailTab.numero_bordereau}}</span><br>
-																			</div>
-																		</div> -->
+																		<!-- {{checkBoxArticles}} -->
 																		<table class="table">
 																			<thead>
 																				<tr class="bg-secondary">
+																					<th>#</th>
 																					<th scope="col">code</th>
 																					<th scope="col">Article</th>
 																					<th scope="col">Qte</th>
-
 																				</tr>
 																			</thead>
 																			<tbody>
 																				<tr v-for="(det,i) in detailTab.logic_data_article">
+																					<td>
+																							<div class="custom-control custom-checkbox custom-control-inline">
+																								<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles" :disabled="detailTab.status_operation != 0">
+							                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
+																							</div>
+																					</td>
 																					<td>{{det.articles_id[0].code_article}}</td>
 																					<td>{{det.articles_id[0].nom_article}}</td>
 																					<td>{{det.qte}}</td>
-
 																				</tr>
 																			</tbody>
 																		</table>
@@ -156,4 +195,69 @@
         <!-- End XP Rightbar -->
     </div>
     <!-- End XP Container -->
+
+
+
+
+		<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
+			<div class="modal-dialog" role="document">
+					<div class="modal-content">
+							<div class="modal-header">
+									<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+									<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+									</button>
+							</div>
+							<div class="modal-body">
+								<div class="text-center">
+									<span>Vous êtes sur le point d'approuver un approvisionnement,</span>
+									<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
+									<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+									<div class="form-group col-md-12 text-center">
+										<label for="password_op">Mot de passe *</label>
+										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+									</div>
+									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_appro_inter_depot()" class="btn btn-primary">Confirmer</button>
+									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+								</div>
+								<!-- <div v-if="isNoQuantity" class="text-center">
+									<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
+									<span class="text-danger">
+										Impossible de valider cette commande, car il y a un ou plusieurs articles dont leur quantité ne se trouve pas de votre stock! Veuillez svp consulter le détail de la commande pour plus de precision.
+									</span>
+								</div> -->
+							</div>
+
+					</div>
+			</div>
+	</div>
+
+
+	<!-- ANNULER APPRO POPUP CONFIRMATOION -->
+	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalFaveur}">
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body">
+							<div class="text-center">
+								<span>Attention!! Vous êtes sur le point d'annuler un ou plusieurs approvisionnement(s),</span>
+								<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
+								<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+								<div class="form-group col-md-12 text-center">
+									<label for="password_op">Mot de passe *</label>
+									<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+								</div>
+								<button v-if="!isLoadSaveMainButtonModal" @click="add_annuler_approvisionnement" class="btn btn-primary">Confirmer</button>
+								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+							</div>
+						</div>
+
+				</div>
+		</div>
+</div>
 <?=$this->endSection() ?>

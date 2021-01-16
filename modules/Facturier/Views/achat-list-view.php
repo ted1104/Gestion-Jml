@@ -218,7 +218,6 @@
 																	<div class="col-md-6">
 																		<span>Produit</span><br>
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}</span>
-
 																	</div>
 																	<div class="col-md-2" v-if="stateStatus==1">
 																		<div class="custom-control custom-checkbox custom-control-inline">
@@ -226,7 +225,6 @@
 		                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
 																		</div>
 	                                </div>
-
 																</div>
 																<br>
 																<div class="row">
@@ -262,7 +260,6 @@
         <!-- End XP Rightbar -->
     </div>
     <!-- End XP Container -->
-
 
 		<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
 			<div class="modal-dialog" role="document">

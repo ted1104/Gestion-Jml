@@ -6,6 +6,9 @@ use App\Entities\ApprovisionnementsInterDepotEntity;
 use App\Models\ApprovisionnementsInterDepotDetailModel;
 use App\Models\StockModel;
 use App\Entities\StockEntity;
+use App\Models\UsersAuthModel;
+use CodeIgniter\I18n\Time;
+
 
 
 
@@ -14,6 +17,8 @@ class ApprovisionnementInterDepot extends ResourceController {
   protected $modelName = '\App\Models\ApprovisionnementsInterDepotModel';
   protected $approvisionnementsInterDepotDetailModel = null;
   protected $stockModel = null;
+  protected $usersAuthModel = null;
+
 
 
 
@@ -22,15 +27,19 @@ class ApprovisionnementInterDepot extends ResourceController {
     helper(['global']);
     $this->approvisionnementsInterDepotDetailModel = new ApprovisionnementsInterDepotDetailModel();
     $this->stockModel = new StockModel();
+    $this->usersAuthModel = new UsersAuthModel();
 
   }
-  public function approvisionnementInterDepot_get($limit, $offset){
-    $data = $this->model->orderBy('id','DESC')->findAll($limit,$offset);
+  public function approvisionnementInterDepot_get($limit, $offset,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_approvisionnement'=> $dateFilter];
+    $data = $this->model->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> count($data = $this->model->orderBy('id','DESC')->findAll())
+      'all'=> count($data = $this->model->Where($conditionDate)->orderBy('id','DESC')->findAll())
     ]);
   }
   public function approvisionnementInterDepot_create(){
@@ -67,28 +76,94 @@ class ApprovisionnementInterDepot extends ResourceController {
             'data'=>""
           ]);
         }
-        //UPDATE STOCK IN STOCK DEPOT DESTINATION
-        $conditionDest =[
-          'depot_id'=>$this->request->getPost('depots_id_dest'),
-          'articles_id'=>$article[$i]
-        ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
-        $initqteDest = $this->stockModel->getWhere($conditionDest)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
-        $QteDest = $initqteDest->qte_stock + $qte[$i];//ADDITION ANCIENNE + NOUVELLE
-        $QteVirtuelDest = $initqteDest->qte_stock_virtuel + $qte[$i];
+      }
 
-        //UPDATE STOCK IN STOCK DEPOT DESTINATION
-        $conditionSource =[
-          'depot_id'=>$this->request->getPost('depots_id_source'),
-          'articles_id'=>$article[$i]
-        ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
-        $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
-        $QteSource = $initqteSource->qte_stock - $qte[$i];//ADDITION ANCIENNE + NOUVELLE
-        $QteVirtuelSource = $initqteSource->qte_stock_virtuel - $qte[$i];
-        // return $this->respond([$initqte]);
+      $status = 200;
+      $message = [
+        'success' => 'Approvisionnement reussi mais reste en attente de validation',
+        'errors' => null
+      ];
+      $data = null;
+    }
+    $this->model->commitTrans();
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> $data
+     ]);
+  }
+  public function approvisionnementInterDepot_get_by_depot($idDepot,$limit, $offset,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_approvisionnement'=> $dateFilter];
+    $conditionSource = [
+      'depots_id_source'=>$idDepot,
+      'date_approvisionnement'=> $dateFilter
+    ];
+    $conditionDest= [
+      'depots_id_dest'=>$idDepot,
+      'date_approvisionnement'=> $dateFilter
+    ];
+    $where = "(depots_id_dest='".$idDepot."' or depots_id_source='".$idDepot."') and date_approvisionnement='".$dateFilter."'";
 
-        $updStockDest = $this->stockModel->update($initqteDest->id,['qte_stock'=>$QteDest,'qte_stock_virtuel'=>$QteVirtuelDest]);
 
-        $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource,'qte_stock_virtuel'=>$QteVirtuelSource]);
+    $data = $this->model->Where($where)->orderBy('id','DESC')->findAll($limit,$offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'all'=> count($data = $this->model->Where($conditionSource)->Where($conditionDest)->orderBy('id','DESC')->findAll())
+    ]);
+  }
+  public function validateApprovisionnementInterDepot($pwd,$idAppro,$iduser){
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+    }else{
+      $infoAppro = $this->model->find($idAppro);
+      $depot_source = $infoAppro->depots_id_source[0]->id;
+      $depot_dest = $infoAppro->depots_id_dest[0]->id;
+
+      $data = ['status_operation'=>1];
+      if(!$updateData = $this->model->update($idAppro,$data)){
+        $status = 400;
+        $message = [
+          'success' => null,
+          'errors' => $this->model->erros()
+        ];
+        $data = "";
+      }else{
+        $allArt = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$idAppro)->findAll();
+        foreach ($allArt as $key => $value) {
+          //UPDATE STOCK IN STOCK DEPOT DESTINATION
+          $conditionDest =[
+            'depot_id'=>$depot_dest,
+            'articles_id'=>$value->articles_id[0]->id
+          ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+          $initqteDest = $this->stockModel->getWhere($conditionDest)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+
+          $QteDest = $initqteDest->qte_stock +$value->qte;//ADDITION ANCIENNE + NOUVELLE
+          $QteVirtuelDest = $initqteDest->qte_stock_virtuel + $value->qte;
+
+          //UPDATE STOCK IN STOCK DEPOT DESTINATION
+          $conditionSource =[
+            'depot_id'=>$depot_source,
+            'articles_id'=>$value->articles_id[0]->id
+          ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+          $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+          $QteSource = $initqteSource->qte_stock - $value->qte;//ADDITION ANCIENNE + NOUVELLE
+          $QteVirtuelSource = $initqteSource->qte_stock_virtuel - $value->qte;
+          // return $this->respond([$initqte]);
+
+          $updStockDest = $this->stockModel->update($initqteDest->id,['qte_stock'=>$QteDest,'qte_stock_virtuel'=>$QteVirtuelDest]);
+
+          $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource,'qte_stock_virtuel'=>$QteVirtuelSource]);
+
+        }
 
         if(!$updStockDest and !$updStockSource){
           $this->model->RollbackTrans();
@@ -102,29 +177,104 @@ class ApprovisionnementInterDepot extends ResourceController {
             'data'=> $dtStock
           ]);
         }
-      }
 
-      $status = 200;
-      $message = [
-        'success' => 'Le dépôt a été bien approvisionné',
-        'errors' => null
-      ];
-      $data = null;
+        $status = 200;
+        $message = [
+          'success' => 'L\'approvisionnement a été validé avec succès',
+          'errors' => null
+        ];
+        $data = null;
+      }
     }
-    $this->model->commitTrans();
-     return $this->respond([
-       'status' => $status,
-       'message' =>$message,
-       'data'=> $data
-     ]);
-  }
-  public function approvisionnementInterDepot_get_by_depot($idDepot,$limit, $offset){
-    $data = $this->model->Where('depots_id_source',$idDepot)->orWhere('depots_id_dest', $idDepot)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
-      'status' => 200,
-      'message' => 'success',
-      'data' => $data,
-      'all'=> count($data = $this->model->Where('depots_id_source',$idDepot)->orWhere('depots_id_dest', $idDepot)->orderBy('id','DESC')->findAll())
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
+  public function annuler_approvisionnement_inter_depot(){
+    $pwd = $this->request->getPost('pwd');
+    $idappro = $this->request->getPost('idappro');
+    $iduser = $this->request->getPost('iduser');
+
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+    }else{
+      //SUITES VALIDATIONS
+      $nbrAnnule = 1;
+      for ($i=0; $i < count($idappro); $i++) {
+        $data = ['status_operation'=>2];
+        if(!$updateData = $this->model->update($idappro[$i],$data)){
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => $this->model->erros()
+          ];
+          $data = "";
+        }else {
+            $status = 200;
+            $message = [
+              'success' => $nbrAnnule++ .' Approvisionnement(s) annulé(s) avec succès',
+              'errors' => null
+            ];
+            $data = "";
+        }
+      }
+    }
+    // $this->model->RollbackTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+  public function approvisionnement_delete_articles(){
+    $idappro = $this->request->getPost('idappro');
+    $idarticle = $this->request->getPost('idarticle');
+    $getAllarticleDeLAppro = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id', $idappro)->findAll();
+    if(count($idarticle) < count($getAllarticleDeLAppro)){
+    for ($i=0; $i < count($idarticle); $i++) {
+        $condition = [
+          'approvisionnement_id' =>$idappro,
+          'articles_id'=>$idarticle[$i]
+        ];
+        $data = $this->approvisionnementsInterDepotDetailModel->getWhere($condition)->getRow();
+        if($this->approvisionnementsInterDepotDetailModel->delete(['id' =>$data->id ])){
+          $textArt = $i > 1 ? 'ont':'a';
+          $status = 200;
+          $message = [
+            'success' => ($i+1).' article(s) de cet approvisionnement '.$textArt.' été supprimer avec succès',
+            'errors' => null
+          ];
+          $data = "";
+
+        }else{
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => "Echec de la suppression d'article"
+          ];
+          $data = "";
+        }
+
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Impossible de supprimer tous les articles de l\'approvisionnement!']
+      ];
+      $data = "";
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
     ]);
   }
 }
