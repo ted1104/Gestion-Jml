@@ -28,65 +28,28 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>LISTE DEMANDE DE DECAISSEMENT CAISSIER ET DECAISSEMENT</h4>
+													 <h4>HISTORIQUE ENCAISSEMENT INTERNE</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
-												<div class="col-md-4 col-lg-4 col-xl-4 ">
-													<div class="card m-b-30">
-                            <div class="card-header bg-white">
-                                <h5 class="card-title text-black">Informations relatives au decaissement Externe</h5>
-                            </div>
-                            <div class="card-body">
-																	<div class="form-group">
-																		<label for="destination">Destination</label>
-																		<select class="form-control" v-model="destination">
-																			<option value="" disabled>--Choisir Destination--</option>
-																			<option value="1">BANQUE</option>
-																			<option value="2">ACHAT PRODUITS</option>
-																			<option value="3">AUTRES</option>
-																		</select>
-																	</div>
-                                  <div class="form-group">
-                                    <label for="nom_article">Montant *</label>
-                                    <input type="text" class="form-control" v-model="montant">
-                                  </div>
-
-																	<div class="form-group">
-                                    <label for="description">Note *</label>
-                                    <textarea class="form-control" name="inputTextarea" id="description" rows="3" v-model="note"></textarea>
-                                  </div>
-                              		<button v-if="!isLoadSaveMainButton" @click="add_decaissement_externe" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-                            </div>
-                        </div>
-												</div>
-												<div class="col-md-8 col-lg-8 col-xl-8">
+												<div class="col-md-10 col-lg-10 col-xl-10">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-                              <h5 class="card-title text-black">{{isDecaissementExterne?'Décaissement Externe':'Décaissement Interne'}}</h5>
+                              <h5 class="card-title text-black">ENCAISSEMENT INTERNE {{dateFilterDisplay}}</h5>
 															<div class="">
-																<div @click="get_decaisssement_caissier_principale(2)" class="btn badge-warning padding-4" :id="!isDecaissementExterne?'border-menu':''">
-																		Decaissement Interne
-																</div>
-																<div @click="get_decaisssement_externe" class="btn btn-info padding-4" :id="isDecaissementExterne?'border-menu':''">
-																		Decaissement Externe
-																</div>
 																<div class="pull-right row">
 																	<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
 																	<!-- BOUTTON DECAISSEMENT INTERNTE -->
-																	<button v-if="!isDecaissementExterne" class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_caissier_principale)"><i class="mdi mdi-search-web"></i></button>
+																	<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_histo_interne_admin)"><i class="mdi mdi-search-web"></i></button>
 
-																	<!-- BOUTTON DECAISSEMENT EXTERNE -->
-																	<button v-if="isDecaissementExterne" class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_externe)"><i class="mdi mdi-search-web"></i> </button>
 																</div>
 															</div>
                           </div>
 
                           <div class="card-body">
-                              <div class="table-responsive" v-if="!isDecaissementExterne">
+                              <div class="table-responsive">
                                 <table class="table" >
                                   <thead>
                                     <tr class="bg-secondary">
@@ -94,8 +57,9 @@
                                       <th scope="col">Caissier</th>
 																			<th scope="col">Caissier Principal</th>
                                       <th scope="col">Montant</th>
+																			<th scope="col">Note</th>
                                       <th scope="col">Status</th>
-																			<th scope="col">Valider</th>
+
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -104,12 +68,9 @@
                                       <td>{{dt.users_id_from.nom+' '+dt.users_id_from.prenom}}</td>
 																			<td>{{dt.users_id_dest.nom+' '+dt.users_id_dest.prenom}}</td>
 																			<td>{{dt.montant}} USD</td>
+																			<td>{{dt.note}}</td>
 																			<td>
 																					<span :class="dt.status_operation==0?'badge badge-warning':'badge badge-success'">{{dt.status_operation==0?'EN ATTENTE':'VALIDEE'}}</span>
-																			</td>
-																			<td>
-																				<button v-if="dt.status_operation==0" class='btn btn-round btn-success' @click="_u_open_mod_popup_caissier_principal_validation_decaissement(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
-																				<i v-if="dt.status_operation==1" class='mdi mdi-checkbox-marked-circle-outline'>
 																			</td>
 
                                     </tr>
@@ -123,8 +84,8 @@
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
 															</div>
-															<div class="table-responsive" v-if="isDecaissementExterne">
-																<!-- DECAISSEMENT EXTERNE TABLE -->
+															<!-- <div class="table-responsive" v-if="isDecaissementExterne">
+																DECAISSEMENT EXTERNE TABLE
 																<table class="table" >
                                   <thead>
                                     <tr class="bg-secondary">
@@ -154,7 +115,7 @@
 																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
-                              </div>
+                              </div> -->
                           </div>
                         </div>
 												</div>

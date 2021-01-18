@@ -12,11 +12,12 @@ $routes->get('admin-stock','Approv::stockDepots',['filter' => 'isLoggedIn']);
 $routes->get('admin-config-depot','Dashboard::config_depot',['filter' => 'isLoggedIn']);
 $routes->get('admin-config-etat-critique','Dashboard::config_critique',['filter' => 'isLoggedIn']);
 $routes->get('admin-caisse','Dashboard::getCaissierMontant',['filter' => 'isLoggedIn']);
-$routes->get('admin-decaissement','Dashboard::getDecaissement',['filter' => 'isLoggedIn']);
+$routes->get('admin-encaissement-interne','Dashboard::getEncaissementInterne',['filter' => 'isLoggedIn']);
+$routes->get('admin-decaissement-externe','Dashboard::getDecaissementInterne',['filter' => 'isLoggedIn']);
 $routes->get('admin-add-users','Dashboard::createUsers',['filter' => 'isLoggedIn']);
 $routes->get('admin-list-users','Dashboard::getAllUsers',['filter' => 'isLoggedIn']);
 $routes->get('admin-histo-appro-inter-depot','Approv::historiqueInterDepot',['filter' => 'isLoggedIn']);
-$routes->get('admin-encaissement','Dashboard::getEncaissementExterne',['filter' => 'isLoggedIn']);
+$routes->get('admin-encaissement-externe','Dashboard::getEncaissementExterne',['filter' => 'isLoggedIn']);
 
 
 

@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>HISTORIQUE DECAISSEMENT INTERNE ET EXTERNE</h4>
+													 <h4>HISTORIQUE DECAISSEMENT EXTERNE</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -37,62 +37,20 @@
 												<div class="col-md-10 col-lg-10 col-xl-10">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-                              <h5 class="card-title text-black">{{isDecaissementExterne?'Décaissement Externe':'Décaissement Interne'}}</h5>
+                                <h5 class="card-title text-black">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
 															<div class="">
-																<div @click="get_decaisssement_histo_interne_admin()" class="btn badge-warning padding-4" :id="!isDecaissementExterne?'border-menu':''">
-																		Decaissement Interne
-																</div>
-																<div @click="get_decaisssement_externe" class="btn btn-info padding-4" :id="isDecaissementExterne?'border-menu':''">
-																		Decaissement Externe
-																</div>
 																<div class="pull-right row">
 																	<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																	<!-- BOUTTON DECAISSEMENT INTERNTE -->
-																	<button v-if="!isDecaissementExterne" class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_histo_interne_admin)"><i class="mdi mdi-search-web"></i></button>
 
 																	<!-- BOUTTON DECAISSEMENT EXTERNE -->
-																	<button v-if="isDecaissementExterne" class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_externe_admin)"><i class="mdi mdi-search-web"></i> </button>
+																	<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_externe_admin)"><i class="mdi mdi-search-web"></i> </button>
 																</div>
 															</div>
                           </div>
 
                           <div class="card-body">
-                              <div class="table-responsive" v-if="!isDecaissementExterne">
-                                <table class="table" >
-                                  <thead>
-                                    <tr class="bg-secondary">
-                                      <th scope="col">Date</th>
-                                      <th scope="col">Caissier</th>
-																			<th scope="col">Caissier Principal</th>
-                                      <th scope="col">Montant</th>
-																			<th scope="col">Note</th>
-                                      <th scope="col">Status</th>
 
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr v-for="(dt, index) in dataToDisplay">
-                                      <td>{{dt.date_decaissement}}</td>
-                                      <td>{{dt.users_id_from.nom+' '+dt.users_id_from.prenom}}</td>
-																			<td>{{dt.users_id_dest.nom+' '+dt.users_id_dest.prenom}}</td>
-																			<td>{{dt.montant}} USD</td>
-																			<td>{{dt.note}}</td>
-																			<td>
-																					<span :class="dt.status_operation==0?'badge badge-warning':'badge badge-success'">{{dt.status_operation==0?'EN ATTENTE':'VALIDEE'}}</span>
-																			</td>
-
-                                    </tr>
-                                  </tbody>
-                                </table>
-																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
-																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
-																</div>
-																<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																	<img src="<?=base_url() ?>/public/load/empty.png" >
-																	<h6 class="text-danger">Données vide!!</h6>
-																</div>
-															</div>
-															<div class="table-responsive" v-if="isDecaissementExterne">
+															<div class="table-responsive">
 																<!-- DECAISSEMENT EXTERNE TABLE -->
 																<table class="table" >
                                   <thead>

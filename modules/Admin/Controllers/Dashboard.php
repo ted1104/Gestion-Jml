@@ -27,11 +27,11 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\users\caissiers-list-view', $data);
   }
-  public function getDecaissement(){
+  public function getEncaissementInterne(){
     $data = [
       'titlePage' => 'Decaissement Historique: Administration'
     ];
-    echo view($this->linkMod.'\caisse\decaissement-historique-view', $data);
+    echo view($this->linkMod.'\caisse\encaissement-interne-historique-view', $data);
   }
   public function createUsers(){
     $data = [
@@ -49,7 +49,13 @@ class Dashboard extends BaseController {
     $data = [
       'titlePage' => 'Encaissement Externe Historique: Administration'
     ];
-    echo view($this->linkMod.'\caisse\encaissement-historique-view', $data);
+    echo view($this->linkMod.'\caisse\encaissement-externe-historique-view', $data);
+  }
+  public function getDecaissementInterne(){
+    $data = [
+      'titlePage' => 'Decaissement Historique: Administration'
+    ];
+    echo view($this->linkMod.'\caisse\decaissement-externe-historique-view', $data);
   }
 
 

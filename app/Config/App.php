@@ -21,7 +21,7 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
-	public $baseURL = 'http://localhost:8080/';
+	public $baseURL;
 
 	/*
 	|--------------------------------------------------------------------------
@@ -265,4 +265,17 @@ class App extends BaseConfig
 	|   - http://www.w3.org/TR/CSP/
 	*/
 	public $CSPEnabled = false;
+
+	public function __construct(){
+		if($_SERVER['SERVER_NAME']== 'localhost' OR $_SERVER['SERVER_NAME']== '127.0.0.1'){
+			$this->baseURL = 'http://127.0.0.1/GestionBoutique';
+		}else{
+			if($_SERVER['SERVER_NAME']=='jml.local'){
+				$this->baseURL = 'http://jml.local';
+			}else{
+				$this->baseURL = 'http://169.255.189.89';
+			}
+
+		}
+	}
 }

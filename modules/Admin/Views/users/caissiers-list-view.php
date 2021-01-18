@@ -65,10 +65,11 @@
 																			<td>CAISSIER {{dt.is_main==1?'PRINCIPAL':'SECONDAIRE'}}</td>
 																			<td>{{dt.logic_montant_caisse}} USD</td>
 																			<td>
-																				<a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i></a>
-																				<a href="#" v-if="checkBoxArticles.length>0"  class='btn btn-round btn-info' ><i class="mdi mdi-circle-edit-outline text-white"></i></a>
-																			</td>
+																				<!-- <a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i></a>
+																				<a href="#" v-if="checkBoxArticles.length>0"  class='btn btn-round btn-info' ><i class="mdi mdi-circle-edit-outline text-white"></i></a> -->
 
+																				<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																			</td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -82,6 +83,49 @@
                               </div>
                           </div>
                         </div>
+												</div>
+
+
+												<div class="col-md-4 col-lg-4 col-xl-4">
+													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
+														<div class="container" v-if="!isShowBlocHistoFactureStatus">
+															<div class="row">
+																<div class="col-md-10">
+																	<h5 class="card-title">DETAIL OPERATIONS </h5>
+																	<div class="text-center">
+																		<p>{{detailTab.nom+' '+detailTab.prenom}}</p>
+																	</div>
+																</div>
+																<div class="col-md-2">
+																	<i class="mdi mdi-close-circle  text-right text-danger cursor" @click="isShow=!isShow"></i>
+																</div>
+																<div class="table-responsive">
+																	<div class="container">
+																		<table class="table">
+																				<tr>
+																					<td>Achats</td>
+																					<td>#</td>
+																				</tr>
+																				<tr>
+																					<td>Encaissement Interne</td>
+																					<td>#</td>
+																				</tr>
+																				<tr>
+																					<td>Encaissement Externe</td>
+																					<td>#</td>
+																				</tr>
+																				<tr>
+																					<td>Decaissement</td>
+																					<td>#</td>
+																				</tr>
+																		</table>
+																	</div>
+																</div>
+															</div>
+
+														</div>
+
+													</div>
 												</div>
 											</div>
                     </div>

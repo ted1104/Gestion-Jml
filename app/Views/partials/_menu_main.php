@@ -60,8 +60,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-caisse') ?>">Caissiers</a></li>
-                      <li><a href="<?=base_url('admin-decaissement') ?>">Décaissement</a></li>
-                      <li><a href="<?=base_url('admin-encaissement') ?>">Encaissement <span class="badge badge-danger">NEW</span></a></li>
+                      <li><a href="<?=base_url('admin-encaissement-interne') ?>">Encaissement interne</a></li>
+                      <li><a href="<?=base_url('admin-encaissement-externe') ?>">Encaissement Externe</a></li>
+                      <li><a href="<?=base_url('admin-decaissement-externe') ?>">Decaissement Externe</a></li>
                       <!-- <li><a href="table-editable.html">Editable Table</a></li>
                       <li><a href="table-rwdtable.html">RWD Table</a></li> -->
                   </ul>
@@ -130,7 +131,7 @@
                 <li>
                     <a href="<?=base_url('caissier-encaissement-externe') ?>">
                         <i class="mdi mdi-email"></i><span>G-Encaissement</span>
-                        <span class="badge badge-danger">NEW</span>
+
                     </a>
                 </li>
               <?php endif; ?>

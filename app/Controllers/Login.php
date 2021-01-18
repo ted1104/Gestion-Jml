@@ -10,6 +10,7 @@ class Login extends BaseController {
     $this->title = 'Login';
   }
   public function index(){
+    
     $data = [
       'titlePage' => $this->title,
     ];

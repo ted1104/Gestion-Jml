@@ -24,6 +24,7 @@
                               </h3>
 															<div class="text-center">
 																<span >Version : 1.0</span>
+																<?=$_SERVER['SERVER_NAME'] ?>
 															</div>
                               <div class="p-3">
                                   <form action="<?=base_url('login') ?>" autocomplete="off" method="POST">

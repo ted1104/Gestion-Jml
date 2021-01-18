@@ -5,7 +5,8 @@ var vthis = new Vue({
   },
   data () {
     return {
-      url : 'http://127.0.0.1/GestionBoutique/api/v1/',
+      // urlBase : "",
+      url : "",
       //url : 'http://172.18.0.11/api/v1/',
       tokenConfig : {
         'authorization' : '3bacb9ec-9fbc-4442-ab76-3a6e35b0a627',
@@ -215,10 +216,14 @@ var vthis = new Vue({
   },
 
   created () {
+    this._u_set_base_url();
     this._u_fx_to_load_router();
     this._u_get_code_facture();
     this._u_get_today();
     this._u_fx_get_montant();
+
+
+
 
     // alert(this.dpot_id);
 
@@ -2181,7 +2186,7 @@ var vthis = new Vue({
       this.isShow = !this.isShow;
       //pour profile Image admin update
       this.iduserToChangeProfile = index.id;
-      // console.log(this.detailTab);
+      console.log(this.detailTab);
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
@@ -2511,10 +2516,17 @@ var vthis = new Vue({
      formData.append('is_central', this.RadioCheckedIsMain);
      return formData;
    },
+    _u_set_base_url(){
+      if(window.location.host==='127.0.0.1' || window.location.host==='localhost'){
+        this.url = 'http://'+window.location.host+'/GestionBoutique/api/v1/';
+      }else{
+        this.url = 'http://'+window.location.host+'/api/v1/';
+      }
+    },
     _u_fx_to_load_router(){
     let pth = window.location.pathname.split('/');
     //pth = pth.split(',');
-    console.log(pth);
+    console.log(window.location.host);
     if(pth[2] ==='admin-add-article' || pth[2] ==='admin-list-article'){
       this.get_article();
     }
@@ -2579,7 +2591,7 @@ var vthis = new Vue({
     if(pth[2]=='admin-caisse' || pth[2]=='caissier-list-caissier'){
       this.get_caissiers();
     }
-    if(pth[2]=='admin-decaissement'){
+    if(pth[2]=='admin-encaissement-interne'){
       this.get_decaisssement_histo_interne_admin();
     }
     if(pth[2]=='admin-add-users'){
@@ -2598,9 +2610,12 @@ var vthis = new Vue({
       this.stateStatus = 1;
       this.get_encaisssement_externe(this.stateStatus);
     }
-    if(pth[2] == 'admin-encaissement'){
+    if(pth[2] == 'admin-encaissement-externe'){
       this.stateStatus = null;
       this.get_encaisssement_externe(this.stateStatus);
+    }
+    if(pth[2] = 'admin-decaissement-externe'){
+      this.get_decaisssement_externe_admin();
     }
 
 
