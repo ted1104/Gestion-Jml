@@ -17,7 +17,7 @@ class PdfGenerate extends BaseController {
   public function index($code){
     $data = $this->commande->find($code);
     // echo "<pre>";
-    // print_r($data->payer_a[0]->nom);
+    // print_r($data->logic_somme);
     // echo "</pre>";
     $this->pdf = new FPDF("L","pt", array(300,300));
     $this->pdf->SetFont('Helvetica','B',8);
@@ -29,6 +29,7 @@ class PdfGenerate extends BaseController {
     // $this->pdf->Ln();
     $this->pdf->Cell(190,10,utf8_decode('Dépôt : '.$data->depots_id[0]->nom),0,1,'C');
     $this->pdf->Cell(190,10,utf8_decode('Caissier : '.$data->payer_a[0]->nom.' '.$data->payer_a[0]->prenom),0,1,'C');
+    $this->pdf->Cell(190,10,utf8_decode('Montant Total : '.$data->logic_somme.' USD'),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',20);
     $this->pdf->Cell(190,40,$data->numero_commande,0,1,'C');
     $this->pdf->Ln();
