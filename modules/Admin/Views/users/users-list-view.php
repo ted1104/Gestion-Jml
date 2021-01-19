@@ -120,6 +120,8 @@
 																		<span>Nom : {{detailTab.nom}} {{detailTab.prenom}}</span><br>
 																		<span>Tél : {{detailTab.tel}}</span><br>
 																		<span>Profile : {{detailTab.logic_role_depot.role[0].description}} {{detailTab.is_main==1?'PRINCIPAL':'SECONDAIRE'}}</span><br>
+
+																		<span>Username : {{detailTab.logic_auth.username}}</span><br>
 																		<span>Lieu : {{detailTab.logic_role_depot.depot.nom}}</span><br>
 																		<span>Naissance : {{detailTab.dob}}</span><br>
 																		<span>Debut service : {{detailTab.date_debut_service}}</span><br>
