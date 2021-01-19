@@ -991,6 +991,7 @@ var vthis = new Vue({
     },
     get_historique_approvisionnement(limit=this.PerPaged,offset=0, indexPage=0){
       const newurl = this.url+"approvisionnement-get-all/"+limit+"/"+offset;
+      this.isNoReturnedData = false;
       this.dataToDisplay=[];
       return axios
             .get(newurl,{headers: this.tokenConfig})
@@ -999,6 +1000,9 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
               // console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
@@ -1006,6 +1010,7 @@ var vthis = new Vue({
     },
     get_historique_approvisionnement_by_depot(limit=this.PerPaged,offset=0, indexPage=0){
       const newurl = this.url+"approvisionnement-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset;
+      this.isNoReturnedData = false;
       this.dataToDisplay=[];
       return axios
             .get(newurl,{headers: this.tokenConfig})
@@ -1349,6 +1354,7 @@ var vthis = new Vue({
     },
     get_historique_approvisionnement_inter_depot_by_depot(limit=this.PerPaged,offset=0, indexPage=0){
       const newurl = this.url+"approvisionnement-inter-depot-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset+"/"+this.dateFilter;
+      this.isNoReturnedData = false;
       this.dataToDisplay=[];
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -1371,6 +1377,7 @@ var vthis = new Vue({
     get_historique_approvisionnement_inter_depot_admin(limit=this.PerPaged,offset=0, indexPage=0){
       const newurl = this.url+"approvisionnement-inter-depot-get-all/"+limit+"/"+offset+"/"+this.dateFilter;
       this.dataToDisplay=[];
+      this.isNoReturnedData = false;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -2669,7 +2676,7 @@ var vthis = new Vue({
       this.stateStatus = null;
       this.get_encaisssement_externe(this.stateStatus);
     }
-    if(pth[2] = 'admin-decaissement-externe'){
+    if(pth[2] == 'admin-decaissement-externe'){
       this.get_decaisssement_externe_admin();
     }
   }

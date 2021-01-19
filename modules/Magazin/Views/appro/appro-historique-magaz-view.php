@@ -73,11 +73,11 @@
 															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement_by_depot)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement_by_depot(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement_by_depot)">Next</button>
                                     </li>
                                   </ul>
                                 </nav>
