@@ -161,6 +161,7 @@
 																			<th scope="col">PU</th>
 																			<th scope="col">PT</th>
 																			<th scope="col">Faveur</th>
+																			<th scope="col">Stock</th>
 																			<th scope="col">Action</th>
 																		</tr>
 																	</thead>
@@ -173,6 +174,7 @@
 																			<!-- <td>{{dt.interval}}</td> -->
 																			<td>{{parseFloat(dt.prix_unit) * dt.qte}}</td>
 																			<td><span :class="dt.isfaveur == 1?'text-success':'text-danger'">{{dt.isfaveur == 1?'Oui':'Non'}}</span></td>
+																			<td>{{dt.qteStock}}</td>
 																			<td><button  class="btn btn-round btn-danger" @click="_u_remove_line_list_art(index)"><i class="mdi mdi-delete-sweep" ></i></button></td>
 																		</tr>
 																	</tbody>
@@ -254,14 +256,14 @@
 															</div>
 
 															<!-- {{checkBoxArticles}} -->
-															<div  class="">
+															<div  class="container">
 																<div class="row">
 																	<table class="table">
-																		<thead>
-																			<tr>
+																		<thead >
+																			<tr class="bg-secondary">
 																				<th scope="col">code</th>
 																				<th scope="col">Article</th>
-																				<!-- <th scope="col">Qte</th> -->
+																				<th scope="col">Qte Virt</th>
 																				<th scope="col">Etat</th>
 
 																			</tr>
@@ -270,7 +272,7 @@
 																			<tr v-for="(det,i) in detailTab.logic_article_stock">
 																				<td>{{det.articles_id[0].code_article}}</td>
 																				<td>{{det.articles_id[0].nom_article}}</td>
-																				<!-- <td>{{det.qte_stock}}</td> -->
+																				<td>{{det.qte_stock_virtuel}}</td>
 																				<td>
 																					<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
 																				</td>

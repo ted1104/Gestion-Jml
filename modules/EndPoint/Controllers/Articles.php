@@ -233,6 +233,7 @@ class Articles extends ResourceController {
                      'qte' => $Qte,
                      'prix_unit' =>$PU,
                      'interval' => $interval,
+                     'qteStock' => $initqte->qte_stock_virtuel
 
                    ];
                  }
