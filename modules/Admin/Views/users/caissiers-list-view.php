@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-8 col-lg-8 col-xl-8">
+												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8':'col-md-12'">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
 														<div class="row">
@@ -58,7 +58,7 @@
 																		</tr>
 																	</thead>
 																	<tbody>
-																		<tr v-for="(dt, index) in caissierList">
+																		<tr v-for="(dt, index) in caissierList" :class="currentLineSelectedInList==index?'bg-light':''">
 																			<th>{{dt.nom}}</th>
 																			<td>{{dt.prenom}}</td>
 																			<td>{{dt.sexe}}</td>
@@ -68,7 +68,7 @@
 																				<!-- <a href="#"  class='btn btn-round btn-secondary' ><i class='mdi mdi-eye-outline'></i></a>
 																				<a href="#" v-if="checkBoxArticles.length>0"  class='btn btn-round btn-info' ><i class="mdi mdi-circle-edit-outline text-white"></i></a> -->
 
-																				<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																				<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																			</td>
 																		</tr>
 																	</tbody>
@@ -86,7 +86,7 @@
 												</div>
 
 
-												<div class="col-md-4 col-lg-4 col-xl-4">
+												<div v-if="isShow" :class="isShow ? 'col-md-4 col-lg-4 col-xl-4':''">
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container" v-if="!isShowBlocHistoFactureStatus">
 															<div class="row">

@@ -213,6 +213,9 @@ var vthis = new Vue({
       qte_restaurer : "",
       qte_restaurer_init : "",
 
+      //SLECTIONNER LIGNE QUI EST VISIBLE
+      currentLineSelectedInList : -1,
+
 
 
 
@@ -993,6 +996,10 @@ var vthis = new Vue({
       const newurl = this.url+"approvisionnement-get-all/"+limit+"/"+offset;
       this.isNoReturnedData = false;
       this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      //Reset la partie selected coloree
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -1012,6 +1019,9 @@ var vthis = new Vue({
       const newurl = this.url+"approvisionnement-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset;
       this.isNoReturnedData = false;
       this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -1378,6 +1388,9 @@ var vthis = new Vue({
       const newurl = this.url+"approvisionnement-inter-depot-get-all/"+limit+"/"+offset+"/"+this.dateFilter;
       this.dataToDisplay=[];
       this.isNoReturnedData = false;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -2242,13 +2255,16 @@ var vthis = new Vue({
       this.date_approvisionnement = currentDateWithFormat;
       this.date_vente = currentDateWithFormat;
     },
-    _u_see_detail_tab(index){
-      this.codeIdArticlePrint = index.id;
-      this.detailTab = index;
+    _u_see_detail_tab(data, indLine=null){
+      this.codeIdArticlePrint = data.id;
+      this.detailTab = data;
       this.isShow = !this.isShow;
       //pour profile Image admin update
-      this.iduserToChangeProfile = index.id;
-      console.log(this.detailTab);
+      this.iduserToChangeProfile = data.id;
+      // console.log(this.detailTab);
+      if(indLine !=null){
+        this.currentLineSelectedInList = indLine;
+      }
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
@@ -2294,6 +2310,7 @@ var vthis = new Vue({
       // this.messageErrorBottom =false;
     },
     _u_fx_generate_pagination(totalRecords){
+      this.currentLineSelectedInList = -1;
       this.pageNumber = Math.ceil(parseInt(totalRecords) / parseInt(this.PerPaged));
       for (var i = 1; i <= this.pageNumber; i++) {
         var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
@@ -2302,6 +2319,7 @@ var vthis = new Vue({
           "offset":parseInt(offset)
         }
         this.paginationTab.push(this.paginationTabIn);
+
       }
       // console.log(this.paginationTab);
     },

@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8':'col-md-12'">
+												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8 u-transition':'col-md-12 u-transition'">
                         <!-- <div class=""> -->
                           <div class="card">
                             <div class="card-header bg-white">
@@ -57,7 +57,7 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(det,i) in dataToDisplay">
+																	<tr v-for="(det,i) in dataToDisplay" :class="currentLineSelectedInList==i?'bg-light':''">
 																		<td>{{det.code_article}}</td>
 																		<td>{{det.nom_article}}</td>
 																		<td>{{det.description}}</td>
@@ -71,7 +71,7 @@
                                       <button class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_restaure_pv(det,2)"><i class='mdi mdi-restore'></i> </button>
                                     </td>
                                     <td>
-                                      <button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(det)"><i class="mdi mdi-eye-outline" ></i></button>
+                                      <button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(det,i)"><i class="mdi mdi-eye-outline" ></i></button>
                                     </td>
 
 																	</tr>

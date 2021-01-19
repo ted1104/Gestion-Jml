@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-7 col-lg-7 col-xl-7">
+												<div :class="isShow ? 'col-md-7 col-lg-7 col-xl-7':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT EFFECTUES</h5>
@@ -52,11 +52,11 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(dt, index) in dataToDisplay">
-																		<td>{{dt.date_approvisionnement}}</td>
+																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
+																		<td>{{dt.date_approvisionnement}}-{{index}}</td>
 																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
-																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
+																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -85,8 +85,8 @@
                         </div>
 												</div>
 
-												<div class="col-md-5 col-lg-5 col-xl-5">
-													<div class="card u-animation-FromRight" v-if="isShow">
+												<div v-if="isShow" :class="isShow ? 'col-md-5 col-lg-5 col-xl-5':''">
+													<div class="card m-b-30 u-transition">
 														<div class="container">
 															<div class="row">
 																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>

@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-9 col-lg-9 col-xl-9">
+												<div :class="isShow ? 'col-md-9 col-lg-9 col-xl-9':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
@@ -104,7 +104,7 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(dt, index) in dataToDisplay">
+																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																		<th>
 																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
 																		</th>
@@ -137,7 +137,7 @@
 																			<button v-if="dt.status_vente_id.id==2 && dt.logic_is.reel" class='btn btn-round btn-warning' @click="_u_open_mod_popup_magaz(dt,3)"><i class='mdi mdi-alert-circle'></i></button>
 																		</td>
 																		<td>
-																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																		</td>
 																	</tr>
 																</tbody>
@@ -180,8 +180,9 @@
 														</div>
                         </div>
 												</div>
-												<div class="col-md-3 col-lg-3 col-xl-3">
-													<div class="card m-b-30 u-animation-FromRight" v-show="isShow">
+
+												<div v-if="isShow" :class="isShow ? 'col-md-3 col-lg-3 col-xl-3':''">
+													<div class="card m-b-30 u-transition">
 														<div class="container">
 															<div class="row">
 																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
@@ -195,7 +196,7 @@
 																		<br>
 																		<span>{{det.qte_vendue}}</span>
 																	</div>
-																	<div class="col-md-6">
+																	<div class="col-md-8">
 																		<span>Produit</span><br>
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
 																	</div>
@@ -205,8 +206,8 @@
 																<br>
 																<div class="row">
 																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
-																	<span :class="stateStatus==2?'col-md-4':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
-																	<span :class="stateStatus==2?'col-md-4':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
+																	<span :class="stateStatus==2?'col-md-6':'col-md-6'">Prix: <br> {{det.prix_unitaire}} USD</span>
+																	<span :class="stateStatus==2?'col-md-6':'col-md-6'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
 																	<span class="col-md-4" v-if="stateStatus==2">Stock<br>
 																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
 																	</span>

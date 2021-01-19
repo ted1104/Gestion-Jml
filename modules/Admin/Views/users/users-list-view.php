@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-8 col-lg-8 col-xl-8">
+												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8':'col-md-12 u-transition'">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
 														<div class="row">
@@ -61,7 +61,7 @@
 																		</tr>
 																	</thead>
 																	<tbody>
-																		<tr v-for="(dt, index) in dataToDisplay">
+																		<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																			<th>{{dt.nom}}</th>
 																			<td>{{dt.prenom}}</td>
 																			<td>{{dt.tel}}</td>
@@ -72,7 +72,7 @@
 																				<span :class="dt.logic_auth.status_users_id==1?'badge badge-success':'badge badge-danger'">{{dt.logic_auth.status_users_id==1?'ACTIF':'BLOQUER'}}</span>
 																			</td>
 																			<td>
-																				<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																				<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																			</td>
 																		</tr>
 																	</tbody>
@@ -101,8 +101,8 @@
                         </div>
 												</div>
 
-												<div class="col-md-4 col-lg-4 col-xl-4">
-													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
+												<div v-if="isShow" :class="isShow ? 'col-md-4 col-lg-4 col-xl-4':''">
+													<div class="card m-b-30 u-transition">
 														<div class="container">
 															<div class="row">
 																<h5 class="col-md-9 card-title">PROFILE DE {{detailTab.nom}} {{detailTab.prenom}}</h5>

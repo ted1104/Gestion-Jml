@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-9 col-lg-9 col-xl-9">
+												<div :class="isShow ? 'col-md-9 col-lg-9 col-xl-9':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
 															<div class="row">
@@ -112,7 +112,7 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(dt, index) in dataToDisplay">
+																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																		<th>
 																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
 																		</th>
@@ -139,7 +139,7 @@
 
 																		</th>
 																		<td>
-																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																		</td>
 																	</tr>
 																</tbody>
@@ -184,8 +184,8 @@
                         </div>
 												</div>
 
-												<div class="col-md-3 col-lg-3 col-xl-3">
-													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
+												<div v-if="isShow" :class="isShow ? 'col-md-3 col-lg-3 col-xl-3':''">
+													<div class="card m-b-30 u-transition">
 														<div class="container" v-if="!isShowBlocHistoFactureStatus">
 															<div class="row">
 																<div class="col-md-1">

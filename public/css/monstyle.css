@@ -117,6 +117,9 @@
   font-size: 50px;
   color: red;
 }
+.width-0 {
+  width: 0px !important;
+}
 
 
 /* ===================UTILITIES============================ */
@@ -137,6 +140,8 @@
 .u-animation-FromPointToGrand{ animation: CommingFromPointToGrand .6s ease-in-out; }
 .u-animation-FromGrandToPoint{ animation: CommingFromGrandToPoint .6s ease-in-out; }
 .u-animation-CommingHiddenToVisibleOpacity{ animation: CommingHiddenToVisibleOpacity .6s ease-in-out; }
+.u-transition { transition: .8s all }
+.u-transition-right { transition: 1.6s all }
 @keyframes CommingFromLeft{
     0%{
         opacity: 0;

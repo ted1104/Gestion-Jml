@@ -131,7 +131,7 @@
     <!-- End XP Container -->
 
 		<!-- MODAL -->
-	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
+	<!-- <div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -152,11 +152,11 @@
 							</div>
 							<button @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
             </div>
-            <!-- <div class="modal-footer">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Ok</button>
-            </div> -->
+            </div>
         </div>
     </div>
-</div>
+</div> -->
 <?=$this->endSection() ?>

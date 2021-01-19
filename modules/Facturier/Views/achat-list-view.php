@@ -34,10 +34,9 @@
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
-
-												<div class="col-md-9 col-lg-9 col-xl-9">
+												<div :class="isShow ? 'col-md-9 col-lg-9 col-xl-9':'col-md-12 u-transition'">
 													<div class="card m-b-30">
-                            <div class="card-header bg-white container">
+                            <div class="card-header bg-white">
 															<!-- {{stateStatus}} -->
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
 																<div class="">
@@ -110,7 +109,7 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(dt, index) in dataToDisplay">
+																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																		<td>
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" name="checkBoxArticles" :id="dt.id" class="custom-control-input" :value="dt.id" v-model="checkBoxAchatSelected">
@@ -135,7 +134,7 @@
 																			<span v-if="dt.status_vente_id.id==3" class="badge badge-success">{{dt.status_vente_id.description}}</span>
 																			<span v-if="dt.status_vente_id.id==4" class="badge badge-danger">{{dt.status_vente_id.description}}</span>
 																		</td>
-																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button></td>
+																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -178,8 +177,9 @@
                         </div>
 												</div>
 
-												<div class="col-md-3 col-lg-3 col-xl-3">
-													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
+
+												<div v-if="isShow" :class="isShow ? 'col-md-3 col-lg-3 col-xl-3':''">
+													<div class="card m-b-30 u-transition">
 														<div class="container">
 															<div class="row">
 																<div class="col-md-2">

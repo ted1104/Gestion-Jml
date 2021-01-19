@@ -35,23 +35,25 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div class="col-md-10 col-lg-10 col-xl-10">
-													<div class="card m-b-30 container">
-                            <div class="card-header row bg-white">
-                                <h5 class="card-title text-black col-md-6">INFORMATIONS DE MON STOCK</h5>
-																<div class="col-md-6">
-																	<div class="row text-center" v-if="CritiqueDataTab.length >0">
-																		<div class="col-md-4" >
-																			<span class="badge badge-pill badge-danger">N</span><br> Qte <= {{CritiqueDataTab[0].montant_min}}
-																		</div>
-																		<div class="col-md-4">
-																			<span class="badge badge-pill badge-warning">N</span><br> {{CritiqueDataTab[0].montant_min}} < Qte < {{CritiqueDataTab[0].montant_max}}
-																		</div>
-																		<div class="col-md-4">
-																			<span class="badge badge-pill badge-success">N</span><br> {{CritiqueDataTab[0].montant_max}} <= Qte
+												<div class="col-md-12 col-lg-12 col-xl-12">
+													<div class="card">
+                            <div class="card-header bg-white">
+                                <div class="row">
+																	<h5 class="card-title text-black col-md-6">INFORMATIONS DE MON STOCK</h5>
+																	<div class="col-md-6">
+																		<div class="row text-center" v-if="CritiqueDataTab.length >0">
+																			<div class="col-md-4" >
+																				<span class="badge badge-pill badge-danger">N</span><br> Qte <= {{CritiqueDataTab[0].montant_min}}
+																			</div>
+																			<div class="col-md-4">
+																				<span class="badge badge-pill badge-warning">N</span><br> {{CritiqueDataTab[0].montant_min}} < Qte < {{CritiqueDataTab[0].montant_max}}
+																			</div>
+																			<div class="col-md-4">
+																				<span class="badge badge-pill badge-success">N</span><br> {{CritiqueDataTab[0].montant_max}} <= Qte
+																			</div>
 																		</div>
 																	</div>
-																</div>
+                                </div>
                             </div>
 														<div class="table-responsive card-body">
 															<table class="table">

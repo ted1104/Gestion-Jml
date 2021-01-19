@@ -34,7 +34,7 @@
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row ">
-												<div class="col-md-8 col-lg-8 col-xl-8">
+												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
 															<div class="row">
@@ -57,7 +57,7 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr v-for="(dt, index) in dataToDisplay">
+																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																		<td>{{index+1}}</td>
 																		<td>{{dt.code_article}}</td>
 																		<td>{{dt.nom_article}}</td>
@@ -72,7 +72,7 @@
 																			</button>
 																		</td>
 																		<td>
-																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt)"><i class="mdi mdi-eye-outline" ></i></button>
+																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																		</td>
 																	</tr>
 																</tbody>
@@ -101,7 +101,8 @@
                         </div>
 												</div>
 
-												<div class="col-md-4 col-lg-4 col-xl-4">
+												<div v-if="isShow" :class="isShow ? 'col-md-4 col-lg-4 col-xl-4':''">
+													<div class="card m-b-30 u-transition">
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
