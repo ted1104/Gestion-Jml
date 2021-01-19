@@ -26,7 +26,7 @@ class Achat extends BaseController {
     $data = [
       'titlePage' => 'MON STOCK: Dépôt'
     ];
-    echo view($this->linkMod.'\depots-stock-magaz-view', $data);
+    echo view($this->linkMod.'\stock\depots-stock-magaz-view', $data);
   }
 
   public function getAchatFaveur(){
@@ -47,6 +47,12 @@ class Achat extends BaseController {
       'titlePage' => 'APPROVISONNEMENT: Inter-Dépôt'
     ];
     echo view($this->linkMod.'\appro\appro-inter-depot-historique-view', $data);
+  }
+  public function getStockPv(){
+    $data = [
+      'titlePage' => 'MON STOCK: Dépôt'
+    ];
+    echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
   }
 
 

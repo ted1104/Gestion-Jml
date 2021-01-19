@@ -9,3 +9,4 @@ $routes->get('magaz-stock','Achat::getStockDepot',['filter' => 'isLoggedIn']);
 $routes->get('magaz-add-appro','Achat::addAppro',['filter' => 'isLoggedIn']);
 $routes->get('magaz-add-appro-to-depot','Achat::addApproInterDepot',['filter' => 'isLoggedIn']);
 $routes->get('magaz-histo-appro-inter-depot','Achat::getHistoriqueApproInterDepot',['filter' => 'isLoggedIn']);
+$routes->get('magaz-pv','Achat::getStockPv',['filter' => 'isLoggedIn']);

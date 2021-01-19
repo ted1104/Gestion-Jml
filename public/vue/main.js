@@ -207,7 +207,12 @@ var vthis = new Vue({
       //CREATE ENCAISSEMENT EXTERNE
       montant_encaissement : "",
       motif : "",
-      montantTotalAllEncaissement : ""
+      montantTotalAllEncaissement : "",
+
+      //PV RESTAURE ET APPROVISIOONER
+      qte_restaurer : "",
+      qte_restaurer_init : "",
+
 
 
 
@@ -262,7 +267,7 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
-              // console.log(this.dataToDisplay);
+              console.log(this.dataToDisplay);
               this.isShow = false;
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
@@ -1683,6 +1688,47 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    add_approvision_pv_restaure(e){
+      console.log("====RESTARURE===");
+      console.log(this.qte_restaurer);
+      console.log("====INIT RESTARURE===");
+      console.log(this.qte_restaurer_init);
+      e.preventDefault();
+      const newurl = this.url+"pv-approvisionnement-restaure";
+      var form = new FormData();
+      form.append('users_id',this.users_id);
+      form.append('articles_id',this.articles_id);
+      form.append('qte_restaure', this.qte_restaurer);
+      form.append('depots_id_dest',this.depots_id);
+      form.append('date_restaurer',this.date_approvisionnement);
+
+      if(+this.qte_restaurer_init < +this.qte_restaurer){
+        this._u_fx_config_error_message("Erreur",["Vous n'avez pas cette quantité dans le dépôt PV"],'alert-danger');
+        return;
+      }
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  this._u_close_mod_form();
+                  this.get_stock_depots_by_depot();
+                  this.isLoadSaveMainButton = false;
+                  this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -2168,6 +2214,15 @@ var vthis = new Vue({
       this.styleModal = 'block';
       console.log(cmd);
     },
+    _u_open_mod_popup_magaz_restaure_pv(cmd,val){
+      this.modalTitle = "APPROVISIONNEMENT PV RESTAURE DE L'ARTICLE "+cmd.articles_id[0].code_article+" : "+cmd.articles_id[0].nom_article;
+      this.articles_id = cmd.articles_id[0].id;
+      this.qte_restaurer = cmd.articles_id[0].qte_stock_pv;
+      this.qte_restaurer_init = cmd.articles_id[0].qte_stock_pv;
+      this.depots_id ="";
+      this.styleModal = 'block';
+      console.log(cmd);
+    },
     _u_open_mod_popup_photo(userid){
       //console.log("=====ARTICLE=====");
       //console.log(cmd);
@@ -2527,10 +2582,10 @@ var vthis = new Vue({
     let pth = window.location.pathname.split('/');
     //pth = pth.split(',');
     console.log(window.location.host);
-    if(pth[2] ==='admin-add-article' || pth[2] ==='admin-list-article'){
+    if(pth[2] ==='admin-add-article' || pth[2] ==='admin-list-article' || pth[2]=='magaz-pv' || pth[2]=='admin-stock-pv'){
       this.get_article();
     }
-    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users' || pth[2] === 'magaz-add-appro-to-depot'){
+    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users' || pth[2] === 'magaz-add-appro-to-depot' || pth[2] == 'magaz-pv'){
       this.get_depots();
     }
     if(pth[2]=='facturier-add-achat' || pth[2]==='caissier-add-achat'){
@@ -2617,10 +2672,6 @@ var vthis = new Vue({
     if(pth[2] = 'admin-decaissement-externe'){
       this.get_decaisssement_externe_admin();
     }
-
-
-
-
   }
 
   },

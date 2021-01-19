@@ -5,7 +5,10 @@ use CodeIgniter\RESTful\ResourceController;
 use App\Entities\ApprovisionnementsEntity;
 use App\Models\ApprovisionnementsDetailModel;
 use App\Models\StockModel;
+use App\Models\ArticlesModel;
+use App\Models\PvRestaurationModel;
 use App\Entities\StockEntity;
+use App\Entities\PvRestaurationEntity;
 
 
 
@@ -14,6 +17,8 @@ class Approvisionnement extends ResourceController {
   protected $modelName = '\App\Models\ApprovisionnementsModel';
   protected $approvisionnementsDetailModel = null;
   protected $stockModel = null;
+  protected $articlesModel = null;
+  protected $pvRestaurationModel = null;
 
 
 
@@ -22,6 +27,8 @@ class Approvisionnement extends ResourceController {
     helper(['global']);
     $this->approvisionnementsDetailModel = new ApprovisionnementsDetailModel();
     $this->stockModel = new StockModel();
+    $this->articlesModel = new ArticlesModel();
+    $this->pvRestaurationModel = new PvRestaurationModel();
 
   }
   public function approvisionnement_get($limit, $offset){
@@ -66,7 +73,7 @@ class Approvisionnement extends ResourceController {
             'errors'=>$this->approvisionnementsDetailModel->errors()
           ];
           return $this->respond([
-            'status' => '200',
+            'status' => '400',
             'message' =>$message,
             'data'=>""
           ]);
@@ -89,11 +96,28 @@ class Approvisionnement extends ResourceController {
             'errors'=>$this->stockModel->errors()
           ];
           return $this->respond([
-            'status' => '200',
+            'status' => '400',
             'message' =>$message,
             'data'=> $dtStock
           ]);
         }
+
+        //ADD PV TO STOCK PV
+        $getSpecificArticlePvStock = $this->articlesModel->find($article[$i]);
+        $newPvStock = $getSpecificArticlePvStock->qte_stock_pv + $qte_pv[$i];
+        if(!$this->articlesModel->update($article[$i],['qte_stock_pv'=>$newPvStock])){
+          $this->model->RollbackTrans();
+          $message = [
+            'success' =>null,
+            'errors'=>$this->articlesModel->errors()
+          ];
+          return $this->respond([
+            'status' => '400',
+            'message' =>$message,
+            'data'=> $dtStock
+          ]);
+        }
+
       }
 
       $status = 200;
@@ -118,5 +142,64 @@ class Approvisionnement extends ResourceController {
       'data' => $data,
       'all'=> count($data = $this->model->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll())
     ]);
+  }
+  public function approvisionementPvRestaure(){
+    $this->pvRestaurationModel->beginTrans();
+    $data = new PvRestaurationEntity($this->request->getPost());
+    if(!$insertData = $this->pvRestaurationModel->insert($data)){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->pvRestaurationModel->errors()
+      ];
+      $data = null;
+    }else{
+      $artInfo = $this->articlesModel->find($data->articles_id);
+      $newQte = $artInfo->qte_stock_pv - $data->qte_restaure;
+      if(!$this->articlesModel->update($data->articles_id, ['qte_stock_pv'=>$newQte])){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->articlesModel->errors()
+        ];
+        $data = null;
+      }else{
+        //UPDATE STOCK IN STOCK
+        $condition =[
+          'depot_id'=>$data->depots_id_dest[0]->id,
+          'articles_id'=>$data->articles_id
+        ];
+        
+        //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+        $initqte = $this->stockModel->getWhere($condition)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+        $Qte = $initqte->qte_stock + $data->qte_restaure;//ADDITION ANCIENNE + NOUVELLE
+        $QteVirtuel = $initqte->qte_stock_virtuel + $data->qte_restaure;
+        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel])){
+          $this->pvRestaurationModel->RollbackTrans();
+          $message = [
+            'success' =>null,
+            'errors'=>$this->approvisionnementsDetailModel->errors()
+          ];
+          return $this->respond([
+            'status' => '400',
+            'message' =>$message,
+            'data'=>""
+          ]);
+        }else{
+          $status = 200;
+          $message = [
+            'success' => 'Le dépôt a été bien approvisionné par le(s) PV restauré(s)',
+            'errors' => null
+          ];
+          $data = null;
+        }
+      }
+    }
+    $this->pvRestaurationModel->commitTrans();
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> $data
+     ]);
   }
 }

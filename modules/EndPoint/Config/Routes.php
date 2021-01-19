@@ -100,6 +100,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('approvisionnement-inter-depot-validate/(:any)/(:num)/(:num)/validate','ApprovisionnementInterDepot::validateApprovisionnementInterDepot/$1/$2/$3');
   $routes->post('approvisionnement-annuler','ApprovisionnementInterDepot::annuler_approvisionnement_inter_depot');
   $routes->post('delete-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_delete_articles');
+  $routes->post('pv-approvisionnement-restaure','Approvisionnement::approvisionementPvRestaure');
 
 
 

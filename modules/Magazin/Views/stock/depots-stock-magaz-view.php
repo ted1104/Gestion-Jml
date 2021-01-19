@@ -59,7 +59,7 @@
 																	<tr class="bg-secondary">
 																		<th scope="col">code</th>
 																		<th scope="col">Article</th>
-																		<th scope="col">Descritpion</th>
+																		<th scope="col">Description</th>
 																		<th scope="col">Qte Réelle</th>
 																		<th scope="col">Qte Virtuelle</th>
 																		<th scope="col">Etat</th>

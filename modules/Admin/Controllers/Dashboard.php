@@ -58,7 +58,12 @@ class Dashboard extends BaseController {
     echo view($this->linkMod.'\caisse\decaissement-externe-historique-view', $data);
   }
 
-
+  public function getStockPv(){
+    $data = [
+      'titlePage' => 'STOCK PV: Administration'
+    ];
+    echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+  }
 
 
 

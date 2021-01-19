@@ -53,7 +53,7 @@
 																			<th scope="col">Prenom</th>
 																			<th scope="col">Sexe</th>
 																			<th scope="col">Type</th>
-																			<th scope="col">Montant</th>
+																			<th scope="col">Montant Reste</th>
 																			<th scope="col">Action</th>
 																		</tr>
 																	</thead>

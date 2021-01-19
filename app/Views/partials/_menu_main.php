@@ -35,6 +35,7 @@
                       <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
                       <li><a href="<?=base_url('admin-list-article') ?>">Liste et Prix</a></li>
                       <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
+                      <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
                   </ul>
               </li>
               <li>
@@ -194,7 +195,8 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Stock</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
+                    <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
+                    <li><a href="<?=base_url('magaz-pv') ?>">PV stock</a></li>
                   </ul>
               </li>
               <li>
