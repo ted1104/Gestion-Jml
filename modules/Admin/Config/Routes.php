@@ -19,6 +19,9 @@ $routes->get('admin-list-users','Dashboard::getAllUsers',['filter' => 'isLoggedI
 $routes->get('admin-histo-appro-inter-depot','Approv::historiqueInterDepot',['filter' => 'isLoggedIn']);
 $routes->get('admin-encaissement-externe','Dashboard::getEncaissementExterne',['filter' => 'isLoggedIn']);
 $routes->get('admin-stock-pv','Dashboard::getStockPv',['filter' => 'isLoggedIn']);
+$routes->get('admin-rapport','Dashboard::getRapport',['filter' => 'isLoggedIn']);
+
+
 
 
 

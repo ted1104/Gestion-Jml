@@ -2,15 +2,13 @@
 
 namespace App\Controllers;
 
-
-
 class Login extends BaseController {
   protected $title;
   public function __construct(){
     $this->title = 'Login';
   }
   public function index(){
-    
+
     $data = [
       'titlePage' => $this->title,
     ];

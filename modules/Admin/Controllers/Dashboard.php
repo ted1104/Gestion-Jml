@@ -64,6 +64,13 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
   }
+  public function getRapport(){
+    $data = [
+      'titlePage' => 'RAPPORTS: Administration'
+    ];
+    echo view($this->linkMod.'\rapport\rapport-view', $data);
+  }
+
 
 
 

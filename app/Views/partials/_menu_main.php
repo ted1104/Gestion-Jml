@@ -88,6 +88,12 @@
                       <li><a href="table-rwdtable.html">RWD Table</a></li> -->
                   </ul>
               </li>
+              <li>
+                  <a href="<?=base_url('admin-rapport') ?>">
+                      <i class="mdi mdi-email"></i><span>Rapport</span>
+                  </a>
+
+              </li>
             <?php endif; ?>
 
             <!-- MENU GERANT -->
