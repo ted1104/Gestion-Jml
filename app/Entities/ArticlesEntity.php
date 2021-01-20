@@ -42,10 +42,10 @@ class ArticlesEntity extends Entity{
     $this->pvRestaurationModel = new PvRestaurationModel();
   }
   public function getUsersId(){
-    return $this->userModel->find($this->attributes['users_id']);
+    return $this->userModel->select('id,nom,prenom')->find($this->attributes['users_id']);
   }
   public function getLogicDetailData(){
-    return $this->articlesPrixModel->getWhere(['articles_id'=>$this->attributes['id']])->getResult();
+    return $this->articlesPrixModel->select('id,articles_id,prix_unitaire,qte_decideur_min,qte_decideur_max')->getWhere(['articles_id'=>$this->attributes['id']])->getResult();
   }
   public function getLogicConfigArticleFaveur(){
     return $this->articlesConfigFaveurModel->Where('articles_id',$this->attributes['id'])->findAll();

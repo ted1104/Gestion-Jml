@@ -45,7 +45,7 @@ class CommandesDetailEntity extends Entity{
 
   }
   public function getArticlesId(){
-    return $this->articlesModel->Where('id',$this->attributes['articles_id'])->findAll();
+    return $this->articlesModel->select('id,code_article,nom_article,created_at,logic_detail_data')->Where('id',$this->attributes['articles_id'])->findAll();
   }
   public function getTypePrix(){
     return $this->attributes['type_prix']==1?'En Gros':'En détail';

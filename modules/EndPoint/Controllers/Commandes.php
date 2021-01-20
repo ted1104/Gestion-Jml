@@ -109,6 +109,7 @@ class Commandes extends ResourceController {
     }
     $condition =['date_vente'=> $dateFilter];
     $data = $this->model->Where($condition)->Where('users_id',$iduser)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll($limit,$offset);
+    header('Content-Type: application/json');
     return $this->respond([
       'status' => 200,
       'message' => 'success',

@@ -33,15 +33,15 @@ class StDepotEntity extends Entity{
   }
 
   public function getLogicArticleStock(){
-    return self::$stockModel->Where('depot_id',$this->attributes['id'])->findAll();
+    return self::$stockModel->select('id,articles_id,depot_id,qte_stock,qte_stock_virtuel,logic_etat_critique')->Where('depot_id',$this->attributes['id'])->findAll();
   }
 
   public function getResponsableId(){
-    $data = self::$userModel->Where('id',$this->attributes['responsable_id'])->find();
+    $data = self::$userModel->select('id,nom,prenom')->Where('id',$this->attributes['responsable_id'])->find();
     return $data[0]->nom.' '.$data[0]->prenom;
   }
 
-  
+
 
 
 

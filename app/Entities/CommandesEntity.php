@@ -67,19 +67,19 @@ class CommandesEntity extends Entity{
 
   public function getStatusVenteId(){
     $db = \Config\Database::connect();
-    $query = $db->table('st_status_vente')->getWhere(['id' => $this->attributes['status_vente_id']]);
+    $query = $db->table('st_status_vente')->select('id,description')->getWhere(['id' => $this->attributes['status_vente_id']]);
     $data = $query->getRow();
     return $data;
   }
 
   public function getUsersId(){
-    return $this->userModel->Where('id',$this->attributes['users_id'])->findAll();
+    return $this->userModel->select('id,nom,prenom')->Where('id',$this->attributes['users_id'])->findAll();
   }
   public function getDepotsId(){
-    return $this->depotModel->Where('id',$this->attributes['depots_id'])->findAll();
+    return $this->depotModel->select('id,nom,logic_article_stock')->Where('id',$this->attributes['depots_id'])->findAll();
   }
   public function getPayerA(){
-    return $this->userModel->Where('id',$this->attributes['payer_a'])->findAll();
+    return $this->userModel->select('id,nom,prenom')->Where('id',$this->attributes['payer_a'])->findAll();
   }
 
   public function getLogicArticle(){
@@ -151,14 +151,14 @@ class CommandesEntity extends Entity{
     );
   }
 
-  public function getLogicCodeFacture(){
-    $plainText = 200;
-    $ciphertext = base64_encode($this->encrypter->encrypt($plainText));
-
-    // Outputs: This is a plain-text message!
-    //echo $this->encrypter->decrypt(base64_decode($ciphertext));
-    return $ciphertext;
-  }
+  // public function getLogicCodeFacture(){
+  //   $plainText = 200;
+  //   $ciphertext = base64_encode($this->encrypter->encrypt($plainText));
+  //
+  //   // Outputs: This is a plain-text message!
+  //   //echo $this->encrypter->decrypt(base64_decode($ciphertext));
+  //   return $ciphertext;
+  // }
 
   //HELPER
 
