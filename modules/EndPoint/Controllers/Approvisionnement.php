@@ -7,8 +7,12 @@ use App\Models\ApprovisionnementsDetailModel;
 use App\Models\StockModel;
 use App\Models\ArticlesModel;
 use App\Models\PvRestaurationModel;
+use App\Models\ClotureStockModel;
 use App\Entities\StockEntity;
 use App\Entities\PvRestaurationEntity;
+use App\Entities\ClotureStockEntity;
+use CodeIgniter\I18n\Time;
+
 
 
 
@@ -19,6 +23,7 @@ class Approvisionnement extends ResourceController {
   protected $stockModel = null;
   protected $articlesModel = null;
   protected $pvRestaurationModel = null;
+  protected $clotureStockModel = null;
 
 
 
@@ -29,6 +34,7 @@ class Approvisionnement extends ResourceController {
     $this->stockModel = new StockModel();
     $this->articlesModel = new ArticlesModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
+    $this->clotureStockModel = new ClotureStockModel();
 
   }
   public function approvisionnement_get($limit, $offset){
@@ -169,7 +175,7 @@ class Approvisionnement extends ResourceController {
           'depot_id'=>$data->depots_id_dest[0]->id,
           'articles_id'=>$data->articles_id
         ];
-        
+
         //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
         $initqte = $this->stockModel->getWhere($condition)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
         $Qte = $initqte->qte_stock + $data->qte_restaure;//ADDITION ANCIENNE + NOUVELLE
@@ -201,5 +207,22 @@ class Approvisionnement extends ResourceController {
        'message' =>$message,
        'data'=> $data
      ]);
+  }
+
+  public function clotureJournalierStock(){
+    $d = Time::tomorrow();
+    $initStock = $this->stockModel->findAll();
+    foreach ($initStock as $key => $value) {
+      $data = [
+        'articles_id'=>$value->articles_id[0]->id,
+        'depot_id' =>$value->depot_id,
+        'qte_stock' =>$value->qte_stock,
+        'qte_stock_virtuel' =>$value->qte_stock_virtuel,
+        'date_cloture' =>$d
+      ];
+      
+      $insertData = $this->clotureStockModel->insert($data);
+    }
+    // echo $d;
   }
 }

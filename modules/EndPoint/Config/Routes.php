@@ -103,6 +103,10 @@ $routes->group('api/v1', function($routes){
   $routes->post('pv-approvisionnement-restaure','Approvisionnement::approvisionementPvRestaure');
 
 
+  //CLOTURE AUTOMATIQUE
+  $routes->get('cloture-stock-journalier','Approvisionnement::clotureJournalierStock');
+
+
 
 
 

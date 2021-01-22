@@ -6,6 +6,13 @@ use App\Models\CommandesModel;
 use App\Models\StDepotModel;
 use App\Models\ArticlesModel;
 use App\Models\CommandesDetailModel;
+use App\Models\CommandesStatusHistoriqueModel;
+use App\Models\ApprovisionnementsDetailModel;
+use App\Models\StockModel;
+use App\Models\ClotureStockModel;
+
+
+
 
 
 
@@ -15,6 +22,15 @@ class PdfGenerate extends BaseController {
   protected $depotModel = null;
   protected $articlesModel = null;
   protected $commandesDetailModel = null;
+  protected $commandesStatusHistoriqueModel = null;
+  protected $approvisionnementsDetailModel = null;
+  protected $stockModel = null;
+  protected $clotureStockModel = null;
+
+
+
+
+
 
 
 
@@ -25,6 +41,10 @@ class PdfGenerate extends BaseController {
     $this->depotModel = new StDepotModel();
     $this->articlesModel = new ArticlesModel();
     $this->commandesDetailModel = new CommandesDetailModel();
+    $this->commandesStatusHistoriqueModel = new CommandesStatusHistoriqueModel();
+    $this->approvisionnementsDetailModel = new ApprovisionnementsDetailModel();
+    $this->stockModel = new StockModel();
+    $this->clotureStockModel = new ClotureStockModel();
 
 
   }
@@ -118,13 +138,16 @@ class PdfGenerate extends BaseController {
 
 ##################RAPPORT#############################
 
-public function rapport_journal_de_sorti_par_depot($idDepot,$dateRapport){
+  public function rapport_journal_de_sorti_par_depot($idDepot,$dateRapport){
   $depotInfo = $this->depotModel->find($idDepot);
   $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
-  $Achats = $this->commande->Where('date_vente',$dateRapport)->Where('depots_id',$idDepot)->findAll();
-  // $data = $this->commande->find($code);
+  $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
+
+  // like('created_at',$dateRapport,'after')->Where('depots_id',$idDepot)->findAll();
+  //
+  // $profile = $this->model->join('profiles','profiles.user_id=users.id','right')->findAll();
   // echo "<pre>";
-  // print_r($Achats);
+  // print_r(count($AchatsHisto));
   // echo "</pre>";
   // exit();
   $this->pdf = new TableFpdf('L','mm','A4');
@@ -143,52 +166,64 @@ public function rapport_journal_de_sorti_par_depot($idDepot,$dateRapport){
   $DonneApprovisionnement = array();
   $LineEmptyNumFacture = array();
   for($i = 0; $i < count($allArticle); $i++){
-    array_push($enteTableArticle,275/count($allArticle));
+    //APPROVISIONNEMENT GENERAL
+    $approGen = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+    //GET QUANTITE INITIAL RESTANT EN STOCK HIER
+
+    $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateRapport)->find();
+
+
+    // echo "<pre>";
+    // print_r($approGen[0]->qte);
+    // print_r($allArticle[$i]->id);
+    // echo "</pre>";
+    // exit();
+
+    array_push($enteTableArticle,273/count($allArticle));
     array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
-    array_push($DonneStockInitial,0);
-    array_push($DonneApprovisionnement,0);
+    array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock : 0);
+    array_push($DonneApprovisionnement,$approGen[0]->qte?$approGen[0]->qte:0);
     array_push($LineEmptyNumFacture,'');
   }
   $this->pdf->SetWidths($enteTableArticle);
 
   $this->pdf->SetFont('Helvetica','B',6);
-  $this->pdf->Cell(12,5,'Produit',1,0,'L');
+  $this->pdf->Cell(14,5,'Produit',1,0,'L');
   $this->pdf->Row($DonneTableArticle);
 
-  $this->pdf->Cell(12,5,'Stock Init',1,0,'L');
+  $this->pdf->Cell(14,5,'Stock Init',1,0,'L');
   $this->pdf->Row($DonneStockInitial);
 
-  $this->pdf->Cell(12,5,'Appro',1,0,'L');
+  $this->pdf->Cell(14,5,'Appro',1,0,'L');
   $this->pdf->Row($DonneApprovisionnement);
 
-  $this->pdf->Cell(12,5,'Facture',1,0,'L');
-  $this->pdf->SetWidths(array(275));
+  $this->pdf->Cell(14,5,'Facture',1,0,'L');
+  $this->pdf->SetWidths(array(273));
   $this->pdf->Row(array(''));
-
+  $this->pdf->SetFont('Helvetica','',6);
   $this->pdf->SetWidths($enteTableArticle);
   // $venteArray = array();
-  foreach ($Achats as $key => $value) {
-    $this->pdf->Cell(12,5,utf8_decode($value->numero_commande),1,0,'L');
+  foreach ($AchatsHisto as $key => $value) {
+    $achat = $this->commande->find($value->vente_id);
+    $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
     $venteDetailArray = array();
     for($i = 0; $i < count($allArticle); $i++){
-      $detAchat = $this->commandesDetailModel->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
-      if($detAchat){
-        array_push($venteDetailArray,$detAchat[0]->qte_vendue);
-      }else{
-        array_push($venteDetailArray,'-');
-      }
+      $detAchat = $this->commandesDetailModel->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+        array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
     }
     $this->pdf->Row($venteDetailArray);
   }
 
 //RECHERCHE MONTANT TOTAL PAR ARTICLE
+  $this->pdf->SetFont('Helvetica','B',6);
   $this->pdf->SetWidths($enteTableArticle);
-  $this->pdf->Cell(12,5,'Total',1,0,'L');
+  $this->pdf->Cell(14,5,'Total vendu',1,0,'L');
   $TotalArticleVendu =  array();
   for($i = 0; $i < count($allArticle); $i++){
     $qteTotal = 0;
-    foreach ($Achats as $key => $value) {
-      $detAchat = $this->commandesDetailModel->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+    foreach ($AchatsHisto as $key => $value) {
+      $detAchat = $this->commandesDetailModel->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->findAll();
       if($detAchat){
         $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
       }else{
@@ -199,6 +234,17 @@ public function rapport_journal_de_sorti_par_depot($idDepot,$dateRapport){
   }
 
   $this->pdf->Row($TotalArticleVendu);
+
+  //RESTE EN Stock
+  $this->pdf->SetWidths($enteTableArticle);
+  $this->pdf->Cell(14,5,'Reste Stock',1,0,'L');
+  $qteStockReste = array();
+  for($i = 0; $i < count($allArticle); $i++){
+    $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+    array_push($qteStockReste,$stock[0]->qte_stock);
+  }
+  $this->pdf->Row($qteStockReste);
+  // $this->stockModel
 
 
 
