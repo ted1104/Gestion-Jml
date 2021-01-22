@@ -52,6 +52,7 @@
 																		<th scope="col">Pièces</th>
 																		<th scope="col">Config Prix</th>
 																		<th scope="col">Config Faveur</th>
+																		<th scope="col">Rapport</th>
 																		<th scope="col">Détail</th>
 
 																	</tr>
@@ -70,6 +71,9 @@
 																			<button class="btn btn-round btn-light" v-if="dt.logic_config_article_faveur.length > 0" @click="_u_open_mod_form_config_faveur(dt,2)">
 																				<i class="mdi mdi-circle-edit-outline"></i>
 																			</button>
+																		</td>
+																		<td>
+																			<span :class="dt.is_show_on_rapport==1?'text-success':'text-danger'">{{dt.is_show_on_rapport==1 ? 'Oui':'Non'}}</span>
 																		</td>
 																		<td>
 																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
@@ -106,7 +110,7 @@
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL PRIX ARTICLES {{detailTab.nom_article}}</h5>
+																<h5 class="col-md-9 card-title text-center">DETAIL PRIX ARTICLES {{detailTab.nom_article}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 															<!-- {{checkBoxArticles}} -->
@@ -121,7 +125,6 @@
 																					<th scope="col">Action</th>
 																					<!-- <th scope="col">Qte Virtuelle</th>
 																					<th scope="col">Etat</th> -->
-
 																				</tr>
 																			</thead>
 																			<tbody>
@@ -147,10 +150,7 @@
 
 																<!-- CONFIGURATION FAVEURS -->
 																<div class="row">
-																	<h5 class="col-md-9 card-title">DETAIL CONFIGURATION FAVEUR</h5>
-																	<!-- <i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i> -->
-
-
+																	<h5 class="col-md-12 card-title text-center">DETAIL CONFIGURATION FAVEUR</h5>
 																</div>
 																<div class="row">
 																	<div class="table-responsive container">
@@ -162,10 +162,6 @@
 																			<th scope="col">Qte Faveur</th>
 																			<th scope="col">Interval</th>
 																			<th scope="col">PU</th>
-
-																			<!-- <th scope="col">Qte Virtuelle</th>
-																			<th scope="col">Etat</th> -->
-
 																		</tr>
 																	</thead>
 																	<tbody>
@@ -174,12 +170,6 @@
 																			<td>{{det.prix_id[0].qte_decideur_min+' - '+det.prix_id[0].qte_decideur_max}}</td>
 																			<td>{{det.prix_id[0].prix_unitaire}} USD</td>
 
-																			<!-- <td>
-																				<span class="btn btn-round btn-light">
-																					<i class="mdi mdi-circle-edit-outline text-danger" @click="_u_open_mod_form(det,2)"></i>
-																				</span>
-																				<button v-if = "+i+1 == detailTab.logic_detail_data.length" class="btn btn-round btn-danger" @click="_u_open_mod_form(det,3)"><i class="mdi mdi-delete-sweep" ></i></button>
-																			</td> -->
 																		</tr>
 																	</tbody>
 																</table>
@@ -188,6 +178,13 @@
 																	<i class="mdi mdi-cancel" style="font-size:40px"></i>
 																</div>
 																<hr>
+																<div class="row text-center">
+																	<h5 class="col-md-12 card-title">VISIBILITE SUR RAPPORT</h5>
+																</div>
+																<div class="text-center">
+																	<button v-if="!isLoadSaveMainButtonModal" @click="active_article_visibilite_sur_rapport(detailTab.id)" :class="detailTab.is_show_on_rapport==1?'btn btn-danger':'btn btn-success'">{{detailTab.is_show_on_rapport==1?'Désactiver':'Activer'}}</button>
+																	<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																</div>
 															</div>
 
 														</div>

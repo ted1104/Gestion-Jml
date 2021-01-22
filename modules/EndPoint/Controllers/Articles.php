@@ -493,6 +493,31 @@ class Articles extends ResourceController {
 
     ]);
   }
+  public function article_activate_visibilite_sur_rapport($idArticle){
+    $data = $this->model->find($idArticle);
+    $statusArticle = $data->is_show_on_rapport==1?0:1;
+    if(!$this->model->set('is_show_on_rapport',$statusArticle)->Where('id',$idArticle)->update()){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->model->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' => $statusArticle==0?'Article activé pour être visible sur le rapport':'Article désactivé pour ne pas être visible sur le rapport',
+        'errors' => $data->is_show_on_rapport
+      ];
+      $data = 'null';
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+
+  }
   public function multitest(){
     print_r($this->request->getPost());
 

@@ -33,8 +33,8 @@
                               </div>
                               <div class="card-body">
                                 <div class="form-group">
-                                  <label for="password_main_conf">Date</label>
-                                  <input type="password" class="form-control" id="password_main_conf" v-model="password_main_conf">
+                                  <label for="dateRapport">Date</label>
+                                  <vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapport"></vuejs-datepicker>
                                 </div>
                                 <div class="form-group">
                                   <label for="depots_id">Dépôt</label>
@@ -42,7 +42,7 @@
                                     <option v-for="(dp, i) in depotList" :value="dp.id">{{dp.nom}}</option>
                                   </select>
                                 </div>
-                                <a target="_blank" href="<?=base_url() ?>/rapport-journal-de-sorti-par-depot/1/2021-12-10" class="btn btn-primary">Généré</a>
+                                <a target="_blank" :href="'<?=base_url() ?>/rapport-journal-de-sorti-par-depot/'+depot_id+'/'+dateRapport+''" class="btn btn-primary">Généré</a>
                               </div>
                             </div>
                         </div>

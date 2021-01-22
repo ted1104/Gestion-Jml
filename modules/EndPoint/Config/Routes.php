@@ -50,6 +50,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('articles-delete-price/(:num)/del','Articles::article_delete_price/$1');
   $routes->post('articles-create-config-faveur','Articles::create_configuration_faveur_article');
   $routes->post('articles-update-configuration-faveur','Articles::article_configuration_faveur_article');
+  $routes->get('article-change-visibilite-sur-rapport/(:num)','Articles::article_activate_visibilite_sur_rapport/$1');
 
 
 

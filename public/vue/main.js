@@ -216,10 +216,8 @@ var vthis = new Vue({
       //SLECTIONNER LIGNE QUI EST VISIBLE
       currentLineSelectedInList : -1,
 
-
-
-
-
+      //RAPPORT
+      dateRapport : ""
     }
   },
 
@@ -1750,6 +1748,32 @@ var vthis = new Vue({
             })
     },
 
+    active_article_visibilite_sur_rapport(idarticle){
+      // console.log(iduser);
+      const newurl = this.url+"article-change-visibilite-sur-rapport/"+idarticle;
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_article();
+                  // this.get_article();
+                  this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
     //FONCTION POUR RECHERCHER
@@ -2254,6 +2278,7 @@ var vthis = new Vue({
       var currentDateWithFormat = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       this.date_approvisionnement = currentDateWithFormat;
       this.date_vente = currentDateWithFormat;
+      this.dateRapport = currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
@@ -2420,6 +2445,7 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+
     // _u_hidden_display_message_error(){}
     // FONCTIONS UTILITIES COMMUNES
     _u_fx_config_error_message(title, message, classError){
@@ -2697,12 +2723,21 @@ var vthis = new Vue({
     if(pth[2] == 'admin-decaissement-externe'){
       this.get_decaisssement_externe_admin();
     }
+    if(pth[2] == 'admin-rapport'){
+      this.get_depots();
+    }
   }
 
   },
   watch : {
     messageError : function(val){
       console.log("change to "+this.messageError);
+    },
+    dateRapport : function(val){
+      var date = new Date(val);
+      var month = date.getMonth()+1;
+      return date.getFullYear()+'-'+month+'-'+date.getDate();
+      // console.log(this.dateRapport);
     }
   }
 })
