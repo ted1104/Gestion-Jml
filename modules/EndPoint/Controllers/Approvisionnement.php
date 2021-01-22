@@ -212,17 +212,21 @@ class Approvisionnement extends ResourceController {
   public function clotureJournalierStock(){
     $d = Time::tomorrow();
     $initStock = $this->stockModel->findAll();
-    foreach ($initStock as $key => $value) {
-      $data = [
-        'articles_id'=>$value->articles_id[0]->id,
-        'depot_id' =>$value->depot_id,
-        'qte_stock' =>$value->qte_stock,
-        'qte_stock_virtuel' =>$value->qte_stock_virtuel,
-        'date_cloture' =>$d
-      ];
-      
-      $insertData = $this->clotureStockModel->insert($data);
+    if(!$this->clotureStockModel->Where('date_cloture',$d)->find()){
+      foreach ($initStock as $key => $value) {
+        $data = [
+          'articles_id'=>$value->articles_id[0]->id,
+          'depot_id' =>$value->depot_id,
+          'qte_stock' =>$value->qte_stock,
+          'qte_stock_virtuel' =>$value->qte_stock_virtuel,
+          'date_cloture' =>$d
+        ];
+
+        $insertData = $this->clotureStockModel->insert($data);
+      }
+      echo 'cloture avec success';
+    }else{
+      echo 'Deja encore';
     }
-    // echo $d;
   }
 }

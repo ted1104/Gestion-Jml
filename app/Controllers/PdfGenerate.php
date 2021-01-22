@@ -143,6 +143,8 @@ class PdfGenerate extends BaseController {
   $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
   $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
 
+
+
   // like('created_at',$dateRapport,'after')->Where('depots_id',$idDepot)->findAll();
   //
   // $profile = $this->model->join('profiles','profiles.user_id=users.id','right')->findAll();
@@ -155,8 +157,15 @@ class PdfGenerate extends BaseController {
   $this->pdf->SetMargins(5,5,5);
   $this->pdf->AddPage();
 
+
+
   $this->pdf->Cell(287,5,utf8_decode('RAPPORT JOURNAL DE SORTI '.$depotInfo->nom),0,1,'C');
   $this->pdf->Cell(287,5,'Date : '.$dateRapport,0,1,'C');
+
+  if(!$allArticle){
+    $this->pdf->Cell(287,20,'AUCUN ARTICLE SELECTIONNER SUR LE RAPPORT',1,0,'C');
+    $this->outPut();
+  }
 
 
   //CREATION ENTETE TABLEAU
