@@ -2736,8 +2736,9 @@ var vthis = new Vue({
     dateRapport : function(val){
       var date = new Date(val);
       var month = date.getMonth()+1;
-      return date.getFullYear()+'-'+month+'-'+date.getDate();
-      // console.log(this.dateRapport);
+      month = month.toString().length ==1 ? '0'+month: month;
+      this.dateRapport = date.getFullYear()+'-'+month+'-'+date.getDate();
+      //console.log(this.dateRapport);
     }
   }
 })
