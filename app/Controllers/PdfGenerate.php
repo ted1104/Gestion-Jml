@@ -10,6 +10,8 @@ use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\ApprovisionnementsDetailModel;
 use App\Models\StockModel;
 use App\Models\ClotureStockModel;
+use CodeIgniter\I18n\Time;
+
 
 
 
@@ -26,12 +28,6 @@ class PdfGenerate extends BaseController {
   protected $approvisionnementsDetailModel = null;
   protected $stockModel = null;
   protected $clotureStockModel = null;
-
-
-
-
-
-
 
 
   public function __construct(){
@@ -142,9 +138,6 @@ class PdfGenerate extends BaseController {
   $depotInfo = $this->depotModel->find($idDepot);
   $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
   $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
-
-
-
   // like('created_at',$dateRapport,'after')->Where('depots_id',$idDepot)->findAll();
   //
   // $profile = $this->model->join('profiles','profiles.user_id=users.id','right')->findAll();
@@ -156,8 +149,6 @@ class PdfGenerate extends BaseController {
   $this->pdf->SetFont('Helvetica','B',8);
   $this->pdf->SetMargins(5,5,5);
   $this->pdf->AddPage();
-
-
 
   $this->pdf->Cell(287,5,utf8_decode('RAPPORT JOURNAL DE SORTI '.$depotInfo->nom),0,1,'C');
   $this->pdf->Cell(287,5,'Date : '.$dateRapport,0,1,'C');
@@ -248,32 +239,26 @@ class PdfGenerate extends BaseController {
   $this->pdf->SetWidths($enteTableArticle);
   $this->pdf->Cell(14,5,'Reste Stock',1,0,'L');
   $qteStockReste = array();
+
+  $todayDate = Time::today();
+  $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
+  $compareDate = $todayDate->getYear().'-'.$m.'-'.$todayDate->getDay();
+
   for($i = 0; $i < count($allArticle); $i++){
-    $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
-    array_push($qteStockReste,$stock[0]->qte_stock);
+    if($compareDate==$dateRapport){
+      $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+      array_push($qteStockReste,$stock[0]->qte_stock);
+    }else{
+      $dateR = Time::parse($dateRapport);
+      $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+      $dy = $dateR->getDay()+1;
+      $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
+      $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateR)->find();
+      array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock : 0);
+    }
+
   }
   $this->pdf->Row($qteStockReste);
-  // $this->stockModel
-
-
-
-
-
-
-  // $this->pdf->MulCell(287,5,'Date : '.$dateRapport,0,1,'C');
-  // // $this->pdf->Ln();
-  // $this->pdf->Cell(190,10,'Client : '.$data->nom_client,0,1,'C');
-  // // $this->pdf->Ln();
-  // $this->pdf->Cell(190,10,utf8_decode('Dépôt : '.$data->depots_id[0]->nom),0,1,'C');
-  // $this->pdf->Cell(190,10,utf8_decode('Caissier : '.$data->payer_a[0]->nom.' '.$data->payer_a[0]->prenom),0,1,'C');
-  // $this->pdf->Cell(190,10,utf8_decode('Montant Total : '.$data->logic_somme.' USD'),0,1,'C');
-  // $this->pdf->SetFont('Helvetica','B',20);
-  // $this->pdf->Cell(190,40,$data->numero_commande,0,1,'C');
-  // $this->pdf->Ln();
-  // $this->pdf->SetWidths(array(30,50,30,40));
-  // for($i=0;$i<20;$i++){
-  //   $this->pdf->Row(array("papa","Hellp","Ooo","oaoao"));
-  // }
   $this->outPut();
 
 
