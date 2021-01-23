@@ -141,11 +141,12 @@ class PdfGenerate extends BaseController {
       // exit();
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
       $this->pdf->AliasNbPages();
-      $this->pdf->SetFont('Helvetica','B',8);
+      $this->pdf->SetFont('Helvetica','B',12);
       $this->pdf->SetMargins(5,5,5);
       $this->pdf->AddPage();
 
       $this->pdf->Cell(287,5,utf8_decode('RAPPORT JOURNAL DE SORTI '.$depotInfo->nom),0,1,'C');
+      $this->pdf->SetFont('Helvetica','B',8);
       $this->pdf->Cell(287,5,'Date : '.$dateRapport,0,1,'C');
 
       if(!$allArticle){
