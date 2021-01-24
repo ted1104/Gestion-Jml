@@ -2286,10 +2286,12 @@ var vthis = new Vue({
       this.isShow = !this.isShow;
       //pour profile Image admin update
       this.iduserToChangeProfile = data.id;
-      // console.log(this.detailTab);
+
       if(indLine !=null){
         this.currentLineSelectedInList = indLine;
       }
+
+      console.log(this.detailTab);
     },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";

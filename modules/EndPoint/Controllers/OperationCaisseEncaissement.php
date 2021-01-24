@@ -66,7 +66,7 @@ class OperationCaisseEncaissement extends ResourceController {
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'confition'=>$conditionDate
+      'condition'=>$conditionDate
     ]);
   }
 

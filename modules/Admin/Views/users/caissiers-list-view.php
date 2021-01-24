@@ -91,7 +91,7 @@
 														<div class="container" v-if="!isShowBlocHistoFactureStatus">
 															<div class="row">
 																<div class="col-md-10">
-																	<h5 class="card-title">DETAIL OPERATIONS </h5>
+																	<h5 class="card-title">DETAIL OPERATIONS AUJORD'HUI</h5>
 																	<div class="text-center">
 																		<p>{{detailTab.nom+' '+detailTab.prenom}}</p>
 																	</div>
@@ -102,22 +102,34 @@
 																<div class="table-responsive">
 																	<div class="container">
 																		<table class="table">
+																			<thead>
+																				<tr class="bg-secondary">
+																					<th scope="col">Operation</th>
+																					<th scope="col">Montant</th>
+																				</tr>
+																			</thead>
+																			<tbody>
 																				<tr>
 																					<td>Achats</td>
-																					<td>#</td>
+																					<td>{{detailTab.logic_operation_finance.achat}} USD</td>
 																				</tr>
-																				<tr>
+																				<tr v-if="detailTab.is_main==1">
 																					<td>Encaissement Interne</td>
-																					<td>#</td>
+																					<td>{{detailTab.logic_operation_finance.encaissementInterne}} USD</td>
 																				</tr>
-																				<tr>
+																				<tr v-if="detailTab.is_main==1">
 																					<td>Encaissement Externe</td>
-																					<td>#</td>
+																					<td>{{detailTab.logic_operation_finance.encaissementExterne}} USD</td>
 																				</tr>
-																				<tr>
-																					<td>Decaissement</td>
-																					<td>#</td>
+																				<tr v-if="detailTab.is_main==0">
+																					<td>Decaissement Interne</td>
+																					<td>{{detailTab.logic_operation_finance.decaissementInterne}} USD</td>
 																				</tr>
+																				<tr v-if="detailTab.is_main==1">
+																					<td>Decaissement Externe</td>
+																					<td>{{detailTab.logic_operation_finance.decaissementExterne}} USD</td>
+																				</tr>
+																			</tbody>
 																		</table>
 																	</div>
 																</div>
