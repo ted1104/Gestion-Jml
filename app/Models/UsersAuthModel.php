@@ -30,7 +30,7 @@ class UsersAuthModel extends Model{
   protected $returnType ='App\Entities\UsersAuthEntity';
 
   public function authLogin($user){
-    $userData = $this->Where('username',$user['username'])->findAll();
+    $userData = $this->select('id,username,password_main,status_users_id,users_id')->Where('username',$user['username'])->findAll();
     if(count($userData) > 0){
       $verify = password_verify($user['password_main'], $userData[0]->password_main);
       if($verify){
