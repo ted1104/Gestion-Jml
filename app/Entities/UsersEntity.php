@@ -104,6 +104,8 @@ class UsersEntity extends Entity{
 
   public function getLogicOperationFinance(){
     $d = Time::today();
+    $m = strlen($d->getMonth())==1?'0'.$d->getMonth():$d->getMonth();
+    $d = $d->getYear().'-'.$m.'-'.$d->getDay();
     // $d = '2021-01-14';
     //LES ACHATS
     $sommesAchatTotal = 0;
@@ -136,6 +138,7 @@ class UsersEntity extends Entity{
       'decaissementInterne' => $sommesDecaissementInterne[0]->montant?round($sommesDecaissementInterne[0]->montant,2):0,
       'encaissementExterne' => $sommesEncaissementExterne[0]->montant_encaissement?round($sommesEncaissementExterne[0]->montant_encaissement,2):0,
       'decaissementExterne' => $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0,
+      // 'date' => $d
     ];
   }
 }
