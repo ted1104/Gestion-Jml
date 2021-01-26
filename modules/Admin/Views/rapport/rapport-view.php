@@ -31,7 +31,7 @@
                               <div class="card-header bg-white">
                                   <h5 class="card-title text-black">RAPPORT JOURNAL DE SORTI DEPOT</h5>
                               </div>
-                              <div class="card-body">
+                              <div class="card-body margin-bottom-8">
                                 <div class="form-group">
                                   <label for="dateRapport">Date</label>
                                   <vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapport"></vuejs-datepicker>
