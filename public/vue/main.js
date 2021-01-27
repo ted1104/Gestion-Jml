@@ -217,7 +217,8 @@ var vthis = new Vue({
       currentLineSelectedInList : -1,
 
       //RAPPORT
-      dateRapport : ""
+      dateRapport : "",
+      dateRapportFin : "",
     }
   },
 
@@ -2280,6 +2281,7 @@ var vthis = new Vue({
       this.date_approvisionnement = currentDateWithFormat;
       this.date_vente = currentDateWithFormat;
       this.dateRapport = currentDateWithFormat;
+      this.dateRapportFin = currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
@@ -2741,6 +2743,13 @@ var vthis = new Vue({
       var month = date.getMonth()+1;
       month = month.toString().length ==1 ? '0'+month: month;
       this.dateRapport = date.getFullYear()+'-'+month+'-'+date.getDate();
+      //console.log(this.dateRapport);
+    },
+    dateRapportFin : function(val){
+      var date = new Date(val);
+      var month = date.getMonth()+1;
+      month = month.toString().length ==1 ? '0'+month: month;
+      this.dateRapportFin = date.getFullYear()+'-'+month+'-'+date.getDate();
       //console.log(this.dateRapport);
     }
   }

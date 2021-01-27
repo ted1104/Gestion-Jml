@@ -10,7 +10,12 @@ use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\ApprovisionnementsDetailModel;
 use App\Models\StockModel;
 use App\Models\ClotureStockModel;
+use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
+use App\Models\DecaissementModel;
+use App\Models\EncaissementExterneModel;
+use App\Models\DecaissementExterneModel;
+
 
 class PdfGenerate extends BaseController {
   protected $pdf;
@@ -22,6 +27,12 @@ class PdfGenerate extends BaseController {
   protected $approvisionnementsDetailModel = null;
   protected $stockModel = null;
   protected $clotureStockModel = null;
+  protected $usersModel = null;
+  protected $decaissementModel  = null;
+  protected $encaissementExterneModel = null;
+  protected $decaissementExterneModel = null;
+
+
 
 
   public function __construct(){
@@ -35,6 +46,10 @@ class PdfGenerate extends BaseController {
     $this->approvisionnementsDetailModel = new ApprovisionnementsDetailModel();
     $this->stockModel = new StockModel();
     $this->clotureStockModel = new ClotureStockModel();
+    $this->usersModel = new UsersModel();
+    $this->decaissementModel = new DecaissementModel();
+    $this->encaissementExterneModel = new EncaissementExterneModel();
+    $this->decaissementExterneModel = new DecaissementExterneModel();
 
 
   }
@@ -132,13 +147,7 @@ class PdfGenerate extends BaseController {
       $depotInfo = $this->depotModel->find($idDepot);
       $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
       $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
-      // like('created_at',$dateRapport,'after')->Where('depots_id',$idDepot)->findAll();
-      //
-      // $profile = $this->model->join('profiles','profiles.user_id=users.id','right')->findAll();
-      // echo "<pre>";
-      // print_r(count($AchatsHisto));
-      // echo "</pre>";
-      // exit();
+
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
       $this->pdf->AliasNbPages();
       $this->pdf->SetFont('Helvetica','B',12);
@@ -257,4 +266,102 @@ class PdfGenerate extends BaseController {
       $this->pdf->Row($qteStockReste);
       $this->outPut();
     }
+
+  public function rapport_finacier_journalier($dateRapport){
+    $dataAllCaissiers = $this->usersModel->Where('roles_id',3)->findAll();
+    // echo '<pre>';
+    // print_r($dataAllCaissiers);
+    // die();
+
+
+    $this->pdf = new TableFpdf('P','mm','A4');
+    $this->pdf->AliasNbPages();
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->SetMargins(5,5,5);
+    $this->pdf->AddPage();
+
+    $dateR = Time::parse($dateRapport);
+    $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+
+    $this->pdf->Cell(200,7,utf8_decode('RAPPORT FINANCIER JOURNALIER '),0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->Cell(200,7,'Date : '.$dateR->getDay().'-'.$m.'-'. $dateR->getYear(),0,1,'C');
+
+    $i =1;
+    foreach ($dataAllCaissiers as $key => $value) {
+      //REQUETTES
+      $d = $dateRapport;
+      //LES ACHATS
+      $sommesAchatTotal = 0;
+      $allVente = $this->commandesStatusHistoriqueModel->Where('status_vente_id',2)->Where('users_id',$value->id)->like('created_at',$d,'after')->findAll();
+      foreach ($allVente as $key) {
+        $detail = $this->commandesDetailModel->Where('vente_id',$key->vente_id)->findAll();
+        $sommes= 0;
+        foreach ($detail as $key => $valueAc) {
+          $montant = ($valueAc->is_negotiate == 0 || $valueAc->is_negotiate == 1) ?$valueAc->qte_vendue * $valueAc->prix_unitaire:$valueAc->qte_vendue * $valueAc->prix_negociation;
+          $sommes +=$montant;
+        }
+        $sommesAchatTotal+=$sommes;
+      }
+
+      //ENCAISSEMENT INTERNE : CAISSIER MAIN
+      $sommesEncaissementInterne = $this->decaissementModel->selectSum('montant')->Where('users_id_dest',$value->id)->Where('date_decaissement',$d)->find();
+
+      //DECAISSEMENT INTERNE : CAISSIER SECONDAIRE
+      $sommesDecaissementInterne = $this->decaissementModel->selectSum('montant')->Where('users_id_from',$value->id)->Where('date_decaissement',$d)->find();
+
+      //ENCAISSEMENT EXTERNE ; CAISSIER MAIN
+      $sommesEncaissementExterne = $this->encaissementExterneModel->selectSum('montant_encaissement')->Where('users_id',$value->id)->Where('date_encaissement',$d)->find();
+
+      //DECAISSEMENT INTERNE : CAISSIER MAIN
+      $sommesDecaissementExterne = $this->decaissementExterneModel->selectSum('montant')->Where('users_id_from',$value->id)->Where('date_decaissement',$d)->find();
+
+      //   return [
+      //   'achat' => round($sommesAchatTotal,2),
+      //   'encaissementInterne' => $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0,
+      //   'decaissementInterne' => $sommesDecaissementInterne[0]->montant?round($sommesDecaissementInterne[0]->montant,2):0,
+      //   'encaissementExterne' => $sommesEncaissementExterne[0]->montant_encaissement?round($sommesEncaissementExterne[0]->montant_encaissement,2):0,
+      //   'decaissementExterne' => $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0,
+      //   'date' => $d
+      // ];
+      // code...
+      $this->pdf->SetFont('Helvetica','B',10);
+      $this->pdf->Cell(200,7,$i++.'. '.utf8_decode(strtoupper($value->nom).' '.strtoupper($value->prenom)),0,1,'L');
+      $this->pdf->SetFont('Helvetica','B',8);
+      $this->pdf->SetWidths(array(40,40,40,40,40));
+      $this->pdf->Row(array('Achat','Encaissement Interne','Decaissement Interne','Encaissement Externe','Decaissement Externe'));
+
+      $chiffreAchat = round($sommesAchatTotal,2);
+      $chiffreEncaissementInterne = $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0;
+      $chiffreDecaissementInterne = $sommesDecaissementInterne[0]->montant?round($sommesDecaissementInterne[0]->montant,2):0;
+      $chiffreEncaissementExterne = $sommesEncaissementExterne[0]->montant_encaissement?round($sommesEncaissementExterne[0]->montant_encaissement,2):0;
+      $chiffreDecaissementExterne = $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0;
+      $this->pdf->Row(array(
+        $chiffreAchat,
+        $chiffreEncaissementInterne,
+        $chiffreDecaissementInterne,
+        $chiffreEncaissementExterne,
+        $chiffreDecaissementExterne
+      ));
+      if($value->is_main == 1){
+        $montantReste = ($chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne) - $chiffreDecaissementExterne;
+        $formule = 'Achat + Encaissement Interne + Encaissement Externe - Decaissement Externe';
+      }else{
+        $montantReste = $chiffreAchat - $chiffreDecaissementInterne;
+        $formule = 'Achat - Decaissement Interne';
+      }
+      $this->pdf->Cell(200,7,'Formule : '.$formule,1,1,'L');
+      $this->pdf->Cell(200,7,'Montant Reste : '.round($montantReste, 2).' USD',1,1,'L');
+
+      // echo '<pre>';
+      // print_r($value);
+      $this->pdf->Ln(5);
+    }
+
+
+
+
+
+    $this->outPut();
+  }
 }
