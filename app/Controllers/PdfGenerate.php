@@ -15,6 +15,8 @@ use CodeIgniter\I18n\Time;
 use App\Models\DecaissementModel;
 use App\Models\EncaissementExterneModel;
 use App\Models\DecaissementExterneModel;
+use App\Models\CaisseModel;
+
 
 
 class PdfGenerate extends BaseController {
@@ -31,6 +33,8 @@ class PdfGenerate extends BaseController {
   protected $decaissementModel  = null;
   protected $encaissementExterneModel = null;
   protected $decaissementExterneModel = null;
+  protected static $caisseModel = null;
+
 
 
 
@@ -50,6 +54,8 @@ class PdfGenerate extends BaseController {
     $this->decaissementModel = new DecaissementModel();
     $this->encaissementExterneModel = new EncaissementExterneModel();
     $this->decaissementExterneModel = new DecaissementExterneModel();
+    self::$caisseModel = new CaisseModel();
+
 
 
   }
@@ -316,6 +322,8 @@ class PdfGenerate extends BaseController {
       //DECAISSEMENT INTERNE : CAISSIER MAIN
       $sommesDecaissementExterne = $this->decaissementExterneModel->selectSum('montant')->Where('users_id_from',$value->id)->Where('date_decaissement',$d)->find();
 
+      $dataCaisseMontant = self::$caisseModel->Where('users_id',$value->id)->find();
+
       //   return [
       //   'achat' => round($sommesAchatTotal,2),
       //   'encaissementInterne' => $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0,
@@ -344,14 +352,17 @@ class PdfGenerate extends BaseController {
         $chiffreDecaissementExterne
       ));
       if($value->is_main == 1){
-        $montantReste = ($chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne) - $chiffreDecaissementExterne;
+        $montantEntree = $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
         $formule = 'Achat + Encaissement Interne + Encaissement Externe - Decaissement Externe';
+        $this->pdf->Cell(200,7,utf8_decode('Montant Total Entrée : '.round($montantEntree,2).' USD'),1,1,'L');
+        $this->pdf->Cell(200,7,'Montant Total Sorti : '.round($chiffreDecaissementExterne, 2).' USD',1,1,'L');
+        $this->pdf->Cell(200,7,utf8_decode('Difference : Montant Total Entrée -  Montant Total Sorti : '.round($montantEntree-$chiffreDecaissementExterne, 2).' USD'),1,1,'L');
       }else{
         $montantReste = $chiffreAchat - $chiffreDecaissementInterne;
         $formule = 'Achat - Decaissement Interne';
       }
-      $this->pdf->Cell(200,7,'Formule : '.$formule,1,1,'L');
-      $this->pdf->Cell(200,7,'Montant Reste : '.round($montantReste, 2).' USD',1,1,'L');
+
+      $this->pdf->Cell(200,7,'Total caisse Actuel : '.round($dataCaisseMontant[0]->montant, 2).' USD',1,1,'L');
 
       // echo '<pre>';
       // print_r($value);
