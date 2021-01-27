@@ -37,10 +37,10 @@ class PvRestaurationEntity extends Entity{
     $this->approvisionnementsDetailModel = new ApprovisionnementsDetailModel();
   }
   public function getUsersId(){
-    return $this->userModel->select("nom, prenom")->find($this->attributes['users_id']);
+    return $this->userModel->select("id,nom, prenom")->find($this->attributes['users_id']);
   }
   public function getDepotsIdDest(){
-    return $this->depotModel->select("nom")->Where('id',$this->attributes['depots_id_dest'])->find();
+    return $this->depotModel->select("id,nom")->Where('id',$this->attributes['depots_id_dest'])->find();
   }
 
   public function getDateRestaure(){

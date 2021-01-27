@@ -1707,10 +1707,10 @@ var vthis = new Vue({
             })
     },
     add_approvision_pv_restaure(e){
-      console.log("====RESTARURE===");
-      console.log(this.qte_restaurer);
-      console.log("====INIT RESTARURE===");
-      console.log(this.qte_restaurer_init);
+      // console.log("====RESTARURE===");
+      // console.log(this.qte_restaurer);
+      // console.log("====INIT RESTARURE===");
+      // console.log(this.qte_restaurer_init);
       e.preventDefault();
       const newurl = this.url+"pv-approvisionnement-restaure";
       var form = new FormData();
@@ -1734,7 +1734,7 @@ var vthis = new Vue({
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   this._u_fx_form_init_field();
                   this._u_close_mod_form();
-                  this.get_stock_depots_by_depot();
+                  this.get_article();
                   this.isLoadSaveMainButton = false;
                   this.tabListData=[];
                   return;
@@ -2259,10 +2259,11 @@ var vthis = new Vue({
       console.log(cmd);
     },
     _u_open_mod_popup_magaz_restaure_pv(cmd,val){
-      this.modalTitle = "APPROVISIONNEMENT PV RESTAURE DE L'ARTICLE "+cmd.articles_id[0].code_article+" : "+cmd.articles_id[0].nom_article;
-      this.articles_id = cmd.articles_id[0].id;
-      this.qte_restaurer = cmd.articles_id[0].qte_stock_pv;
-      this.qte_restaurer_init = cmd.articles_id[0].qte_stock_pv;
+      console.log(cmd);
+      this.modalTitle = "APPROVISIONNEMENT PV RESTAURATION DE L'ARTICLE "+cmd.code_article+" : "+cmd.nom_article;
+      this.articles_id = cmd.id;
+      this.qte_restaurer = cmd.qte_stock_pv;
+      this.qte_restaurer_init = cmd.qte_stock_pv;
       this.depots_id ="";
       this.styleModal = 'block';
       console.log(cmd);
