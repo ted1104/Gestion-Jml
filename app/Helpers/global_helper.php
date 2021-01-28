@@ -44,7 +44,7 @@ if(! function_exists('getDepotCentral')){
     $db = \Config\Database::connect();
     $query = $db->table('st_depots')->getWhere(['is_central' => 1, 'lieu' =>$lieu]);
     $data = $query->getRow();
-    return $data->id;
+    return $data ? $data->id:null;
   }
 }
 //$tableSecondaire,$id

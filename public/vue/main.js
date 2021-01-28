@@ -367,7 +367,9 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.depotList = response.data.data;
-              // console.log(this.depotList);
+              if(this.depotList.length < 1){
+                this.isNoReturnedData = true;
+              }
             }).catch(error =>{
               console.log(error);
             })
@@ -2040,8 +2042,8 @@ var vthis = new Vue({
         this._u_fx_config_error_message_bottom("Message",['Veuillez selectionner un dépôt traiteur'],'alert-danger');
         return;
       }
-      if(this.qte < 1){
-        this._u_fx_config_error_message_bottom("Message",['La quantité doit être superieure à 1'],'alert-danger');
+      if(!Number(this.qte)){
+        this._u_fx_config_error_message_bottom("Message",['La quantité est invalide'],'alert-danger');
         return;
       }
       this.messageErrorBottom = false;

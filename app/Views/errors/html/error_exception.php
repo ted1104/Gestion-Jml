@@ -151,7 +151,7 @@
 									<?php if (is_string($value)) : ?>
 										<?= htmlspecialchars($value, ENT_SUBSTITUTE, 'UTF-8') ?>
 									<?php else: ?>
-										<?= '<pre>' . print_r($value, true) ?>
+										<?= '<pre>' . print_r($value, false) ?>
 									<?php endif; ?>
 								</td>
 							</tr>
