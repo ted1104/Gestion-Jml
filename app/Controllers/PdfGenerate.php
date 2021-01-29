@@ -175,10 +175,16 @@ class PdfGenerate extends BaseController {
       $DonneTableArticle = array();
       $DonneStockInitial = array();
       $DonneApprovisionnement = array();
+      $DonneApprovisionnementPv = array();
+      $DonneApprovisionnementTotal = array();
       $LineEmptyNumFacture = array();
       for($i = 0; $i < count($allArticle); $i++){
         //APPROVISIONNEMENT GENERAL
         $approGen = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $approGenPv = $this->approvisionnementsDetailModel->selectSum('qte_pv')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
 
         //GET QUANTITE INITIAL RESTANT EN STOCK HIER
 
@@ -195,6 +201,8 @@ class PdfGenerate extends BaseController {
         array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
         array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock : 0);
         array_push($DonneApprovisionnement,$approGen[0]->qte?$approGen[0]->qte:0);
+        array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
+        array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
         array_push($LineEmptyNumFacture,'');
       }
       $this->pdf->SetWidths($enteTableArticle);
@@ -206,8 +214,14 @@ class PdfGenerate extends BaseController {
       $this->pdf->Cell(14,5,'Stock Init',1,0,'L');
       $this->pdf->Row($DonneStockInitial);
 
-      $this->pdf->Cell(14,5,'Appro',1,0,'L');
+      $this->pdf->Cell(14,5,'Appro Bon',1,0,'L');
       $this->pdf->Row($DonneApprovisionnement);
+
+      $this->pdf->Cell(14,5,'Appro PV',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementPv);
+
+      $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementTotal);
 
       $this->pdf->Cell(14,5,'Facture',1,0,'L');
       $this->pdf->SetWidths(array(273));
