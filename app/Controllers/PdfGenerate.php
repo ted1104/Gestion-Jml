@@ -217,7 +217,7 @@ class PdfGenerate extends BaseController {
       $this->pdf->Cell(14,5,'Appro Bon',1,0,'L');
       $this->pdf->Row($DonneApprovisionnement);
 
-      $this->pdf->Cell(14,5,'Appro PV',1,0,'L');
+      $this->pdf->Cell(14,5,'PV',1,0,'L');
       $this->pdf->Row($DonneApprovisionnementPv);
 
       $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
