@@ -92,7 +92,7 @@
 																						<input type="text" class="form-control" v-model="codeArticle">
 					                                </div>
 					                                <div class="form-group col-md-4 col-lg-4 col-xl-4">
-					                                  <input type="text" class="form-control" id="qte" v-model="qte">
+					                                  <input type="text" class="form-control" id="qte" v-model="qte" placeholder="ex : 2 ou 2 sur 4">
 					                                </div>
 																					<div class="col-md-2 col-lg-2 col-xl-2">
 																						<div class="custom-control custom-checkbox custom-control-inline ">
