@@ -2042,10 +2042,10 @@ var vthis = new Vue({
         this._u_fx_config_error_message_bottom("Message",['Veuillez selectionner un dépôt traiteur'],'alert-danger');
         return;
       }
-      if(!Number(this.qte)){
-        this._u_fx_config_error_message_bottom("Message",['La quantité est invalide'],'alert-danger');
-        return;
-      }
+      // if(!Number(this.qte)){
+      //   this._u_fx_config_error_message_bottom("Message",['La quantité est invalide'],'alert-danger');
+      //   return;
+      // }
       this.messageErrorBottom = false;
       this.isLoadSaveMainButtonModal = true;
       return axios
