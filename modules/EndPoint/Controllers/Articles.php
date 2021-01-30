@@ -135,13 +135,60 @@ class Articles extends ResourceController {
   }
   public function article_search_data_commande($codeArticle,$qte,$depotid,$isFaveur){
      $codeArt = $codeArticle;
-     $Qte = $qte;
+     $qqte =  explode("sur",$qte);
      $depot = $depotid;
      $isFaveur = $isFaveur;
-
      $data = $this->model->Where('code_article',$codeArt)->find();
-
      if($data){
+       //CONTROLE SUR LE QUANTITE ENVOYEE
+       if(is_array($qqte) and count($qqte) > 1){
+         if($qqte[0] < 1 OR $data[0]->nombre_piece <= $qqte[0]){
+           if($data[0]->nombre_piece > 1){
+             $message = [
+               'success' =>null,
+               'errors'=>'Quantité renseigné invalide !! Cet article ne contient que '.$data[0]->nombre_piece.' en détaillant! Veuillez verifier le nombre de pièce dans cet article'
+             ];
+           }else{
+             $message = [
+               'success' =>null,
+               'errors'=>'Cet article ne peut pas être vendu avec une quantité inférieure à 1 car le nombre de pièce dans cet article est égal à 1'
+             ];
+           }
+           return $this->respond([
+             'status' => 400,
+             'message' =>$message,
+             'data'=> null
+           ]);
+         }else{
+           $Qte = (int)$qqte[0]/ (int)$data[0]->nombre_piece;
+
+         }
+       }else{
+         $Qte = $qqte[0];
+         if($Qte < 0 || $Qte ==0){
+           $message = [
+             'success' =>null,
+             'errors'=>'La quantité ne doit pas être inférieur ou égale à 0'
+           ];
+           return $this->respond([
+             'status' => 400,
+             'message' =>$message,
+             'data'=> null
+           ]);
+         }
+       }
+       // CHECK IF THIS ARTICLE IS ALLOW TO BE BUY WITH PRICE INFERIEUR A 1
+       if($Qte < 1 and $data[0]->nombre_piece < 2){
+         $message = [
+           'success' =>null,
+           'errors'=>'Cet article ne peut pas être vendu avec une quantité inférieure à 1 car le nombre de pièce dans cet article est égal à 1'
+         ];
+         return $this->respond([
+           'status' => 400,
+           'message' =>$message,
+           'data'=> null
+         ]);
+       }
        //CHECK IF DEPOT HAS THIS QUANTIY
        $condition =[
          'depot_id'=>$depot,
@@ -280,7 +327,8 @@ class Articles extends ResourceController {
      return $this->respond([
        'status' => $status,
        'message' =>$message,
-       'data'=> $data
+       'data'=>$data,
+       // 'msg' => fmod($calc, 1) == 0.00
      ]);
      // print_r($ConfigFaveur[0]->articles_id);
 
