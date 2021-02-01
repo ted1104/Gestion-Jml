@@ -13,11 +13,12 @@ class ClotureStockEntity extends Entity{
     'depot_id' => null,
     'qte_stock' => null,
     'date_cloture'=>null,
+    'qte_stock_virtuel'=>null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
   ];
-
+  
   protected $datamap = [];
   protected static $articlesModel = null;
   protected static $etatcritique = null;

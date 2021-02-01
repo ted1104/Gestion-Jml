@@ -61,6 +61,20 @@
 		                              </div>
 		                            </div>
 		                        </div>
+														<div class="col-md-4 col-lg-4 col-xl-4 ">
+			                          <div class="card m-b-30">
+			                              <div class="card-header bg-white">
+			                                  <h5 class="card-title text-black">RAPPORT STOCK GENERAL</h5>
+			                              </div>
+			                              <div class="card-body margin-bottom-8">
+			                                <div class="form-group">
+			                                  <label for="dateRapportGen">Date</label>
+			                                  <vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapportGen"></vuejs-datepicker>
+			                                </div>
+			                                <a target="_blank" :href="'<?=base_url() ?>/rapport-stock-general/'+dateRapportGen+''" class="btn btn-primary">Généré</a>
+			                              </div>
+			                            </div>
+			                        </div>
 											</div>
                     </div>
                     <!-- End XP Col -->

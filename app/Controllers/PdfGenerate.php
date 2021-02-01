@@ -272,14 +272,14 @@ class PdfGenerate extends BaseController {
       for($i = 0; $i < count($allArticle); $i++){
         if($compareDate==$dateRapport){
           $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
-          array_push($qteStockReste,$stock[0]->qte_stock);
+          array_push($qteStockReste,$stock[0]->qte_stock_virtuel);
         }else{
           $dateR = Time::parse($dateRapport);
           $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
           $dy = $dateR->getDay()+1;
           $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
           $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateR)->find();
-          array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock : 0);
+          array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         }
 
       }
@@ -289,10 +289,6 @@ class PdfGenerate extends BaseController {
 
   public function rapport_finacier_journalier($dateRapport){
     $dataAllCaissiers = $this->usersModel->Where('roles_id',3)->findAll();
-    // echo '<pre>';
-    // print_r($dataAllCaissiers);
-    // die();
-
 
     $this->pdf = new TableFpdf('P','mm','A4');
     $this->pdf->AliasNbPages();
@@ -338,20 +334,11 @@ class PdfGenerate extends BaseController {
 
       $dataCaisseMontant = self::$caisseModel->Where('users_id',$value->id)->find();
 
-      //   return [
-      //   'achat' => round($sommesAchatTotal,2),
-      //   'encaissementInterne' => $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0,
-      //   'decaissementInterne' => $sommesDecaissementInterne[0]->montant?round($sommesDecaissementInterne[0]->montant,2):0,
-      //   'encaissementExterne' => $sommesEncaissementExterne[0]->montant_encaissement?round($sommesEncaissementExterne[0]->montant_encaissement,2):0,
-      //   'decaissementExterne' => $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0,
-      //   'date' => $d
-      // ];
-      // code...
       $this->pdf->SetFont('Helvetica','B',10);
       $this->pdf->Cell(200,7,$i++.'. '.utf8_decode(strtoupper($value->nom).' '.strtoupper($value->prenom)),0,1,'L');
       $this->pdf->SetFont('Helvetica','B',8);
       $this->pdf->SetWidths(array(40,40,40,40,40));
-      $this->pdf->Row(array('Achat','Encaissement Interne','Decaissement Interne','Encaissement Externe','Decaissement Externe'));
+      $this->pdf->Row(array('Vente','Encaissement Interne','Decaissement Interne','Encaissement Externe','Decaissement Externe'));
 
       $chiffreAchat = round($sommesAchatTotal,2);
       $chiffreEncaissementInterne = $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0;
@@ -367,13 +354,13 @@ class PdfGenerate extends BaseController {
       ));
       if($value->is_main == 1){
         $montantEntree = $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
-        $formule = 'Achat + Encaissement Interne + Encaissement Externe - Decaissement Externe';
+        $formule = 'Vente + Encaissement Interne + Encaissement Externe - Decaissement Externe';
         $this->pdf->Cell(200,7,utf8_decode('Montant Total Entrée : '.round($montantEntree,2).' USD'),1,1,'L');
         $this->pdf->Cell(200,7,'Montant Total Sorti : '.round($chiffreDecaissementExterne, 2).' USD',1,1,'L');
         $this->pdf->Cell(200,7,utf8_decode('Difference : Montant Total Entrée -  Montant Total Sorti : '.round($montantEntree-$chiffreDecaissementExterne, 2).' USD'),1,1,'L');
       }else{
         $montantReste = $chiffreAchat - $chiffreDecaissementInterne;
-        $formule = 'Achat - Decaissement Interne';
+        $formule = 'Vente - Decaissement Interne';
       }
 
       $this->pdf->Cell(200,7,'Total caisse Actuel : '.round($dataCaisseMontant[0]->montant, 2).' USD',1,1,'L');
@@ -384,6 +371,95 @@ class PdfGenerate extends BaseController {
     }
 
 
+
+
+
+    $this->outPut();
+  }
+
+  public function rapport_stock_general($dateRapport){
+    $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
+
+    $this->pdf = new TableFpdf('P','mm','A4');
+    $this->pdf->AliasNbPages();
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->SetMargins(5,5,5);
+    $this->pdf->AddPage();
+
+    $dateR = Time::parse($dateRapport);
+    $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+
+    $this->pdf->Cell(200,7,utf8_decode('RAPPORT STOCK GENERAL'),0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->Cell(200,7,'Date : '.$dateR->getDay().'-'.$m.'-'. $dateR->getYear(),0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',6);
+    $this->pdf->Ln(5);
+    $this->pdf->SetWidths(array(50,15,15,15,15,20));
+    $this->pdf->Row(array('Designation','Stock Initial',utf8_decode('Entrée'),utf8_decode('Sorti'),utf8_decode('Stock Final'),utf8_decode('Observation')));
+    $this->pdf->SetFont('Helvetica','',6);
+    foreach ($allArticle as $key => $value) {
+      // code... SI
+      $stockInit = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateRapport)->find();
+
+      //code Entree
+      $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where('articles_id',$value->id)->find();
+
+      //code pour sorti
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
+
+      // echo '<pre>';
+      // print_r($AchatsHisto);
+      // die();
+      $qteTotal = 0;
+      foreach ($AchatsHisto as $key) {
+        $detAchat = $this->commandesDetailModel->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
+        if($detAchat){
+          $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+        }else{
+          $qteTotal = $qteTotal + 0;
+        }
+      }
+
+      //RESTE EN Stock
+      $todayDate = Time::today();
+      $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
+      $compareDate = $todayDate->getYear().'-'.$m.'-'.$todayDate->getDay();
+
+        $qteResteEnStock = 0;
+        if($compareDate==$dateRapport){
+          $stock = $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->find();
+          $qteResteEnStock = $stock[0]->qte_stock_virtuel ? $stock[0]->qte_stock_virtuel:0;
+
+          // echo 'here </br>';
+        }else{
+          $dateR = Time::parse($dateRapport);
+          $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+          $dy = $dateR->getDay()+1;
+          $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
+          $stockInitCloture = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateR)->find();
+
+          // echo '<pre>';
+          // print_r($dateR);
+          // die();
+          $qteResteEnStock = $stockInitCloture[0]->qte_stock_virtuel? $stockInitCloture[0]->qte_stock_virtuel:0;
+
+          // echo 'here too </br>';
+        }
+
+
+      $this->pdf->Row(array(
+            utf8_decode(strtoupper($value->nom_article)),
+            $stockInit[0]->qte_stock_virtuel?$stockInit[0]->qte_stock_virtuel:0,
+            $approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0,
+            $qteTotal,
+            $qteResteEnStock,
+            '-'));
+    }
+
+    // $stockInit = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',1)->Where('date_cloture','2021-01-23')->find();
+    // echo '<pre>';
+    // print_r($stockInit);
+    // die();
 
 
 

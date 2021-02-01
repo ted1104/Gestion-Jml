@@ -39,7 +39,11 @@ $routes->get('print-facture/(:any)/code','PdfGenerate::facture/$1',['filter' => 
 
 $routes->get('config-pass-profile','Configuration::index',['filter' => 'isLoggedIn']);
 $routes->get('rapport-journal-de-sorti-par-depot/(:num)/(:any)/','PdfGenerate::rapport_journal_de_sorti_par_depot/$1/$2');
-$routes->get('rapport-financier-journalier/(:any)/','PdfGenerate::rapport_finacier_journalier/$1');
+$routes->get('rapport-financier-journalier/(:any)','PdfGenerate::rapport_finacier_journalier/$1');
+$routes->get('rapport-stock-general/(:any)','PdfGenerate::rapport_stock_general/$1');
+
+
+
 
 
 
