@@ -47,4 +47,16 @@ if(! function_exists('getDepotCentral')){
     return $data ? $data->id:null;
   }
 }
+if(! function_exists('dateFormating')){
+  function dateFormating($d){
+    $m = strlen($d->getMonth())==1?'0'.$d->getMonth():$d->getMonth();
+    $dy = strlen($d->getDay())==1?'0'.$d->getDay():$d->getDay();
+    $d = $d->getYear().'-'.$m.'-'.$dy;
+    return $d;
+  }
+}
+
+
+
+// $d = '2021-01-14';
 //$tableSecondaire,$id

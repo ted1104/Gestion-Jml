@@ -104,10 +104,8 @@ class UsersEntity extends Entity{
 
   public function getLogicOperationFinance(){
     $d = Time::today();
-    $m = strlen($d->getMonth())==1?'0'.$d->getMonth():$d->getMonth();
-    $d = $d->getYear().'-'.$m.'-'.$d->getDay();
-    // $d = '2021-01-14';
-    //LES ACHATS
+    $d = dateFormating($d);
+
     $sommesAchatTotal = 0;
     $allVente = $this->commandesStatusHistoriqueModel->Where('status_vente_id',2)->Where('users_id',$this->attributes['id'])->like('created_at',$d,'after')->findAll();
     foreach ($allVente as $key) {
