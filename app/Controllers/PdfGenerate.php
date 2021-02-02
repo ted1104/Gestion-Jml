@@ -237,7 +237,7 @@ class PdfGenerate extends BaseController {
         $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
         $venteDetailArray = array();
         for($i = 0; $i < count($allArticle); $i++){
-          $detAchat = $this->commandesDetailModel->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
             array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
         }
         $this->pdf->Row($venteDetailArray);
@@ -251,7 +251,7 @@ class PdfGenerate extends BaseController {
       for($i = 0; $i < count($allArticle); $i++){
         $qteTotal = 0;
         foreach ($AchatsHisto as $key => $value) {
-          $detAchat = $this->commandesDetailModel->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->findAll();
           if($detAchat){
             $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
           }else{
@@ -433,7 +433,7 @@ class PdfGenerate extends BaseController {
       // die();
       $qteTotal = 0;
       foreach ($AchatsHisto as $key) {
-        $detAchat = $this->commandesDetailModel->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
         if($detAchat){
           $qteTotal += $detAchat[0]->qte_vendue;
         }
