@@ -165,10 +165,10 @@ class Articles extends ResourceController {
          }
        }else{
          $Qte = $qqte[0];
-         if($Qte < 0 || $Qte ==0){
+         if($Qte < 1 || $Qte ==0){
            $message = [
              'success' =>null,
-             'errors'=>'La quantité ne doit pas être inférieur ou égale à 0'
+             'errors'=>'La quantité ne doit pas être inférieur à 1'
            ];
            return $this->respond([
              'status' => 400,
