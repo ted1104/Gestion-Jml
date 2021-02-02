@@ -303,10 +303,11 @@ class PdfGenerate extends BaseController {
 
     $dateR = Time::parse($dateRapport);
     $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+    $dyy = strlen($dateR->getDay())==1?'0'.$dateR->getDay():$dateR->getDay();
 
     $this->pdf->Cell(200,7,utf8_decode('RAPPORT FINANCIER JOURNALIER '),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',12);
-    $this->pdf->Cell(200,7,'Date : '.$dateR->getDay().'-'.$m.'-'. $dateR->getYear(),0,1,'C');
+    $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
 
     $i =1;
     foreach ($dataAllCaissiers as $key => $value) {
@@ -407,10 +408,11 @@ class PdfGenerate extends BaseController {
 
     $dateR = Time::parse($dateRapport);
     $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+    $dyy = strlen($dateR->getDay())==1?'0'.$dateR->getDay():$dateR->getDay();
 
     $this->pdf->Cell(200,7,utf8_decode('RAPPORT STOCK GENERAL'),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',12);
-    $this->pdf->Cell(200,7,'Date : '.$dateR->getDay().'-'.$m.'-'. $dateR->getYear(),0,1,'C');
+    $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',6);
     $this->pdf->Ln(5);
     $this->pdf->SetWidths(array(50,15,15,15,15,20));
@@ -424,18 +426,16 @@ class PdfGenerate extends BaseController {
       $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where('articles_id',$value->id)->find();
 
       //code pour sorti
-      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
 
       // echo '<pre>';
-      // print_r($AchatsHisto);
+      // print_r(count($AchatsHisto));
       // die();
       $qteTotal = 0;
       foreach ($AchatsHisto as $key) {
         $detAchat = $this->commandesDetailModel->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
         if($detAchat){
-          $qteTotal += $qteTotal + $detAchat[0]->qte_vendue;
-        }else{
-          $qteTotal += $qteTotal + 0;
+          $qteTotal += $detAchat[0]->qte_vendue;
         }
       }
 
