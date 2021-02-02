@@ -431,11 +431,11 @@ class PdfGenerate extends BaseController {
       // die();
       $qteTotal = 0;
       foreach ($AchatsHisto as $key) {
-        $detAchat = $this->commandesDetailModel->Where('vente_id',$key->vente_id)->Where('articles_id',$key->id)->findAll();
+        $detAchat = $this->commandesDetailModel->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
         if($detAchat){
-          $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+          $qteTotal += $qteTotal + $detAchat[0]->qte_vendue;
         }else{
-          $qteTotal = $qteTotal + 0;
+          $qteTotal += $qteTotal + 0;
         }
       }
 
