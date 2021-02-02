@@ -11,6 +11,8 @@ use App\Models\DecaissementExterneModel;
 use App\Models\EncaissementExterneModel;
 use App\Entities\EncaissementExterneEntity;
 use CodeIgniter\I18n\Time;
+use App\Models\ClotureCaisseModel;
+
 
 
 
@@ -23,6 +25,8 @@ class OperationCaisseEncaissement extends ResourceController {
   protected $usersAuthModel = null;
   protected $decaissementExterneModel = null;
   protected $encaissementExterneModel = null;
+  protected $clotureCaisseModel = null;
+
 
 
 
@@ -33,6 +37,7 @@ class OperationCaisseEncaissement extends ResourceController {
     $this->decaissementExterneModel = new DecaissementExterneModel();
     $this->usersAuthModel = new UsersAuthModel();
     $this->encaissementExterneModel = new EncaissementExterneModel();
+    $this->clotureCaisseModel =  new ClotureCaisseModel();
   }
   //MONTANT SOLDE DU CAISSIER
   public function getMontantCaisse($idCaissier){
@@ -320,5 +325,24 @@ class OperationCaisseEncaissement extends ResourceController {
     $SommeEncaissement = $this->encaissementExterneModel->selectSum('montant_encaissement')->Where($conditionUserSource)->Where($conditionDate)->find();
     return round($SommeEncaissement[0]->montant_encaissement,2);
 
+  }
+
+  // #########CLOTURE OPERATION
+  public function clotureJournalierCaisse(){
+    $d = Time::today();
+    $initCaisse = $this->caisseModel->findAll();
+    if(!$this->clotureCaisseModel->Where('date_cloture',$d)->find()){
+      foreach ($initCaisse as $key => $value) {
+        $data = [
+          'montant'=>$value->montant,
+          'users_id' =>$value->users_id,
+          'date_cloture' =>$d
+        ];
+        $insertData = $this->clotureCaisseModel->insert($data);
+      }
+      echo 'caisse cloture avec success';
+    }else{
+      echo 'caisse Deja cloturé encore';
+    }
   }
 }

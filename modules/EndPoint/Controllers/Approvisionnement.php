@@ -8,6 +8,7 @@ use App\Models\StockModel;
 use App\Models\ArticlesModel;
 use App\Models\PvRestaurationModel;
 use App\Models\ClotureStockModel;
+
 use App\Entities\StockEntity;
 use App\Entities\PvRestaurationEntity;
 use App\Entities\ClotureStockEntity;
@@ -24,6 +25,7 @@ class Approvisionnement extends ResourceController {
   protected $articlesModel = null;
   protected $pvRestaurationModel = null;
   protected $clotureStockModel = null;
+  
 
 
 
@@ -35,6 +37,7 @@ class Approvisionnement extends ResourceController {
     $this->articlesModel = new ArticlesModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->clotureStockModel = new ClotureStockModel();
+    
 
   }
   public function approvisionnement_get($limit, $offset){

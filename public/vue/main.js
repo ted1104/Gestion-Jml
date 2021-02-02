@@ -2746,21 +2746,27 @@ var vthis = new Vue({
       var date = new Date(val);
       var month = date.getMonth()+1;
       month = month.toString().length ==1 ? '0'+month: month;
-      this.dateRapport = date.getFullYear()+'-'+month+'-'+date.getDate();
+      var day = date.getDate();
+      day =  day.toString().length ==1 ? '0'+day: day;
+      this.dateRapport = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
     },
     dateRapportFin : function(val){
       var date = new Date(val);
       var month = date.getMonth()+1;
       month = month.toString().length ==1 ? '0'+month: month;
-      this.dateRapportFin = date.getFullYear()+'-'+month+'-'+date.getDate();
+      var day = date.getDate();
+      day =  day.toString().length ==1 ? '0'+day: day;
+      this.dateRapportFin = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
     },
     dateRapportGen : function(val){
       var date = new Date(val);
       var month = date.getMonth()+1;
       month = month.toString().length ==1 ? '0'+month: month;
-      this.dateRapportGen = date.getFullYear()+'-'+month+'-'+date.getDate();
+      var day = date.getDate();
+      day =  day.toString().length ==1 ? '0'+day: day;
+      this.dateRapportGen = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
     }
   }

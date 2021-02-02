@@ -106,6 +106,9 @@ $routes->group('api/v1', function($routes){
 
   //CLOTURE AUTOMATIQUE
   $routes->get('cloture-stock-journalier','Approvisionnement::clotureJournalierStock');
+  $routes->get('cloture-caisse-journalier','OperationCaisseEncaissement::clotureJournalierCaisse');
+
+
 
 
 
