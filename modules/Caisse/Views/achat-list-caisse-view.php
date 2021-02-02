@@ -223,7 +223,11 @@
 																		<!-- <span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].code_article}}</span> -->
 
 																		<span>Qte:</span><br>
-																		<span>{{det.qte_vendue}}</span>
+																		<span v-if="det.qte_vendue >1">{{det.qte_vendue}}</span>
+																		<span v-if="det.qte_vendue <1" class="text-danger">
+
+																			{{(det.articles_id[0].nombre_piece * det.qte_vendue)+'/'+det.articles_id[0].nombre_piece}}
+																		</span>
 																	</div>
 																	<div class="col-md-6">
 																		<span>Produit</span><br>
