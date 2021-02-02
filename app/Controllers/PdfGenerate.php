@@ -270,7 +270,8 @@ class PdfGenerate extends BaseController {
 
       $todayDate = Time::today();
       $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
-      $compareDate = $todayDate->getYear().'-'.$m.'-'.$todayDate->getDay();
+      $d = strlen($todayDate->getDay())==1?'0'.$todayDate->getDay():$todayDate->getDay();
+      $compareDate = $todayDate->getYear().'-'.$m.'-'.$d;
 
       for($i = 0; $i < count($allArticle); $i++){
         if($compareDate==$dateRapport){
@@ -280,6 +281,7 @@ class PdfGenerate extends BaseController {
           $dateR = Time::parse($dateRapport);
           $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
           $dy = $dateR->getDay()+1;
+          $dy = strlen($dy)==1?'0'. $dy:$dy;
           $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
           $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateR)->find();
           array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
@@ -335,8 +337,16 @@ class PdfGenerate extends BaseController {
       //DECAISSEMENT INTERNE : CAISSIER MAIN
       $sommesDecaissementExterne = $this->decaissementExterneModel->selectSum('montant')->Where('users_id_from',$value->id)->Where('date_decaissement',$d)->find();
 
+
+      //RESTE STOCK INITIAL
+      $dateReste = Time::parse($dateRapport);
+      $m = strlen($dateReste->getMonth())==1?'0'.$dateReste->getMonth():$dateReste->getMonth();
+      $dy = $dateReste->getDay()-1;
+      $dy = strlen($dy)==1?'0'. $dy:$dy;
+      $dateReste = $dateReste->getYear().'-'.$m.'-'.$dy;
+
       $dataCaisseMontant = self::$caisseModel->Where('users_id',$value->id)->find();
-      $dataCaisseMontantResteHier = self::$clotureCaisseModel->Where('users_id',$value->id)->Where('date_cloture', Time::yesterday())->find();
+      $dataCaisseMontantResteHier = self::$clotureCaisseModel->Where('users_id',$value->id)->Where('date_cloture', $dateReste)->find();
 
       $this->pdf->SetFont('Helvetica','B',10);
       $this->pdf->Cell(200,7,$i++.'. '.utf8_decode(strtoupper($value->nom).' '.strtoupper($value->prenom)),0,1,'L');
@@ -357,14 +367,16 @@ class PdfGenerate extends BaseController {
         $chiffreDecaissementExterne
       ));
 
-      $this->pdf->Cell(200,7,utf8_decode('Montant Caisse Reste Hier : '.($dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0).' USD'),1,1,'L');
+      $this->pdf->Cell(200,7,utf8_decode('Montant Caisse Initial : '.($dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0).' USD'),1,1,'L');
       if($value->is_main == 1){
         $montantEntree = $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
         $formule = 'Vente + Encaissement Interne + Encaissement Externe - Decaissement Externe';
+        $this->pdf->Cell(200,7,utf8_decode('Ventes Total journalière : '.round($chiffreAchat+$chiffreEncaissementInterne, 2).' USD'),1,1,'L');
+        $this->pdf->Cell(200,7,utf8_decode('Encaissement Externe : '.round($chiffreEncaissementExterne, 2).' USD'),1,1,'L');
         $this->pdf->Cell(200,7,utf8_decode('Montant Total Entrée : '.round($montantEntree,2).' USD'),1,1,'L');
         $this->pdf->Cell(200,7,'Montant Total Sorti : '.round($chiffreDecaissementExterne, 2).' USD',1,1,'L');
-        $this->pdf->Cell(200,7,utf8_decode('Difference : Montant Total Entrée -  Montant Total Sorti : '.round($montantEntree-$chiffreDecaissementExterne, 2).' USD'),1,1,'L');
-        $this->pdf->Cell(200,7,utf8_decode('Montant Total Ventes : '.round($chiffreAchat-$chiffreEncaissementInterne, 2).' USD'),1,1,'L');
+      // $this->pdf->Cell(200,7,utf8_decode('Difference : Montant Total Entrée -  Montant Total Sorti : '.round($montantEntree-$chiffreDecaissementExterne, 2).' USD'),1,1,'L');
+
       }else{
         $montantReste = $chiffreAchat - $chiffreDecaissementInterne;
         $formule = 'Vente - Decaissement Interne';
