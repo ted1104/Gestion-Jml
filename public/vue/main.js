@@ -2551,6 +2551,7 @@ var vthis = new Vue({
      formData.append('poids',vthis.poids);
      formData.append('users_id',vthis.users_id);
      formData.append('nombre_piece',vthis.nombre_piece);
+     formData.append('qte_stock_pv',0);
      return formData;
    },
     _u_fx_form_data_art_price(){
