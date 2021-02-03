@@ -389,11 +389,6 @@ class PdfGenerate extends BaseController {
       // print_r($value);
       $this->pdf->Ln(5);
     }
-
-
-
-
-
     $this->outPut();
   }
 
@@ -442,15 +437,19 @@ class PdfGenerate extends BaseController {
       //RESTE EN Stock
       $todayDate = Time::today();
       $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
-      $compareDate = $todayDate->getYear().'-'.$m.'-'.$todayDate->getDay();
+      $myday = strlen($todayDate->getDay())==1?'0'.$todayDate->getDay():$todayDate->getDay();
+      $compareDate = $todayDate->getYear().'-'.$m.'-'.$myday;
 
-        $qteResteEnStock = 0;
+      $qteResteEnStock = 0;
+
         if($compareDate==$dateRapport){
+          // echo 'Here';
           $stock = $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->find();
           $qteResteEnStock = $stock[0]->qte_stock_virtuel ? $stock[0]->qte_stock_virtuel:0;
 
           // echo 'here </br>';
         }else{
+          // echo 'Here Too';
           $dateR = Time::parse($dateRapport);
           $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
           $dy = $dateR->getDay()+1;
