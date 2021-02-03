@@ -72,8 +72,8 @@
 																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																		<td>
 																			<div class="custom-control custom-checkbox custom-control-inline">
-																				<input type="checkbox" name="checkBoxArticles" :id="dt.id" class="custom-control-input" :value="dt.id" v-model="checkBoxAchatSelected" :disabled="dt.status_operation != 0">
-																				<label class="custom-control-label" :for="dt.id"></label>
+																				<input type="checkbox" name="checkBoxAchatSelected" :id="dt.id+'ch'" class="custom-control-input" :value="dt.id" v-model="checkBoxAchatSelected" :disabled="dt.status_operation != 0">
+																				<label class="custom-control-label" :for="dt.id+'ch'"></label>
 																			</div>
 																		</td>
 																		<td>{{dt.date_approvisionnement}}</td>

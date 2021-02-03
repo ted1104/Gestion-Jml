@@ -76,6 +76,17 @@ class ApprovisionnementInterDepot extends ResourceController {
             'data'=>""
           ]);
         }
+
+        //UPDATE STOCK IN STOCK DEPOT SOURCE
+        $conditionSource =[
+          'depot_id'=>$data->depots_id_source[0]->id,
+          'articles_id'=>$article[$i]
+        ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+        $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+        //$QteSource = $initqteSource->qte_stock - $qte[$i];//ADDITION ANCIENNE + NOUVELLE
+        $QteVirtuelSource = $initqteSource->qte_stock_virtuel - $qte[$i];
+        // return $this->respond([$initqte]);
+        $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock_virtuel'=>$QteVirtuelSource]);
       }
 
       $status = 200;
@@ -156,12 +167,12 @@ class ApprovisionnementInterDepot extends ResourceController {
           ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
           $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
           $QteSource = $initqteSource->qte_stock - $value->qte;//ADDITION ANCIENNE + NOUVELLE
-          $QteVirtuelSource = $initqteSource->qte_stock_virtuel - $value->qte;
+          // $QteVirtuelSource = $initqteSource->qte_stock_virtuel - $value->qte;
           // return $this->respond([$initqte]);
 
           $updStockDest = $this->stockModel->update($initqteDest->id,['qte_stock'=>$QteDest,'qte_stock_virtuel'=>$QteVirtuelDest]);
 
-          $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource,'qte_stock_virtuel'=>$QteVirtuelSource]);
+          $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource]);
 
         }
 
@@ -217,12 +228,29 @@ class ApprovisionnementInterDepot extends ResourceController {
           ];
           $data = "";
         }else {
-            $status = 200;
-            $message = [
-              'success' => $nbrAnnule++ .' Approvisionnement(s) annulé(s) avec succès',
-              'errors' => null
-            ];
-            $data = "";
+          $infoAppro = $this->model->find($idappro[$i]);
+          $allArticleIn = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$idappro[$i])->findAll();
+          foreach ($allArticleIn as $key => $value) {
+            // code...
+
+            //UPDATE STOCK IN STOCK DEPOT SOURCE
+            $conditionSource =[
+              'depot_id'=>$infoAppro->depots_id_source[0]->id,
+              'articles_id'=>$value->articles_id[0]->id
+            ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+            $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+            //$QteSource = $initqteSource->qte_stock - $qte[$i];//ADDITION ANCIENNE + NOUVELLE
+            $QteVirtuelSource = $initqteSource->qte_stock_virtuel + $value->qte;
+            // return $this->respond([$initqte]);
+            $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock_virtuel'=>$QteVirtuelSource]);
+          }
+
+          $status = 200;
+          $message = [
+            'success' => $nbrAnnule++ .' Approvisionnement(s) annulé(s) avec succès',
+            'errors' => null
+          ];
+          $data = "";
         }
       }
     }
@@ -244,24 +272,45 @@ class ApprovisionnementInterDepot extends ResourceController {
           'articles_id'=>$idarticle[$i]
         ];
         $data = $this->approvisionnementsInterDepotDetailModel->getWhere($condition)->getRow();
-        if($this->approvisionnementsInterDepotDetailModel->delete(['id' =>$data->id ])){
-          $textArt = $i > 1 ? 'ont':'a';
-          $status = 200;
-          $message = [
-            'success' => ($i+1).' article(s) de cet approvisionnement '.$textArt.' été supprimer avec succès',
-            'errors' => null
-          ];
-          $data = "";
 
-        }else{
-          $status = 400;
-          $message = [
-            'success' => null,
-            'errors' => "Echec de la suppression d'article"
-          ];
-          $data = "";
-        }
+        $infoAppro = $this->model->find($idappro);
+        $allArticleIn = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$idappro)->Where('articles_id',$idarticle[$i])->find();
+          //UPDATE STOCK IN STOCK DEPOT SOURCE
+          $conditionSource =[
+            'depot_id'=>$infoAppro->depots_id_source[0]->id,
+            'articles_id'=>$allArticleIn[0]->articles_id[0]->id
+          ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+          $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+          //$QteSource = $initqteSource->qte_stock - $qte[$i];//ADDITION ANCIENNE + NOUVELLE
+          $QteVirtuelSource = $initqteSource->qte_stock_virtuel + $allArticleIn[0]->qte;
+          // return $this->respond([$initqte]);
+          $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock_virtuel'=>$QteVirtuelSource]);
+          if($updStockSource){
+            if($this->approvisionnementsInterDepotDetailModel->delete(['id' =>$data->id ])){
+              $textArt = $i > 1 ? 'ont':'a';
+              $status = 200;
+              $message = [
+                'success' => ($i+1).' article(s) de cet approvisionnement '.$textArt.' été supprimer avec succès',
+                'errors' => null
+              ];
+              $data = "";
 
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => "Echec de la suppression d'article"
+              ];
+              $data = "";
+            }
+          }else{
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => "Echec de la suppression d'article veuilez contactez l'administrateur"
+            ];
+            $data = "";
+          }
       }
     }else{
       $status = 400;
