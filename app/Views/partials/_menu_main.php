@@ -98,6 +98,40 @@
 
             <!-- MENU GERANT -->
             <?php if(session('users')['info'][0]->roles_id == 2): ?>
+              <li>
+                  <a href="<?=base_url('gerant-dashboard') ?>">
+                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-list-achat') ?>">Achat</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
+                      <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
+
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                  
+                      <li><a href="<?=base_url('admin-histo-appro') ?>">Historique </a></li>
+                      <li><a href="<?=base_url('admin-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
+                  </ul>
+
+              </li>
             <?php endif; ?>
 
             <!-- MENU CAISSIER -->
