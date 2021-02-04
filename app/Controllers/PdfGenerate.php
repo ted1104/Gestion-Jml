@@ -428,7 +428,7 @@ class PdfGenerate extends BaseController {
       $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where('articles_id',$value->id)->find();
 
       //code pour sorti
-      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
 
       // echo '<pre>';
       // print_r(count($AchatsHisto));
