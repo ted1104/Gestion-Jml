@@ -155,7 +155,7 @@ class PdfGenerate extends BaseController {
   public function rapport_journal_de_sorti_par_depot($idDepot,$dateRapport){
       $depotInfo = $this->depotModel->find($idDepot);
       $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
-      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll();
 
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
       $this->pdf->AliasNbPages();
@@ -177,6 +177,7 @@ class PdfGenerate extends BaseController {
       $enteTableArticle = array();
       $DonneTableArticle = array();
       $DonneStockInitial = array();
+      $DonneStockInitialVirtuel = array();
       $DonneApprovisionnement = array();
       $DonneApprovisionnementPv = array();
       $DonneApprovisionnementTotal = array();
@@ -194,15 +195,11 @@ class PdfGenerate extends BaseController {
         $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateRapport)->find();
 
 
-        // echo "<pre>";
-        // print_r($approGen[0]->qte);
-        // print_r($allArticle[$i]->id);
-        // echo "</pre>";
-        // exit();
 
         array_push($enteTableArticle,273/count($allArticle));
         array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
-        array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
+        array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock : 0);
+        array_push($DonneStockInitialVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         array_push($DonneApprovisionnement,$approGen[0]->qte?$approGen[0]->qte:0);
         array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
         array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
@@ -214,8 +211,11 @@ class PdfGenerate extends BaseController {
       $this->pdf->Cell(14,5,'Produit',1,0,'L');
       $this->pdf->Row($DonneTableArticle);
 
-      $this->pdf->Cell(14,5,'Stock Init',1,0,'L');
+      $this->pdf->Cell(14,5,'Stock Init R',1,0,'L');
       $this->pdf->Row($DonneStockInitial);
+
+      $this->pdf->Cell(14,5,'Stock Init V',1,0,'L');
+      $this->pdf->Row($DonneStockInitialVirtuel);
 
       $this->pdf->Cell(14,5,'Appro Bon',1,0,'L');
       $this->pdf->Row($DonneApprovisionnement);
@@ -265,8 +265,9 @@ class PdfGenerate extends BaseController {
 
       //RESTE EN Stock
       $this->pdf->SetWidths($enteTableArticle);
-      $this->pdf->Cell(14,5,'Reste Stock',1,0,'L');
+      $this->pdf->Cell(14,5,'Rst Stock R',1,0,'L');
       $qteStockReste = array();
+      $qteStockResteVirtuel = array();
 
       $todayDate = Time::today();
       $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
@@ -276,7 +277,8 @@ class PdfGenerate extends BaseController {
       for($i = 0; $i < count($allArticle); $i++){
         if($compareDate==$dateRapport){
           $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
-          array_push($qteStockReste,$stock[0]->qte_stock_virtuel);
+          array_push($qteStockReste,$stock[0]->qte_stock);
+          array_push($qteStockResteVirtuel,$stock[0]->qte_stock_virtuel);
         }else{
           $dateR = Time::parse($dateRapport);
           $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
@@ -284,11 +286,16 @@ class PdfGenerate extends BaseController {
           $dy = strlen($dy)==1?'0'. $dy:$dy;
           $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
           $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateR)->find();
-          array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
+          array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock : 0);
+          array_push($qteStockResteVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         }
 
       }
       $this->pdf->Row($qteStockReste);
+
+      $this->pdf->Cell(14,5,'Rst Stock V',1,0,'L');
+      $this->pdf->Row($qteStockResteVirtuel);
+
       $this->outPut();
     }
 
