@@ -212,9 +212,11 @@ var vthis = new Vue({
       //PV RESTAURE ET APPROVISIOONER
       qte_restaurer : "",
       qte_restaurer_init : "",
+      qte_perdue : 0,
 
       //SLECTIONNER LIGNE QUI EST VISIBLE
       currentLineSelectedInList : -1,
+
 
       //RAPPORT
       dateRapport : "",
@@ -1721,6 +1723,7 @@ var vthis = new Vue({
       form.append('users_id',this.users_id);
       form.append('articles_id',this.articles_id);
       form.append('qte_restaure', this.qte_restaurer);
+      form.append('qte_perdue', this.qte_perdue);
       form.append('depots_id_dest',this.depots_id);
       form.append('date_restaurer',this.date_approvisionnement);
 
@@ -1728,6 +1731,15 @@ var vthis = new Vue({
         this._u_fx_config_error_message("Erreur",["Vous n'avez pas cette quantité dans le dépôt PV"],'alert-danger');
         return;
       }
+      if(this.checkBoxAchatSelected.length > 0){
+        if(Number(this.qte_restaurer) + Number(this.qte_perdue) !== Number(this.qte_restaurer_init)){
+          this._u_fx_config_error_message("Erreur",["Vos quantités renseignées sont invalides"],'alert-danger');
+          // console.log(Number(this.qte_restaurer)+Number(this.qte_perdue));
+          // console.log(this.qte_restaurer_init);
+          return;
+        }
+      }
+
       this.isLoadSaveMainButton = true;
       this.messageError = false;
       return axios

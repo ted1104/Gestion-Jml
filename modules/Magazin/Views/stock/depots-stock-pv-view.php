@@ -35,7 +35,7 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
-												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8 u-transition':'col-md-12 u-transition'">
+												<div :class="isShow ? 'col-md-6 col-lg-6 col-xl-6 u-transition':'col-md-12 u-transition'">
                         <!-- <div class=""> -->
                           <div class="card">
                             <div class="card-header bg-white">
@@ -47,7 +47,7 @@
 																	<tr class="bg-secondary">
 																		<th scope="col">code</th>
 																		<th scope="col">Article</th>
-																		<th scope="col">Description</th>
+																		<th scope="col" v-if="!isShow">Description</th>
 																		<!-- <th scope="col">Qte Réelle</th>
 																		<th scope="col">Qte Virtuelle</th> -->
 																		<th scope="col">Qte PV</th>
@@ -60,7 +60,7 @@
 																	<tr v-for="(det,i) in dataToDisplay" :class="currentLineSelectedInList==i?'bg-light':''">
 																		<td>{{det.code_article}}</td>
 																		<td>{{det.nom_article}}</td>
-																		<td>{{det.description}}</td>
+																		<td v-if="!isShow">{{det.description}}</td>
 																		<!-- <td>{{det.qte_stock}}</td>
 																		<td>{{det.qte_stock_virtuel}}</td> -->
 																		<!-- <td>
@@ -97,7 +97,7 @@
                         </div>
 												</div>
 
-												<div v-if="isShow" :class="isShow ? 'col-md-4 col-lg-4 col-xl-4':''">
+												<div v-if="isShow" :class="isShow ? 'col-md-6 col-lg-6 col-xl-6':''">
 													<div class="card m-b-30 u-animation-FromRight" v-if="isShow">
 														<div class="container" v-if="!isShowBlocHistoFactureStatus">
 															<div class="row">
@@ -116,15 +116,19 @@
                                       <thead>
       																	<tr class="bg-secondary">
                                           <th scope="col">Date</th>
-      																		<th scope="col">Qte</th>
-      																		<th scope="col">Dépôt</th>
+																					<th scope="col">Qte Restauré</th>
+      																		<th scope="col">Qte Perdue</th>
+																					<th scope="col">Dépôt</th>
+      																		<th scope="col">Par</th>
       																	</tr>
       																</thead>
 																				<tbody>
                                           <tr v-for="(dt,i) in detailTab.logic_operation_pv_restaurer">
                                             <td>{{dt.date_restaurer}}</td>
-                                            <td>{{dt.qte_restaure}}</td>
+																						<td>{{dt.qte_restaure}}</td>
+                                            <td>{{dt.qte_perdue}}</td>
                                             <td>{{dt.depots_id_dest[0].nom}}</td>
+																						<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
                                           </tr>
                                         </tbody>
 																		</table>
@@ -172,8 +176,21 @@
                 </select>
               </div>
     					<div class="form-group">
-    						<label for="prix_unitaire">Quantité Restaurée *</label>
+    						<label for="qte_restaurer">Quantité Restaurée *</label>
     						<input type="text" class="form-control" id="qte_restaurer" aria-describedby="qte_restaurer" v-model="qte_restaurer">
+								<!-- {{checkBoxAchatSelected}} -->
+    					</div>
+							<div class="form-group">
+								<span>Avez vous terminer la restauration de tous les PVs ?</span><br>
+								<div class="custom-control custom-checkbox custom-control-inline">
+									<input type="checkbox" name="checkBoxAchatSelected" id="ch" class="custom-control-input" value="1" v-model="checkBoxAchatSelected">
+									<label class="custom-control-label" for="ch"></label>
+									<label for="ch"> Oui j'ai terminé</label>
+								</div>
+							</div>
+							<div class="form-group" v-if="checkBoxAchatSelected.length > 0">
+    						<label for="qte_perdue">Quantité Perdue *</label>
+    						<input type="text" class="form-control" id="qte_perdue" aria-describedby="qte_perdue" v-model="qte_perdue">
     					</div>
               <div class="form-group">
                 <label for="date_approvisionnement">Date</label>

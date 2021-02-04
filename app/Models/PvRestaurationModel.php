@@ -6,7 +6,7 @@ class PvRestaurationModel extends Model{
   protected $table = 'g_interne_pv_restaure';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['users_id','depots_id_dest','qte_restaure','date_restaurer','articles_id'];
+  protected $allowedFields = ['users_id','depots_id_dest','qte_restaure','date_restaurer','articles_id','qte_perdue'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'date_restaurer' => 'required|valid_date[Y-m-d]',

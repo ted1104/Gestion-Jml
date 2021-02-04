@@ -172,6 +172,9 @@ class Approvisionnement extends ResourceController {
     }else{
       $artInfo = $this->articlesModel->find($data->articles_id);
       $newQte = $artInfo->qte_stock_pv - $data->qte_restaure;
+      if($data->qte_perdue > 0){
+        $newQte = $artInfo->qte_stock_pv - ($data->qte_restaure+$data->qte_perdue);
+      }
       if(!$this->articlesModel->update($data->articles_id, ['qte_stock_pv'=>$newQte])){
         $status = 400;
         $message = [

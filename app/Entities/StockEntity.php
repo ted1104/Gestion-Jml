@@ -30,7 +30,7 @@ class StockEntity extends Entity{
   }
 
   protected function getArticlesId(){
-    return self::$articlesModel->select('id,code_article,nom_article,logic_detail_data')->Where('id',$this->attributes['articles_id'])->find();
+    return self::$articlesModel->select('id,code_article,nom_article,description,logic_detail_data')->Where('id',$this->attributes['articles_id'])->find();
   }
   protected function getLogicEtatCritique(){
 

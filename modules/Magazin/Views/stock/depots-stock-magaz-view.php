@@ -56,6 +56,7 @@
                                 </div>
                             </div>
 														<div class="table-responsive card-body">
+
 															<table class="table">
 																<thead>
 																	<tr class="bg-secondary">
