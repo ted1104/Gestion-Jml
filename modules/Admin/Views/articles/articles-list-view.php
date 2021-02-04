@@ -50,6 +50,7 @@
 																		<th scope="col">Code</th>
 																		<th scope="col">Nom Article</th>
 																		<th scope="col">Pièces</th>
+																		<th scope="col">Qte virt</th>
 																		<th scope="col">Config Prix</th>
 																		<th scope="col">Config Faveur</th>
 																		<th scope="col">Rapport</th>
@@ -63,6 +64,7 @@
 																		<td>{{dt.code_article}}</td>
 																		<td>{{dt.nom_article}}</td>
 																		<td>{{dt.nombre_piece}}</td>
+																		<td>{{dt.logic_qte_virtuel_dispo}}</td>
 																		<td>
 																			<button :class="dt.logic_detail_data.length > 0?'btn btn-round btn-success':'btn btn-round btn-light'" @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																		</td>
