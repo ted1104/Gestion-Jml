@@ -38,7 +38,17 @@
 												<div :class="isShow ? 'col-md-8 col-lg-8 col-xl-8':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT RECUS</h5>
+                                <div class="row">
+																	<div class="col-md-7">
+	                                		<h5 class="card-title text-black">INFORMATIONS SUR LES APPROVISONNEMENT RECUS</h5>
+	                                </div>
+																	<div class="col-md-5">
+																		<div class="pull-right row">
+																			<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_approvisionnement_by_depot)"><i class="mdi mdi-search-web"></i> </button>
+																		</div>
+																	</div>
+                                </div>
 
                             </div>
 														<div class="table-responsive card-body">

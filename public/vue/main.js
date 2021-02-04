@@ -995,7 +995,7 @@ var vthis = new Vue({
             })
     },
     get_historique_approvisionnement(limit=this.PerPaged,offset=0, indexPage=0){
-      const newurl = this.url+"approvisionnement-get-all/"+limit+"/"+offset;
+      const newurl = this.url+"approvisionnement-get-all/"+this.dateFilter+"/"+limit+"/"+offset;
       this.isNoReturnedData = false;
       this.dataToDisplay=[];
       if(this.isShow){
@@ -1018,7 +1018,7 @@ var vthis = new Vue({
             })
     },
     get_historique_approvisionnement_by_depot(limit=this.PerPaged,offset=0, indexPage=0){
-      const newurl = this.url+"approvisionnement-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset;
+      const newurl = this.url+"approvisionnement-get-by-depot/"+this.dpot_id+"/"+limit+"/"+offset+"/"+this.dateFilter;
       this.isNoReturnedData = false;
       this.dataToDisplay=[];
       if(this.isShow){

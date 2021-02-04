@@ -90,8 +90,8 @@ $routes->group('api/v1', function($routes){
 
 
   //3. APPROVISIONNEMENT
-  $routes->get('approvisionnement-get-all/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2');
-  $routes->get('approvisionnement-get-by-depot/(:num)/(:num)/(:num)','Approvisionnement::approvisionnement_get_by_depot/$1/$2/$3');
+  $routes->get('approvisionnement-get-all/(:any)/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2/$3');
+  $routes->get('approvisionnement-get-by-depot/(:num)/(:num)/(:num)/(:any)','Approvisionnement::approvisionnement_get_by_depot/$1/$2/$3/$4');
   $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
 
   $routes->get('approvisionnement-inter-depot-get-all/(:num)/(:num)/(:any)','ApprovisionnementInterDepot::approvisionnementInterDepot_get/$1/$2/$3');

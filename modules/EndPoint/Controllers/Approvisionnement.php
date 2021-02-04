@@ -25,7 +25,7 @@ class Approvisionnement extends ResourceController {
   protected $articlesModel = null;
   protected $pvRestaurationModel = null;
   protected $clotureStockModel = null;
-  
+
 
 
 
@@ -37,16 +37,19 @@ class Approvisionnement extends ResourceController {
     $this->articlesModel = new ArticlesModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->clotureStockModel = new ClotureStockModel();
-    
+
 
   }
-  public function approvisionnement_get($limit, $offset){
-    $data = $this->model->orderBy('id','DESC')->findAll($limit,$offset);
+  public function approvisionnement_get($dateFilter,$limit, $offset){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_approvisionnement'=> $dateFilter];
+    $data = $this->model->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> count($data = $this->model->orderBy('id','DESC')->findAll())
+      'all'=> count($data = $this->model->Where($conditionDate)->orderBy('id','DESC')->findAll())
     ]);
   }
   public function approvisionnement_create(){
@@ -143,13 +146,17 @@ class Approvisionnement extends ResourceController {
        'data'=> $data
      ]);
   }
-  public function approvisionnement_get_by_depot($idDepot,$limit, $offset){
-    $data = $this->model->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll($limit,$offset);
+  public function approvisionnement_get_by_depot($idDepot,$limit, $offset,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_approvisionnement'=> $dateFilter];
+
+    $data = $this->model->Where($conditionDate)->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> count($data = $this->model->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll())
+      'all'=> count($data = $this->model->Where($conditionDate)->Where('depots_id',$idDepot)->orderBy('id','DESC')->findAll())
     ]);
   }
   public function approvisionementPvRestaure(){
