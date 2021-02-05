@@ -55,6 +55,16 @@ if(! function_exists('dateFormating')){
     return $d;
   }
 }
+if(! function_exists('getAllDroitAccess')){
+  function getAllDroitAccess($idUser){
+    $db = \Config\Database::connect();
+    $query = $db->table('g_droit_access')->getWhere(['users_id' => $idUser]);
+    $data = $query->getRow();
+    return [
+      'g_pv' => $data ? $data->g_pv:0
+    ];
+  }
+}
 
 
 

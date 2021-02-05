@@ -5,6 +5,7 @@ use CodeIgniter\RESTful\ResourceController;
 use App\Entities\UsersEntity;
 use App\Entities\UsersAuthEntity;
 use App\Models\UsersAuthModel;
+use App\Models\DroitAccessModel;
 
 
 
@@ -12,10 +13,13 @@ class Users extends ResourceController {
   protected $format = 'json';
   protected $modelName = '\App\Models\UsersModel';
   protected $userAuthModel = null;
+  protected $droitAccessModel = null;
 
   public function __construct(){
     helper(['global']);
     $this->userAuthModel = new UsersAuthModel();
+    $this->droitAccessModel = new DroitAccessModel();
+
   }
 
   public function users_get($limit,$offset){
@@ -236,5 +240,50 @@ class Users extends ResourceController {
       'data' => null
     ]);
 
+  }
+
+  public function changeAccessToGestionPv($idUser){
+    $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
+    if(!$userHaveAccess){
+      $data = ['users_id' => $idUser ,'g_pv'=>1];
+      if(!$insertData = $this->droitAccessModel->insert($data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' => 'Le droit d\'acces à la gestion de PV a été activé avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }else{
+      $data = ['g_pv' =>$userHaveAccess[0]->g_pv ? 0 : 1 ];
+      if(!$this->droitAccessModel->update($userHaveAccess[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $text = $userHaveAccess[0]->g_pv ? 'desactivé' : 'activé';
+        $message = [
+          'success' => 'Le droit d\'acces à la gestion de PV a été '.$text.' avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
   }
 }

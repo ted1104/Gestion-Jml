@@ -31,6 +31,8 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-reset-password-connexion/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_connexion/$1/$2/$3');
   $routes->get('users-reset-password-operation/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_operation/$1/$2/$3');
 
+  $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
+
 
 
 

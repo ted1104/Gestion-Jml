@@ -23,6 +23,7 @@ class Login extends BaseController {
         $this->session->setFlashData('message',['title' => 'Bienvenue !!', 'content' => 'Amusez vous bien '.$auth['info'][0]->nom.' '.$auth['info'][0]->prenom.'. Nous vous souhaitons un excelent travail','color'=>'alert-success']);
         $redirectLink = checkroleandredirect($auth['info'][0]->roles_id);
         $this->session->set('users', $auth);
+        $this->session->set('accessDroit',getAllDroitAccess($auth['info'][0]->id));
         $this->session->set('profile', $redirectLink->description);
         $this->session->set('lieuAffectation', getLieuAffectationDetail($auth['info'][0]->depot_id));
         return redirect()->to($redirectLink->routes);

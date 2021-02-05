@@ -221,7 +221,10 @@ var vthis = new Vue({
       //RAPPORT
       dateRapport : "",
       dateRapportFin : "",
-      dateRapportGen : ""
+      dateRapportGen : "",
+
+      //VARIVALE POUR DROIT ACCESS
+      accessGestionPv : "",
     }
   },
 
@@ -1790,7 +1793,9 @@ var vthis = new Vue({
             })
     },
 
+
     //QUELQUES FONCTIONS COTE ADMINISTRATION
+
 
     //FONCTION POUR RECHERCHER
     _searchDataFacturier(limit=this.PerPaged,offset=0, indexPage=0){
@@ -2309,9 +2314,9 @@ var vthis = new Vue({
       if(indLine !=null){
         this.currentLineSelectedInList = indLine;
       }
-
       console.log(this.detailTab);
     },
+
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
       return axios
@@ -2463,6 +2468,32 @@ var vthis = new Vue({
 
 
             }).catch(error =>{
+              console.log(error);
+            })
+    },
+
+    _u_change_droit_access(){
+      var userID = this.codeIdArticlePrint;
+      const newurl = this.url+"users-change-pv-gestion-access/"+userID;
+      // this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_users_admin();
+                  // this.get_article();
+                  // this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                // this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
               console.log(error);
             })
     },
@@ -2781,7 +2812,11 @@ var vthis = new Vue({
       day =  day.toString().length ==1 ? '0'+day: day;
       this.dateRapportGen = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
-    }
+    },
+    // accessGestionPv : function(val){
+    //   // console.log(val);
+    //   this._u_change_droit_access();
+    // }
   }
 })
 

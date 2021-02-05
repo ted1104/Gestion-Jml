@@ -13,6 +13,7 @@ use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\DecaissementModel;
 use App\Models\EncaissementExterneModel;
 use App\Models\DecaissementExterneModel;
+use App\Models\DroitAccessModel;
 
 
 
@@ -37,6 +38,7 @@ class UsersEntity extends Entity{
     'logic_role_depot'=>null,
     'logic_auth'=>null,
     'logic_operation_finance' => null,
+    'logic_droit_access' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
@@ -53,6 +55,7 @@ class UsersEntity extends Entity{
   protected $decaissementModel  = null;
   protected $encaissementExterneModel = null;
   protected $decaissementExterneModel = null;
+  protected $droitAccessModel = null;
 
 
 
@@ -69,6 +72,7 @@ class UsersEntity extends Entity{
     $this->decaissementModel = new DecaissementModel();
     $this->encaissementExterneModel = new EncaissementExterneModel();
     $this->decaissementExterneModel = new DecaissementExterneModel();
+    $this->droitAccessModel = new DroitAccessModel();
   }
 
   public function setPassword(String $pass){
@@ -138,5 +142,9 @@ class UsersEntity extends Entity{
       'decaissementExterne' => $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0,
       'date' => $d
     ];
+  }
+
+  public function getLogicDroitAccess(){
+    return $this->droitAccessModel->Where('users_id', $this->attributes['id'])->find();
   }
 }

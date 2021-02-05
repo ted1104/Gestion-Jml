@@ -117,7 +117,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
-                      <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <?php if(session('accessDroit')['g_pv'] == 1): ?>
+                        <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <?php endif; ?>
                   </ul>
               </li>
               <li>
@@ -126,7 +128,7 @@
 
                   </a>
                   <ul class="xp-vertical-submenu">
-                  
+
                       <li><a href="<?=base_url('admin-histo-appro') ?>">Historique </a></li>
                       <li><a href="<?=base_url('admin-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
                   </ul>
@@ -151,6 +153,9 @@
                       <li><a href="<?=base_url('caissier-add-achat') ?>">Créer</a></li>
                       <?php endif;?>
                       <li><a href="<?=base_url('caissier-list-achat') ?>">Mes Achats</a></li>
+                      <?php if(session('accessDroit')['g_pv'] == 1): ?>
+                        <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <?php endif; ?>
                   </ul>
 
               </li>
@@ -194,6 +199,9 @@
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('facturier-add-achat') ?>">Créer</a></li>
                       <li><a href="<?=base_url('facturier-list-achat') ?>">Mes Achats</a></li>
+                      <?php if(session('accessDroit')['g_pv'] == 1): ?>
+                        <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <?php endif; ?>
                   </ul>
               </li>
               <li>
@@ -236,7 +244,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
-                    <li><a href="<?=base_url('magaz-pv') ?>">PV stock</a></li>
+                    <?php if(session('accessDroit')['g_pv'] == 1): ?>
+                      <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                    <?php endif; ?>
                   </ul>
               </li>
               <li>

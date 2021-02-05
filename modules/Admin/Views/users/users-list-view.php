@@ -103,12 +103,14 @@
 
 												<div v-if="isShow" :class="isShow ? 'col-md-4 col-lg-4 col-xl-4':''">
 													<div class="card m-b-30 u-transition">
-														<div class="container">
-															<div class="row">
-																<h5 class="col-md-9 card-title">PROFILE DE {{detailTab.nom}} {{detailTab.prenom}}</h5>
-																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
-															</div>
+														<div class="">
 															<div class="container">
+																<div class="row">
+																	<div class="col-md-9 ">
+																			<h5 class="card-title">PROFILE DE {{detailTab.nom}} {{detailTab.prenom}}</h5>
+																	</div>
+																	<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
+																</div>
 																<div class="row">
 																	<div class="col-md-4">
 																		<label for="input-file">
@@ -129,6 +131,9 @@
 																</div>
 																<hr>
 																<div class="row text-center">
+																	<div class="col-md-12 text-left">
+																		<h5 class="card-title">SECURITE COMPTE</h5>
+																	</div>
 																	<div class="col-md-6">
 																		<p>Status Compte</p>
 																		<p :class="detailTab.logic_auth.status_users_id==1?'badge badge-success':'badge badge-danger'">{{detailTab.logic_auth.status_users_id==1?'ACTIF':'BLOQUER'}}</p>
@@ -144,6 +149,20 @@
 																		</p>
 																	</div>
 																</div>
+																<hr>
+																	<div class="row margin-bottom-8">
+																		<div class="col-md-12 text-left">
+																			<h5 class="card-title">DROIT DU COMPTE</h5>
+																		</div>
+																		<div class="col-md-12">
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="ch" class="custom-control-input" @change="_u_change_droit_access" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_pv==1? 'checked':'':''">
+																				<label class="custom-control-label" for="ch">Gestion PV</label>
+
+																			</div>
+																		</div>
+
+																	</div>
 
 															</div>
 														</div>
