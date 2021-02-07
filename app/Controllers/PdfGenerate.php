@@ -458,9 +458,10 @@ class PdfGenerate extends BaseController {
 
         if($compareDate==$dateRapport){
           // echo 'Here';
-          $stock = $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->find();
+          $stockVirtuelle = $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->find();
+          $stock = $this->stockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->find();
           $qteResteEnStockReelle = $stock[0]->qte_stock ? $stock[0]->qte_stock:0;
-          $qteResteEnStockVirtuelle = $stock[0]->qte_stock_virtuel ? $stock[0]->qte_stock_virtuel:0;
+          $qteResteEnStockVirtuelle = $stockVirtuelle[0]->qte_stock_virtuel ? $stockVirtuelle[0]->qte_stock_virtuel:0;
 
           // echo 'here </br>';
         }else{
@@ -470,11 +471,12 @@ class PdfGenerate extends BaseController {
           $dy = $dateR->getDay()+1;
           $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
           $stockInitCloture = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateR)->find();
+          $stockInitClotureReelle = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateR)->find();
 
           // echo '<pre>';
           // print_r($dateR);
           // die();
-          $qteResteEnStockReelle = $stockInitCloture[0]->qte_stock? $stockInitCloture[0]->qte_stock:0;
+          $qteResteEnStockReelle = $stockInitClotureReelle[0]->qte_stock? $stockInitClotureReelle[0]->qte_stock:0;
           $qteResteEnStockVirtuelle = $stockInitCloture[0]->qte_stock_virtuel? $stockInitCloture[0]->qte_stock_virtuel:0;
 
           // echo 'here too </br>';
@@ -484,7 +486,7 @@ class PdfGenerate extends BaseController {
       $this->pdf->Row(array(
             utf8_decode(strtoupper($value->nom_article)),
             $stockInit[0]->qte_stock?$stockInit[0]->qte_stock:0,
-            $stockInitVirtuel[0]->qte_stock_virtuel?$stockInit[0]->qte_stock_virtuel:0,
+            $stockInitVirtuel[0]->qte_stock_virtuel?$stockInitVirtuel[0]->qte_stock_virtuel:0,
             $approGenBonne[0]->qte?$approGenBonne[0]->qte:0,
             $approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0,
             $approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0,
