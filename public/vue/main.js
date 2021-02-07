@@ -2316,7 +2316,27 @@ var vthis = new Vue({
       }
       console.log(this.detailTab);
     },
+    _u_see_detail_tab_admin_users(data, indLine=null){
+      this.codeIdArticlePrint = data.id;
+      this.detailTab = data;
+      this.isShow = !this.isShow;
+      //pour profile Image admin update
+      this.iduserToChangeProfile = data.id;
+      if(indLine !=null){
+        this.currentLineSelectedInList = indLine;
+      }
 
+      //POUR COCHE CHECK BOX IF USER HAVE ACCES TO PV
+      // if(data.logic_droit_access.length > 0){
+      //   if(data.logic_droit_access[0].g_pv==1){
+      //     this.accessGestionPv = true;
+      //   }else{
+      //     this.accessGestionPv = false;
+      //   }
+      // }else{
+      //   this.accessGestionPv = false;
+      // }
+    },
     _u_get_code_facture(){
       const newurl = this.url+"commandes-generate-code";
       return axios
@@ -2689,7 +2709,7 @@ var vthis = new Vue({
     if(pth[2] ==='admin-add-article' || pth[2] ==='admin-list-article' || pth[2]=='magaz-pv' || pth[2]=='admin-stock-pv'){
       this.get_article();
     }
-    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users' || pth[2] === 'magaz-add-appro-to-depot' || pth[2] == 'magaz-pv'){
+    if(pth[2] ==='admin-add-appro' || pth[2] ==='facturier-add-achat' || pth[2]==='caissier-add-achat' ||  pth[2]=='admin-add-users' || pth[2] === 'magaz-add-appro-to-depot' || pth[2] == 'magaz-pv' || pth[2]=='admin-stock-pv'){
       this.get_depots();
     }
     if(pth[2]=='facturier-add-achat' || pth[2]==='caissier-add-achat'){
