@@ -197,13 +197,14 @@ class OperationCaisseEncaissement extends ResourceController {
     $conditionDate =['date_decaissement'=> $dateFilter];
     $conditionUserFrom = [];
     if($idCaissier != 0){
-      $conditionUserDest = ['users_id_from'=>$idCaissier];
+      $conditionUserFrom = ['users_id_from'=>$idCaissier];
     }
     $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->orderBy('id','DESC')->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'conti' => $conditionUserFrom
     ]);
   }
 
