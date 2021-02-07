@@ -316,6 +316,20 @@ class PdfGenerate extends BaseController {
     $this->pdf->SetFont('Helvetica','B',12);
     $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
 
+    $this->pdf->SetFont('Helvetica','B',8);
+    $this->pdf->SetWidths(array(30,20,25,25,25,25,25,25));
+    $this->pdf->Row(array('Nom caissier','Vente','Encaissement Interne','Decaissement Interne','Encaissement Externe','Decaissement Externe','Montant Caisse Initial','Montant Caisse Actuel'));
+
+
+    //VARIABLE POUR SITUATION TOTAL FINANCIERE
+    $situationMontantTotalInitialHier = 0;
+    $situationVenteTotaleJournaliere = 0;
+    $situationMontantEncaissementExterne = 0;
+    $situationMontantTotalEntre = 0;
+    $situationMontantDecaissementExterne = 0;
+    $situationMontantCaisseActuel = 0;
+
+
     $i =1;
     foreach ($dataAllCaissiers as $key => $value) {
       //REQUETTES
@@ -356,11 +370,6 @@ class PdfGenerate extends BaseController {
       $dataCaisseMontant = self::$caisseModel->Where('users_id',$value->id)->find();
       $dataCaisseMontantResteHier = self::$clotureCaisseModel->Where('users_id',$value->id)->Where('date_cloture', $dateReste)->find();
 
-      $this->pdf->SetFont('Helvetica','B',10);
-      $this->pdf->Cell(200,7,$i++.'. '.utf8_decode(strtoupper($value->nom).' '.strtoupper($value->prenom)),0,1,'L');
-      $this->pdf->SetFont('Helvetica','B',8);
-      $this->pdf->SetWidths(array(40,40,40,40,40));
-      $this->pdf->Row(array('Vente','Encaissement Interne','Decaissement Interne','Encaissement Externe','Decaissement Externe'));
 
       $chiffreAchat = round($sommesAchatTotal,2);
       $chiffreEncaissementInterne = $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0;
@@ -368,34 +377,84 @@ class PdfGenerate extends BaseController {
       $chiffreEncaissementExterne = $sommesEncaissementExterne[0]->montant_encaissement?round($sommesEncaissementExterne[0]->montant_encaissement,2):0;
       $chiffreDecaissementExterne = $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0;
       $this->pdf->Row(array(
+        utf8_decode(strtoupper($value->nom)).' '.utf8_decode(strtoupper($value->prenom)).' '.$value->id,
         $chiffreAchat,
         $chiffreEncaissementInterne,
         $chiffreDecaissementInterne,
         $chiffreEncaissementExterne,
-        $chiffreDecaissementExterne
+        $chiffreDecaissementExterne,
+        $dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0,
+        round($dataCaisseMontant[0]->montant?$dataCaisseMontant[0]->montant:0, 2)
       ));
 
-      $this->pdf->Cell(200,7,utf8_decode('Montant Caisse Initial : '.($dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0).' USD'),1,1,'L');
-      if($value->is_main == 1){
-        $montantEntree = $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
-        $formule = 'Vente + Encaissement Interne + Encaissement Externe - Decaissement Externe';
-        $this->pdf->Cell(200,7,utf8_decode('Ventes Total journalière : '.round($chiffreAchat+$chiffreEncaissementInterne, 2).' USD'),1,1,'L');
-        $this->pdf->Cell(200,7,utf8_decode('Encaissement Externe : '.round($chiffreEncaissementExterne, 2).' USD'),1,1,'L');
-        $this->pdf->Cell(200,7,utf8_decode('Montant Total Entrée : '.round($montantEntree,2).' USD'),1,1,'L');
-        $this->pdf->Cell(200,7,'Montant Total Sorti : '.round($chiffreDecaissementExterne, 2).' USD',1,1,'L');
-      // $this->pdf->Cell(200,7,utf8_decode('Difference : Montant Total Entrée -  Montant Total Sorti : '.round($montantEntree-$chiffreDecaissementExterne, 2).' USD'),1,1,'L');
-
-      }else{
-        $montantReste = $chiffreAchat - $chiffreDecaissementInterne;
-        $formule = 'Vente - Decaissement Interne';
+      // $idCaissierPrincipal = $value->is_main = 1 ? $value->id : 0;
+      //CALCUL POUR SITUTATION TOTAL DE LA CAISSE
+      if($value->is_main==1){
+        $situationMontantTotalInitialHier += $dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0;
+        $situationVenteTotaleJournaliere += $chiffreAchat + $chiffreEncaissementInterne;
+        $situationMontantEncaissementExterne += $chiffreEncaissementExterne;
+        $situationMontantTotalEntre += $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
+        $situationMontantDecaissementExterne += $chiffreDecaissementExterne;
+        $situationMontantCaisseActuel += $dataCaisseMontant[0]->montant?$dataCaisseMontant[0]->montant:0;
       }
 
-      $this->pdf->Cell(200,7,'Total caisse Actuel : '.round($dataCaisseMontant[0]->montant, 2).' USD',1,1,'L');
-
-      // echo '<pre>';
-      // print_r($value);
-      $this->pdf->Ln(5);
     }
+    $this->pdf->Ln();
+    $this->pdf->SetFont('Helvetica','B',10);
+    $this->pdf->Cell(200,7,' SITUATION CAISSE TOTALE ',0,1,'C');
+
+    $this->pdf->SetFont('Helvetica','B',8);
+    $this->pdf->Cell(100,7,'Montant Initial Caisse : ',1,0,'L');
+    $this->pdf->Cell(100,7,round($situationMontantTotalInitialHier, 2).' USD',1,1,'L');
+
+    $this->pdf->Cell(100,7,utf8_decode('Ventes Totales journalières : '),1,0,'L');
+    $this->pdf->Cell(100,7,round($situationVenteTotaleJournaliere, 2).' USD',1,1,'L');
+
+    $this->pdf->Cell(100,7,utf8_decode('Encaissement Externe : '),1,0,'L');
+    $this->pdf->Cell(100,7,round($situationMontantEncaissementExterne, 2).' USD',1,1,'L');
+
+    $this->pdf->Cell(100,7,utf8_decode('Montant Total Entré : '),1,0,'L');
+    $this->pdf->Cell(100,7,round($situationMontantTotalEntre, 2).' USD',1,1,'L');
+
+    $this->pdf->Cell(100,7,utf8_decode('Décaissement Externe : '),1,0,'L');
+    $this->pdf->Cell(100,7,round($situationMontantDecaissementExterne, 2).' USD',1,1,'L');
+
+    $this->pdf->Cell(100,7,utf8_decode('Montant caisse Actuel : '),1,0,'L');
+    $this->pdf->Cell(100,7,round($situationMontantCaisseActuel, 2).' USD',1,1,'L');
+
+    $this->pdf->Ln();
+    $this->pdf->SetFont('Helvetica','B',10);
+    $this->pdf->Cell(200,7,'DETAIL ENCAISSEMENT EXTERNE ',0,1,'C');
+
+
+    $conditionDate =['date_encaissement'=> $dateRapport];
+
+    $dataEncaissementExterne = $this->encaissementExterneModel->select("id,users_id,date_encaissement,motif,created_at,montant_encaissement")->Where($conditionDate)->orderBy('id','DESC')->findAll();
+    $this->pdf->SetFont('Helvetica','B',8);
+    $this->pdf->SetWidths(array(50,50,50,50));
+    $this->pdf->Row(array('DATE','CAISSIER','MONTANT','MOTIF SOURCE'));
+    foreach ($dataEncaissementExterne as $key => $value) {
+      // code...
+    $this->pdf->Row(array($value->date_encaissement,utf8_decode($value->users_id->nom.' '.$value->users_id->prenom),$value->montant_encaissement.' USD',utf8_decode($value->motif)));
+
+    }
+
+    $this->pdf->Ln();
+    $this->pdf->SetFont('Helvetica','B',10);
+    $this->pdf->Cell(200,7,'DETAIL DECAISSEMENT EXTERNE ',0,1,'C');
+    $conditionDateDec =['date_decaissement'=> $dateRapport];
+    $dataDecaissement = $this->decaissementExterneModel->Where($conditionDateDec)->orderBy('id','DESC')->findAll();
+
+    $this->pdf->SetFont('Helvetica','B',8);
+    $this->pdf->SetWidths(array(40,40,40,40,40));
+    $this->pdf->Row(array('DATE','CAISSIER','MONTANT','DESTINATION','NOTE'));
+
+    foreach ($dataDecaissement as $key => $value) {
+      // code...
+    $this->pdf->Row(array($value->date_decaissement,utf8_decode($value->users_id_from->nom.' '.$value->users_id_from->prenom),$value->montant.' USD',utf8_decode($value->destination),utf8_decode($value->note)));
+
+    }
+
     $this->outPut();
   }
 
