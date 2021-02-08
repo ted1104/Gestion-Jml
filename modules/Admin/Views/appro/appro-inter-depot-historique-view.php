@@ -108,6 +108,12 @@
 																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
+															<div class="row">
+																<div class="col-md-12">
+																	<p>Date Expédition : {{detailTab.date_approvisionnement}}</p>
+																	<p>Date Validation : {{detailTab.updated_at.date.split('.')[0] > detailTab.date_approvisionnement ? detailTab.updated_at.date.split('.')[0] : '-'}}</p>
+																</div>
+															</div>
 
 															<!-- {{checkBoxArticles}} -->
 															<div  class="">
@@ -163,5 +169,6 @@
         </div>
         <!-- End XP Rightbar -->
     </div>
+	</div>
     <!-- End XP Container -->
 <?=$this->endSection() ?>
