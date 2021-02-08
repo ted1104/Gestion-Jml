@@ -2431,28 +2431,25 @@ var vthis = new Vue({
     },
     _u_formatDateFilter(callbackFunction){
       var date = new Date(this.dateFilter);
-      var month = date.getMonth()+1;
-      this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
-      // console.log(this.stateStatus);
+      this.dateFilter = this._u_formatOnlyDateAndReturn(date);
       this._u_set_table_title_with_date();
       callbackFunction(this.stateStatus);
     },
     _u_formatDateFilterWithoutStatus(callbackFunction){
       var date = new Date(this.dateFilter);
-      var month = date.getMonth()+1;
-      this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
+      this.dateFilter = this._u_formatOnlyDateAndReturn(date);
       this._u_set_table_title_with_date();
       callbackFunction();
     },
     _u_formatOnlyDate(date){
       var date = new Date(this.dateFilter);
-      var month = date.getMonth()+1;
-      this.dateFilter = date.getFullYear()+'-'+month+'-'+date.getDate();
+      this.dateFilter = this._u_formatOnlyDateAndReturn(date);
     },
     _u_formatOnlyDateAndReturn(date){
       var date = new Date(date);
-      var month = date.getMonth()+1;
-      return date.getFullYear()+'-'+month+'-'+date.getDate();
+      var month = Number(date.getMonth())+1 < 10 ? '0'+Number(date.getMonth()+1):date.getMonth()+1;
+      var day = date.getDate() < 10 ? '0'+date.getDate():date.getDate();
+      return date.getFullYear()+'-'+month+'-'+day;
     },
     _u_set_table_title_with_date(){
       if(this.dateFilter !==null){
