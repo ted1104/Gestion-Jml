@@ -38,8 +38,8 @@
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
                               <h5 class="card-title text-black">ENCAISSEMENT INTERNE {{dateFilterDisplay}}</h5>
-															<div class="">
-																<div class="pull-right row">
+															<div class="u">
+																<div class="pull-right row ">
 																	<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
 																	<!-- BOUTTON DECAISSEMENT INTERNTE -->
 																	<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_histo_interne_admin)"><i class="mdi mdi-search-web"></i></button>

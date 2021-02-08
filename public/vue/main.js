@@ -2303,6 +2303,7 @@ var vthis = new Vue({
       this.dateRapport = currentDateWithFormat;
       this.dateRapportFin = currentDateWithFormat;
       this.dateRapportGen = currentDateWithFormat;
+      this.dateFilter = currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
