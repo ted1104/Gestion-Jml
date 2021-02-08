@@ -68,8 +68,9 @@
 																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
 																		<td>
 																			<span v-if="dt.status_operation==0" class="badge badge-warning">EN ATTENTE</span>
-																			<span v-if="dt.status_operation==1" class="badge badge-success">VALIDE</span>
-																			<span v-if="dt.status_operation==2" class="badge badge-danger">ANNULER</span>
+																			<span v-if="dt.status_operation==1" class="badge badge-info">PARTIEL</span>
+																			<span v-if="dt.status_operation==2" class="badge badge-success">VALIDER</span>
+																			<span v-if="dt.status_operation==3" class="badge badge-danger">ANNULER</span>
 																		</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>

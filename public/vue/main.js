@@ -2336,7 +2336,7 @@ var vthis = new Vue({
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
       this.detailTab = data;
-      this.isShow = !this.isShow;
+      this.isShow = true;
       //pour profile Image admin update
       this.iduserToChangeProfile = data.id;
 
