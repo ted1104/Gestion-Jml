@@ -104,6 +104,8 @@ $routes->group('api/v1', function($routes){
   $routes->post('approvisionnement-annuler','ApprovisionnementInterDepot::annuler_approvisionnement_inter_depot');
   $routes->post('delete-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_delete_articles');
   $routes->post('pv-approvisionnement-restaure','Approvisionnement::approvisionementPvRestaure');
+  $routes->post('validate-partiel-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_validate_partiel_articles');
+
 
 
   //CLOTURE AUTOMATIQUE

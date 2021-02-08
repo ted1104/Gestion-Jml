@@ -139,7 +139,7 @@ class ApprovisionnementInterDepot extends ResourceController {
       $depot_source = $infoAppro->depots_id_source[0]->id;
       $depot_dest = $infoAppro->depots_id_dest[0]->id;
 
-      $data = ['status_operation'=>1];
+      $data = ['status_operation'=>2];
       if(!$updateData = $this->model->update($idAppro,$data)){
         $status = 400;
         $message = [
@@ -148,7 +148,7 @@ class ApprovisionnementInterDepot extends ResourceController {
         ];
         $data = "";
       }else{
-        $allArt = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$idAppro)->findAll();
+        $allArt = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$idAppro)->Where('is_validate',0)->findAll();
         foreach ($allArt as $key => $value) {
           //UPDATE STOCK IN STOCK DEPOT DESTINATION
           $conditionDest =[
@@ -174,6 +174,7 @@ class ApprovisionnementInterDepot extends ResourceController {
 
           $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource]);
 
+          $this->approvisionnementsInterDepotDetailModel->update($value->id, ['is_validate'=>1]);
         }
 
         if(!$updStockDest and !$updStockSource){
@@ -317,6 +318,83 @@ class ApprovisionnementInterDepot extends ResourceController {
       $message = [
         'success' => null,
         'errors' => ['Impossible de supprimer tous les articles de l\'approvisionnement!']
+      ];
+      $data = "";
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+  public function approvisionnement_validate_partiel_articles(){
+    $idappro = $this->request->getPost('idappro');
+    $idarticle = $this->request->getPost('idarticle');
+    $getAllarticleDeLAppro = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id', $idappro)->Where('is_validate', 0)->findAll();
+    if(count($idarticle) < count($getAllarticleDeLAppro)){
+    for ($i=0; $i < count($idarticle); $i++) {
+        $condition = [
+          'approvisionnement_id' =>$idappro,
+          'articles_id'=>$idarticle[$i]
+        ];
+        $data = $this->approvisionnementsInterDepotDetailModel->getWhere($condition)->getRow();
+
+        $infoAppro = $this->model->find($idappro);
+        $allArticleIn = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$idappro)->Where('articles_id',$idarticle[$i])->find();
+        //UPDATE STOCK IN STOCK DEPOT DESTINATION
+        $conditionDest =[
+          'depot_id'=>$infoAppro->depots_id_dest[0]->id,
+          'articles_id'=>$allArticleIn[0]->articles_id[0]->id
+        ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+        $initqteDest = $this->stockModel->getWhere($conditionDest)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+
+        $QteDest = $initqteDest->qte_stock +$allArticleIn[0]->qte;//ADDITION ANCIENNE + NOUVELLE
+        $QteVirtuelDest = $initqteDest->qte_stock_virtuel + $allArticleIn[0]->qte;
+
+          //UPDATE STOCK IN STOCK DEPOT SOURCE
+          $conditionSource =[
+            'depot_id'=>$infoAppro->depots_id_source[0]->id,
+            'articles_id'=>$allArticleIn[0]->articles_id[0]->id
+          ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+          $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+          $QteSource = $initqteSource->qte_stock - $allArticleIn[0]->qte;//ADDITION ANCIENNE + NOUVELLE
+
+          $updStockDest = $this->stockModel->update($initqteDest->id,['qte_stock'=>$QteDest,'qte_stock_virtuel'=>$QteVirtuelDest]);
+
+          $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource]);
+
+          if($updStockSource and $updStockDest){
+            if($this->approvisionnementsInterDepotDetailModel->update($allArticleIn[0]->id, ['is_validate'=>1]) and $this->model->update($idappro, ['status_operation'=>1])){
+              $textArt = $i > 1 ? 'ont':'a';
+              $status = 200;
+              $message = [
+                'success' => ($i+1).' article(s) de cet approvisionnement '.$textArt.' été validé avec succès ',
+                'errors' => null
+              ];
+              $data = "";
+
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => "Echec de la suppression d'article"
+              ];
+              $data = "";
+            }
+          }else{
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => "Echec de la suppression d'article veuilez contactez l'administrateur"
+            ];
+            $data = "";
+          }
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Impossible de valider tous les articles de l\'approvisionnement, veuillez par contre valider tout l\'approvisionnement dans son ensemble!']
       ];
       $data = "";
     }

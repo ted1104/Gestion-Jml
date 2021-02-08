@@ -6,7 +6,7 @@ class ApprovisionnementsInterDepotDetailModel extends Model{
   protected $table = 'g_interne_approvisionnement_inter_depot_detail';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['approvisionnement_id','articles_id','qte'];
+  protected $allowedFields = ['approvisionnement_id','articles_id','qte','is_validate'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'approvisionnement_id' => 'required|checkingForeignKeyExist[g_interne_approvisionnement_inter_depot,id]',

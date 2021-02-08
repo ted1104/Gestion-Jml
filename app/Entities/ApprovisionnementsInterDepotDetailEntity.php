@@ -13,6 +13,7 @@ class ApprovisionnementsInterDepotDetailEntity extends Entity{
     'approvisionnement_id' => null,
     'articles_id' => null,
     'qte' => null,
+    'is_validate' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

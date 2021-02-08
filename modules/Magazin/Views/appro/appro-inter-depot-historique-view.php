@@ -87,13 +87,14 @@
 																		</td>
 																		<td>
 																			<span v-if="dt.status_operation==0" class="badge badge-warning">EN ATTENTE</span>
-																			<span v-if="dt.status_operation==1" class="badge badge-success">VALIDE</span>
-																			<span v-if="dt.status_operation==2" class="badge badge-danger">ANNULER</span>
+																			<span v-if="dt.status_operation==1" class="badge badge-info">PARTIEL</span>
+																			<span v-if="dt.status_operation==2" class="badge badge-success">VALIDER</span>
+																			<span v-if="dt.status_operation==3" class="badge badge-danger">ANNULER</span>
 																		</td>
 																		<td>
-																			<button v-if="dt.depots_id_dest[0].id == dpot_id && dt.status_operation ==0" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_validate_appro_inter_depot(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
+																			<button v-if="dt.depots_id_dest[0].id == dpot_id && (dt.status_operation ==0 || dt.status_operation == 1)" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_validate_appro_inter_depot(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
 
-																			<i v-if="dt.depots_id_source[0].id == dpot_id || dt.status_operation !=0" class='mdi mdi-checkbox-marked-circle-outline'></i>
+																			<i v-if="dt.depots_id_source[0].id == dpot_id || (dt.status_operation !=0 && dt.status_operation !=1)" class='mdi mdi-checkbox-marked-circle-outline'></i>
 																		</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button></td>
 																	</tr>
@@ -133,19 +134,25 @@
 															</div>
 															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
 																<div class="row">
-																	<!-- <div class="col-md-6">
-																		<button v-if="!isLoadNego" type="button" @click="add_ask_negotiation(detailTab.id)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-call-made mr-2"></i> Negocier</button>
-																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-																	</div> -->
-																	<div class="col-md-12 text-right">
-																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
-																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	<div class="col-md-12">
+																		<div class="row">
+																			<div class="col-md-6 text-left">
+																				<div v-if="detailTab.depots_id_dest[0].id == dpot_id">
+																					<button v-if="!isLoadNego" type="button" class="btn btn-rounded btn-success padding-4-l-g font-size-2" @click="validate_partiel_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Valider</button>
+																					<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																				</div>
+																			</div>
+																			<div class="col-md-6 text-right">
+																				<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
+																				<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																			</div>
+																		</div>
 																	</div>
 																</div>
 															</div>
 
 															<!-- {{checkBoxArticles}} -->
-															<div  class="">
+															<div  class="margin-top-4">
 																<div class="row">
 																	<div class="table-responsive container">
 																		<!-- {{checkBoxArticles}} -->
@@ -162,7 +169,7 @@
 																				<tr v-for="(det,i) in detailTab.logic_data_article">
 																					<td>
 																							<div class="custom-control custom-checkbox custom-control-inline">
-																								<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles" :disabled="detailTab.status_operation != 0">
+																								<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles" :disabled="(detailTab.status_operation != 0 && detailTab.status_operation != 1) || det.is_validate == 1">
 							                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
 																							</div>
 																					</td>

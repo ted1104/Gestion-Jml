@@ -1766,7 +1766,6 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-
     active_article_visibilite_sur_rapport(idarticle){
       // console.log(iduser);
       const newurl = this.url+"article-change-visibilite-sur-rapport/"+idarticle;
@@ -1789,6 +1788,35 @@ var vthis = new Vue({
                 this.isLoadSaveMainButton = false;
             })
             .catch(error =>{
+              console.log(error);
+            })
+    },
+
+    validate_partiel_article_approvisionnement_inter_depot(cmd){
+      this.isLoadNego = true;
+      const newurl = this.url+"validate-partiel-article-approvisionnement";
+      var form = new FormData();
+      form.append('idappro',cmd);
+      for(var i=0; i< this.checkBoxArticles.length; i++){
+        form.append('idarticle[]', this.checkBoxArticles[i]);
+    	}
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadNego = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_historique_approvisionnement_inter_depot_by_depot();
+                this._u_close_mod_form();
+                this._u_reset_checkBoxSelected();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadNego = false;
+            }).catch(error =>{
               console.log(error);
             })
     },
