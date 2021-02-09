@@ -42,7 +42,7 @@ $routes->group('api/v1', function($routes){
 
 
   //2.ARTCILES
-  $routes->get('articles-get-all','Articles::articles_get');
+  $routes->get('articles-get-all/(:num)/(:num)','Articles::articles_get/$1/$2');
   $routes->post('articles-create-one','Articles::articles_create');
   $routes->post('articles-create-price','Articles::articles_set_price');
   $routes->get('articles-search-data-commande/(:any)/(:any)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3/$4');

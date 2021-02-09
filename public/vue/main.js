@@ -166,6 +166,7 @@ var vthis = new Vue({
       paginationTabIn:{},
       currentIndexPage :0,
       PerPaged:5,
+      totalData : 0,
 
       //VARIABLE CREATION UTILISATEUR
       nom :"",
@@ -269,8 +270,12 @@ var vthis = new Vue({
             console.log(error);
           })
   },
-    get_article(){
-      const newurl = this.url+"articles-get-all";
+    get_article(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"articles-get-all/"+limit+"/"+offset;
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -280,6 +285,9 @@ var vthis = new Vue({
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
             }).catch(error =>{
               console.log(error);
             })
@@ -2410,6 +2418,7 @@ var vthis = new Vue({
       // this.messageErrorBottom =false;
     },
     _u_fx_generate_pagination(totalRecords){
+      this.totalData = totalRecords;
       this.currentLineSelectedInList = -1;
       this.pageNumber = Math.ceil(parseInt(totalRecords) / parseInt(this.PerPaged));
       for (var i = 1; i <= this.pageNumber; i++) {

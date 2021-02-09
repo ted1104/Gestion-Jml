@@ -27,12 +27,13 @@ class Articles extends ResourceController {
     $this->depotModel = new StDepotModel();
     $this->articlesConfigFaveurModel = new ArticlesConfigFaveurModel();
   }
-  public function articles_get(){
-    $data = $this->model->findAll();
+  public function articles_get($limit, $offset){
+    $data = $this->model->findAll($limit, $offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all'=> count($data = $this->model->findAll())
     ]);
   }
   public function articles_create(){

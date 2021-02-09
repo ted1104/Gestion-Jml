@@ -38,7 +38,7 @@
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
 															<div class="row">
-																<h5 class="card-title text-black col-md-8 col-lg-8 col-xl-8">TOUS LES ARTICLES ET LEUR PRIX ( {{dataToDisplay.length}} )</h5>
+																<h5 class="card-title text-black col-md-8 col-lg-8 col-xl-8">TOUS LES ARTICLES ET LEUR PRIX ( {{totalData}} )</h5>
 															</div>
 
                             </div>
@@ -92,17 +92,17 @@
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- PAGINATION -->
-															<!-- <nav aria-label="...">
+															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_article)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_article(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_article)">Next</button>
                                     </li>
                                   </ul>
-                                </nav> -->
+                                </nav>
 														</div>
                         </div>
 												</div>
