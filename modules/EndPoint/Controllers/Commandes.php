@@ -217,17 +217,16 @@ class Commandes extends ResourceController {
             $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
             foreach ($allArt as $key => $value) {
 
-              // if($value->is_faveur == 0){
-                $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id[0]->id,'articles_id'=>$value->articles_id[0]->id])->getRow();
-              // }else{
-              //   $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id_faveur,'articles_id'=>$value->articles_id[0]->id])->getRow();
-              // }
+            // if($value->is_faveur == 0){
+            $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id[0]->id,'articles_id'=>$value->articles_id[0]->id])->getRow();
+            // }else{
+            //   $stokdepot = $this->stockModel->getWhere(['depot_id'=>$infoCommande->depots_id_faveur,'articles_id'=>$value->articles_id[0]->id])->getRow();
+            // }
 
-
-              $stokinit = $stokdepot->qte_stock_virtuel;
-              $qte_a_retrancher = $value->qte_vendue;
-              $nvlleqte = $stokinit-$qte_a_retrancher;
-              $this->stockModel->update($stokdepot->id,['qte_stock_virtuel'=>$nvlleqte]);
+            $stokinit = $stokdepot->qte_stock_virtuel;
+            $qte_a_retrancher = $value->qte_vendue;
+            $nvlleqte = $stokinit-$qte_a_retrancher;
+            $this->stockModel->update($stokdepot->id,['qte_stock_virtuel'=>$nvlleqte]);
             }
             //FIN DECOMPTE DE LA QUANTITE VIRTUELLE DU DEPOT SPECIFIQUE
             $status = 200;
