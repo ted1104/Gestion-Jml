@@ -1751,7 +1751,7 @@ var vthis = new Vue({
       // return ;
 
       if(this.qte_restaurer_init < 1){
-        this._u_fx_config_error_message("Erreur",["La quantité en Kg à restaurer doit être au moins superieure ou égale à 1"],'alert-danger');
+        this._u_fx_config_error_message("Erreur",["La quantité en unité à restaurer doit être au moins superieure ou égale à 1"],'alert-danger');
         return;
       }
       // if(this.checkBoxAchatSelected.length > 0){
@@ -2309,6 +2309,7 @@ var vthis = new Vue({
 
       this.articles_id = art.id;
       this.modalTitle = "AJOUTER Kg PV L'ARTICLE "+art.nom_article;
+      this.qte_pv_kg = 0;
       this.qte_restaurer = art.qte_stock_pv;
       this.styleModalFaveur = 'block';
       console.log(this.ListPricesArticle);
