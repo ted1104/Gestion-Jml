@@ -76,7 +76,8 @@
 																			<button class='btn btn-round btn-success' @click="_u_open_mod_add_kg_pv(det,1)" :disabled="det.is_eligible_add_kg==1 || det.qte_stock_pv==0"><i class='mdi mdi-plus'></i> </button>
 																		</td>
                                     <td>
-                                      <button class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_restaure_pv(det,2)" :disabled="det.poids > det.pv_en_kg"><i class='mdi mdi-restore'></i> </button>
+																			<!-- {{det.pv_en_kg+' '+det.poids}} -->
+                                      <button class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_restaure_pv(det,2)" :disabled="Number(det.pv_en_kg) < Number(det.poids)"><i class='mdi mdi-restore'></i> </button>
                                     </td>
                                     <td>
                                       <button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(det,i)"><i class="mdi mdi-eye-outline" ></i></button>
