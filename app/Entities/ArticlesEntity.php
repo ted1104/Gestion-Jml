@@ -20,6 +20,8 @@ class ArticlesEntity extends Entity{
     'users_id' => null,
     'nombre_piece'=> null,
     'qte_stock_pv' => null,
+    'pv_en_kg' => null,
+    'is_eligible_add_kg' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

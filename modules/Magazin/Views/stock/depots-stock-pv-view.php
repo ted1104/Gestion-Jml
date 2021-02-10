@@ -51,6 +51,7 @@
 																		<!-- <th scope="col">Qte Réelle</th>
 																		<th scope="col">Qte Virtuelle</th> -->
 																		<th scope="col">Qte PV</th>
+																		<th scope="col">Qte PV en Kg</th>
                                     <th scope="col">Restaurer</th>
                                     <th scope="col">Historique</th>
 
@@ -67,6 +68,7 @@
 																			<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
 																		</td> -->
                                     <td>{{det.qte_stock_pv}}</td>
+																		<td>{{det.kg_pv}}</td>
                                     <td>
                                       <button class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_restaure_pv(det,2)"><i class='mdi mdi-restore'></i> </button>
                                     </td>

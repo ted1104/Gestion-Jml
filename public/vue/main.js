@@ -214,6 +214,8 @@ var vthis = new Vue({
       qte_restaurer : "",
       qte_restaurer_init : "",
       qte_perdue : 0,
+      qte_pv_kg : 0,
+      poids_article : 0,
 
       //SLECTIONNER LIGNE QUI EST VISIBLE
       currentLineSelectedInList : -1,
@@ -1731,25 +1733,35 @@ var vthis = new Vue({
       e.preventDefault();
       const newurl = this.url+"pv-approvisionnement-restaure";
       var form = new FormData();
+      var qtPVKg = Math.floor(this.qte_restaurer) * this.poids_article;
+
       form.append('users_id',this.users_id);
       form.append('articles_id',this.articles_id);
-      form.append('qte_restaure', this.qte_restaurer);
+      form.append('qte_restaure', Math.floor(this.qte_restaurer));
+      // if(this.checkBoxAchatSelected.length > 0){
       form.append('qte_perdue', this.qte_perdue);
+      // }else{
+      //   form.append('qte_perdue', 0);
+      // }
+      form.append('pv_en_kg',qtPVKg);
       form.append('depots_id_dest',this.depots_id);
       form.append('date_restaurer',this.date_approvisionnement);
+      // console.log(qtPVKg);
+      // console.log(Math.floor(this.qte_restaurer));
+      // return ;
 
-      if(+this.qte_restaurer_init < +this.qte_restaurer){
-        this._u_fx_config_error_message("Erreur",["Vous n'avez pas cette quantité dans le dépôt PV"],'alert-danger');
+      if(this.qte_restaurer_init < 1){
+        this._u_fx_config_error_message("Erreur",["La quantité en Kg à restaurer doit être au moins superieure ou égale à 1"],'alert-danger');
         return;
       }
-      if(this.checkBoxAchatSelected.length > 0){
-        if(Number(this.qte_restaurer) + Number(this.qte_perdue) !== Number(this.qte_restaurer_init)){
-          this._u_fx_config_error_message("Erreur",["Vos quantités renseignées sont invalides"],'alert-danger');
-          // console.log(Number(this.qte_restaurer)+Number(this.qte_perdue));
-          // console.log(this.qte_restaurer_init);
-          return;
-        }
-      }
+      // if(this.checkBoxAchatSelected.length > 0){
+      //   if(Number(this.qte_restaurer) + Number(this.qte_perdue) !== Number(this.qte_restaurer_init)){
+      //     this._u_fx_config_error_message("Erreur",["Vos quantités renseignées sont invalides"],'alert-danger');
+      //     // console.log(Number(this.qte_restaurer)+Number(this.qte_perdue));
+      //     // console.log(this.qte_restaurer_init);
+      //     return;
+      //   }
+      // }
 
       this.isLoadSaveMainButton = true;
       this.messageError = false;
@@ -1824,6 +1836,37 @@ var vthis = new Vue({
               var err = response.data.message.errors;
               this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
               this.isLoadNego = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    update_article_kg_pv(){
+      this.isLoadSaveMainButtonModal = true;
+      const newurl = this.url+"articles-set-kg-pv";
+      var form = new FormData();
+      form.append('idarticle',this.articles_id);
+      form.append('kg',this.qte_pv_kg);
+      if(this.qte_pv_kg < 1){
+        this._u_fx_config_error_message("Erreur",["Le Kg de PV ne doit pas être inferieur à 1"],'alert-danger');
+        return;
+      }
+
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadSaveMainButtonModal = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_close_mod_form();
+                this.get_article();
+                this.qte_pv_kg = 0;
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
             }).catch(error =>{
               console.log(error);
             })
@@ -2262,6 +2305,14 @@ var vthis = new Vue({
       this.styleModalFaveur = 'block';
       console.log(this.ListPricesArticle);
     },
+    _u_open_mod_add_kg_pv(art, from=null){
+
+      this.articles_id = art.id;
+      this.modalTitle = "AJOUTER Kg PV L'ARTICLE "+art.nom_article;
+      this.qte_restaurer = art.qte_stock_pv;
+      this.styleModalFaveur = 'block';
+      console.log(this.ListPricesArticle);
+    },
     _u_close_mod_form(){
       this.styleModal = 'none';
       this.styleModalFaveur = 'none';
@@ -2319,11 +2370,16 @@ var vthis = new Vue({
       console.log(cmd);
       this.modalTitle = "APPROVISIONNEMENT PV RESTAURATION DE L'ARTICLE "+cmd.code_article+" : "+cmd.nom_article;
       this.articles_id = cmd.id;
-      this.qte_restaurer = cmd.qte_stock_pv;
+      // this.qte_restaurer = cmd.qte_stock_pv;
+      this.qte_restaurer = Number(cmd.pv_en_kg)/Number(cmd.poids);
+      this.poids_article = cmd.poids;
       this.qte_restaurer_init = cmd.qte_stock_pv;
+      this.qte_pv_kg = cmd.pv_en_kg;
+      this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
       this.depots_id ="";
       this.styleModal = 'block';
       console.log(cmd);
+      // console.log(this.qte_pv_kg);
     },
     _u_open_mod_popup_photo(userid){
       //console.log("=====ARTICLE=====");
@@ -2868,6 +2924,11 @@ var vthis = new Vue({
       this.dateRapportGen = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
     },
+    qte_pv_kg : function(val){
+      this.qte_restaurer = Number(this.qte_pv_kg) / Number(this.poids_article);
+      this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
+      this.qte_perdue = this.qte_perdue.toFixed(2);
+    }
     // accessGestionPv : function(val){
     //   // console.log(val);
     //   this._u_change_droit_access();

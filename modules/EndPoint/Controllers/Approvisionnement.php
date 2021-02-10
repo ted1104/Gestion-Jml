@@ -90,6 +90,10 @@ class Approvisionnement extends ResourceController {
             'data'=>""
           ]);
         }
+
+        if($qte_pv[$i] > 0){
+          $this->articlesModel->update($article[$i],['is_eligible_add_kg'=>0]);
+        }
         //UPDATE STOCK IN STOCK
         $condition =[
           'depot_id'=>$this->request->getPost('depots_id'),
@@ -172,10 +176,12 @@ class Approvisionnement extends ResourceController {
     }else{
       $artInfo = $this->articlesModel->find($data->articles_id);
       $newQte = $artInfo->qte_stock_pv - $data->qte_restaure;
+
+      $newQteKg = $artInfo->pv_en_kg - $data->pv_en_kg;
       if($data->qte_perdue > 0){
         $newQte = $artInfo->qte_stock_pv - ($data->qte_restaure+$data->qte_perdue);
       }
-      if(!$this->articlesModel->update($data->articles_id, ['qte_stock_pv'=>$newQte])){
+      if(!$this->articlesModel->update($data->articles_id, ['qte_stock_pv'=>$newQte, 'pv_en_kg'=>$newQteKg])){
         $status = 400;
         $message = [
           'success' =>null,

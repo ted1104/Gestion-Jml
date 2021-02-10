@@ -567,6 +567,31 @@ class Articles extends ResourceController {
     ]);
 
   }
+  public function article_set_kg_pv(){
+    $data = $this->request->getPost();
+    $art = $this->model->find($data['idarticle']);
+    if(!$this->model->update($data['idarticle'],['pv_en_kg'=>$data['kg'] + $art->pv_en_kg,'is_eligible_add_kg'=>1])){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->model->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'Mis à jour des Kg PV effectué avec succès',
+        'errors' => null
+      ];
+      $data = 'null';
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
+
   public function multitest(){
     print_r($this->request->getPost());
 

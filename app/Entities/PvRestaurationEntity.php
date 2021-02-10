@@ -16,7 +16,7 @@ class PvRestaurationEntity extends Entity{
     'depots_id_dest' => null,
     'users_id' => null,
     'qte_restaure'=>null,
-    'qte_restaure' => null,
+    'pv_en_kg' => null,
     'articles_id' => null,
     'created_at' => null,
     'updated_at' => null,
