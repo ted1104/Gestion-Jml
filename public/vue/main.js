@@ -2707,6 +2707,10 @@ var vthis = new Vue({
      formData.append('users_id',vthis.users_id);
      formData.append('nombre_piece',vthis.nombre_piece);
      formData.append('qte_stock_pv',0);
+     formData.append('qte_stock_pv',0);
+     formData.append('pv_en_kg',0);
+
+
      return formData;
    },
     _u_fx_form_data_art_price(){
