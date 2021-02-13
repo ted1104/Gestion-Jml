@@ -286,4 +286,24 @@ class Users extends ResourceController {
       'data' => $data
     ]);
   }
+  public function bloqueAllCountUsers(){
+    $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
+    foreach ($allUserToBlockAccount as $key => $value) {
+      $in = $this->userAuthModel->Where('users_id',$value->id)->find();
+      if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>2])){
+        echo 'Tous les comptes desactivés';
+      }
+    }
+    // print_r(count($allUserToBlockAccount));
+  }
+  public function DebloqueAllCountUsers(){
+    $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
+    foreach ($allUserToBlockAccount as $key => $value) {
+      $in = $this->userAuthModel->Where('users_id',$value->id)->find();
+      if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>1])){
+        echo 'Tous les comptes activés';
+      }
+    }
+    // print_r(count($allUserToBlockAccount));
+  }
 }
