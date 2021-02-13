@@ -591,7 +591,30 @@ class Articles extends ResourceController {
       'data'=> $data
     ]);
   }
+  public function article_update($id){
+    $data = $this->request->getJSON();
+    $updateData = $this->model->update($id,$data);
+    if(!$updateData){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>'Le code article existe déjà'
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'Mise à jour reussie',
+        'errors' => null
+      ];
+      $data = $updateData;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data,
 
+    ]);
+  }
   public function multitest(){
     print_r($this->request->getPost());
 
