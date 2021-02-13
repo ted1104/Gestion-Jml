@@ -98,6 +98,19 @@
                                     </tr>
                                   </tbody>
                                 </table>
+																
+																<!-- PAGINATION -->
+																<nav aria-label="...">
+	                                  <ul class="pagination">
+	                                    <li class="page-item">
+	                                      <button class="page-link" @click="_u_previous_page(get_article)">Previous</button>
+	                                    </li>
+	                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_article(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+	                                    <li class="page-item">
+	                                      <button class="page-link" @click="_u_next_page(get_article)">Next</button>
+	                                    </li>
+	                                  </ul>
+	                                </nav>
 																<div class="text-center" v-if="dataToDisplay.length < 1 && !isNoReturnedData">
 																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
