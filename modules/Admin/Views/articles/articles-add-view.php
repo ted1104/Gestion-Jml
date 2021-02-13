@@ -40,7 +40,7 @@
                                 <h5 class="card-title text-black">Information relative à l'article</h5>
                             </div>
                             <div class="card-body">
-                                  <div class="form-group">
+                                  <div class="form-group" v-if="!this.wantToUpdate">
                                     <label for="codeArt">Code Article *</label>
                                     <input type="text" class="form-control" id="codeArt" aria-describedby="codeArt" v-model="code_article">
                                   </div>
@@ -60,8 +60,17 @@
                                     <label for="description">Descrition *</label>
                                     <textarea class="form-control" name="inputTextarea" id="description" rows="3" v-model="description"></textarea>
                                   </div>
-                              		<button v-if="!isLoadSaveMainButtonModal" @click="add_article" class="btn btn-primary">Enregistrer</button>
-																	<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	<div class="form-group" v-if="this.wantToUpdate">
+                                    <label for="qte_restaurer">Qte PV en Stock</label>
+                                    <input type="text" class="form-control" id="qte_restaurer" v-model="qte_restaurer">
+                                  </div>
+																	<div class="form-group" v-if="this.wantToUpdate">
+                                    <label for="qte_pv_kg_up">Qte PV en Kg</label>
+                                    <input type="text" class="form-control" id="qte_pv_kg_up" v-model="qte_pv_kg_up">
+                                  </div>
+                              		<button v-if="!isLoadSaveMainButton && !this.wantToUpdate" @click="add_article" class="btn btn-primary">Enregistrer</button>
+																	<button v-if="!isLoadSaveMainButton && this.wantToUpdate" @click="update_article_data" class="btn btn-primary">Modifier</button>
+																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
                             </div>
                         </div>
 												</div>
@@ -91,14 +100,21 @@
 																			<td>{{dt.nombre_piece}}</td>
                                       <td>{{dt.description}}</td>
 																			<td>
-																				<button class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																				<!-- <button class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button> -->
+																				<div v-if="indexTopUpdate!=index">
+																					<button type="button" class='btn btn-round btn-success' name="button" @click="_u_update_article(dt,index)" :disabled="indexTopUpdate"><i class='mdi mdi-eye-outline'></i></button>
+
+																				</div>
+																				<div v-if="indexTopUpdate==index">
+																					<button type="button" class='btn btn-round btn-info' name="button" @click="_u_update_article(dt,index)"><i class='mdi mdi-close'></i></button>
+																				</div>
 																			</td>
 																			</td>
 
                                     </tr>
                                   </tbody>
                                 </table>
-																
+
 																<!-- PAGINATION -->
 																<nav aria-label="...">
 	                                  <ul class="pagination">

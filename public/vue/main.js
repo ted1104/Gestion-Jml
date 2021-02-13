@@ -216,6 +216,8 @@ var vthis = new Vue({
       qte_perdue : 0,
       qte_pv_kg : 0,
       poids_article : 0,
+      qte_pv_kg_up : 0, //uniquement pour la partie update
+
 
       //SLECTIONNER LIGNE QUI EST VISIBLE
       currentLineSelectedInList : -1,
@@ -228,6 +230,12 @@ var vthis = new Vue({
 
       //VARIVALE POUR DROIT ACCESS
       accessGestionPv : "",
+
+
+      //STATUS FOR UPDATED
+      wantToUpdate : false,
+      indexTopUpdate : null,
+      idElementSelected : null,
     }
   },
 
@@ -1871,6 +1879,41 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    update_article_data(e){
+    e.preventDefault();
+    this.isLoadSaveMainButton = true;
+    const newurl = this.url+"update-article/"+this.idElementSelected+"/update";
+    var form = {
+        "nom_article":this.nom_article,
+        "poids": this.poids,
+        "description":this.description,
+        "nombre_piece":this.nombre_piece,
+        "qte_stock_pv":this.qte_restaurer,
+        "pv_en_kg": this.qte_pv_kg_up
+      }
+
+    this.messageError = false;
+    return axios
+          .put(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.wantToUpdate = false;
+                this.indexTopUpdate = null;
+                this.get_article();
+                this.isLoadSaveMainButton = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this.isLoadSaveMainButton = false;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+  },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -2507,6 +2550,7 @@ var vthis = new Vue({
       }
     },
 
+
     _u_next_page_for_list_achat(callbackFunctionGetList){
       var i = (this.currentIndexPage+1)+1;
       if(i <= this.pageNumber){
@@ -2583,7 +2627,6 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-
     _u_change_droit_access(){
       var userID = this.codeIdArticlePrint;
       const newurl = this.url+"users-change-pv-gestion-access/"+userID;
@@ -2608,6 +2651,28 @@ var vthis = new Vue({
             .catch(error =>{
               console.log(error);
             })
+    },
+    _u_update_article(art, index){
+      this.idElementSelected = art.id;
+      // this.wantToUpdate = false;
+      if(!this.wantToUpdate){
+        this.indexTopUpdate = index;
+        this.code_article = art.code_article;
+        this.nom_article = art.nom_article;
+        this.description = art.description;
+        this.poids = art.poids;
+        this.nombre_piece = art.nombre_piece;
+        this.qte_restaurer = art.qte_stock_pv;
+        this.qte_pv_kg_up = art.pv_en_kg;
+        this.wantToUpdate = true;
+      }else{
+        this.indexTopUpdate = null;
+        this._u_fx_form_init_field();
+        this.wantToUpdate = false;
+      }
+      // this.wantToUpdate = false;
+      // console.log(this.indexTopUpdate);
+
     },
 
     // _u_hidden_display_message_error(){}
@@ -2640,6 +2705,7 @@ var vthis = new Vue({
       this.nom_article = "";
       this.poids = "";
       this.description = "";
+      vthis.nombre_piece = 1;
 
       // this.articles_id = "";
       // this.type_prix = "";
@@ -2706,7 +2772,6 @@ var vthis = new Vue({
      formData.append('poids',vthis.poids);
      formData.append('users_id',vthis.users_id);
      formData.append('nombre_piece',vthis.nombre_piece);
-     formData.append('qte_stock_pv',0);
      formData.append('qte_stock_pv',0);
      formData.append('pv_en_kg',0);
      formData.append('is_eligible_add_kg',0);
