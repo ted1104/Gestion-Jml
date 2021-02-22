@@ -80,7 +80,11 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(190,10,utf8_decode('Montant Total : '.$data->logic_somme.' USD'),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',20);
     $this->pdf->Cell(190,40,$data->numero_commande,0,1,'C');
-    $this->pdf->Ln();
+    // $this->pdf->Ln();
+    $this->pdf->SetFont('Helvetica','B',6);
+    $this->pdf->Cell(190,10,'A retirer avant 17h00',0,1,'C');
+    $date = Time::parse($data->created_at);
+    $this->pdf->Cell(190,10,'Valable avant '.$date->addDays(6),0,1,'C');
 
     $this->outPut();
 
