@@ -161,6 +161,8 @@ class PdfGenerate extends BaseController {
       $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
       $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll();
 
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
+
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
       $this->pdf->AliasNbPages();
       $this->pdf->SetFont('Helvetica','B',12);
@@ -215,20 +217,9 @@ class PdfGenerate extends BaseController {
       $this->pdf->Cell(14,5,'Produit',1,0,'L');
       $this->pdf->Row($DonneTableArticle);
 
-      $this->pdf->Cell(14,5,'Stock Init R',1,0,'L');
-      $this->pdf->Row($DonneStockInitial);
 
-      $this->pdf->Cell(14,5,'Stock Init V',1,0,'L');
-      $this->pdf->Row($DonneStockInitialVirtuel);
 
-      $this->pdf->Cell(14,5,'Appro Bon',1,0,'L');
-      $this->pdf->Row($DonneApprovisionnement);
-
-      $this->pdf->Cell(14,5,'PV',1,0,'L');
-      $this->pdf->Row($DonneApprovisionnementPv);
-
-      $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
-      $this->pdf->Row($DonneApprovisionnementTotal);
+      // DEBUT LISTE FACTURE JOURNALIERE
 
       $this->pdf->Cell(14,5,'Facture',1,0,'L');
       $this->pdf->SetWidths(array(273));
@@ -246,12 +237,29 @@ class PdfGenerate extends BaseController {
         }
         $this->pdf->Row($venteDetailArray);
       }
+      $this->pdf->SetFont('Helvetica','B',6);
+      $this->pdf->Cell(14,5,'Stock Init R',1,0,'L');
+      $this->pdf->Row($DonneStockInitial);
 
-    //RECHERCHE MONTANT TOTAL PAR ARTICLE
+      $this->pdf->Cell(14,5,'Stock Init V',1,0,'L');
+      $this->pdf->Row($DonneStockInitialVirtuel);
+
+      $this->pdf->Cell(14,5,'Appro Bon',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnement);
+
+      $this->pdf->Cell(14,5,'PV',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementPv);
+
+      $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementTotal);
+
+    //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET PAYER
       $this->pdf->SetFont('Helvetica','B',6);
       $this->pdf->SetWidths($enteTableArticle);
       $this->pdf->Cell(14,5,'Total vendu',1,0,'L');
-      $TotalArticleVendu =  array();
+      $TotalArticleVenduAPayer =  array();
+      // $TotalArticleVenduEtLivre = array();
+
       for($i = 0; $i < count($allArticle); $i++){
         $qteTotal = 0;
         foreach ($AchatsHisto as $key => $value) {
@@ -262,15 +270,14 @@ class PdfGenerate extends BaseController {
             $qteTotal = $qteTotal + 0;
           }
         }
-        array_push($TotalArticleVendu, $qteTotal);
+        array_push($TotalArticleVenduAPayer, $qteTotal);
       }
-
-      $this->pdf->Row($TotalArticleVendu);
+      $this->pdf->Row($TotalArticleVenduAPayer);
 
       //RESTE EN Stock
       $this->pdf->SetWidths($enteTableArticle);
-      $this->pdf->Cell(14,5,'Rst Stock R',1,0,'L');
-      $qteStockReste = array();
+
+      $qteStockResteReelle = array();
       $qteStockResteVirtuel = array();
 
       $todayDate = Time::today();
@@ -281,7 +288,7 @@ class PdfGenerate extends BaseController {
       for($i = 0; $i < count($allArticle); $i++){
         if($compareDate==$dateRapport){
           $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
-          array_push($qteStockReste,$stock[0]->qte_stock);
+          array_push($qteStockResteReelle,$stock[0]->qte_stock);
           array_push($qteStockResteVirtuel,$stock[0]->qte_stock_virtuel);
         }else{
           $dateR = Time::parse($dateRapport);
@@ -290,15 +297,43 @@ class PdfGenerate extends BaseController {
           $dy = strlen($dy)==1?'0'. $dy:$dy;
           $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
           $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateR)->find();
-          array_push($qteStockReste,$stockInit ? $stockInit[0]->qte_stock : 0);
+          array_push($qteStockResteReelle,$stockInit ? $stockInit[0]->qte_stock : 0);
           array_push($qteStockResteVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         }
 
       }
-      $this->pdf->Row($qteStockReste);
-
       $this->pdf->Cell(14,5,'Rst Stock V',1,0,'L');
       $this->pdf->Row($qteStockResteVirtuel);
+
+
+
+
+      //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET LIVRER
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->SetWidths($enteTableArticle);
+        $this->pdf->Cell(14,5,utf8_decode('Total livré'),1,0,'L');
+        $TotalArticleVenduEtLivre = array();
+
+        for($i = 0; $i < count($allArticle); $i++){
+          $qteTotal = 0;
+          foreach ($AchatsHistoLivre as $key => $value) {
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+            if($detAchat){
+              $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+            }else{
+              $qteTotal = $qteTotal + 0;
+            }
+          }
+          array_push($TotalArticleVenduEtLivre, $qteTotal);
+        }
+        $this->pdf->Row($TotalArticleVenduEtLivre);
+
+
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->Cell(14,5,'Rst Stock R',1,0,'L');
+        $this->pdf->Row($qteStockResteReelle);
+
+
 
       $this->outPut();
     }
