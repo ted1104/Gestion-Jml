@@ -159,7 +159,11 @@ class PdfGenerate extends BaseController {
       $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
       $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll();
 
-      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->findAll();
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+
+
+      // print_r(count($AchatsHistoLivre));
+      // die();
 
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
       $this->pdf->AliasNbPages();
@@ -230,7 +234,7 @@ class PdfGenerate extends BaseController {
         $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
         $venteDetailArray = array();
         for($i = 0; $i < count($allArticle); $i++){
-          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
             array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
         }
         $this->pdf->Row($venteDetailArray);
@@ -315,7 +319,7 @@ class PdfGenerate extends BaseController {
         for($i = 0; $i < count($allArticle); $i++){
           $qteTotal = 0;
           foreach ($AchatsHistoLivre as $key => $value) {
-            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
             if($detAchat){
               $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
             }else{
