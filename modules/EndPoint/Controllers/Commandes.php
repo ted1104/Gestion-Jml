@@ -1203,7 +1203,7 @@ class Commandes extends ResourceController {
   //################ FONCTION ADMINISTRTION #####################
 
   //FONCTION POUR AFFICHER LA LISTE DE TOUTES LES OPERATIONS SANS EXCEPTIONS ADMIN
-  public function commandes_all_get_by_status($statutVente,$dateFilter,$limit,$offset){
+  public function commandes_all_get_by_status($statutVente,$dateFilter,$limit,$offset,$isPartiel){
     $d = Time::today();
     if($dateFilter == "null"){
       $dateFilter = $d;
@@ -1214,12 +1214,19 @@ class Commandes extends ResourceController {
     if($statutVente!=5){
       $conditionStatus = ['status_vente_id'=>$statutVente];
     }
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->findAll($limit,$offset);
+    $conditionPartiel = [];
+    if($isPartiel == 1){
+      $conditionPartiel = ['is_livrer_all'=>1];
+      if($dateFilter == $d){
+        $condition =[];
+      }
+    }
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->Where($conditionPartiel)->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> $this->model->selectCount('id')->Where($condition)->Where($conditionStatus)->orderBy('id','DESC')->findAll()[0]->id,
+      'all'=> $this->model->selectCount('id')->Where($condition)->Where($conditionStatus)->Where($conditionPartiel)->orderBy('id','DESC')->findAll()[0]->id,
       'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
       'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($conditionStatus,$condition,$conditionLike)
     ]);

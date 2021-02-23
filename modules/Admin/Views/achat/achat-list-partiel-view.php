@@ -40,25 +40,25 @@
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
 																<div class="">
-																	<!-- <div @click="get_commande_magazinier(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
+																	<!-- <div @click="get_commande_admin(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
                                       En attente <span class="badge badge-pill badge-light">{{ListFiltreData.attente==undefined?'0':ListFiltreData.attente}}</span>
                                   </div>
-																	<div @click="get_commande_magazinier(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
+																	<div @click="get_commande_admin(2)" class="btn btn-info padding-4" :id="stateStatus==2?'border-menu':''">
                                       Payée <span class="badge badge-pill badge-light">{{ListFiltreData.payer==undefined?'0':ListFiltreData.payer}}</span>
                                   </div> -->
-																	<div @click="get_commande_magazinier(3,isPartiel=1)" class="btn btn-success padding-4" :id="stateStatus==3?'border-menu':''">
+																	<div @click="get_commande_admin(3,isPartiel=1)" class="btn btn-success padding-4" :id="stateStatus==3?'border-menu':''">
                                       Livrée partiellement <span class="badge badge-pill badge-light">{{dataToDisplay.length}}</span>
                                   </div>
-																	<!-- <div @click="get_commande_magazinier(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
+																	<!-- <div @click="get_commande_admin(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div> -->
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
-																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_magazinier)"><i class="mdi mdi-restore"></i> </button>
+																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_admin)"><i class="mdi mdi-restore"></i> </button>
 																	</div>
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Rechercher par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_magazinier)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_admin)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 																<div v-if="showAdvancedSearch" class="margin-top-4 u-animation-FromTop">
@@ -84,7 +84,7 @@
 																	</div>
 
 																	<div class="margin-top-7">
-																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataByMagazinier">
+																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataAdmin">
 																	</div>
 																</div>
 
@@ -162,11 +162,11 @@
 															<nav aria-label="..." v-if="!isResearchPagination">
 																	<ul class="pagination">
 																		<li class="page-item">
-																			<button class="page-link" @click="_u_previous_page_for_list_achat(get_commande_magazinier)">Previous</button>
+																			<button class="page-link" @click="_u_previous_page_for_list_achat(get_commande_admin)">Previous</button>
 																		</li>
-																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_magazinier(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_admin(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
 																		<li class="page-item">
-																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_magazinier)">Next</button>
+																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_admin)">Next</button>
 																		</li>
 																	</ul>
 																</nav>
@@ -176,11 +176,11 @@
 															<nav aria-label="..." v-if="isResearchPagination">
 																	<ul class="pagination">
 																		<li class="page-item">
-																			<button class="page-link" @click="_u_previous_page(_searchDataByMagazinier)">Previous</button>
+																			<button class="page-link" @click="_u_previous_page(_searchDataAdmin)">Previous</button>
 																		</li>
-																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="_searchDataByMagazinier(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="_searchDataAdmin(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
 																		<li class="page-item">
-																			<button class="page-link" @click="_u_next_page(_searchDataByMagazinier)">Next</button>
+																			<button class="page-link" @click="_u_next_page(_searchDataAdmin)">Next</button>
 																		</li>
 																	</ul>
 																</nav>

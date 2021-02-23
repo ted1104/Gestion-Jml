@@ -73,7 +73,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('commandes-validation-caissier/(:any)/(:num)/(:num)/(:any)/validation','Commandes::validation_operation_commande_caissier/$1/$2/$3/$4');
   $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/(:num)/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2/$3/$4/$5/$6');
   $routes->get('commandes-validation-magaz/(:any)/(:num)/(:num)/(:num)/validation','Commandes::validation_operation_commande_magasinier/$1/$2/$3/$4');
-  $routes->get('commandes-all-by-status/(:num)/(:any)/(:num)/(:num)/status','Commandes::commandes_all_get_by_status/$1/$2/$3/$4');
+  $routes->get('commandes-all-by-status/(:num)/(:any)/(:num)/(:num)/(:num)/status','Commandes::commandes_all_get_by_status/$1/$2/$3/$4/$5');
   $routes->post('demande-negotiation','Commandes::commandes_negotiate');
   $routes->get('achat-get-all-negotiation/(:num)/negotiation','Commandes::commandes_get_en_negotiation/$1');
   $routes->post('achat-validate-negotiation','Commandes::commande_validate_negotiation');
