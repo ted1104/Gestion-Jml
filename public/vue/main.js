@@ -1083,6 +1083,9 @@ var vthis = new Vue({
     },
     get_stock_depots(){
     const newurl = this.url+"stock-depot";
+    if(this.isShow){
+      this.isShow = !this.isShow;
+    }
     this.dataToDisplay=[];
     return axios
           .get(newurl,{headers: this.tokenConfig})
@@ -2005,6 +2008,31 @@ var vthis = new Vue({
             console.log(error);
           })
         },
+    ajustement_stock_depot_virtuel_reel(){
+      const newurl = this.url+"ajustement-stock-depot-virtuelle-reelle/"+this.articles_id+"/"+this.depots_id+"/"+this.qte_reelle+"/"+this.qte_virtuelle;
+
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_stock_depots();
+                  this._u_close_mod_form();
+                  this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -2528,7 +2556,8 @@ var vthis = new Vue({
       this.modalTitle = "AJUSTEMENT STOCK DE L'ARTICLE "+art.articles_id[0].code_article+" : "+art.articles_id[0].nom_article+" DU DEPOT "+cmd.nom;
       this.qte_reelle = art.qte_stock;
       this.qte_virtuelle = art.qte_stock_virtuel;
-      // this.articles_id = cmd.id;
+      this.depots_id = cmd.id;
+      this.articles_id = art.articles_id[0].id;
       // // this.qte_restaurer = cmd.qte_stock_pv;
       // this.qte_restaurer = Number(cmd.pv_en_kg)/Number(cmd.poids);
       // this.poids_article = cmd.poids;

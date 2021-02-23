@@ -181,7 +181,8 @@
 								<label for="qte_virtuelle">Qte Virtuelle *</label>
 								<input type="text" class="form-control" id="qte_virtuelle" aria-describedby="qte_virtuelle" v-model="qte_virtuelle">
 							</div>
-							<button @click="add_article_prix" class="btn btn-primary">Ajuster Quantité</button>
+							<button v-if="!isLoadSaveMainButton" @click="ajustement_stock_depot_virtuel_reel" class="btn btn-primary">Ajuster Quantité</button>
+							<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 						</div>
 						<!-- <div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
