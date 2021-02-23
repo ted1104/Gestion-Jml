@@ -350,6 +350,7 @@ var vthis = new Vue({
       form.append('telephone_client', this.telephone_client);
       form.append('container_faveur',this.ListIdArticleFaveur.length > 0 ? 1 : 0);
       form.append('depots_id_faveur', this.depot_central_id);
+      form.append('is_livrer_all', 0);
 
       for(var i=0; i< this.tabListData.length; i++){
         form.append('articles_id[]', this.tabListData[i]['id']);
