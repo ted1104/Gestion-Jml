@@ -39,6 +39,8 @@
 													<div class="card m-b-30">
 	                            <div class="card-header bg-white text-center">
 	                                <h5 class="card-title text-black">CLOTURE STOCK DEPOT</h5>
+																	<span>Date : {{this.dateFilter}}</span><br>
+																	<span>Status : <span :class="dataToDisplay.cloture_stock?'text-success':'text-danger'">{{dataToDisplay.cloture_stock?'Clôturé':'Non Clôture'}}</span></span>
 	                            </div>
 	                            <div class="card-body text-center">
                               		<button @click="_u_open_mod_popup_systeme(1)" class="btn btn-primary">clôturer</button>
@@ -50,6 +52,8 @@
 													<div class="card m-b-30">
 	                            <div class="card-header bg-white text-center">
 	                                <h5 class="card-title text-black">CLOTURE CAISSE</h5>
+																	<span>Date : {{this.dateFilter}}</span><br>
+																	<span>Status : <span :class="dataToDisplay.cloture_caisse?'text-success':'text-danger'">{{dataToDisplay.cloture_caisse?'Clôturé':'Non Clôture'}}</span></span>
 	                            </div>
 	                            <div class="card-body text-center">
                               		<button @click="_u_open_mod_popup_systeme(2)" class="btn btn-primary">clôturer</button>
@@ -61,6 +65,8 @@
 													<div class="card m-b-30">
 	                            <div class="card-header bg-white text-center">
 	                                <h6 class="text-black">OPERATION SUR LES COMPTES</h6>
+																	<span>Date : {{this.dateFilter}}</span><br>
+																	<span>Status : <span :class="dataToDisplay.etat_compte?'text-danger':'text-success'">{{dataToDisplay.etat_compte?'Comptes désactivés':'Comptes activés'}}</span></span>
 	                            </div>
 	                            <div class="card-body text-center">
                               		<button @click="_u_open_mod_popup_systeme(3)" class="btn btn-success">Activer</button>

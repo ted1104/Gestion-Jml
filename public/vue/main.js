@@ -1977,6 +1977,7 @@ var vthis = new Vue({
                   this.isLoadSaveMainButton = false;
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   this._u_close_mod_form();
+                  this.get_etat_parametre_systeme();
                   return;
                 }
                 var err = response.data.message.errors;
@@ -1988,6 +1989,18 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_etat_parametre_systeme(){
+    const newurl = this.url+"detect-etat-param-system";
+    this.dataToDisplay=[];
+    return axios
+          .get(newurl,{headers: this.tokenConfig})
+          .then(response =>{
+            this.dataToDisplay = response.data.data;
+            console.log(this.dataToDisplay);
+          }).catch(error =>{
+            console.log(error);
+          })
+        },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3109,6 +3122,11 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'admin-rapport'){
       this.get_depots();
     }
+    if(pth[this.indexRoute]=='admin-config-system'){
+      this.get_etat_parametre_systeme();
+    }
+
+
   }
 
   },

@@ -200,11 +200,10 @@ class TableStatique extends ResourceController {
     }
 
 
-
     $data = [
       "cloture_stock" => $cloture_stock ? true : false,
       "cloture_caisse" => $cloture_caisse ? true : false,
-      "etat_compte" => $IsBloqued ? 'Comptes desactivés':'Comptes activés',
+      "etat_compte" => $IsBloqued ? true:false,
     ];
 
     return $this->respond([
