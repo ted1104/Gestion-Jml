@@ -2758,7 +2758,11 @@ var vthis = new Vue({
        newurl = this.url+"cloture-stock-journalier";
      }else if(type ==2){
         newurl = this.url+"cloture-caisse-journalier";
-      }
+     }else if(type ==3){
+         newurl = this.url+"users-debloque-account";
+     }else if(type ==4){
+        newurl = this.url+"users-bloque-account";
+     }
       this.messageError = false;
       this.isLoadSaveMainButton = true;
       return axios
