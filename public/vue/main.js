@@ -241,6 +241,9 @@ var vthis = new Vue({
       //validation Action Livraison Partielle
       isPartielle : false,
       isPartielFecthData : 0,
+
+      //Config Syst
+      textDescriptif : null
     }
   },
 
@@ -2489,6 +2492,21 @@ var vthis = new Vue({
       //console.log(cmd);
       this.modalTitle = "MODIFICATION DE LA PHOTO DU PROFILE";
       this.styleModal = 'block';
+    },
+    _u_open_mod_popup_systeme(i){
+      if(i == 1){
+        this.modalTitle = "CLOTURE STOCK DEPOT JOURNALIERE";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière du stock de tous les dépôts, assurez vous que c'est le bon moment de le faire car cette action est irréversible";
+      }else if (i == 2) {
+        this.modalTitle = "CLOTURE CAISSE JOURNALIERE";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière de la caisse générale, assurez vous que c'est le bon moment de le faire car cette action est irréversible";
+      }else if (i == 3) {
+        this.modalTitle = "DESACTIVER/ACTIVER TOUS LES COMPTES";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire de desactiver tous les comptes du système sauf ceux de manager et des administrateurs du système, assurez vous que c'est le bon moment de le faire";
+      }
+      this.styleModal = 'block';
+
+      // console.log(cmd);
     },
     _u_get_today(){
       var currentDate = new Date();

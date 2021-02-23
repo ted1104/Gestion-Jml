@@ -341,9 +341,20 @@ class OperationCaisseEncaissement extends ResourceController {
         ];
         $insertData = $this->clotureCaisseModel->insert($data);
       }
-      echo 'caisse cloture avec success';
+      $message = [
+        'success' => "La cloture journalière de la caisse a été effectuée avec succès",
+        'errors' => null
+      ];
     }else{
-      echo 'caisse Deja cloturé encore';
+      $message = [
+        'success' => null,
+        'errors' => "Merci de reessayer demain car la cloture journalière de la caisse est déjà faite"
+      ];
     }
+    return $this->respond([
+      'status' => 200,
+      'message' =>$message,
+      // 'data'=> $data
+    ]);
   }
 }

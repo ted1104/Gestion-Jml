@@ -243,9 +243,22 @@ class Approvisionnement extends ResourceController {
 
         $insertData = $this->clotureStockModel->insert($data);
       }
-      echo 'cloture avec success';
+      //echo 'cloture avec success';
+      $message = [
+        'success' => "La cloture journalière a été effectuée avec succès",
+        'errors' => null
+      ];
     }else{
-      echo 'Deja encore';
+      $message = [
+        'success' => null,
+        'errors' => "Merci de reessayer demain car la cloture journalière est déjà faite"
+      ];
     }
+    return $this->respond([
+      'status' => 200,
+      'message' =>$message,
+      // 'data'=> $data
+    ]);
   }
+
 }

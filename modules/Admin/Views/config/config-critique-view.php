@@ -54,52 +54,7 @@
                             </div>
                         </div>
 												</div>
-												<div class="col-md-8 col-lg-8 col-xl-8">
-												<div class="card m-b-30">
-													<div class="card-header bg-white">
-															<h5 class="card-title text-black col-md-6">CONFIGURATIONS ACTUELLES ETAT CRITIQUE</h5>
-															<div class="col-md-6">
-																<div class="row text-center" v-if="dataToDisplay.length >0">
-																	<div class="col-md-4" >
-																		<span class="badge badge-pill badge-danger">N</span><br> Qte <= {{montant_min}}
-																	</div>
-																	<div class="col-md-4">
-																		<span class="badge badge-pill badge-warning">N</span><br> {{montant_min}} < Qte < {{montant_max}}
-																	</div>
-																	<div class="col-md-4">
-																		<span class="badge badge-pill badge-success">N</span><br> {{montant_max}} <= Qte
-																	</div>
-																</div>
-															</div>
-													</div>
-                          <div class="card-body">
-                              <div class="table-responsive">
-                                <table class="table">
-                                  <thead>
-                                    <tr class="bg-secondary">
-
-                                      <th scope="col">Nombre Article Minimum</th>
-                                      <th scope="col">Nombre Article Max</th>
-                                    </tr>
-                                  </thead>
-
-                                  <tbody>
-                                    <tr v-for="(dt, index) in dataToDisplay">
-
-                                      <th>{{dt.montant_min}}</th>
-                                      <td>{{dt.montant_max}}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-																<!-- LOAD FOR WAITING DATA -->
-																<div class="text-center" v-if="dataToDisplay.length < 1">
-																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
-																</div>
-																<!-- PAGINATION -->
-                              </div>
-                          </div>
-                        </div>
-												</div>
+												
 											</div>
                     </div>
                     <!-- End XP Col -->

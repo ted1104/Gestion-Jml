@@ -70,6 +70,14 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\rapport\rapport-view', $data);
   }
+  public function getConfigSystem(){
+    $data = [
+      'titlePage' => 'ACTION AVANCEE: Administration'
+    ];
+    echo view($this->linkMod.'\config\config-avance-view', $data);
+  }
+
+
 
 
 
