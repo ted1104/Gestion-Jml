@@ -60,7 +60,7 @@
 												<div class="col-md-3 col-lg-3 col-xl-3 ">
 													<div class="card m-b-30">
 	                            <div class="card-header bg-white text-center">
-	                                <h6 class="text-black">BLOQUER LES COMPTES</h6>
+	                                <h6 class="text-black">OPERATION SUR LES COMPTES</h6>
 	                            </div>
 	                            <div class="card-body text-center">
                               		<button @click="_u_open_mod_popup_systeme(3)" class="btn btn-success">Activer</button>
@@ -101,9 +101,19 @@
 								<span class="text-danger">
 									{{textDescriptif}}
 								</span>
+								<br>
+								<div class="form-group col-md-12 text-center">
+									<label for="password_op">Renseigner votre Mot de passe des operations *</label>
+									<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+								</div>
 							</div>
-							<br>
-							<button v-if="!isLoadSaveMainButton"  @click="_u_cloture_operation_caisse_et_depot(typeAction)" class="btn btn-danger">Je confirme</button>
+							<div v-if="!passIsCorrectCanProcceed">
+								<button v-if="!isLoadSaveMainButton"  @click="_u_check_if_password_op_is_correct" class="btn btn-info">Vérifier Mot de passe</button>
+							</div>
+							<div v-if="passIsCorrectCanProcceed">
+								<span class="text-success">Mot de passe des operations correctes pour finaliser avec le processus veuillez cliquer sur le bouton ci-dessous</span>
+								<button v-if="!isLoadSaveMainButton"  @click="operation_systeme_config(typeAction)" class="btn btn-danger">Je confirme</button>
+							</div>
 							<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
             </div>
 

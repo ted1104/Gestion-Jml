@@ -37,6 +37,9 @@ $routes->group('api/v1', function($routes){
 
   $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
   $routes->get('users-change-achat-partiels-gestion-access/(:num)','Users::changeAccessToGestionAchatPartiels/$1');
+  $routes->get('users-check-correct-password/(:num)/(:any)','Users::CheckIfPasswordIsCorrect/$1/$2');
+
+
 
 
 

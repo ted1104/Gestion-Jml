@@ -366,4 +366,24 @@ class Users extends ResourceController {
     ]);
     // print_r(count($allUserToBlockAccount));
   }
+
+  public function CheckIfPasswordIsCorrect($idUser,$pwd){
+    if(!$this->userAuthModel->authPasswordOperation($idUser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'success',
+        'errors' => null
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+    ]);
+  }
 }

@@ -245,6 +245,7 @@ var vthis = new Vue({
       //Config Syst
       textDescriptif : null,
       typeAction : null,
+      passIsCorrectCanProcceed : false,
     }
   },
 
@@ -1955,6 +1956,38 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    operation_systeme_config(type){
+      let newurl = null;
+      if(type==1){
+       newurl = this.url+"cloture-stock-journalier";
+     }else if(type ==2){
+        newurl = this.url+"cloture-caisse-journalier";
+     }else if(type ==3){
+         newurl = this.url+"users-debloque-account";
+     }else if(type ==4){
+        newurl = this.url+"users-bloque-account";
+     }
+      this.messageError = false;
+      this.isLoadSaveMainButton = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this.isLoadSaveMainButton = false;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_close_mod_form();
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+                this._u_close_mod_form();
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -2480,21 +2513,23 @@ var vthis = new Vue({
       this.styleModal = 'block';
     },
     _u_open_mod_popup_systeme(i){
+      this.password_op = null;
+      this.passIsCorrectCanProcceed = false;
       if(i == 1){
         this.modalTitle = "CLOTURE STOCK DEPOT JOURNALIERE";
-        this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière du stock de tous les dépôts, assurez vous que c'est le bon moment de le faire car cette action est irréversible";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière du stock de tous les dépôts, assurez vous que c'est le bon moment de le faire car cette action est irréversible. Cette action est sensée être faite à la fin de la journée vers 18h30";
         this.typeAction = 1;
       }else if (i == 2) {
         this.modalTitle = "CLOTURE CAISSE JOURNALIERE";
-        this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière de la caisse générale, assurez vous que c'est le bon moment de le faire car cette action est irréversible";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière de la caisse générale, assurez vous que c'est le bon moment de le faire car cette action est irréversible. Cette action est sensée être faite à la fin de la journée vers 18h30";
         this.typeAction = 2;
       }else if (i == 3) {
         this.modalTitle = "ACTIVER TOUS LES COMPTES";
-        this.textDescriptif = "Attentions, vous êtes sur le point de faire d'activer tous les comptes du système sauf ceux des managers et des administrateurs du système, assurez vous que c'est le bon moment de le faire";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire d'activer tous les comptes du système sauf ceux des managers et des administrateurs du système, assurez vous que c'est le bon moment de le faire.";
         this.typeAction = 3;
       }else if (i == 4) {
         this.modalTitle = "DESACTIVER TOUS LES COMPTES";
-        this.textDescriptif = "Attentions, vous êtes sur le point de faire de desactiver tous les comptes du système sauf ceux des managers et des administrateurs du système, assurez vous que c'est le bon moment de le faire";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire de desactiver tous les comptes du système sauf ceux des managers et des administrateurs du système, assurez vous que c'est le bon moment de le faire. Cette action est sensée être faite à la fin de la journée vers 18h30";
         this.typeAction = 4;
       }
       this.styleModal = 'block';
@@ -2750,19 +2785,12 @@ var vthis = new Vue({
       // console.log(this.indexTopUpdate);
 
     },
-
-    _u_cloture_operation_caisse_et_depot(type){
-      // const newurl = this.url+"cloture-stock-journalier";
-      let newurl = null;
-      if(type==1){
-       newurl = this.url+"cloture-stock-journalier";
-     }else if(type ==2){
-        newurl = this.url+"cloture-caisse-journalier";
-     }else if(type ==3){
-         newurl = this.url+"users-debloque-account";
-     }else if(type ==4){
-        newurl = this.url+"users-bloque-account";
-     }
+    _u_check_if_password_op_is_correct(){
+      const newurl = this.url+"users-check-correct-password/"+this.users_id+"/"+this.password_op;
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
       this.messageError = false;
       this.isLoadSaveMainButton = true;
       return axios
@@ -2771,7 +2799,8 @@ var vthis = new Vue({
                 if(response.data.message.success !=null){
                   var err = response.data.message.success;
                   this.isLoadSaveMainButton = false;
-                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.passIsCorrectCanProcceed = true;
+                  // this._u_fx_config_error_message("Succès",[err],'alert-success');
                   return;
                 }
                 var err = response.data.message.errors;
