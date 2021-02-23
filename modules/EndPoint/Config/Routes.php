@@ -34,6 +34,8 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
   $routes->get('users-bloque-account','Users::bloqueAllCountUsers');
   $routes->get('users-debloque-account','Users::DebloqueAllCountUsers');
+  $routes->get('users-change-achat-partiels-gestion-access/(:num)','Users::changeAccessToGestionAchatPartiels/$1');
+
 
 
 
