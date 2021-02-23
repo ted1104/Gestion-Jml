@@ -541,7 +541,7 @@ class Commandes extends ResourceController {
             // }
             if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
               //DECOMPTE DU STOCK DEOPOTS
-              $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
+              $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->where('is_validate_livrer',0)->findAll();
               foreach ($allArt as $key => $value) {
                 $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$value->articles_id[0]->id])->getRow();
                 $stokinit = $stokdepot->qte_stock;
