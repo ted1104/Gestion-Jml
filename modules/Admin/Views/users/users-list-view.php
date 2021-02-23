@@ -156,9 +156,12 @@
 																		</div>
 																		<div class="col-md-12">
 																			<div class="custom-control custom-checkbox custom-control-inline">
-																				<input type="checkbox" id="ch" class="custom-control-input" @change="_u_change_droit_access" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_pv==1? 'checked':'':''">
+																				<input type="checkbox" id="ch" class="custom-control-input" @change="_u_change_droit_access(1)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_pv==1? 'checked':'':''">
 																				<label class="custom-control-label" for="ch">Gestion PV</label>
-
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chs" class="custom-control-input" @change="_u_change_droit_access(2)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_achat_partiels==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chs">Gestion Achat partiels</label>
 																			</div>
 																		</div>
 

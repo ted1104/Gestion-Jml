@@ -2685,9 +2685,15 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    _u_change_droit_access(){
+    _u_change_droit_access(droit){
       var userID = this.codeIdArticlePrint;
-      const newurl = this.url+"users-change-pv-gestion-access/"+userID;
+      let newurl = null;
+      if(droit==1){
+       newurl = this.url+"users-change-pv-gestion-access/"+userID;
+      }else{
+        newurl = this.url+"users-change-achat-partiels-gestion-access/"+userID;
+      }
+      // alert(newurl);
       // this.isLoadSaveMainButton = true;
       this.messageError = false;
       return axios
