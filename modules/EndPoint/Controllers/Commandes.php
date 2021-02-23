@@ -281,6 +281,10 @@ class Commandes extends ResourceController {
         $condition =[];
       }
     }
+
+    // print_r($conditionPartiel);
+    // die();
+
     $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,

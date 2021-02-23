@@ -172,6 +172,7 @@
 																</nav>
 																<!-- FIN PAGINATION LISTE NORMALE -->
 
+
 															<!-- PAGINATION LORS DE LA RECHERRCHE -->
 															<nav aria-label="..." v-if="isResearchPagination">
 																	<ul class="pagination">
