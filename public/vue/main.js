@@ -624,7 +624,12 @@ var vthis = new Vue({
                 if(from == 1){
                   this.get_commande_faveur_magazinier(2);
                 }else {
-                  this.get_commande_magazinier(2);
+                  if(this.isPartielFecthData ==0){
+                    this.get_commande_magazinier(2);
+                  }else{
+                    this.get_commande_magazinier(3);
+                  }
+
                 }
 
                 this._u_close_mod_form();
@@ -1944,7 +1949,11 @@ var vthis = new Vue({
                 var err = response.data.message.success;
                 this.isLoadSaveMainButtonModal = false;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
-                this.get_commande_magazinier(2);
+                if(this.isPartielFecthData ==0){
+                  this.get_commande_magazinier(2);
+                }else{
+                  this.get_commande_magazinier(3);
+                }
                 this._u_close_mod_form();
                 this._u_reset_checkBoxSelected();
                 return;

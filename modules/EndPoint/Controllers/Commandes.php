@@ -597,7 +597,7 @@ class Commandes extends ResourceController {
       $data = "";
     }else{
       if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanityPartiel($iddepot,$idcommande,$idarticle)){
-        $getAllArticleInCommande = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
+        $getAllArticleInCommande = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('is_validate_livrer',0)->findAll();
         $data = ['status_vente_id'=>3,'is_livrer_all'=>1];
         if(count($idarticle) < count($getAllArticleInCommande)){
           if(!$this->model->update($idcommande,$data)){

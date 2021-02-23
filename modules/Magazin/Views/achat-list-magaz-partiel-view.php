@@ -99,6 +99,7 @@
 																		<th scope="col">{{stateStatus==1?'Commander par':(stateStatus==2?'Payer à':(stateStatus==3?'Livrer par':'Annuler par'))}}</th>
 																		<th scope="col">Montant</th>
 																		<th scope="col">Status</th>
+																		<th scope="col">Valider</th>
 																		<th scope="col">{{stateStatus !=3?'Valider':'Print'}}</th>
 																		<th scope="col">Action</th>
 																	</tr>
@@ -133,6 +134,9 @@
 																			</div>
 																			<!-- <span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==2" class="badge badge-success">TOUT</span> -->
 																			<span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==1" class="badge badge-warning">PARTIEL</span>
+																		</td>
+																		<td>
+																			<button v-if="dt.status_vente_id.id==3 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 																		</td>
 																		<td scope="col">
 																			<button v-if="dt.status_vente_id.id==2 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
@@ -225,13 +229,13 @@
 																		</span>
 																	</div>
 																	<div class="col-md-2">
-																		<div class="custom-control custom-checkbox custom-control-inline" v-if="detailTab.status_vente_id.id==2">
+																		<div class="custom-control custom-checkbox custom-control-inline" v-if="detailTab.status_vente_id.id==3 && det.is_validate_livrer==0">
 																			<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles">
 		                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
 																		</div>
-																		<div class="" v-if="detailTab.status_vente_id.id==3">
+																		<div class="" v-if="detailTab.status_vente_id.id==3 && det.is_validate_livrer==1">
 																			<span v-if="det.is_validate_livrer==1" class="text-success">OK</span>
-																			<span v-if="det.is_validate_livrer==0" class="text-danger">NO</span>
+																			<!-- <span v-if="det.is_validate_livrer==0" class="text-danger">NO</span> -->
 																		</div>
 	                                </div>
 																</div>
