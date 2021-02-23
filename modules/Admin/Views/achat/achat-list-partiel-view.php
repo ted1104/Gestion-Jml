@@ -99,7 +99,7 @@
 																		<th scope="col">{{stateStatus==1?'Commander par':(stateStatus==2?'Payer à':(stateStatus==3?'Livrer par':'Annuler par'))}}</th>
 																		<th scope="col">Montant</th>
 																		<th scope="col">Status</th>
-																		<th scope="col">Valider</th>
+																		<!-- <th scope="col">Valider</th> -->
 																		<th scope="col">{{stateStatus !=3?'Valider':'Print'}}</th>
 																		<th scope="col">Action</th>
 																	</tr>
@@ -135,9 +135,9 @@
 																			<!-- <span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==2" class="badge badge-success">TOUT</span> -->
 																			<span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==1" class="badge badge-warning">PARTIEL</span>
 																		</td>
-																		<td>
+																		<!-- <td>
 																			<button v-if="dt.status_vente_id.id==3 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
-																		</td>
+																		</td> -->
 																		<td scope="col">
 																			<button v-if="dt.status_vente_id.id==2 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 																			<i v-if="dt.status_vente_id.id==1" class='mdi mdi-checkbox-marked-circle-outline'></i>
@@ -210,7 +210,7 @@
 																</div>
 																<hr>
 															</div>
-															{{checkBoxArticles}}
+															<!-- {{checkBoxArticles}} -->
 															<div v-for="(det,i) in detailTab.logic_article">
 																<div class="row">
 																	<div class="col-md-4">

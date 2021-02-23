@@ -205,7 +205,7 @@
 																</div>
 																<hr>
 															</div>
-															{{checkBoxArticles}}
+															<!-- {{checkBoxArticles}} -->
 															<div v-for="(det,i) in detailTab.logic_article">
 																<div class="row">
 																	<div class="col-md-4">
