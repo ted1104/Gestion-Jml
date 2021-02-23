@@ -227,7 +227,6 @@ class Approvisionnement extends ResourceController {
        'data'=> $data
      ]);
   }
-
   public function clotureJournalierStock(){
     $d = Time::tomorrow();
     $initStock = $this->stockModel->findAll();
@@ -258,6 +257,31 @@ class Approvisionnement extends ResourceController {
       'status' => 200,
       'message' =>$message,
       // 'data'=> $data
+    ]);
+  }
+  public function ajustementStockDepot($idArticle, $idDepot, $newQteReelle, $newQteVirtuelle){
+
+    $getLine = $this->stockModel->Where('articles_id',$idArticle)->Where('depot_id',$idDepot)->find();
+    if(!$this->stockModel->update($getLine[0]->id, ['qte_stock'=>$newQteReelle, 'qte_stock_virtuel'=>$newQteVirtuelle])){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->stockModel->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' =>"Ajustement des stocks virtuel et réel avec succès",
+        'errors'=>null
+      ];
+      $data = null;
+    }
+
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
     ]);
   }
 

@@ -121,6 +121,8 @@ $routes->group('api/v1', function($routes){
   $routes->post('delete-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_delete_articles');
   $routes->post('pv-approvisionnement-restaure','Approvisionnement::approvisionementPvRestaure');
   $routes->post('validate-partiel-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_validate_partiel_articles');
+  $routes->get('ajustement-stock-depot-virtuelle-reelle/(:num)/(:num)/(:any)/(:any)','Approvisionnement::ajustementStockDepot/$1/$2/$3/$4');
+
 
 
 
