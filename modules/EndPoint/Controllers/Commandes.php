@@ -65,7 +65,8 @@ class Commandes extends ResourceController {
           'articles_id'=>$article[$i],
           'qte_vendue'=>$qte_vendue[$i],
           'prix_unitaire' =>$prix_unitaire[$i],
-          'is_faveur' => $is_faveur[$i]
+          'is_faveur' => $is_faveur[$i],
+          'is_validate_livrer'=>0
         ];
         // print_r($dataDetail);
         // exit();

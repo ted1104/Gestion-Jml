@@ -39,8 +39,6 @@ class PdfGenerate extends BaseController {
 
 
 
-
-
   public function __construct(){
     $this->pdf = new FPDF();
 
@@ -227,7 +225,7 @@ class PdfGenerate extends BaseController {
       $this->pdf->SetFont('Helvetica','',6);
       $this->pdf->SetWidths($enteTableArticle);
       // $venteArray = array();
-      foreach ($AchatsHisto as $key => $value) {
+      foreach ($AchatsHistoLivre as $key => $value) {
         $achat = $this->commande->find($value->vente_id);
         $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
         $venteDetailArray = array();
