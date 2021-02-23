@@ -20,6 +20,9 @@ $routes->get('admin-histo-appro-inter-depot','Approv::historiqueInterDepot',['fi
 $routes->get('admin-encaissement-externe','Dashboard::getEncaissementExterne',['filter' => 'isLoggedIn']);
 $routes->get('admin-stock-pv','Dashboard::getStockPv',['filter' => 'isLoggedIn']);
 $routes->get('admin-rapport','Dashboard::getRapport',['filter' => 'isLoggedIn']);
+$routes->get('admin-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'isLoggedIn']);
+
+
 
 
 

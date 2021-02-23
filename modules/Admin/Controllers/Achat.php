@@ -14,5 +14,11 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\achat\achat-list-negotiation-view', $data);
   }
+  public function getAchatPartiel(){
+    $data = [
+      'titlePage' => 'ACHAT PARTIEL: Administration'
+    ];
+    echo view($this->linkMod.'\achat\achat-list-partiel-view', $data);
+  }
 
 }

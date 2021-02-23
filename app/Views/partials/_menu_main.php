@@ -25,6 +25,7 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-list-achat') ?>">Achat</a></li>
+                      <li><a href="<?=base_url('admin-list-achat-partiel') ?>">Achats Partiels</a></li>
                   </ul>
               </li>
               <li>
