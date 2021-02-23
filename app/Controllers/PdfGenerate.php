@@ -517,8 +517,8 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',6);
     $this->pdf->Ln(5);
-    $this->pdf->SetWidths(array(50,15,15,15,15,15,15,15,15,20));
-    $this->pdf->Row(array('Designation',utf8_decode('Stock Initial Réelle'),utf8_decode('Stock Initial Virtuelle'),utf8_decode('Entrée Qte Bonne'),utf8_decode('Entrée Qte PV'),utf8_decode('Entrée Qte Totale'),utf8_decode('Sorti'),utf8_decode('Stock Final Réelle'),utf8_decode('Stock Final Virtuelle'),utf8_decode('Observation')));
+    $this->pdf->SetWidths(array(45,15,15,15,15,15,15,15,15,15,20));
+    $this->pdf->Row(array('Designation',utf8_decode('Stock Initial Réelle'),utf8_decode('Stock Initial Virtuelle'),utf8_decode('Entrée Qte Bonne'),utf8_decode('Entrée Qte PV'),utf8_decode('Entrée Qte Totale'),utf8_decode('Sorti (Total Vendu)'),utf8_decode('Sorti (Total livré)'),utf8_decode('Stock Final Réelle'),utf8_decode('Stock Final Virtuelle'),utf8_decode('Observation')));
     $this->pdf->SetFont('Helvetica','',6);
     foreach ($allArticle as $key => $value) {
       // code... SI
@@ -536,14 +536,28 @@ class PdfGenerate extends BaseController {
       //code pour sorti
       $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
 
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+
+      // print_r(count($AchatsHistoLivre));
+      // die();
+
+
       // echo '<pre>';
       // print_r(count($AchatsHisto));
       // die();
-      $qteTotal = 0;
+      $qteTotalVendu = 0;
       foreach ($AchatsHisto as $key) {
         $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
         if($detAchat){
-          $qteTotal += $detAchat[0]->qte_vendue;
+          $qteTotalVendu += $detAchat[0]->qte_vendue;
+        }
+      }
+
+      $qteTotalLivre = 0;
+      foreach ($AchatsHistoLivre as $key) {
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->like('updated_at',$dateRapport,'after')->findAll();
+        if($detAchat){
+          $qteTotalLivre += $detAchat[0]->qte_vendue;
         }
       }
 
@@ -590,7 +604,8 @@ class PdfGenerate extends BaseController {
             $approGenBonne[0]->qte?$approGenBonne[0]->qte:0,
             $approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0,
             $approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0,
-            $qteTotal,
+            $qteTotalVendu,
+            $qteTotalLivre,
             $qteResteEnStockReelle,
             $qteResteEnStockVirtuelle,
             '-'));
