@@ -7,7 +7,11 @@ use App\Models\StEtatCritiqueModel;
 use App\Models\ArticlesModel;
 use App\Models\StockModel;
 use App\Models\StProfileModel;
-
+use App\Models\ClotureStockModel;
+use App\Models\ClotureCaisseModel;
+use App\Models\UsersModel;
+use App\Models\UsersAuthModel;
+use CodeIgniter\I18n\Time;
 
 class TableStatique extends ResourceController {
   protected $format = 'json';
@@ -16,6 +20,10 @@ class TableStatique extends ResourceController {
   protected $stockModel = null;
   protected static $stetatcritique = null;
   protected static $stProfileModel = null;
+  protected $clotureStockModel = null;
+  protected $clotureCaisseModel = null;
+  protected $userModel = null;
+  protected $usersAuthModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -24,6 +32,10 @@ class TableStatique extends ResourceController {
     $this->stockModel = new StockModel();
     self::$stetatcritique = new StEtatCritiqueModel();
     self::$stProfileModel = new StProfileModel();
+    $this->clotureStockModel = new ClotureStockModel();
+    $this->clotureCaisseModel =  new ClotureCaisseModel();
+    $this->userModel = new UsersModel();
+    $this->usersAuthModel = new UsersAuthModel();
   }
 
   public function depot_get(){
@@ -168,4 +180,38 @@ class TableStatique extends ResourceController {
       'data' => $data,
     ]);
   }
+  public function detectEtatDesParametresSysteme(){
+    //STOCK CLOTURE
+    $d = Time::tomorrow();
+    $cloture_stock = $this->clotureStockModel->Where('date_cloture',$d)->find();
+
+    //CAISEE CLOTURE
+    $dy = Time::today();
+    $cloture_caisse = $this->clotureCaisseModel->Where('date_cloture',$dy)->find();
+
+    //ETAT COMPTE
+    $allUserToBlockAccount = $this->userModel->Where('roles_id !=',1)->findAll();
+    $IsBloqued = true;
+    foreach ($allUserToBlockAccount as $key => $value) {
+      $in = $this->usersAuthModel->Where('users_id',$value->id)->find();
+      if($in[0]->status_users_id == 1){
+        $IsBloqued = false;
+      }
+    }
+
+
+
+    $data = [
+      "cloture_stock" => $cloture_stock ? true : false,
+      "cloture_caisse" => $cloture_caisse ? true : false,
+      "etat_compte" => $IsBloqued ? 'Comptes desactivés':'Comptes activés',
+    ];
+
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+  }
+
 }
