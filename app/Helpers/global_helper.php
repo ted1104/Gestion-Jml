@@ -61,7 +61,8 @@ if(! function_exists('getAllDroitAccess')){
     $query = $db->table('g_droit_access')->getWhere(['users_id' => $idUser]);
     $data = $query->getRow();
     return [
-      'g_pv' => $data ? $data->g_pv:0
+      'g_pv' => $data ? $data->g_pv:0,
+      'g_achat_partiels'=> $data ? $data->g_achat_partiels:0,
     ];
   }
 }

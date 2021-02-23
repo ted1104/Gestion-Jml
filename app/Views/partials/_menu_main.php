@@ -110,6 +110,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-list-achat') ?>">Achat</a></li>
+                      <?php if(session('accessDroit')['g_achat_partiels'] == 1): ?>
+                        <li><a href="<?=base_url('admin-list-achat-partiel') ?>">Achats Partiels</a></li>
+                      <?php endif; ?>
                   </ul>
               </li>
               <li>
@@ -232,7 +235,9 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
-                    <li><a href="<?=base_url('magaz-list-achat-partiel') ?>">Mes Achats Partiels</a></li>
+                    <?php if(session('accessDroit')['g_achat_partiels'] == 1): ?>
+                      <li><a href="<?=base_url('magaz-list-achat-partiel') ?>">Mes Achats Partiels</a></li>
+                    <?php endif; ?>
                     <?php //if(session('lieuAffectation')->is_central == 1):  ?>
                     <!-- <li><a href="<?=base_url('magaz-list-achat-faveur') ?>">Mes Achats Faveurs</a></li> -->
                     <?php //endif; ?>
