@@ -125,10 +125,14 @@
 																		<!--  -->
 																		<td>{{dt.logic_somme}} USD</td>
 																		<td>
-																			<span v-if="dt.status_vente_id.id==1" class="badge badge-warning">{{dt.status_vente_id.description}}</span>
-																			<span v-if="dt.status_vente_id.id==2" class="badge badge-info">{{dt.status_vente_id.description}}</span>
-																			<span v-if="dt.status_vente_id.id==3" class="badge badge-success">{{dt.status_vente_id.description}}</span>
-																			<span v-if="dt.status_vente_id.id==4" class="badge badge-danger">{{dt.status_vente_id.description}}</span>
+																			<div class="">
+																				<span v-if="dt.status_vente_id.id==1" class="badge badge-warning">{{dt.status_vente_id.description}}</span>
+																				<span v-if="dt.status_vente_id.id==2" class="badge badge-info">{{dt.status_vente_id.description}}</span>
+																				<span v-if="dt.status_vente_id.id==3" class="badge badge-success">{{dt.status_vente_id.description}}</span>
+																				<span v-if="dt.status_vente_id.id==4" class="badge badge-danger">{{dt.status_vente_id.description}}</span>
+																			</div>
+																			<!-- <span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==2" class="badge badge-success">TOUT</span> -->
+																			<span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==1" class="badge badge-warning">PARTIEL</span>
 																		</td>
 																		<td scope="col">
 																			<button v-if="dt.status_vente_id.id==2 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
@@ -191,7 +195,7 @@
 															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
 																<div class="row">
 																	<div class="col-md-6">
-																		<button v-if="!isLoadNego" type="button" @click="add_ask_negotiation(detailTab.id)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Livrer</button>
+																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_magaz(detailTab,2, true)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Livrer</button>
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																	<!-- <div class="col-md-6 text-right">
@@ -221,9 +225,13 @@
 																		</span>
 																	</div>
 																	<div class="col-md-2">
-																		<div class="custom-control custom-checkbox custom-control-inline">
+																		<div class="custom-control custom-checkbox custom-control-inline" v-if="detailTab.status_vente_id.id==2">
 																			<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles">
 		                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
+																		</div>
+																		<div class="" v-if="detailTab.status_vente_id.id==3">
+																			<span v-if="det.is_validate_livrer==1" class="text-success">OK</span>
+																			<span v-if="det.is_validate_livrer==0" class="text-danger">NO</span>
 																		</div>
 	                                </div>
 																</div>
@@ -288,7 +296,8 @@
 										<label for="password_op">Mot de passe *</label>
 										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 									</div>
-									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_livraison(2)" class="btn btn-primary">Confirmer</button>
+									<button v-if="!isLoadSaveMainButtonModal && !isPartielle" @click="add_validation_livraison(2)" class="btn btn-primary">Confirmer</button>
+									<button v-if="!isLoadSaveMainButtonModal && isPartielle" @click="add_validation_livraison_partielle()" class="btn btn-primary">Confirmer</button>
 									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 								</div>
 								<div v-if="isNoQuantity" class="text-center">
