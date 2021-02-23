@@ -55,5 +55,12 @@ class Achat extends BaseController {
     echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
   }
 
+  public function getAchatPartiel(){
+    $data = [
+      'titlePage' => 'ACHAT PARTIEL: Dépôt'
+    ];
+    echo view($this->linkMod.'\achat-list-magaz-partiel-view', $data);
+  }
+
 
 }

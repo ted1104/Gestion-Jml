@@ -2942,6 +2942,9 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='magaz-list-achat'){
       this.get_commande_magazinier();
     }
+    if(pth[this.indexRoute]=='magaz-list-achat-partiel'){
+      this.get_commande_magazinier(3);
+    }
     if(pth[this.indexRoute]=='magaz-list-achat-faveur'){
       this.get_commande_faveur_magazinier();
     }
