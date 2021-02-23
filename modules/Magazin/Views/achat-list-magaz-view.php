@@ -224,6 +224,7 @@
 																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
 																		</span>
 																	</div>
+																	<?php if(session('accessDroit')['g_achat_partiels'] == 1): ?>
 																	<div class="col-md-2">
 																		<div class="custom-control custom-checkbox custom-control-inline" v-if="detailTab.status_vente_id.id==2">
 																			<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles">
@@ -234,6 +235,7 @@
 																			<span v-if="det.is_validate_livrer==0" class="text-danger">NO</span>
 																		</div>
 	                                </div>
+																	<?php endif; ?>
 																</div>
 																<br>
 																<div class="row">
