@@ -263,7 +263,7 @@ class Commandes extends ResourceController {
   }
 
   //FONCTION POUR AFFICHER LES COMMANDES AFFECTER A UN DEPOT SPECIFIQUE
-  public function commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$limit,$offset){
+  public function commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$limit,$offset,$isPartiel){
     $d = Time::today();
     if($dateFilter == "null"){
       $dateFilter = $d;
@@ -273,12 +273,20 @@ class Commandes extends ResourceController {
     if(getTypeDepot($iddepot)){
       $conditionAllAchatFaveur = ['container_faveur' => 1];
     }
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->findAll($limit,$offset);
+    $conditionPartiel = [];
+
+    if($isPartiel == 1){
+      $conditionPartiel = ['is_livrer_all'=>1];
+      if($dateFilter == $d){
+        $condition =[];
+      }
+    }
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> $this->model->selectCount('id')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->orderBy('id','DESC')->findAll()[0]->id,
+      'all'=> $this->model->selectCount('id')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->orderBy('id','DESC')->findAll()[0]->id,
       'nombreVenteType' => $this->commandeByTypeByuser($iddepot,'depots_id',$condition)
     ]);
   }

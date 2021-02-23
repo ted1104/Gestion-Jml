@@ -240,6 +240,7 @@ var vthis = new Vue({
 
       //validation Action Livraison Partielle
       isPartielle : false,
+      isPartielFecthData : 0,
     }
   },
 
@@ -556,8 +557,8 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_commande_magazinier(statut=2,limit=this.PerPaged,offset=0, indexPage=0){
-      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/depot";
+    get_commande_magazinier(statut=2,limit=this.PerPaged,offset=0, indexPage=0,isPartiel=this.isPartielFecthData){
+      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/"+isPartiel+"/depot";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -2943,6 +2944,7 @@ var vthis = new Vue({
       this.get_commande_magazinier();
     }
     if(pth[this.indexRoute]=='magaz-list-achat-partiel'){
+      this.isPartielFecthData = 1;
       this.get_commande_magazinier(3);
     }
     if(pth[this.indexRoute]=='magaz-list-achat-faveur'){

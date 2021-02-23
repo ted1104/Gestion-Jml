@@ -71,7 +71,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('commandes-generate-code','Commandes::commande_generate_facture_code');
   $routes->get('commandes-get-all/(:num)/(:num)/(:any)/(:num)/(:num)/caissier','Commandes::commandes_get_user_caissier/$1/$2/$3/$4/$5');
   $routes->get('commandes-validation-caissier/(:any)/(:num)/(:num)/(:any)/validation','Commandes::validation_operation_commande_caissier/$1/$2/$3/$4');
-  $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2/$3/$4/$5');
+  $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/(:num)/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2/$3/$4/$5/$6');
   $routes->get('commandes-validation-magaz/(:any)/(:num)/(:num)/(:num)/validation','Commandes::validation_operation_commande_magasinier/$1/$2/$3/$4');
   $routes->get('commandes-all-by-status/(:num)/(:any)/(:num)/(:num)/status','Commandes::commandes_all_get_by_status/$1/$2/$3/$4');
   $routes->post('demande-negotiation','Commandes::commandes_negotiate');
