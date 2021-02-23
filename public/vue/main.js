@@ -246,6 +246,10 @@ var vthis = new Vue({
       textDescriptif : null,
       typeAction : null,
       passIsCorrectCanProcceed : false,
+
+      //AJUSTEMENT STOCK VIRTUELLE ET REEL DEPOT
+      qte_reelle : 0,
+      qte_virtuelle : 0
     }
   },
 
@@ -2517,6 +2521,24 @@ var vthis = new Vue({
       this.depots_id ="";
       this.styleModal = 'block';
       console.log(cmd);
+      // console.log(this.qte_pv_kg);
+    },
+    _u_open_mod_popup_edit_qte_stock(cmd, art){
+      // console.log(cmd);
+      this.modalTitle = "AJUSTEMENT STOCK DE L'ARTICLE "+art.articles_id[0].code_article+" : "+art.articles_id[0].nom_article+" DU DEPOT "+cmd.nom;
+      this.qte_reelle = art.qte_stock;
+      this.qte_virtuelle = art.qte_stock_virtuel;
+      // this.articles_id = cmd.id;
+      // // this.qte_restaurer = cmd.qte_stock_pv;
+      // this.qte_restaurer = Number(cmd.pv_en_kg)/Number(cmd.poids);
+      // this.poids_article = cmd.poids;
+      // this.qte_restaurer_init = cmd.qte_stock_pv;
+      // this.qte_pv_kg = cmd.pv_en_kg;
+      // this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
+      // this.depots_id ="";
+      this.styleModal = 'block';
+      console.log(cmd);
+      console.log(art);
       // console.log(this.qte_pv_kg);
     },
     _u_open_mod_popup_photo(userid){

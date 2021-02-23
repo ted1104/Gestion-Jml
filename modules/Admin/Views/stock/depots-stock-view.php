@@ -34,7 +34,7 @@
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row ">
-												<div :class="isShow ? 'col-md-7 col-lg-7 col-xl-7':'col-md-12 u-transition'">
+												<div :class="isShow ? 'col-md-6 col-lg-6 col-xl-6':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
 															<div class="row">
@@ -98,7 +98,7 @@
                         </div>
 												</div>
 
-												<div v-if="isShow" :class="isShow ? 'col-md-5 col-lg-5 col-xl-5':''">
+												<div v-if="isShow" :class="isShow ? 'col-md-6 col-lg-6 col-xl-6':''">
 														<div class="card m-b-30 u-transition">
 														<div class="container">
 															<div class="row">
@@ -117,6 +117,7 @@
 																					<th scope="col">Qte Réelle</th>
 																					<th scope="col">Qte Virtuelle</th>
 																					<th scope="col">Etat</th>
+																					<th scope="col">Edit</th>
 
 																				</tr>
 																			</thead>
@@ -128,6 +129,9 @@
 																					<td>{{det.qte_stock_virtuel}}</td>
 																					<td>
 																						<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
+																					</td>
+																					<td>
+																						<span @click="_u_open_mod_popup_edit_qte_stock(detailTab, det)" class="cursor"><i class="mdi mdi-circle-edit-outline"></i></span>
 																					</td>
 
 																				</tr>
@@ -157,4 +161,33 @@
         <!-- End XP Rightbar -->
     </div>
     <!-- End XP Container -->
+
+		<!-- MODAL -->
+	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModal}">
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h6 class="modal-title text-center">{{modalTitle}}</h6>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="qte_reelle">Qte Réelle *</label>
+								<input type="text" class="form-control" id="qte_reelle" aria-describedby="qte_reelle" v-model="qte_reelle">
+							</div>
+							<div class="form-group">
+								<label for="qte_virtuelle">Qte Virtuelle *</label>
+								<input type="text" class="form-control" id="qte_virtuelle" aria-describedby="qte_virtuelle" v-model="qte_virtuelle">
+							</div>
+							<button @click="add_article_prix" class="btn btn-primary">Ajuster Quantité</button>
+						</div>
+						<!-- <div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary">Ok</button>
+						</div> -->
+				</div>
+		</div>
+</div>
 <?=$this->endSection() ?>
