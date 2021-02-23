@@ -1916,6 +1916,42 @@ var vthis = new Vue({
           })
   },
 
+    add_validation_livraison_partielle(){
+      this.isLoadDelete = true;
+      const newurl = this.url+"commandes-validation-magaz-partielle";
+      var form = new FormData();
+      form.append('pwd',cmd);
+      form.append('idcommande',cmd);
+      form.append('iduser',cmd);
+      form.append('iddepot',cmd);
+      for(var i=0; i< this.checkBoxArticles.length; i++){
+        form.append('idarticle[]', this.checkBoxArticles[i]);
+      }
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadDelete = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_commande_facturier(1);
+                this._u_close_mod_form();
+                this._u_reset_checkBoxSelected();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadDelete = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
