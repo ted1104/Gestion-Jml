@@ -243,7 +243,8 @@ var vthis = new Vue({
       isPartielFecthData : 0,
 
       //Config Syst
-      textDescriptif : null
+      textDescriptif : null,
+      typeAction : null,
     }
   },
 
@@ -1748,10 +1749,7 @@ var vthis = new Vue({
             })
     },
     add_approvision_pv_restaure(e){
-      // console.log("====RESTARURE===");
-      // console.log(this.qte_restaurer);
-      // console.log("====INIT RESTARURE===");
-      // console.log(this.qte_restaurer_init);
+
       e.preventDefault();
       const newurl = this.url+"pv-approvisionnement-restaure";
       var form = new FormData();
@@ -1760,30 +1758,18 @@ var vthis = new Vue({
       form.append('users_id',this.users_id);
       form.append('articles_id',this.articles_id);
       form.append('qte_restaure', Math.floor(this.qte_restaurer));
-      // if(this.checkBoxAchatSelected.length > 0){
+
       form.append('qte_perdue', this.qte_perdue);
-      // }else{
-      //   form.append('qte_perdue', 0);
-      // }
+
       form.append('pv_en_kg',qtPVKg);
       form.append('depots_id_dest',this.depots_id);
       form.append('date_restaurer',this.date_approvisionnement);
-      // console.log(qtPVKg);
-      // console.log(Math.floor(this.qte_restaurer));
-      // return ;
 
       if(this.qte_restaurer_init < 1){
         this._u_fx_config_error_message("Erreur",["La quantité en unité à restaurer doit être au moins superieure ou égale à 1"],'alert-danger');
         return;
       }
-      // if(this.checkBoxAchatSelected.length > 0){
-      //   if(Number(this.qte_restaurer) + Number(this.qte_perdue) !== Number(this.qte_restaurer_init)){
-      //     this._u_fx_config_error_message("Erreur",["Vos quantités renseignées sont invalides"],'alert-danger');
-      //     // console.log(Number(this.qte_restaurer)+Number(this.qte_perdue));
-      //     // console.log(this.qte_restaurer_init);
-      //     return;
-      //   }
-      // }
+
 
       this.isLoadSaveMainButton = true;
       this.messageError = false;
@@ -2497,12 +2483,19 @@ var vthis = new Vue({
       if(i == 1){
         this.modalTitle = "CLOTURE STOCK DEPOT JOURNALIERE";
         this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière du stock de tous les dépôts, assurez vous que c'est le bon moment de le faire car cette action est irréversible";
+        this.typeAction = 1;
       }else if (i == 2) {
         this.modalTitle = "CLOTURE CAISSE JOURNALIERE";
         this.textDescriptif = "Attentions, vous êtes sur le point de faire la clôture journalière de la caisse générale, assurez vous que c'est le bon moment de le faire car cette action est irréversible";
+        this.typeAction = 2;
       }else if (i == 3) {
-        this.modalTitle = "DESACTIVER/ACTIVER TOUS LES COMPTES";
-        this.textDescriptif = "Attentions, vous êtes sur le point de faire de desactiver tous les comptes du système sauf ceux de manager et des administrateurs du système, assurez vous que c'est le bon moment de le faire";
+        this.modalTitle = "ACTIVER TOUS LES COMPTES";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire d'activer tous les comptes du système sauf ceux des managers et des administrateurs du système, assurez vous que c'est le bon moment de le faire";
+        this.typeAction = 3;
+      }else if (i == 4) {
+        this.modalTitle = "DESACTIVER TOUS LES COMPTES";
+        this.textDescriptif = "Attentions, vous êtes sur le point de faire de desactiver tous les comptes du système sauf ceux des managers et des administrateurs du système, assurez vous que c'est le bon moment de le faire";
+        this.typeAction = 4;
       }
       this.styleModal = 'block';
 
@@ -2756,6 +2749,34 @@ var vthis = new Vue({
       // this.wantToUpdate = false;
       // console.log(this.indexTopUpdate);
 
+    },
+
+    _u_cloture_operation_caisse_et_depot(type){
+      // const newurl = this.url+"cloture-stock-journalier";
+      let newurl = null;
+      if(type==1){
+       newurl = this.url+"cloture-stock-journalier";
+     }else if(type ==2){
+        newurl = this.url+"cloture-caisse-journalier";
+      }
+      this.messageError = false;
+      this.isLoadSaveMainButton = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this.isLoadSaveMainButton = false;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
     },
 
     // _u_hidden_display_message_error(){}

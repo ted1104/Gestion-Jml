@@ -41,8 +41,8 @@
 	                                <h5 class="card-title text-black">CLOTURE STOCK DEPOT</h5>
 	                            </div>
 	                            <div class="card-body text-center">
-                              		<button v-if="!isLoadSaveMainButton" @click="_u_open_mod_popup_systeme(1)" class="btn btn-primary">Valider</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+                              		<button @click="_u_open_mod_popup_systeme(1)" class="btn btn-primary">clôturer</button>
+																	<!-- <img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
 	                            </div>
 	                        </div>
 												</div>
@@ -52,8 +52,8 @@
 	                                <h5 class="card-title text-black">CLOTURE CAISSE</h5>
 	                            </div>
 	                            <div class="card-body text-center">
-                              		<button v-if="!isLoadSaveMainButton" @click="_u_open_mod_popup_systeme(2)" class="btn btn-primary">Valider</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+                              		<button @click="_u_open_mod_popup_systeme(2)" class="btn btn-primary">clôturer</button>
+																	<!-- <img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
 	                            </div>
 	                        </div>
 												</div>
@@ -63,8 +63,9 @@
 	                                <h6 class="text-black">BLOQUER LES COMPTES</h6>
 	                            </div>
 	                            <div class="card-body text-center">
-                              		<button v-if="!isLoadSaveMainButton" @click="_u_open_mod_popup_systeme(3)" class="btn btn-primary">Valider</button>
-																	<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+                              		<button @click="_u_open_mod_popup_systeme(3)" class="btn btn-success">Activer</button>
+																	<button @click="_u_open_mod_popup_systeme(4)" class="btn btn-danger">Desactiver</button>
+																	<!-- <img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
 	                            </div>
 	                        </div>
 												</div>
@@ -102,7 +103,8 @@
 								</span>
 							</div>
 							<br>
-							<button @click="add_article_prix" class="btn btn-danger">Je confirme</button>
+							<button v-if="!isLoadSaveMainButton"  @click="_u_cloture_operation_caisse_et_depot(typeAction)" class="btn btn-danger">Je confirme</button>
+							<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
             </div>
 
         </div>

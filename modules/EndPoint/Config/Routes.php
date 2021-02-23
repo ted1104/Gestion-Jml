@@ -31,9 +31,11 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-reset-password-connexion/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_connexion/$1/$2/$3');
   $routes->get('users-reset-password-operation/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_operation/$1/$2/$3');
 
-  $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
+
   $routes->get('users-bloque-account','Users::bloqueAllCountUsers');
   $routes->get('users-debloque-account','Users::DebloqueAllCountUsers');
+
+  $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
   $routes->get('users-change-achat-partiels-gestion-access/(:num)','Users::changeAccessToGestionAchatPartiels/$1');
 
 

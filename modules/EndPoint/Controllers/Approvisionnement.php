@@ -245,13 +245,13 @@ class Approvisionnement extends ResourceController {
       }
       //echo 'cloture avec success';
       $message = [
-        'success' => "La cloture journalière a été effectuée avec succès",
+        'success' => "La cloture journalière du stock a été effectuée avec succès",
         'errors' => null
       ];
     }else{
       $message = [
         'success' => null,
-        'errors' => "Merci de reessayer demain car la cloture journalière est déjà faite"
+        'errors' => ["Merci de reessayer demain car la cloture journalière du stock est déjà faite"]
       ];
     }
     return $this->respond([

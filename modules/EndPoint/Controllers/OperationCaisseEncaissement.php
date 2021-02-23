@@ -327,7 +327,6 @@ class OperationCaisseEncaissement extends ResourceController {
     return round($SommeEncaissement[0]->montant_encaissement,2);
 
   }
-
   // #########CLOTURE OPERATION AUTOMATIQUE
   public function clotureJournalierCaisse(){
     $d = Time::today();
@@ -348,7 +347,7 @@ class OperationCaisseEncaissement extends ResourceController {
     }else{
       $message = [
         'success' => null,
-        'errors' => "Merci de reessayer demain car la cloture journalière de la caisse est déjà faite"
+        'errors' => ["Merci de reessayer demain car la cloture journalière de la caisse est déjà faite"]
       ];
     }
     return $this->respond([
