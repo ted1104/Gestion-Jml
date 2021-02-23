@@ -85,6 +85,8 @@ $routes->group('api/v1', function($routes){
   $routes->get('commandes-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->get('commandes-all-by-status-search/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/status','Commandes::search_commandes_all_get_by_status/$1/$2/$3/$4/$5/$6/$7');
   $routes->post('achat-annuler','Commandes::annuler_commande_achat');
+  $routes->post('commandes-validation-magaz-partielle','Commandes::validation_operation_commande_magasinier_partiellement');
+
 
 
   $routes->get('commandes-faveur-get-by-depot/(:num)/(:num)/(:any)/depot','Commandes::commandes_faveurs_get_by_depot/$1/$2/$3');

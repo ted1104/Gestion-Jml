@@ -29,6 +29,7 @@ class CommandesEntity extends Entity{
     'container_faveur' => null,
     'depots_id_faveur' => null,
     'depots_id_first_livrer' => null,
+    'is_livrer_all' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

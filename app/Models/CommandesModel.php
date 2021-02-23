@@ -8,7 +8,7 @@ class CommandesModel extends Model{
   protected $table = 'g_interne_vente';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['numero_commande','nom_client','telephone_client','date_vente','status_vente_id','users_id','depots_id','payer_a','is_negotiate','container_faveur','depots_id_faveur','depots_id_first_livrer'];
+  protected $allowedFields = ['numero_commande','nom_client','telephone_client','date_vente','status_vente_id','users_id','depots_id','payer_a','is_negotiate','container_faveur','depots_id_faveur','depots_id_first_livrer','is_livrer_all'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'numero_commande' => 'required|is_unique[g_interne_vente.numero_commande]',
@@ -64,6 +64,24 @@ class CommandesModel extends Model{
     return $is;
 
   }
+  public function checkingIfOneArticleHasNotEnoughtQuanityPartiel($iddepot,$idcommande, $idarticle){
+    $this->commandeDetail = new CommandesDetailModel();
+    $this->stockModel  = new StockModel();
+    $is = false;
+    $depot = $iddepot;
+    $idArticle = $idarticle;
+    for ($i=0; $i < count($idarticle); $i++) {
+      $detail = $this->commandeDetail->Where('vente_id',$idcommande)->Where('articles_id',$idarticle[$i])->find();
+      $qte_vendue = $detail[0]->qte_vendue;
+      $stockqte = $this->stockModel->Where('depot_id',$depot)->Where('articles_id',$idarticle[$i])->first();
+      if($qte_vendue > $stockqte->qte_stock){
+        $is = true;
+      }
+    }
+    return $is;
+
+  }
+
   public function createUniqueAchatID(){
         $alpha  = '1234567890932893208394238439408230948234023482309483094830948230';
         $length = 6;

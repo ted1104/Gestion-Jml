@@ -506,7 +506,7 @@ class Commandes extends ResourceController {
         //ACHAT ET VALIDATION NORMAL
         if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanity($iddepot,$idcommande)){
           //SUITES VALIDATIONS
-          $data = ['status_vente_id'=>3];
+          $data = ['status_vente_id'=>3,'is_livrer_all'=>2];
           // $this->model->beginTrans();
           if(!$updateData = $this->model->update($idcommande,$data)){
             $status = 400;
@@ -522,6 +522,11 @@ class Commandes extends ResourceController {
                 'status_vente_id' => 3,
                 'users_id' => $iduser,
             ];
+            //CHECK IF HISTORIQUE ALREADY EXIST
+            // $insertHisto = true;
+            // if(!$this->commandesStatusHistoriqueModel->Where('vente_id',$idcommande)->Where('status_vente_id',3)->find()){
+            //   $insertHisto = $this->commandesStatusHistoriqueModel->insert($dataStatusHistorique);
+            // }
             if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
               //DECOMPTE DU STOCK DEOPOTS
               $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
@@ -531,6 +536,7 @@ class Commandes extends ResourceController {
                 $qte_a_retrancher = $value->qte_vendue;
                 $nvlleqte = $stokinit-$qte_a_retrancher;
                 $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+                $this->commandesDetailModel->update($value->id, ['is_validate_livrer'=>1]);
               }
               $status = 200;
               $message = [
@@ -560,6 +566,103 @@ class Commandes extends ResourceController {
       }
 
     // $this->model->RollbackTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+
+  public function validation_operation_commande_magasinier_partiellement(){
+    $pwd = $this->request->getPost('pwd');
+    $idcommande = $this->request->getPost('idcommande');
+    $iduser = $this->request->getPost('iduser');
+    $iddepot = $this->request->getPost('iddepot');
+    $idarticle = $this->request->getPost('idarticle'); // un tableau d'article
+
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+    }else{
+      if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanityPartiel($iddepot,$idcommande,$idarticle)){
+        $getAllArticleInCommande = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
+        $data = ['status_vente_id'=>3,'is_livrer_all'=>1];
+        if(count($idarticle) < count($getAllArticleInCommande)){
+          if(!$this->model->update($idcommande,$data)){
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => $this->model->erros()
+            ];
+            $data = "";
+          }else {
+            //CREATION HISTORIQUE CHANGEMENT STATUS
+            $dataStatusHistorique=[
+                'vente_id' => $idcommande,
+                'status_vente_id' => 3,
+                'users_id' => $iduser,
+            ];
+            //CHECK IF HISTORIQUE ALREADY EXIST
+            // $insertHisto = true;
+            // if(!$this->commandesStatusHistoriqueModel->Where('vente_id',$idcommande)->Where('status_vente_id',3)->find()){
+            //   $insertHisto = $this->commandesStatusHistoriqueModel->insert($dataStatusHistorique);
+            // }
+            if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+              //DECOMPTE DU STOCK DEOPOTS
+              // $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->findAll();
+              for ($i=0; $i < count($idarticle); $i++) {
+                $detArticleAchat = $this->commandesDetailModel->Where('vente_id',$idcommande)->Where('articles_id',$idarticle[$i])->findAll();
+
+                $stokdepot = $this->stockModel->getWhere(['depot_id'=>$iddepot,'articles_id'=>$idarticle[$i]])->getRow();
+                $stokinit = $stokdepot->qte_stock;
+                $qte_a_retrancher = $detArticleAchat[0]->qte_vendue;
+                $nvlleqte = $stokinit-$qte_a_retrancher;
+                $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
+                $this->commandesDetailModel->update($detArticleAchat[0]->id, ['is_validate_livrer'=>1]);
+              }
+              $status = 200;
+              $message = [
+                'success' => 'Livraison effectué partiellement avec succès',
+                'errors' => null
+              ];
+              $data = "";
+
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->commandesStatusHistoriqueModel->erros()
+              ];
+              $data = "";
+            }
+
+          }
+
+        }else{
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => ['Impossible de livrer tous les articles de cet achat, veuillez par contre valider tout l\'achat dans son ensemble!']
+          ];
+          $data = "";
+        }
+
+
+      }else{
+        $status = 400;
+        $message = [
+          'success' => null,
+          'errors' => ['Impossible d\'executer cet achat vu que vous n\'avez pas une quantité suffisante pour certains articles selectionnés! Consulter le détail de l\'achat']
+        ];
+        $data = "";
+      }
+
+    }
+
     return $this->respond([
       'status' => $status,
       'message' => $message,

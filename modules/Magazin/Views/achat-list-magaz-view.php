@@ -188,6 +188,20 @@
 																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
 																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
+															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
+																<div class="row">
+																	<div class="col-md-6">
+																		<button v-if="!isLoadNego" type="button" @click="add_ask_negotiation(detailTab.id)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Livrer</button>
+																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div>
+																	<!-- <div class="col-md-6 text-right">
+																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_commande(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
+																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div> -->
+																</div>
+																<hr>
+															</div>
+															{{checkBoxArticles}}
 															<div v-for="(det,i) in detailTab.logic_article">
 																<div class="row">
 																	<div class="col-md-4">
@@ -200,12 +214,18 @@
 																			{{(det.articles_id[0].nombre_piece * det.qte_vendue)+'/'+det.articles_id[0].nombre_piece}}
 																		</span>
 																	</div>
-																	<div class="col-md-8">
+																	<div class="col-md-6">
 																		<span>Produit</span><br>
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
+																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
+																		</span>
 																	</div>
-																	<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
-																	</span>
+																	<div class="col-md-2">
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles">
+		                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
+																		</div>
+	                                </div>
 																</div>
 																<br>
 																<div class="row">

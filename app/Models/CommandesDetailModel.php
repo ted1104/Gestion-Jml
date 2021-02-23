@@ -6,7 +6,7 @@ class CommandesDetailModel extends Model{
   protected $table = 'g_interne_vente_detail';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['vente_id','articles_id','qte_vendue','prix_unitaire','type_prix','is_negotiate','prix_negociation','is_faveur','is_livrer'];
+  protected $allowedFields = ['vente_id','articles_id','qte_vendue','prix_unitaire','type_prix','is_negotiate','prix_negociation','is_faveur','is_livrer','is_validate_livrer'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'vente_id' => 'required',
