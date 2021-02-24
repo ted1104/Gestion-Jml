@@ -63,6 +63,10 @@ if(! function_exists('getAllDroitAccess')){
     return [
       'g_pv' => $data ? $data->g_pv:0,
       'g_achat_partiels'=> $data ? $data->g_achat_partiels:0,
+      'g_systeme' => $data ? $data->g_systeme:0,
+      'g_systeme_cloture_stock' => $data ? $data->g_systeme_cloture_stock:0,
+      'g_systeme_cloture_caisse' => $data ? $data->g_systeme_cloture_caisse:0,
+      'g_systeme_operation_compte' => $data ? $data->g_systeme_operation_compte:0,
     ];
   }
 }
