@@ -41,6 +41,18 @@ $routes->group('api/v1', function($routes){
 
   $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
   $routes->get('users-change-achat-partiels-gestion-access/(:num)','Users::changeAccessToGestionAchatPartiels/$1');
+  $routes->get('users-access-menu-system/(:num)','Users::changeAccessToSystemMenu/$1');
+
+  $routes->get('users-access-system-cloture-stock/(:num)','Users::changeAccessToSystemClotureStock/$1');
+  $routes->get('users-access-system-cloture-caisse/(:num)','Users::changeAccessToSystemClotureCaisse/$1');
+  $routes->get('users-access-system-operation-comptes/(:num)','Users::changeAccessToSystemOperationCompte/$1');
+
+
+
+
+
+
+
   $routes->get('users-check-correct-password/(:num)/(:any)','Users::CheckIfPasswordIsCorrect/$1/$2');
 
 

@@ -76,7 +76,7 @@
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-config-depot') ?>">C-Dépôt</a></li>
                       <li><a href="<?=base_url('admin-config-etat-critique') ?>">C-Etat Critique</a></li>
-                      <li><a href="<?=base_url('admin-config-system') ?>">C-Sys</a></li>
+                      <li><a href="<?=base_url('admin-config-system') ?>">C-Système</a></li>
                   </ul>
               </li>
               <li>
@@ -130,7 +130,6 @@
               <li>
                   <a href="javaScript:void();">
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
-
                   </a>
                   <ul class="xp-vertical-submenu">
 
@@ -138,6 +137,11 @@
                       <li><a href="<?=base_url('admin-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
                   </ul>
 
+              </li>
+              <li>
+                <a href="<?=base_url('admin-config-system') ?>">
+                  <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                </a>
               </li>
             <?php endif; ?>
 

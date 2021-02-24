@@ -242,6 +242,64 @@ class Users extends ResourceController {
 
   }
 
+
+  public function bloqueAllCountUsers(){
+    $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
+    foreach ($allUserToBlockAccount as $key => $value) {
+      $in = $this->userAuthModel->Where('users_id',$value->id)->find();
+      if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>2])){
+        $message = [
+          'success' => 'Tous les comptes sont desactivés',
+          'errors' => null
+        ];
+      }
+    }
+    return $this->respond([
+      'status' => 200,
+      'message' => $message,
+      // 'data' => $data
+    ]);
+    // print_r(count($allUserToBlockAccount));
+  }
+  public function DebloqueAllCountUsers(){
+    $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
+    foreach ($allUserToBlockAccount as $key => $value) {
+      $in = $this->userAuthModel->Where('users_id',$value->id)->find();
+      if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>1])){
+        $message = [
+          'success' => 'Tous les comptes sont activés',
+          'errors' => null
+        ];
+      }
+    }
+    return $this->respond([
+      'status' => 200,
+      'message' => $message,
+      // 'data' => $data
+    ]);
+    // print_r(count($allUserToBlockAccount));
+  }
+  public function CheckIfPasswordIsCorrect($idUser,$pwd){
+    if(!$this->userAuthModel->authPasswordOperation($idUser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'success',
+        'errors' => null
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+    ]);
+  }
+
+  //DROIT D'ACCESS
   public function changeAccessToGestionPv($idUser){
     $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
     if(!$userHaveAccess){
@@ -330,60 +388,182 @@ class Users extends ResourceController {
       'data' => $data
     ]);
   }
-  public function bloqueAllCountUsers(){
-    $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
-    foreach ($allUserToBlockAccount as $key => $value) {
-      $in = $this->userAuthModel->Where('users_id',$value->id)->find();
-      if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>2])){
+  public function changeAccessToSystemMenu($idUser){
+    $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
+    if(!$userHaveAccess){
+      $data = ['users_id' => $idUser ,'g_systeme'=>1];
+      if(!$insertData = $this->droitAccessModel->insert($data)){
+        $status = 400;
         $message = [
-          'success' => 'Tous les comptes sont desactivés',
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' => 'Le droit d\'acces au menu système a été activé avec succès',
           'errors' => null
         ];
+        $data = 'null';
       }
-    }
-    return $this->respond([
-      'status' => 200,
-      'message' => $message,
-      // 'data' => $data
-    ]);
-    // print_r(count($allUserToBlockAccount));
-  }
-  public function DebloqueAllCountUsers(){
-    $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
-    foreach ($allUserToBlockAccount as $key => $value) {
-      $in = $this->userAuthModel->Where('users_id',$value->id)->find();
-      if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>1])){
-        $message = [
-          'success' => 'Tous les comptes sont activés',
-          'errors' => null
-        ];
-      }
-    }
-    return $this->respond([
-      'status' => 200,
-      'message' => $message,
-      // 'data' => $data
-    ]);
-    // print_r(count($allUserToBlockAccount));
-  }
-
-  public function CheckIfPasswordIsCorrect($idUser,$pwd){
-    if(!$this->userAuthModel->authPasswordOperation($idUser,$pwd)){
-      $status = 400;
-      $message = [
-        'success' => null,
-        'errors' => ["Mot de passe des opérations incorrect"]
-      ];
     }else{
-      $status = 200;
-      $message = [
-        'success' => 'success',
-        'errors' => null
-      ];
+      $data = ['g_systeme' =>$userHaveAccess[0]->g_systeme ? 0 : 1 ];
+      if(!$this->droitAccessModel->update($userHaveAccess[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $text = $userHaveAccess[0]->g_systeme ? 'desactivé' : 'activé';
+        $message = [
+          'success' => 'Le droit d\'acces au menu système a été '.$text.' avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
     }
     return $this->respond([
       'status' => $status,
       'message' => $message,
+      'data' => $data
+    ]);
+  }
+
+
+  public function changeAccessToSystemClotureStock($idUser){
+    $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
+    if(!$userHaveAccess){
+      $data = ['users_id' => $idUser ,'g_systeme_cloture_stock'=>1, 'g_systeme'=>1];
+      if(!$insertData = $this->droitAccessModel->insert($data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' => 'Le droit d\'acces à la clôture du stock a été activé avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }else{
+      $data = ['g_systeme_cloture_stock' =>$userHaveAccess[0]->g_systeme_cloture_stock ? 0 : 1 ];
+      if(!$this->droitAccessModel->update($userHaveAccess[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $text = $userHaveAccess[0]->g_systeme_cloture_stock ? 'desactivé' : 'activé';
+        $message = [
+          'success' => 'Le droit d\'acces à la clôture du stock a été '.$text.' avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+  public function changeAccessToSystemClotureCaisse($idUser){
+    $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
+    if(!$userHaveAccess){
+      $data = ['users_id' => $idUser ,'g_systeme_cloture_caisse'=>1,'g_systeme' => 1];
+      if(!$insertData = $this->droitAccessModel->insert($data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' => 'Le droit d\'acces à la clôture de la caisse a été activé avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }else{
+      $data = ['g_systeme_cloture_caisse' =>$userHaveAccess[0]->g_systeme_cloture_caisse ? 0 : 1 ];
+      if(!$this->droitAccessModel->update($userHaveAccess[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $text = $userHaveAccess[0]->g_systeme_cloture_caisse ? 'desactivé' : 'activé';
+        $message = [
+          'success' => 'Le droit d\'acces à la clôture de la caisse a été '.$text.' avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+  public function changeAccessToSystemOperationCompte($idUser){
+    $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
+    if(!$userHaveAccess){
+      $data = ['users_id' => $idUser ,'g_systeme_operation_compte'=>1,'g_systeme' => 1];
+      if(!$insertData = $this->droitAccessModel->insert($data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' => 'Le droit d\'acces aux opérations sur les comptes a été activé avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }else{
+      $data = ['g_systeme_operation_compte' =>$userHaveAccess[0]->g_systeme_operation_compte ? 0 : 1 ];
+      if(!$this->droitAccessModel->update($userHaveAccess[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $text = $userHaveAccess[0]->g_systeme_operation_compte ? 'desactivé' : 'activé';
+        $message = [
+          'success' => 'Le droit d\'acces aux opérations sur les compte a été '.$text.' avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
     ]);
   }
 }
