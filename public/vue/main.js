@@ -2008,32 +2008,32 @@ var vthis = new Vue({
             console.log(error);
           })
         },
+
     ajustement_stock_depot_virtuel_reel(){
-      const newurl = this.url+"ajustement-stock-depot-virtuelle-reelle/"+this.articles_id+"/"+this.depots_id+"/"+this.qte_reelle+"/"+this.qte_virtuelle;
+          const newurl = this.url+"ajustement-stock-depot-virtuelle-reelle/"+this.articles_id+"/"+this.depots_id+"/"+this.qte_reelle+"/"+this.qte_virtuelle;
 
-      this.isLoadSaveMainButton = true;
-      this.messageError = false;
-      return axios
-            .get(newurl,{headers: this.tokenConfig})
-            .then(response =>{
-                if(response.data.message.success !=null){
-                  var err = response.data.message.success;
-                  this._u_fx_config_error_message("Succès",[err],'alert-success');
-                  this.get_stock_depots();
-                  this._u_close_mod_form();
-                  this.isLoadSaveMainButton = false;
-                  // this.tabListData=[];
-                  return;
-                }
-                var err = response.data.message.errors;
-                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
-                this.isLoadSaveMainButton = false;
-            })
-            .catch(error =>{
-              console.log(error);
-            })
-    },
-
+          this.isLoadSaveMainButton = true;
+          this.messageError = false;
+          return axios
+                .get(newurl,{headers: this.tokenConfig})
+                .then(response =>{
+                    if(response.data.message.success !=null){
+                      var err = response.data.message.success;
+                      this._u_fx_config_error_message("Succès",[err],'alert-success');
+                      this.get_stock_depots();
+                      this._u_close_mod_form();
+                      this.isLoadSaveMainButton = false;
+                      // this.tabListData=[];
+                      return;
+                    }
+                    var err = response.data.message.errors;
+                    this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                    this.isLoadSaveMainButton = false;
+                })
+                .catch(error =>{
+                  console.log(error);
+                })
+        },
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -2800,9 +2800,17 @@ var vthis = new Vue({
       var userID = this.codeIdArticlePrint;
       let newurl = null;
       if(droit==1){
-       newurl = this.url+"users-change-pv-gestion-access/"+userID;
-      }else{
+         newurl = this.url+"users-change-pv-gestion-access/"+userID;
+      }else if(droit==2){
         newurl = this.url+"users-change-achat-partiels-gestion-access/"+userID;
+      }else if(droit==3){
+         newurl = this.url+"users-access-menu-system/"+userID;
+      }else if(droit==4){
+         newurl = this.url+"users-access-system-cloture-stock/"+userID;
+      }else if(droit==5){
+         newurl = this.url+"users-access-system-cloture-caisse/"+userID;
+      }else if(droit==6){
+         newurl = this.url+"users-access-system-operation-comptes/"+userID;
       }
       // alert(newurl);
       // this.isLoadSaveMainButton = true;

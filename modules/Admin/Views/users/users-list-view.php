@@ -163,6 +163,22 @@
 																				<input type="checkbox" id="chs" class="custom-control-input" @change="_u_change_droit_access(2)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_achat_partiels==1? 'checked':'':''">
 																				<label class="custom-control-label" for="chs">Gestion Achat partiels</label>
 																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chss" class="custom-control-input" @change="_u_change_droit_access(3)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chss">Accès Menu Système</label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chsss" class="custom-control-input" @change="_u_change_droit_access(4)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme_cloture_stock==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chsss">Accès Système : Clôture Stock</label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chssss" class="custom-control-input" @change="_u_change_droit_access(5)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme_cloture_caisse==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chssss">Accès Système : Clôture Caisse</label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chsssss" class="custom-control-input" @change="_u_change_droit_access(6)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme_operation_compte==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chsssss">Accès Système : Opérations Comptes</label>
+																			</div>
 																		</div>
 
 																	</div>
