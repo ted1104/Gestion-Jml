@@ -131,7 +131,7 @@
 																						<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
 																					</td>
 																					<td>
-																						<span @click="_u_open_mod_popup_edit_qte_stock(detailTab, det)" class="cursor"><i class="mdi mdi-circle-edit-outline"></i></span>
+																						<span @click="_u_open_mod_popup_edit_qte_stock(detailTab, det)" class="btn btn-round btn-light cursor"><i class="mdi mdi-circle-edit-outline"></i></span>
 																					</td>
 
 																				</tr>
