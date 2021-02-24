@@ -337,7 +337,10 @@ class PdfGenerate extends BaseController {
 
 
 
-      $this->outPut();
+      // $this->outPut();
+
+      $this->response->setHeader('Content-Type', 'application/pdf');
+      $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
     }
 
   public function rapport_finacier_journalier($dateRapport){
