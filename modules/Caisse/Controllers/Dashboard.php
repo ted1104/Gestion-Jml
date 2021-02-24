@@ -8,4 +8,11 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\dashboard-view', $data);
   }
+
+  public function getConfigSystem(){
+    $data = [
+      'titlePage' => 'ACTION AVANCEE: Caissier'
+    ];
+    echo view('Modules\Admin\Views\config\config-avance-view', $data);
+  }
 }

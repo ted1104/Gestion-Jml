@@ -35,19 +35,22 @@
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
-												<div class="col-md-3 col-lg-3 col-xl-3 ">
-													<div class="card m-b-30">
-	                            <div class="card-header bg-white text-center">
-	                                <h5 class="card-title text-black">CLOTURE STOCK DEPOT</h5>
-																	<span>Date : {{this.dateFilter}}</span><br>
-																	<span>Status : <span :class="dataToDisplay.cloture_stock?'text-success':'text-danger'">{{dataToDisplay.cloture_stock?'Clôturé':'Non Clôture'}}</span></span>
-	                            </div>
-	                            <div class="card-body text-center">
-                              		<button @click="_u_open_mod_popup_systeme(1)" class="btn btn-primary">clôturer</button>
-																	<!-- <img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
-	                            </div>
-	                        </div>
-												</div>
+												<?php if(session('accessDroit')['g_systeme_cloture_stock'] == 1): ?>
+													<div class="col-md-3 col-lg-3 col-xl-3 ">
+														<div class="card m-b-30">
+																<div class="card-header bg-white text-center">
+																		<h5 class="card-title text-black">CLOTURE STOCK DEPOT</h5>
+																		<span>Date : {{this.dateFilter}}</span><br>
+																		<span>Status : <span :class="dataToDisplay.cloture_stock?'text-success':'text-danger'">{{dataToDisplay.cloture_stock?'Clôturé':'Non Clôture'}}</span></span>
+																</div>
+																<div class="card-body text-center">
+																		<button @click="_u_open_mod_popup_systeme(1)" class="btn btn-primary">clôturer</button>
+																		<!-- <img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
+																</div>
+														</div>
+													</div>
+												<?php endif; ?>
+												<?php if(session('accessDroit')['g_systeme_cloture_caisse'] == 1): ?>
 												<div class="col-md-3 col-lg-3 col-xl-3 ">
 													<div class="card m-b-30">
 	                            <div class="card-header bg-white text-center">
@@ -61,6 +64,8 @@
 	                            </div>
 	                        </div>
 												</div>
+												<?php endif; ?>
+												<?php if(session('accessDroit')['g_systeme_operation_compte'] == 1): ?>
 												<div class="col-md-3 col-lg-3 col-xl-3 ">
 													<div class="card m-b-30">
 	                            <div class="card-header bg-white text-center">
@@ -75,6 +80,7 @@
 	                            </div>
 	                        </div>
 												</div>
+												<?php endif; ?>
 
 											</div>
                     </div>

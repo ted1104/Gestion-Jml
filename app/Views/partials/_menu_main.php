@@ -138,11 +138,13 @@
                   </ul>
 
               </li>
-              <li>
-                <a href="<?=base_url('admin-config-system') ?>">
-                  <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
-                </a>
-              </li>
+              <?php if(session('accessDroit')['g_systeme'] == 1): ?>
+                <li>
+                  <a href="<?=base_url('admin-config-system') ?>">
+                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                  </a>
+                </li>
+              <?php endif; ?>
             <?php endif; ?>
 
             <!-- MENU CAISSIER -->
@@ -190,7 +192,13 @@
                     </a>
                 </li>
               <?php endif; ?>
-
+              <?php if(session('accessDroit')['g_systeme'] == 1): ?>
+                <li>
+                  <a href="<?=base_url('caissier-config-system') ?>">
+                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                  </a>
+                </li>
+              <?php endif; ?>
             <?php endif; ?>
 
             <!-- MENU FACTURIER -->
@@ -213,7 +221,14 @@
                       <?php endif; ?>
                   </ul>
               </li>
-              <li>
+              <?php if(session('accessDroit')['g_systeme'] == 1): ?>
+                <li>
+                  <a href="<?=base_url('facturier-config-system') ?>">
+                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                  </a>
+                </li>
+              <?php endif; ?>
+              <!-- <li>
                   <a href="javaScript:void();">
                       <i class="mdi mdi-chart-areaspline"></i><span>Rapport</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
@@ -223,7 +238,7 @@
                       <li><a href="chart-chartistjs.html">Annuel</a></li>
 
                   </ul>
-              </li>
+              </li> -->
             <?php endif; ?>
 
             <!-- MENU MAGASINIER -->
@@ -288,7 +303,15 @@
                   </ul>
 
               </li>
+              <?php if(session('accessDroit')['g_systeme'] == 1): ?>
+                <li>
+                  <a href="<?=base_url('magaz-config-system') ?>">
+                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                  </a>
+                </li>
+              <?php endif; ?>
             <?php endif; ?>
+
 
             <!--
             <li>

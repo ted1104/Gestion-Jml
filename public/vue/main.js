@@ -3181,7 +3181,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'admin-rapport'){
       this.get_depots();
     }
-    if(pth[this.indexRoute]=='admin-config-system'){
+    if(pth[this.indexRoute]=='admin-config-system' || pth[this.indexRoute]=='facturier-config-system' || pth[this.indexRoute] == 'caissier-config-system' || pth[this.indexRoute]=='magaz-config-system'){
       this.get_etat_parametre_systeme();
     }
 

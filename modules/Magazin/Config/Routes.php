@@ -11,3 +11,4 @@ $routes->get('magaz-add-appro-to-depot','Achat::addApproInterDepot',['filter' =>
 $routes->get('magaz-histo-appro-inter-depot','Achat::getHistoriqueApproInterDepot',['filter' => 'isLoggedIn']);
 $routes->get('magaz-pv','Achat::getStockPv',['filter' => 'isLoggedIn']);
 $routes->get('magaz-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'isLoggedIn']);
+$routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isLoggedIn']);

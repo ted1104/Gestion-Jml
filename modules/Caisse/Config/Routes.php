@@ -8,3 +8,4 @@ $routes->get('caissier-add-decaissement','Achat::decaissementSend',['filter' => 
 $routes->get('caissier-list-decaissement','Achat::decaissementListCaissierMain',['filter' => 'isLoggedIn']);
 $routes->get('caissier-list-caissier','Achat::listCaissier',['filter' => 'isLoggedIn']);
 $routes->get('caissier-encaissement-externe','Achat::getEncaissementExterne',['filter' => 'isLoggedIn']);
+$routes->get('caissier-config-system','Dashboard::getConfigSystem',['filter' => 'isLoggedIn']);
