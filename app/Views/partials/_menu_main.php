@@ -110,9 +110,9 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('admin-list-achat') ?>">Achat</a></li>
+                      <li><a href="<?=base_url('gerant-list-achat') ?>">Achat</a></li>
                       <?php if(session('accessDroit')['g_achat_partiels'] == 1): ?>
-                        <li><a href="<?=base_url('admin-list-achat-partiel') ?>">Achats Partiels</a></li>
+                        <li><a href="<?=base_url('gerant-list-achat-partiel') ?>">Achats Partiels</a></li>
                       <?php endif; ?>
                   </ul>
               </li>
@@ -121,9 +121,9 @@
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
+                      <li><a href="<?=base_url('gerant-stock') ?>">Stock</a></li>
                       <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                        <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                        <li><a href="<?=base_url('gerant-stock-pv') ?>">PV Stock</a></li>
                       <?php endif; ?>
                   </ul>
               </li>
@@ -133,14 +133,14 @@
                   </a>
                   <ul class="xp-vertical-submenu">
 
-                      <li><a href="<?=base_url('admin-histo-appro') ?>">Historique </a></li>
-                      <li><a href="<?=base_url('admin-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
+                      <li><a href="<?=base_url('gerant-histo-appro') ?>">Historique </a></li>
+                      <li><a href="<?=base_url('gerant-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
                   </ul>
 
               </li>
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
                 <li>
-                  <a href="<?=base_url('admin-config-system') ?>">
+                  <a href="<?=base_url('gerant-config-system') ?>">
                     <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
                   </a>
                 </li>

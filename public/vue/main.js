@@ -3080,10 +3080,10 @@ var vthis = new Vue({
     let pth = window.location.pathname.split('/');
     //pth = pth.split(',');
     console.log(window.location.host);
-    if(pth[this.indexRoute] ==='admin-add-article' || pth[this.indexRoute] ==='admin-list-article' || pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv'){
+    if(pth[this.indexRoute] ==='admin-add-article' || pth[this.indexRoute] ==='admin-list-article' || pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
       this.get_article();
     }
-    if(pth[this.indexRoute] ==='admin-add-appro' || pth[this.indexRoute] ==='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' ||  pth[this.indexRoute]=='admin-add-users' || pth[this.indexRoute] === 'magaz-add-appro-to-depot' || pth[this.indexRoute] == 'magaz-pv' || pth[this.indexRoute]=='admin-stock-pv'){
+    if(pth[this.indexRoute] ==='admin-add-appro' || pth[this.indexRoute] ==='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' ||  pth[this.indexRoute]=='admin-add-users' || pth[this.indexRoute] === 'magaz-add-appro-to-depot' || pth[this.indexRoute] == 'magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
       this.get_depots();
     }
     if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat'){
@@ -3110,7 +3110,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='magaz-list-achat-faveur'){
       this.get_commande_faveur_magazinier();
     }
-    if(pth[this.indexRoute]=='admin-list-achat'){
+    if(pth[this.indexRoute]=='admin-list-achat' || pth[this.indexRoute]=='gerant-list-achat'){
       this.get_commande_admin();
     }
     if(pth[this.indexRoute]=='admin-list-achat-partiel'){
@@ -3129,10 +3129,10 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='caissier-list-decaissement'){
       this.get_decaisssement_caissier_principale();
     }
-    if(pth[this.indexRoute]=='admin-histo-appro'){
+    if(pth[this.indexRoute]=='admin-histo-appro' || pth[this.indexRoute]=='gerant-histo-appro'){
       this.get_historique_approvisionnement();
     }
-    if(pth[this.indexRoute]=='admin-stock'){
+    if(pth[this.indexRoute]=='admin-stock' || pth[this.indexRoute]=='gerant-stock'){
       this.get_stock_depots();
     }
     if(pth[this.indexRoute]=='admin-config-depot'){
@@ -3164,7 +3164,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'magaz-histo-appro-inter-depot'){
       this.get_historique_approvisionnement_inter_depot_by_depot();
     }
-    if(pth[this.indexRoute] == 'admin-histo-appro-inter-depot'){
+    if(pth[this.indexRoute] == 'admin-histo-appro-inter-depot' || pth[this.indexRoute] == 'gerant-histo-appro-inter-depot'){
       this.get_historique_approvisionnement_inter_depot_admin();
     }
     if(pth[this.indexRoute] == 'caissier-encaissement-externe'){
@@ -3181,7 +3181,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'admin-rapport'){
       this.get_depots();
     }
-    if(pth[this.indexRoute]=='admin-config-system' || pth[this.indexRoute]=='facturier-config-system' || pth[this.indexRoute] == 'caissier-config-system' || pth[this.indexRoute]=='magaz-config-system'){
+    if(pth[this.indexRoute]=='admin-config-system' || pth[this.indexRoute]=='facturier-config-system' || pth[this.indexRoute] == 'caissier-config-system' || pth[this.indexRoute]=='magaz-config-system' || pth[this.indexRoute]=='gerant-config-system'){
       this.get_etat_parametre_systeme();
     }
 
