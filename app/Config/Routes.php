@@ -42,8 +42,11 @@ $routes->get('rapport-journal-de-sorti-par-depot/(:num)/(:any)/','PdfGenerate::r
 $routes->get('rapport-financier-journalier/(:any)','PdfGenerate::rapport_finacier_journalier/$1',['filter' => 'isLoggedIn']);
 $routes->get('rapport-stock-general/(:any)','PdfGenerate::rapport_stock_general/$1',['filter' => 'isLoggedIn']);
 
-$routes->get('user-desable-account','Configuration::user_desable_account');
-$routes->get('user-enable-account','Configuration::user_enable_account');
+$routes->get('cron-user-desable-account','Configuration::user_desable_account');
+$routes->get('cron-user-enable-account','Configuration::user_enable_account');
+$routes->get('cron-cloture-stock','Configuration::clotureStock');
+$routes->get('cron-cloture-caisse','Configuration::clotureCaisse');
+
 
 
 
