@@ -39,4 +39,19 @@ class Dashboard extends BaseController {
     ];
     echo view('Modules\Admin\Views\config\config-avance-view', $data);
   }
+  public function getStockPv(){
+    $data = [
+      'titlePage' => 'Dépot PV : Gérant'
+    ];
+    echo view('Modules\Admin\Views\stock\depots-stock-pv-view', $data);
+  }
+  public function getAchatListPartiel(){
+    $data = [
+      'titlePage' => 'Achat Partiel PV : Gérant'
+    ];
+    echo view('Modules\Admin\Views\achat\achat-list-partiel-view', $data);
+  }
+
+
+
 }
