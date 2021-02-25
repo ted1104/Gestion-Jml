@@ -7,7 +7,7 @@ class Configuration extends BaseController {
   protected $link;
   public function __construct(){
     $this->title = 'Configuration : Mot de passe';
-    $this->link = 'http://jml.local';
+    $this->link = 'http://jml.local/api/v1/users-debloque-account';
     //$this->link  = 'http://127.0.0.1/GestionBoutique/api/v1/users-debloque-account';
   }
   public function index(){
