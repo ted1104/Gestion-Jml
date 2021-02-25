@@ -16,7 +16,7 @@ class Approv extends BaseController {
   }
   public function stockDepots(){
     $data = [
-      'titlePage' => 'Approvisionnement: Administration'
+      'titlePage' => 'Dépôt: Administration'
     ];
     echo view($this->linkMod.'\stock\depots-stock-view', $data);
   }

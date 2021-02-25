@@ -22,13 +22,13 @@ class IsLoggedIn implements FilterInterface {
       $this->service->session()->setFlashData('message',['title' => 'Session Expirée', 'content' => 'Votre session a été expirée! Veuillez vous reconnecter','color'=>'alert-info']);
       return redirect()->to(base_url('/'));
     }
-  $this->service->session()->setFlashData('message',['title' => 'Session Expirée', 'content' => 'Votre session a été expirée! Veuillez vous reconnecter','color'=>'alert-info']);
+    $this->service->session()->setFlashData('message',['title' => 'Session Expirée', 'content' => 'Votre session a été expirée! Veuillez vous reconnecter','color'=>'alert-info']);
     return redirect()->to(base_url('/'));
 
 	}
 
 	public function after(RequestInterface $request, ResponseInterface $response, $arguments = null){
-
+    // echo 'Hereddd';
 	}
 
 }

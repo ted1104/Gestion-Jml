@@ -53,26 +53,26 @@ class Dashboard extends BaseController {
   }
   public function getDecaissementInterne(){
     $data = [
-      'titlePage' => 'Decaissement Historique: Administration'
+      'titlePage' => 'Decaissement Historique : Administration'
     ];
     echo view($this->linkMod.'\caisse\decaissement-externe-historique-view', $data);
   }
 
   public function getStockPv(){
     $data = [
-      'titlePage' => 'STOCK PV: Administration'
+      'titlePage' => 'STOCK PV : Administration'
     ];
     echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
   }
   public function getRapport(){
     $data = [
-      'titlePage' => 'RAPPORTS: Administration'
+      'titlePage' => 'RAPPORTS : Administration'
     ];
     echo view($this->linkMod.'\rapport\rapport-view', $data);
   }
   public function getConfigSystem(){
     $data = [
-      'titlePage' => 'ACTION AVANCEE: Administration'
+      'titlePage' => 'ACTION AVANCEE : Administration'
     ];
     echo view($this->linkMod.'\config\config-avance-view', $data);
   }

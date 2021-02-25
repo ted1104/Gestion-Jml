@@ -11,7 +11,29 @@ class Filters extends BaseConfig
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
 		'authApiKey'=> \App\Filters\AuthApiKey::class,
-		'isLoggedIn' =>\App\Filters\IsLoggedIn::class
+		// 'isLoggedIn' =>\App\Filters\IsLoggedIn::class,
+		'isManager' => [
+			\App\Filters\IsLoggedIn::class,
+			\App\Filters\IsLoggedAsManager::class
+		],
+		'isGerant' => [
+			\App\Filters\IsLoggedIn::class,
+			\App\Filters\IsLoggedAsGerant::class
+		],
+		'isFacturier'=>[
+			\App\Filters\IsLoggedIn::class,
+			\App\Filters\IsLoggedAsFacturier::class
+		],
+		'isCaissier'=>[
+			\App\Filters\IsLoggedIn::class,
+			\App\Filters\IsLoggedAsCaissier::class
+		],
+		'isMagazinier'=>[
+			\App\Filters\IsLoggedIn::class,
+			\App\Filters\IsLoggedAsMagazinier::class
+		]
+
+		// 'isLoggedAsManager'=>\App\Filters\IsLoggedAsManager::class
 	];
 
 	// Always applied before every request
