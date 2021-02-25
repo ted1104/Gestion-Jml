@@ -421,7 +421,7 @@ class PdfGenerate extends BaseController {
       $chiffreEncaissementExterne = $sommesEncaissementExterne[0]->montant_encaissement?round($sommesEncaissementExterne[0]->montant_encaissement,2):0;
       $chiffreDecaissementExterne = $sommesDecaissementExterne[0]->montant?round($sommesDecaissementExterne[0]->montant,2):0;
       $this->pdf->Row(array(
-        utf8_decode(strtoupper($value->nom)).' '.utf8_decode(strtoupper($value->prenom)).' '.$value->id,
+        utf8_decode(strtoupper($value->nom)).' '.utf8_decode(strtoupper($value->prenom)),
         $chiffreAchat,
         $chiffreEncaissementInterne,
         $chiffreDecaissementInterne,
@@ -499,7 +499,9 @@ class PdfGenerate extends BaseController {
 
     }
 
-    $this->outPut();
+    // $this->outPut();
+    $this->response->setHeader('Content-Type', 'application/pdf');
+    $this->pdf->Output('D',$dateRapport.'_Rapport_journalier_financier.pdf');
   }
 
   public function rapport_stock_general($dateRapport){
@@ -621,6 +623,8 @@ class PdfGenerate extends BaseController {
 
 
 
-    $this->outPut();
+    // $this->outPut();
+    $this->response->setHeader('Content-Type', 'application/pdf');
+    $this->pdf->Output('D',$dateRapport.'_Rapport_stock_general.pdf');
   }
 }
