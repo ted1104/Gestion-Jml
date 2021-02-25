@@ -9,6 +9,10 @@ $routes->get('magaz-stock','Achat::getStockDepot',['filter' => 'isMagazinier']);
 $routes->get('magaz-add-appro','Achat::addAppro',['filter' => 'isMagazinier']);
 $routes->get('magaz-add-appro-to-depot','Achat::addApproInterDepot',['filter' => 'isMagazinier']);
 $routes->get('magaz-histo-appro-inter-depot','Achat::getHistoriqueApproInterDepot',['filter' => 'isMagazinier']);
-$routes->get('magaz-pv','Achat::getStockPv',['filter' => 'isMagazinier']);
+// $routes->get('magaz-pv','Achat::getStockPv',['filter' => 'isMagazinier']);
+$routes->get('magaz-stock-pv','Achat::getStockPv',['filter' => 'isMagazinier']);
 $routes->get('magaz-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'isMagazinier']);
 $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isMagazinier']);
+// $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isMagazinier']);
+//
+// magaz-stock-pv

@@ -52,7 +52,8 @@ class Achat extends BaseController {
     $data = [
       'titlePage' => 'MON STOCK: Dépôt'
     ];
-    echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    echo view('Modules\Admin\Views\stock\depots-stock-pv-view', $data);
   }
 
   public function getAchatPartiel(){

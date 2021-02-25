@@ -150,7 +150,7 @@
             <!-- MENU CAISSIER -->
             <?php if(session('users')['info'][0]->roles_id == 3): ?>
               <li>
-                  <a href="<?=base_url('facturier-dashboard') ?>">
+                  <a href="<?=base_url('caissier-dashboard') ?>">
                       <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
                   </a>
 
@@ -165,7 +165,7 @@
                       <?php endif;?>
                       <li><a href="<?=base_url('caissier-list-achat') ?>">Mes Achats</a></li>
                       <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                        <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                        <li><a href="<?=base_url('caissier-stock-pv') ?>">PV Stock</a></li>
                       <?php endif; ?>
                   </ul>
 
@@ -217,7 +217,7 @@
                       <li><a href="<?=base_url('facturier-add-achat') ?>">Créer</a></li>
                       <li><a href="<?=base_url('facturier-list-achat') ?>">Mes Achats</a></li>
                       <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                        <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                        <li><a href="<?=base_url('facturier-stock-pv') ?>">PV Stock</a></li>
                       <?php endif; ?>
                   </ul>
               </li>
@@ -272,7 +272,7 @@
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
                     <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                      <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <li><a href="<?=base_url('magaz-stock-pv') ?>">PV Stock</a></li>
                     <?php endif; ?>
                   </ul>
               </li>

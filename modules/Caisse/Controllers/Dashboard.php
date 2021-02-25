@@ -15,4 +15,11 @@ class Dashboard extends BaseController {
     ];
     echo view('Modules\Admin\Views\config\config-avance-view', $data);
   }
+
+  public function getStockPv(){
+    $data = [
+      'titlePage' => 'Dépot PV : Caissier'
+    ];
+    echo view('Modules\Admin\Views\stock\depots-stock-pv-view', $data);
+  }
 }
