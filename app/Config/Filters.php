@@ -11,7 +11,7 @@ class Filters extends BaseConfig
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
 		'authApiKey'=> \App\Filters\AuthApiKey::class,
-		// 'isLoggedIn' =>\App\Filters\IsLoggedIn::class,
+		'isLoggedIn' =>\App\Filters\IsLoggedIn::class,
 		'isManager' => [
 			\App\Filters\IsLoggedIn::class,
 			\App\Filters\IsLoggedAsManager::class
