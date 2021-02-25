@@ -117,7 +117,9 @@
 																					<th scope="col">Qte Réelle</th>
 																					<th scope="col">Qte Virtuelle</th>
 																					<th scope="col">Etat</th>
-																					<th scope="col">Edit</th>
+																					<?php if(session('users')['info'][0]->roles_id == 1):  ?>
+																						<th scope="col">Edit</th>
+																					<?php endif ?>
 
 																				</tr>
 																			</thead>
@@ -130,9 +132,11 @@
 																					<td>
 																						<span :class="det.logic_etat_critique==1?'badge badge-pill badge-danger':(det.logic_etat_critique==2?'badge badge-pill badge-warning':'badge badge-pill badge-success')">N</span>
 																					</td>
+																					<?php if(session('users')['info'][0]->roles_id == 1):  ?>
 																					<td>
 																						<span @click="_u_open_mod_popup_edit_qte_stock(detailTab, det)" class="btn btn-round btn-light cursor"><i class="mdi mdi-circle-edit-outline"></i></span>
 																					</td>
+																					<?php endif ?>
 
 																				</tr>
 																			</tbody>
