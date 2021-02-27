@@ -303,12 +303,23 @@ class PdfGenerate extends BaseController {
       $this->pdf->SetWidths($enteTableArticle);
       $this->pdf->Cell(14,5,'Total vendu',1,0,'L');
       $TotalArticleVenduAPayer =  array();
+      $TotalArticleVenduNonPayer =  array();
       // $TotalArticleVenduEtLivre = array();
 
       for($i = 0; $i < count($allArticle); $i++){
         $qteTotal = 0;
+        $qteTotalNonPaye = 0;
         foreach ($AchatsHisto as $key => $value) {
           $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
+
+          //CHECK IF IS PAYED BUT NOT DELIVRED
+          $checkIfIsNonLivred = $this->commandesStatusHistoriqueModel->Where('vente_id',$value->vente_id)->Where('status_vente_id',3)->find();
+          if(count($checkIfIsNonLivred) < 1){
+            $qteTotalNonPaye = $qteTotalNonPaye + $detAchat[0]->qte_vendue;
+          }
+          //FIN CHECK IF IS PAYED BUT NOT DELIVRED
+
+
           if($detAchat){
             $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
           }else{
@@ -316,8 +327,13 @@ class PdfGenerate extends BaseController {
           }
         }
         array_push($TotalArticleVenduAPayer, $qteTotal);
+        array_push($TotalArticleVenduNonPayer, $qteTotalNonPaye);
       }
       $this->pdf->Row($TotalArticleVenduAPayer);
+
+
+
+
 
       //RESTE EN Stock
       $this->pdf->SetWidths($enteTableArticle);
@@ -369,6 +385,12 @@ class PdfGenerate extends BaseController {
           array_push($TotalArticleVenduEtLivre, $qteTotal);
         }
         $this->pdf->Row($TotalArticleVenduEtLivre);
+
+        //AFFICHAGE NON LIVRER
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->SetWidths($enteTableArticle);
+        $this->pdf->Cell(14,5,utf8_decode('Tot Non livré'),1,0,'L');
+        $this->pdf->Row($TotalArticleVenduNonPayer);
 
 
         $this->pdf->SetFont('Helvetica','B',6);
