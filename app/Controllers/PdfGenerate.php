@@ -265,7 +265,7 @@ class PdfGenerate extends BaseController {
       for($i = 0; $i < count($allArticle); $i++){
         $qteTotal = 0;
         foreach ($AchatsHisto as $key => $value) {
-          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
           if($detAchat){
             $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
           }else{

@@ -160,7 +160,7 @@ class ApprovisionnementInterDepot extends ResourceController {
           $QteDest = $initqteDest->qte_stock +$value->qte;//ADDITION ANCIENNE + NOUVELLE
           $QteVirtuelDest = $initqteDest->qte_stock_virtuel + $value->qte;
 
-          //UPDATE STOCK IN STOCK DEPOT DESTINATION
+          //UPDATE STOCK IN STOCK DEPOT SOURCE
           $conditionSource =[
             'depot_id'=>$depot_source,
             'articles_id'=>$value->articles_id[0]->id
