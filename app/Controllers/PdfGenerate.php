@@ -8,6 +8,7 @@ use App\Models\ArticlesModel;
 use App\Models\CommandesDetailModel;
 use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\ApprovisionnementsDetailModel;
+use App\Models\ApprovisionnementsInterDepotDetailModel;
 use App\Models\StockModel;
 use App\Models\ClotureStockModel;
 use App\Models\UsersModel;
@@ -28,6 +29,7 @@ class PdfGenerate extends BaseController {
   protected $commandesDetailModel = null;
   protected $commandesStatusHistoriqueModel = null;
   protected $approvisionnementsDetailModel = null;
+  protected $approvisionnementsInterDepotDetailModel = null;
   protected $stockModel = null;
   protected $clotureStockModel = null;
   protected $usersModel = null;
@@ -48,6 +50,7 @@ class PdfGenerate extends BaseController {
     $this->commandesDetailModel = new CommandesDetailModel();
     $this->commandesStatusHistoriqueModel = new CommandesStatusHistoriqueModel();
     $this->approvisionnementsDetailModel = new ApprovisionnementsDetailModel();
+    $this->approvisionnementsInterDepotDetailModel = new ApprovisionnementsInterDepotDetailModel();
     $this->stockModel = new StockModel();
     $this->clotureStockModel = new ClotureStockModel();
     $this->usersModel = new UsersModel();
@@ -190,6 +193,7 @@ class PdfGenerate extends BaseController {
       $DonneApprovisionnementPv = array();
       $DonneApprovisionnementTotal = array();
       $LineEmptyNumFacture = array();
+      $DonneApprovisionnementInterDepot = array();
       for($i = 0; $i < count($allArticle); $i++){
         //APPROVISIONNEMENT GENERAL
         $approGen = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
@@ -198,6 +202,8 @@ class PdfGenerate extends BaseController {
 
         $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
 
+
+        $approInterDepot = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_source",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
         //GET QUANTITE INITIAL RESTANT EN STOCK HIER
 
         $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateRapport)->find();
@@ -212,6 +218,7 @@ class PdfGenerate extends BaseController {
         array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
         array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
         array_push($LineEmptyNumFacture,'');
+        array_push($DonneApprovisionnementInterDepot,$approInterDepot[0]->qte?$approInterDepot[0]->qte:0);
       }
       $this->pdf->SetWidths($enteTableArticle);
 
@@ -254,6 +261,9 @@ class PdfGenerate extends BaseController {
 
       $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
       $this->pdf->Row($DonneApprovisionnementTotal);
+
+      $this->pdf->Cell(14,5,'Appro Inter',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementInterDepot);
 
     //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET PAYER
       $this->pdf->SetFont('Helvetica','B',6);
@@ -304,8 +314,6 @@ class PdfGenerate extends BaseController {
         }
 
       }
-      $this->pdf->Cell(14,5,'Rst Stock V',1,0,'L');
-      $this->pdf->Row($qteStockResteVirtuel);
 
 
 
@@ -335,12 +343,14 @@ class PdfGenerate extends BaseController {
         $this->pdf->Cell(14,5,'Rst Stock R',1,0,'L');
         $this->pdf->Row($qteStockResteReelle);
 
+        $this->pdf->Cell(14,5,'Rst Stock V',1,0,'L');
+        $this->pdf->Row($qteStockResteVirtuel);
 
 
-      // $this->outPut();
 
       $this->response->setHeader('Content-Type', 'application/pdf');
       $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
+      // $this->outPut();
     }
 
   public function rapport_finacier_journalier($dateRapport){
