@@ -164,6 +164,12 @@ class PdfGenerate extends BaseController {
 
       $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
+      $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll();
+
+      // print_r($AchatLivrePartiellement);
+      // die();
+
+
 
       // print_r(count($AchatsHistoLivre));
       // die();
@@ -272,6 +278,25 @@ class PdfGenerate extends BaseController {
 
             $this->pdf->Row($venteDetailFactureNonPayeArray);
 
+      }
+
+      //FACTURE PAYE PMAIS LIVRER PARTILLEMENT ALORS LISTE DES ARTICLES NON LIVRER
+      $this->pdf->SetFont('Helvetica','B',6);
+      $this->pdf->Cell(14,5,utf8_decode('Payé Partiel'),1,0,'L');
+      $this->pdf->SetWidths(array(273));
+      $this->pdf->Row(array(''));
+      $this->pdf->SetFont('Helvetica','',6);
+      $this->pdf->SetWidths($enteTableArticle);
+      // $venteArray = array();
+      foreach ($AchatLivrePartiellement as $key => $value) {
+        // $achat = $this->commande->find($value->vente_id);
+        $this->pdf->Cell(14,5,utf8_decode($value->numero_commande),1,0,'L');
+        $venteDetailArray = array();
+        for($i = 0; $i < count($allArticle); $i++){
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->where('is_validate_livrer',0)->findAll();
+            array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
+        }
+        $this->pdf->Row($venteDetailArray);
       }
 
 
