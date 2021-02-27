@@ -226,8 +226,6 @@ class PdfGenerate extends BaseController {
       $this->pdf->Cell(14,5,'Produit',1,0,'L');
       $this->pdf->Row($DonneTableArticle);
 
-
-
       // DEBUT LISTE FACTURE JOURNALIERE
 
       $this->pdf->Cell(14,5,'Facture',1,0,'L');
@@ -246,6 +244,41 @@ class PdfGenerate extends BaseController {
         }
         $this->pdf->Row($venteDetailArray);
       }
+
+      //FACTURES PAYES MAIS NON LIVRER
+      $this->pdf->SetFont('Helvetica','B',6);
+      $this->pdf->Cell(14,5,utf8_decode('Non livré'),1,0,'L');
+      $this->pdf->SetWidths(array(273));
+      $this->pdf->Row(array(''));
+      $this->pdf->SetFont('Helvetica','',6);
+      $this->pdf->SetWidths($enteTableArticle);
+
+      foreach ($AchatsHisto as $key => $value) {
+
+        $checkIfIsNonLivred = $this->commandesStatusHistoriqueModel->Where('vente_id',$value->vente_id)->Where('status_vente_id',3)->find();
+
+        $achat = $this->commande->find($value->vente_id);
+        if(count($checkIfIsNonLivred) < 1){
+          $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
+        }
+        $venteDetailFactureNonPayeArray = array();
+        for($i = 0; $i < count($allArticle); $i++){
+          // print_r($checkIfIsNonLivred);
+          if(count($checkIfIsNonLivred) < 1){
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
+                array_push($venteDetailFactureNonPayeArray,$detAchat?$detAchat[0]->qte_vendue:'-');
+          }
+        }
+
+            $this->pdf->Row($venteDetailFactureNonPayeArray);
+
+      }
+
+
+
+
+
+
       $this->pdf->SetFont('Helvetica','B',6);
       $this->pdf->Cell(14,5,'Stock Init R',1,0,'L');
       $this->pdf->Row($DonneStockInitial);
@@ -317,7 +350,6 @@ class PdfGenerate extends BaseController {
 
 
 
-
       //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET LIVRER
         $this->pdf->SetFont('Helvetica','B',6);
         $this->pdf->SetWidths($enteTableArticle);
@@ -349,8 +381,8 @@ class PdfGenerate extends BaseController {
 
 
       $this->response->setHeader('Content-Type', 'application/pdf');
-      $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
-      // $this->outPut();
+      // $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
+      $this->outPut();
     }
 
   public function rapport_finacier_journalier($dateRapport){
@@ -562,7 +594,7 @@ class PdfGenerate extends BaseController {
       // die();
       $qteTotalVendu = 0;
       foreach ($AchatsHisto as $key) {
-        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->like('updated_at',$dateRapport,'after')->findAll();
         if($detAchat){
           $qteTotalVendu += $detAchat[0]->qte_vendue;
         }
