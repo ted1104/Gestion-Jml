@@ -298,6 +298,9 @@ class PdfGenerate extends BaseController {
         }
         $this->pdf->Row($venteDetailArray);
       }
+      if(count($AchatLivrePartiellement) < 1){
+        $this->pdf->Cell(287,5,utf8_decode('Pas de facture livrées partiellement'),1,1,'C');
+      }
 
 
 
