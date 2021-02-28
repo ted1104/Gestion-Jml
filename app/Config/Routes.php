@@ -35,7 +35,7 @@ $routes->post('login','Login::login');
 $routes->get('logout','Login::logout');
 
 $routes->get('print-code/(:any)/code','PdfGenerate::index/$1',['filter' => 'isFacturier']);
-$routes->get('print-facture/(:any)/code','PdfGenerate::facture/$1',['filter' => 'isMagazinier']);
+$routes->get('print-facture/(:any)/code','PdfGenerate::facture/$1');
 
 
 $routes->get('config-pass-profile','Configuration::index',['filter' => 'isLoggedIn']);
