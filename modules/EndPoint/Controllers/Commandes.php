@@ -646,6 +646,10 @@ class Commandes extends ResourceController {
                 $nvlleqte = $stokinit-$qte_a_retrancher;
                 $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
                 $this->commandesDetailModel->update($detArticleAchat[0]->id, ['is_validate_livrer'=>1]);
+
+                //DECOMPTE STOCK PERSONNEL LORS DE LA VALIDATION ACHAT
+                $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle[$i], $qte_a_retrancher,0);
+
               }
               $status = 200;
               $message = [
