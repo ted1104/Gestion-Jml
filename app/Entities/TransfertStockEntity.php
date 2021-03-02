@@ -5,7 +5,7 @@ use Config\Services;
 use App\Models\UsersModel;
 use App\Models\ArticlesPrixModel;
 use App\Models\StDepotModel;
-use App\Models\ApprovisionnementsInterDepotDetailModel;
+use App\Models\TransfertStockDetailModel;
 
 
 class TransfertStockEntity extends Entity{
@@ -27,7 +27,7 @@ class TransfertStockEntity extends Entity{
   protected $userModel = null;
   protected $articlesPrixModel = null;
   protected $depotModel = null;
-  protected $approvisionnementsInterDepotDetailModel = null;
+  protected $transfertStockDetailModel = null;
 
 
   public function __construct(array $data = null){
@@ -35,7 +35,7 @@ class TransfertStockEntity extends Entity{
     $this->userModel = new UsersModel();
     $this->articlesPrixModel = new ArticlesPrixModel();
     $this->depotModel = new StDepotModel();
-    $this->approvisionnementsInterDepotDetailModel = new ApprovisionnementsInterDepotDetailModel();
+    $this->transfertStockDetailModel = new TransfertStockDetailModel();
   }
   public function getUsersId(){
     return $this->userModel->find($this->attributes['users_id']);
@@ -46,9 +46,9 @@ class TransfertStockEntity extends Entity{
   public function getUsersIdDest(){
     return $this->userModel->Where('id',$this->attributes['users_id_dest'])->find();
   }
-  // public function getLogicDataArticle(){
-  //   return $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$this->attributes['id'])->findAll();
-  // }
+  public function getLogicDataArticle(){
+    return $this->transfertStockDetailModel->Where('transfert_id',$this->attributes['id'])->findAll();
+  }
   public function getDateTransfert(){
     return $this->attributes['created_at'];
   }

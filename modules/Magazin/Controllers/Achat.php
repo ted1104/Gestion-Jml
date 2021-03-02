@@ -68,6 +68,12 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\transfert\transfert-depot-add-view', $data);
   }
+  public function getTransfertDepot(){
+    $data = [
+      'titlePage' => 'TRANSFERT : Dépôt'
+    ];
+    echo view($this->linkMod.'\transfert\transfert-depot-historique-view', $data);
+  }
 
 
 }

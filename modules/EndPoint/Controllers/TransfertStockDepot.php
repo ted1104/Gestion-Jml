@@ -86,4 +86,27 @@ class TransfertStockDepot extends ResourceController {
        'data'=> $data
      ]);
   }
+  public function transfert_get_by_depot($idMag,$limit, $offset,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_transfert'=> $dateFilter];
+    $conditionSource = [
+      'users_id_source'=>$idMag,
+      'date_transfert'=> $dateFilter
+    ];
+    $conditionDest= [
+      'users_id_dest'=>$idMag,
+      'date_transfert'=> $dateFilter
+    ];
+    $where = "(users_id_dest='".$idMag."' or users_id_source='".$idMag."') and date_transfert='".$dateFilter."'";
+
+
+    $data = $this->model->Where($where)->orderBy('id','DESC')->findAll($limit,$offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'all'=> count($data = $this->model->Where($conditionSource)->Where($conditionDest)->orderBy('id','DESC')->findAll())
+    ]);
+  }
 }

@@ -2094,6 +2094,28 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_historique_transfert_magaz_by_magaz(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"transfert-magaz-get-by-magaz/"+this.users_id+"/"+limit+"/"+offset+"/"+this.dateFilter;
+      this.isNoReturnedData = false;
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
 
@@ -3275,6 +3297,10 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute] == 'magaz-add-transfert-to-magaz'){
       this.get_magasinier_by_depot();
+    }
+
+    if(pth[this.indexRoute] == 'magaz-histo-transfert-to-magaz'){
+      this.get_historique_transfert_magaz_by_magaz();
     }
 
 

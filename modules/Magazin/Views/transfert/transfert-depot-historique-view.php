@@ -39,11 +39,11 @@
 													<div class="card m-b-30">
 														<div class="card-header bg-white">
 															<div class="row">
-																<h5 class="card-title text-black col-md-7">APPROVISONNEMENT INTER-DEPOT {{dateFilterDisplay}}</h5>
+																<h5 class="card-title text-black col-md-7">HISTORQUE DE TRANSFERT {{dateFilterDisplay}}</h5>
 																<div class="col-md-5">
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_approvisionnement_inter_depot_by_depot)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_transfert_magaz_by_magaz)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 															</div>
@@ -58,9 +58,8 @@
 																	<tr class="bg-secondary">
 																		<th>#</th>
 																		<th scope="col">Date</th>
-																		<th scope="col">Source</th>
-																		<th scope="col">Destination</th>
-																		<th scope="col">Fait par</th>
+																		<th scope="col">Magasinier Source</th>
+																		<th scope="col">Magasinier Destination</th>
 																		<th scope="col">Type</th>
 																		<th scope="col">Status</th>
 																		<th scope="col">Valider</th>
@@ -76,13 +75,13 @@
 																				<label class="custom-control-label" :for="dt.id+'ch'"></label>
 																			</div>
 																		</td>
-																		<td>{{dt.date_approvisionnement}}</td>
-																		<td>{{dt.depots_id_source[0].nom}}</td>
-																		<td>{{dt.depots_id_dest[0].nom}}</td>
-																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
+																		<td>{{dt.date_transfert}}</td>
+																		<td>{{dt.users_id_source[0].nom+' '+dt.users_id_source[0].prenom}}</td>
+																		<td>{{dt.users_id_dest[0].nom+' '+dt.users_id_dest[0].prenom}}</td>
+																		<!-- <td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td> -->
 																		<td>
-																			<span :class="dt.depots_id_source[0].id == dpot_id?'text-success':'text-danger'">
-																				<i :class="dt.depots_id_source[0].id == dpot_id?'mdi mdi-arrow-right-thick':'mdi mdi-arrow-left-thick'"></i>
+																			<span :class="dt.users_id_source[0].id == users_id?'text-success':'text-danger'">
+																				<i :class="dt.users_id_source[0].id == users_id?'mdi mdi-arrow-right-thick':'mdi mdi-arrow-left-thick'"></i>
 																			</span>
 																		</td>
 																		<td>
@@ -92,11 +91,13 @@
 																			<span v-if="dt.status_operation==3" class="badge badge-danger">ANNULER</span>
 																		</td>
 																		<td>
-																			<button v-if="dt.depots_id_dest[0].id == dpot_id && (dt.status_operation ==0 || dt.status_operation == 1)" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_validate_appro_inter_depot(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
+																			<button v-if="dt.users_id_dest[0].id == users_id && (dt.status_operation ==0 || dt.status_operation == 1)" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_validate_appro_inter_depot(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
 
-																			<i v-if="dt.depots_id_source[0].id == dpot_id || (dt.status_operation !=0 && dt.status_operation !=1)" class='mdi mdi-checkbox-marked-circle-outline'></i>
+																			<i v-if="dt.users_id_source[0].id == users_id || (dt.status_operation !=0 && dt.status_operation !=1)" class='mdi mdi-checkbox-marked-circle-outline'></i>
 																		</td>
-																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button></td>
+																		<td>
+																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
+																		</td>
 																	</tr>
 																</tbody>
 															</table>
@@ -113,11 +114,11 @@
 															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_historique_approvisionnement_inter_depot_by_depot)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_historique_transfert_magaz_by_magaz)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_approvisionnement_inter_depot_by_depot(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_transfert_magaz_by_magaz(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_historique_approvisionnement_inter_depot_by_depot)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_historique_transfert_magaz_by_magaz)">Next</button>
                                     </li>
                                   </ul>
                                 </nav>
@@ -129,7 +130,7 @@
 												 <div class="card m-b-30">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>
+																<h5 class="col-md-9 card-title">DETAIL TRANSFERT DU {{detailTab.date_transfert}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
@@ -137,7 +138,7 @@
 																	<div class="col-md-12">
 																		<div class="row">
 																			<div class="col-md-6 text-left">
-																				<div v-if="detailTab.depots_id_dest[0].id == dpot_id">
+																				<div v-if="detailTab.users_id_dest[0].id == users_id">
 																					<button v-if="!isLoadNego" type="button" class="btn btn-rounded btn-success padding-4-l-g font-size-2" @click="validate_partiel_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Valider</button>
 																					<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																				</div>
@@ -151,11 +152,11 @@
 																</div>
 															</div>
 
-															<!-- {{checkBoxArticles}} -->
+
 															<div  class="margin-top-4">
 																<div class="row">
 																	<div class="table-responsive container">
-																		<!-- {{checkBoxArticles}} -->
+
 																		<table class="table">
 																			<thead>
 																				<tr class="bg-secondary">

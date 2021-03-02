@@ -15,6 +15,9 @@ $routes->get('magaz-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'i
 $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isMagazinier']);
 
 $routes->get('magaz-add-transfert-to-magaz','Achat::addTransfertDepot',['filter' => 'isMagazinier']);
+$routes->get('magaz-histo-transfert-to-magaz','Achat::getTransfertDepot',['filter' => 'isMagazinier']);
+
+
 
 // $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isMagazinier']);
 //
