@@ -8,6 +8,7 @@ use App\Models\StockModel;
 use App\Models\ArticlesModel;
 use App\Models\PvRestaurationModel;
 use App\Models\ClotureStockModel;
+use App\Models\StockPersonnelModel;
 
 use App\Entities\StockEntity;
 use App\Entities\PvRestaurationEntity;
@@ -25,8 +26,7 @@ class Approvisionnement extends ResourceController {
   protected $articlesModel = null;
   protected $pvRestaurationModel = null;
   protected $clotureStockModel = null;
-
-
+  protected $stockPersonnelModel = null;
 
 
 
@@ -37,6 +37,7 @@ class Approvisionnement extends ResourceController {
     $this->articlesModel = new ArticlesModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->clotureStockModel = new ClotureStockModel();
+    $this->StockPersonnelModel = new StockPersonnelModel();
 
 
   }
@@ -63,6 +64,9 @@ class Approvisionnement extends ResourceController {
       ];
       $data = null;
     }else{
+      //CREATE LIGNE STOCK PERSONNEL IF NOT EXIST
+      $this->StockPersonnelModel->insertArticleInStockPersonnelIfNotExit($data->users_id->id);
+
       //CREATE COMMANDE  DETAIL AVEC ARTICLE STOCK
       $nArt = count($data->articles_id);
       $article = $data->articles_id;

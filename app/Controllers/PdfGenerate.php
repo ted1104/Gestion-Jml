@@ -216,6 +216,7 @@ class PdfGenerate extends BaseController {
 
 
 
+
         array_push($enteTableArticle,273/count($allArticle));
         array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
         array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock : 0);
@@ -287,9 +288,11 @@ class PdfGenerate extends BaseController {
       $this->pdf->Row(array(''));
       $this->pdf->SetFont('Helvetica','',6);
       $this->pdf->SetWidths($enteTableArticle);
+
       // $venteArray = array();
       foreach ($AchatLivrePartiellement as $key => $value) {
         // $achat = $this->commande->find($value->vente_id);
+        $qteTotalPartiel = 0;
         $this->pdf->Cell(14,5,utf8_decode($value->numero_commande),1,0,'L');
         $venteDetailArray = array();
         for($i = 0; $i < count($allArticle); $i++){
@@ -359,6 +362,20 @@ class PdfGenerate extends BaseController {
       }
       $this->pdf->Row($TotalArticleVenduAPayer);
 
+      //CALCUL TOTATL ARTICLE PAYE MAIS LIVRER PARTIELLEMENT
+      $qteTotalPayeMaisPasLivre = array();
+      for($i = 0; $i < count($allArticle); $i++){
+        $qteTotal = 0;
+        foreach ($AchatLivrePartiellement as $key => $value) {
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->Where('is_validate_livrer',0)->findAll();
+            if($detAchat){
+              $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+            }else{
+              $qteTotal = $qteTotal + 0;
+            }
+        }
+        array_push($qteTotalPayeMaisPasLivre, $qteTotal);
+      }
 
 
 
@@ -419,6 +436,14 @@ class PdfGenerate extends BaseController {
         $this->pdf->SetWidths($enteTableArticle);
         $this->pdf->Cell(14,5,utf8_decode('Tot Non livré'),1,0,'L');
         $this->pdf->Row($TotalArticleVenduNonPayer);
+
+        //AFFICHAGE TOTAL PAYER MAIS NON  LIVRER
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->SetWidths($enteTableArticle);
+        $this->pdf->Cell(14,5,utf8_decode('Tot Rst Part'),1,0,'L');
+        $this->pdf->Row($qteTotalPayeMaisPasLivre);
+
+
 
 
         $this->pdf->SetFont('Helvetica','B',6);
