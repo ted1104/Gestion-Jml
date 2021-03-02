@@ -16,12 +16,6 @@ $routes->group('api/v1', function($routes){
   $routes->get('detect-etat-param-system','TableStatique::detectEtatDesParametresSysteme');
 
 
-
-
-
-
-
-
   //ENDPOINTS LOGIQUES DATA
   //1.USERS
   $routes->get('users-get-all/(:num)/(:num)','Users::users_get/$1/$2');
@@ -31,38 +25,17 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-update-status-account/(:num)','Users::user_account_enable_disable/$1');
   $routes->get('users-reset-password/(:num)','Users::user_account_reset_password/$1');
   $routes->post('users-update-profile','Users::user_update_profile_picture');
-
   $routes->get('users-reset-password-connexion/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_connexion/$1/$2/$3');
   $routes->get('users-reset-password-operation/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_operation/$1/$2/$3');
-
-
   $routes->get('users-bloque-account','Users::bloqueAllCountUsers');
   $routes->get('users-debloque-account','Users::DebloqueAllCountUsers');
-
   $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
   $routes->get('users-change-achat-partiels-gestion-access/(:num)','Users::changeAccessToGestionAchatPartiels/$1');
   $routes->get('users-access-menu-system/(:num)','Users::changeAccessToSystemMenu/$1');
-
   $routes->get('users-access-system-cloture-stock/(:num)','Users::changeAccessToSystemClotureStock/$1');
   $routes->get('users-access-system-cloture-caisse/(:num)','Users::changeAccessToSystemClotureCaisse/$1');
   $routes->get('users-access-system-operation-comptes/(:num)','Users::changeAccessToSystemOperationCompte/$1');
-
-
-
-
-
-
-
   $routes->get('users-check-correct-password/(:num)/(:any)','Users::CheckIfPasswordIsCorrect/$1/$2');
-
-
-
-
-
-
-
-
-
 
 
 
@@ -82,9 +55,6 @@ $routes->group('api/v1', function($routes){
   $routes->put('update-article/(:num)/update','Articles::article_update/$1');
 
 
-
-
-
   $routes->post('art-test','Articles::multitest');
 
   //2.COMMANDES
@@ -102,31 +72,24 @@ $routes->group('api/v1', function($routes){
   $routes->post('achat-validate-negotiation','Commandes::commande_validate_negotiation');
   $routes->post('achat-annuler-tout-negotiation','Commandes::commande_tout_annuler_validate_negotiation');
   $routes->post('achat-annuler-selection-negotiation','Commandes::commande_annuler_selectionner_validate_negotiation');
-
   $routes->get('commandes-get-all-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/facturier','Commandes::search_commandes_get_user_facturier/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->get('commandes-get-all-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/caissier','Commandes::search_commandes_get_user_caissier/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->get('commandes-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->get('commandes-all-by-status-search/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/status','Commandes::search_commandes_all_get_by_status/$1/$2/$3/$4/$5/$6/$7');
   $routes->post('achat-annuler','Commandes::annuler_commande_achat');
   $routes->post('commandes-validation-magaz-partielle','Commandes::validation_operation_commande_magasinier_partiellement');
-
-
-
   $routes->get('commandes-faveur-get-by-depot/(:num)/(:num)/(:any)/depot','Commandes::commandes_faveurs_get_by_depot/$1/$2/$3');
   $routes->get('commandes-faveur-get-by-depot-search/(:num)/(:num)/(:any)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::search_commandes_faveur_get_by_depot/$1/$2/$3/$4/$5/$6/$7/$8');
   $routes->post('delete-article-commande','Commandes::commandes_delete_articles');
   $routes->get('achat-last-one-facturier/(:num)','Commandes::commandes_get_user_facturier_last_one/$1');
 
 
-
   //3. APPROVISIONNEMENT
   $routes->get('approvisionnement-get-all/(:any)/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2/$3');
   $routes->get('approvisionnement-get-by-depot/(:num)/(:num)/(:num)/(:any)','Approvisionnement::approvisionnement_get_by_depot/$1/$2/$3/$4');
   $routes->post('approvisionnement-create','Approvisionnement::approvisionnement_create');
-
   $routes->get('approvisionnement-inter-depot-get-all/(:num)/(:num)/(:any)','ApprovisionnementInterDepot::approvisionnementInterDepot_get/$1/$2/$3');
   $routes->post('approvisionnement-inter-depot-create','ApprovisionnementInterDepot::approvisionnementInterDepot_create');
-
   $routes->get('approvisionnement-inter-depot-get-by-depot/(:num)/(:num)/(:num)/(:any)','ApprovisionnementInterDepot::approvisionnementInterDepot_get_by_depot/$1/$2/$3/$4');
   $routes->get('approvisionnement-inter-depot-validate/(:any)/(:num)/(:num)/validate','ApprovisionnementInterDepot::validateApprovisionnementInterDepot/$1/$2/$3');
   $routes->post('approvisionnement-annuler','ApprovisionnementInterDepot::annuler_approvisionnement_inter_depot');
@@ -137,14 +100,9 @@ $routes->group('api/v1', function($routes){
 
 
 
-
   //CLOTURE AUTOMATIQUE
   $routes->get('cloture-stock-journalier','Approvisionnement::clotureJournalierStock');
   $routes->get('cloture-caisse-journalier','OperationCaisseEncaissement::clotureJournalierCaisse');
-
-
-
-
 
 
 
@@ -158,6 +116,10 @@ $routes->group('api/v1', function($routes){
   $routes->post('create-decaissement--solde-externe','OperationCaisseEncaissement::createDecaissementExterne');
   $routes->get('get-all-encaissement-externe/(:num)/(:any)/enc','OperationCaisseEncaissement::getEncaissementExterne/$1/$2');
   $routes->post('create-encaissement-externe','OperationCaisseEncaissement::createEncaissementExterne');
+
+  //5. STOCK PERSONNEL !!!!==!!!!
+  $routes->get('injection-manuelle-stock-personnel','StockPersonnel::injectStockPersonnelManuel');
+
 
 
 });
