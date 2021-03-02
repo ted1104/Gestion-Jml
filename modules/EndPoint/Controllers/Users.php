@@ -575,4 +575,13 @@ class Users extends ResourceController {
       'data' => $data
     ]);
   }
+
+  public function users_get_magasinier_by_depot($idDepot){
+    $data = $this->model->select('id,nom,prenom')->Where('roles_id',5)->Where('depot_id',$idDepot)->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+  }
 }
