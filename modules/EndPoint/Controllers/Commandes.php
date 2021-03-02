@@ -269,6 +269,8 @@ class Commandes extends ResourceController {
   //FONCTION POUR AFFICHER LES COMMANDES AFFECTER A UN DEPOT SPECIFIQUE
   public function commandes_get_by_depot($iddepot,$statutVente,$dateFilter,$limit,$offset,$isPartiel){
     $d = Time::today();
+    $d = explode(' ',$d);
+    $d = $d[0];
     if($dateFilter == "null"){
       $dateFilter = $d;
     }
@@ -286,8 +288,7 @@ class Commandes extends ResourceController {
       }
     }
 
-    // print_r($conditionPartiel);
-    // die();
+
 
     $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->findAll($limit,$offset);
     return $this->respond([
@@ -1224,6 +1225,9 @@ class Commandes extends ResourceController {
   //FONCTION POUR AFFICHER LA LISTE DE TOUTES LES OPERATIONS SANS EXCEPTIONS ADMIN
   public function commandes_all_get_by_status($statutVente,$dateFilter,$limit,$offset,$isPartiel){
     $d = Time::today();
+    $d = explode(' ',$d);
+    $d = $d[0];
+
     if($dateFilter == "null"){
       $dateFilter = $d;
     }

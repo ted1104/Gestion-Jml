@@ -570,6 +570,8 @@ var vthis = new Vue({
     get_commande_magazinier(statut=2,limit=this.PerPaged,offset=0, indexPage=0,isPartiel=this.isPartielFecthData){
       const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/"+isPartiel+"/depot";
       this.stateStatus = statut;
+      // alert(this.isPartielFecthData);
+      // alert(this.dateFilter);
       if(this.isShow){
         this.isShow = !this.isShow;
       }
@@ -1947,6 +1949,7 @@ var vthis = new Vue({
                 var err = response.data.message.success;
                 this.isLoadSaveMainButtonModal = false;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
+                alert(this.isPartielFecthData);
                 if(this.isPartielFecthData ==0){
                   this.get_commande_magazinier(2);
                 }else{

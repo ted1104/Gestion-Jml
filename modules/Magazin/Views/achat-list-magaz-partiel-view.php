@@ -164,7 +164,7 @@
 																		<li class="page-item">
 																			<button class="page-link" @click="_u_previous_page_for_list_achat(get_commande_magazinier)">Previous</button>
 																		</li>
-																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_magazinier(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_magazinier(statut=3,pageData.limit,pageData.offset,index)">{{index+1}} c</button></li>
 																		<li class="page-item">
 																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_magazinier)">Next</button>
 																		</li>
@@ -228,7 +228,7 @@
 																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
 																		</span>
 																	</div>
-																	
+
 																	<div class="col-md-2">
 																		<div class="custom-control custom-checkbox custom-control-inline" v-if="detailTab.status_vente_id.id==3 && det.is_validate_livrer==0">
 																			<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles">

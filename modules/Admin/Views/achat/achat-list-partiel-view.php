@@ -164,7 +164,7 @@
 																		<li class="page-item">
 																			<button class="page-link" @click="_u_previous_page_for_list_achat(get_commande_admin)">Previous</button>
 																		</li>
-																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_admin(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_admin(3,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
 																		<li class="page-item">
 																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_admin)">Next</button>
 																		</li>
