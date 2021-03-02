@@ -249,7 +249,12 @@ var vthis = new Vue({
 
       //AJUSTEMENT STOCK VIRTUELLE ET REEL DEPOT
       qte_reelle : 0,
-      qte_virtuelle : 0
+      qte_virtuelle : 0,
+
+      //TRANSFERT
+      usersListParDepot : [],
+      usersDestTransfert : null,
+      date_transfert: ""
     }
   },
 
@@ -2037,6 +2042,17 @@ var vthis = new Vue({
                   console.log(error);
                 })
         },
+    get_magasinier_by_depot(){
+      const newurl = this.url+"users-get-magaz-by-depot/"+this.dpot_id;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.usersListParDepot = response.data.data;
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -2410,6 +2426,32 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    _u_create_line_article_transfert(){
+      const newurl = this.url+"articles-search-data-transfert/"+this.codeArticle+"/"+this.qte+"/"+this.users_id+"/search";
+
+      if(this.codeArticle ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le champs article ne doit pas être vide'],'alert-danger');
+        return;
+      }
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                this.tabListData.push(response.data.data);
+                this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
+                this.codeArticle = "";
+                this.qte = 0;
+                this.isLoadSaveMainButtonModal = false;
+                console.log(this.tabListData);
+                return;
+              }
+              this._u_fx_config_error_message_bottom("Message",[response.data.message.errors],'alert-danger')
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     _u_open_mod_form(art, from=null){
       this._u_fx_form_init_field();
       this.isAction = true;
@@ -2612,6 +2654,7 @@ var vthis = new Vue({
       this.dateRapportFin = currentDateWithFormat;
       this.dateRapportGen = currentDateWithFormat;
       this.dateFilter = currentDateWithFormat;
+      this.date_transfert =currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
@@ -3187,6 +3230,10 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='admin-config-system' || pth[this.indexRoute]=='facturier-config-system' || pth[this.indexRoute] == 'caissier-config-system' || pth[this.indexRoute]=='magaz-config-system' || pth[this.indexRoute]=='gerant-config-system'){
       this.get_etat_parametre_systeme();
     }
+    if(pth[this.indexRoute] == 'magaz-add-transfert-to-magaz'){
+      this.get_magasinier_by_depot();
+    }
+
 
 
   }

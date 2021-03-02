@@ -629,6 +629,70 @@ class Articles extends ResourceController {
 
     ]);
   }
+  public function article_search_for_transfert($codeArticle,$qte,$usersid){
+    $codeArt = $codeArticle;
+    $Qte = $qte;
+    $usersid = $usersid;
+    $data = $this->model->Where('code_article',$codeArt)->find();
+    if($data){
+      //CHECK IF DEPOT HAS THIS QUANTIY
+      $condition =[
+        'users_id'=>$usersid,
+        'articles_id'=>$data[0]->id
+      ];
+      //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+      $initqte = $this->stockPersonnelModel->getWhere($condition)->getRow();
+      if(!$initqte){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'Impossible de trouver cet article dans le stock personnel veuillez contacter l\'administrateur du système'
+        ];
+        $data = null;
+      }else{
+        if($Qte <= $initqte->qte_stock){
+        // return $this->respond([$initqte->qte_stock]);
+            $status = 200;
+            $message = [
+              'success' =>'Bien ajouté ',
+              'errors'=> null
+            ];
+            $data = [
+              'id'=>$data[0]->id,
+              'code' => $codeArt,
+              'nom_article' => $data[0]->nom_article,
+              'qte' => $Qte,
+            ];
+
+      }else{
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'La quantité à transfèrer doit être inférieure ou égale à votre quantité réelle personnelle'
+        ];
+        $data = null;
+      }
+    }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>'Aucun Article trouvé avec ce code'
+      ];
+      $data = null;
+    }
+
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
+
+
+
+
+
   public function multitest(){
     print_r($this->request->getPost());
 

@@ -123,6 +123,7 @@ $routes->group('api/v1', function($routes){
 
   //5. STOCK PERSONNEL !!!!==!!!!
   $routes->get('injection-manuelle-stock-personnel','StockPersonnel::injectStockPersonnelManuel');
+  $routes->get('articles-search-data-transfert/(:any)/(:num)/(:num)/search','Articles::article_search_for_transfert/$1/$2/$3');
 
 
 
