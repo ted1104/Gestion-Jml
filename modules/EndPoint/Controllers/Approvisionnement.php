@@ -37,7 +37,7 @@ class Approvisionnement extends ResourceController {
     $this->articlesModel = new ArticlesModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->clotureStockModel = new ClotureStockModel();
-    $this->StockPersonnelModel = new StockPersonnelModel();
+    $this->stockPersonnelModel = new StockPersonnelModel();
 
 
   }
@@ -65,7 +65,7 @@ class Approvisionnement extends ResourceController {
       $data = null;
     }else{
       //CREATE LIGNE STOCK PERSONNEL IF NOT EXIST
-      $this->StockPersonnelModel->insertArticleInStockPersonnelIfNotExit($data->users_id->id);
+      $this->stockPersonnelModel->insertArticleInStockPersonnelIfNotExit($data->users_id->id);
 
       //CREATE COMMANDE  DETAIL AVEC ARTICLE STOCK
       $nArt = count($data->articles_id);
@@ -108,7 +108,7 @@ class Approvisionnement extends ResourceController {
         $QteVirtuel = $initqte->qte_stock_virtuel + $qte[$i];
 
         //UPDATE AND ADD TO QTE PERSONNEL
-        $udpateStockPersonnel = $this->StockPersonnelModel->updateAddQtePersonnel($data->users_id->id,$article[$i], $qte[$i]);
+        $udpateStockPersonnel = $this->stockPersonnelModel->updateQtePersonnel($data->users_id->id,$article[$i], $qte[$i]);
 
         // return $this->respond([$initqte]);
 

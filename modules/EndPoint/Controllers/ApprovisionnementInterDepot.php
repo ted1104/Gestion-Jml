@@ -7,6 +7,7 @@ use App\Models\ApprovisionnementsInterDepotDetailModel;
 use App\Models\StockModel;
 use App\Entities\StockEntity;
 use App\Models\UsersAuthModel;
+use App\Models\StockPersonnelModel;
 use CodeIgniter\I18n\Time;
 
 
@@ -18,6 +19,8 @@ class ApprovisionnementInterDepot extends ResourceController {
   protected $approvisionnementsInterDepotDetailModel = null;
   protected $stockModel = null;
   protected $usersAuthModel = null;
+  protected $stockPersonnelModel = null;
+
 
 
 
@@ -28,6 +31,7 @@ class ApprovisionnementInterDepot extends ResourceController {
     $this->approvisionnementsInterDepotDetailModel = new ApprovisionnementsInterDepotDetailModel();
     $this->stockModel = new StockModel();
     $this->usersAuthModel = new UsersAuthModel();
+    $this->stockPersonnelModel = new StockPersonnelModel();
 
   }
   public function approvisionnementInterDepot_get($limit, $offset,$dateFilter){
@@ -53,6 +57,8 @@ class ApprovisionnementInterDepot extends ResourceController {
       ];
       $data = null;
     }else{
+      //CREATE LIGNE STOCK PERSONNEL IF NOT EXIST
+      // $this->StockPersonnelModel->insertArticleInStockPersonnelIfNotExit($data->users_id->id);
       //CREATE COMMANDE  DETAIL AVEC ARTICLE STOCK
       $nArt = count($data->articles_id);
       $article = $data->articles_id;
@@ -138,6 +144,11 @@ class ApprovisionnementInterDepot extends ResourceController {
       $infoAppro = $this->model->find($idAppro);
       $depot_source = $infoAppro->depots_id_source[0]->id;
       $depot_dest = $infoAppro->depots_id_dest[0]->id;
+      $userSource = $infoAppro->users_id->id;
+      // 
+      // print_r($infoAppro->users_id->id);
+      // die();
+
 
       $data = ['status_operation'=>2];
       if(!$updateData = $this->model->update($idAppro,$data)){
@@ -169,6 +180,12 @@ class ApprovisionnementInterDepot extends ResourceController {
           $QteSource = $initqteSource->qte_stock - $value->qte;//ADDITION ANCIENNE + NOUVELLE
           // $QteVirtuelSource = $initqteSource->qte_stock_virtuel - $value->qte;
           // return $this->respond([$initqte]);
+
+          //UPDATE STOCK PERSONNEL
+          $this->stockPersonnelModel->updateQtePersonnel($iduser,$value->articles_id[0]->id,$value->qte); //STOCK PERSONNEL DESTINATION
+          $this->stockPersonnelModel->updateQtePersonnel($userSource,$value->articles_id[0]->id,$value->qte,0); //STOCK PERSONNEL SOURCE
+
+          // updateQtePersonnel($idUser, $idArticle, $newQteToUpdate,$paramAction=1)
 
           $updStockDest = $this->stockModel->update($initqteDest->id,['qte_stock'=>$QteDest,'qte_stock_virtuel'=>$QteVirtuelDest]);
 
