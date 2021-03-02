@@ -8,6 +8,7 @@ use App\Models\ArticlesPrixHistoriqueModel;
 use App\Models\StockModel;
 use App\Models\StDepotModel;
 use App\Models\ArticlesConfigFaveurModel;
+use App\Models\StockPersonnelModel;
 
 class Articles extends ResourceController {
   protected $format = 'json';
@@ -17,6 +18,7 @@ class Articles extends ResourceController {
   protected $stockModel = null;
   protected $depotModel = null;
   protected $articlesConfigFaveurModel = null;
+  protected $stockPersonnelModel = null;
 
 
   public function __construct(){
@@ -26,6 +28,7 @@ class Articles extends ResourceController {
     $this->stockModel = new StockModel();
     $this->depotModel = new StDepotModel();
     $this->articlesConfigFaveurModel = new ArticlesConfigFaveurModel();
+    $this->stockPersonnelModel = new StockPersonnelModel();
   }
   public function articles_get($limit, $offset){
     $data = $this->model->findAll($limit, $offset);
@@ -59,12 +62,23 @@ class Articles extends ResourceController {
           $this->model->RollbackTrans();
         }
       }
-      $status = 200;
-      $message = [
-        'success' => 'Enregistrement de l\'article reussi avec succès',
-        'errors' => null
-      ];
-      $data = 'null';
+      //create stock personnel when created an article
+      if($this->stockPersonnelModel->insertArticleInStockPersonnelIfNotExitWhenArticleCreated($insertData)){
+        $status = 200;
+        $message = [
+          'success' => 'Enregistrement de l\'article reussi avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }else{
+        $status = 200;
+        $message = [
+          'success' => null,
+          'errors' => 'Echec d\'enregistrement'
+        ];
+        $data = 'null';
+      }
+
     }
     $this->model->commitTrans();
      return $this->respond([
