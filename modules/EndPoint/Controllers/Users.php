@@ -6,6 +6,7 @@ use App\Entities\UsersEntity;
 use App\Entities\UsersAuthEntity;
 use App\Models\UsersAuthModel;
 use App\Models\DroitAccessModel;
+use App\Models\StockPersonnelModel;
 
 
 
@@ -14,11 +15,13 @@ class Users extends ResourceController {
   protected $modelName = '\App\Models\UsersModel';
   protected $userAuthModel = null;
   protected $droitAccessModel = null;
+  protected $stockPersonnelModel = null;
 
   public function __construct(){
     helper(['global']);
     $this->userAuthModel = new UsersAuthModel();
     $this->droitAccessModel = new DroitAccessModel();
+    $this->stockPersonnelModel = new StockPersonnelModel();
 
   }
 
@@ -41,8 +44,9 @@ class Users extends ResourceController {
         'success' =>null,
         'errors'=>$this->model->errors()
       ];
-      $data = null;
+      // $data = null;
     }else{
+
       $dAuth = new UsersAuthEntity($this->request->getPost());
       $dataAuth = [
         'username' => $dAuth->username,
@@ -60,19 +64,24 @@ class Users extends ResourceController {
           'errors'=>$this->userAuthModel->errors()
         ];
       }else{
+        if($data->roles_id==5){
+          //CREATE LIGNE STOCK PERSONNEL IF NOT EXIST
+          $this->stockPersonnelModel->insertArticleInStockPersonnelIfNotExit($dataAuth['users_id']);
+        }
+
         $status = 200;
         $message = [
           'success' => 'Enregistrement reussi',
           'errors' => null
         ];
-        $data = 'null';
+        // $data = 'null';
       }
     }
     $this->model->commitTrans();
      return $this->respond([
        'status' => $status,
        'message' =>$message,
-       'data'=> $data
+       'data'=> null
      ]);
   }
   public function users_get_by_profile($profile){
