@@ -300,6 +300,15 @@
                             <li><a href="<?=base_url('magaz-histo-appro-inter-depot') ?>">Historique</a></li>
                         </ul>
                       </li>
+                      <li>
+                        <a href="javaScript:void();">
+                            <span>Transferts</span><i class="mdi mdi-chevron-right pull-right"></i>
+                        </a>
+                        <ul class="xp-vertical-submenu">
+                            <li><a href="<?=base_url('magaz-add-transfert-to-magaz') ?>">Créer</a></li>
+                            <li><a href="<?=base_url('magaz-histo-transfert-to-magaz') ?>">Historique</a></li>
+                        </ul>
+                      </li>
                   </ul>
 
               </li>

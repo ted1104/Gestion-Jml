@@ -17,11 +17,11 @@ class TransfertStockModel extends Model{
 	protected $validationMessages = [
     'users_id_source'=>[
       'required' => 'L\'utilisateur source est obligatoire',
-      'checkingForeignKeyExist'=>'L\'utilisateur choisit n\'existe pas'
+      'checkingForeignKeyExist'=>'L\'utilisateur source choisit n\'existe pas'
     ],
     'users_id_dest'=>[
       'required' => 'L\'utilisateur destinatiton est obligatoire',
-      'checkingForeignKeyExist'=>'L\'utilisateur choisit n\'existe pas'
+      'checkingForeignKeyExist'=>'L\'utilisateur destinatiton choisit n\'existe pas'
     ],
     'date_approvisionnement'=>[
       'required' => 'La date d\'approvisionnement est obligatoire',

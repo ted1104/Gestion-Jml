@@ -13,6 +13,9 @@ $routes->get('magaz-histo-appro-inter-depot','Achat::getHistoriqueApproInterDepo
 $routes->get('magaz-stock-pv','Achat::getStockPv',['filter' => 'isMagazinier']);
 $routes->get('magaz-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'isMagazinier']);
 $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isMagazinier']);
+
+$routes->get('magaz-add-transfert-to-magaz','Achat::addTransfertDepot',['filter' => 'isMagazinier']);
+
 // $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'isMagazinier']);
 //
 // magaz-stock-pv

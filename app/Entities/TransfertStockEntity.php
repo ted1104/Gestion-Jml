@@ -40,12 +40,12 @@ class TransfertStockEntity extends Entity{
   public function getUsersId(){
     return $this->userModel->find($this->attributes['users_id']);
   }
-  // public function getDepotsIdSource(){
-  //   return $this->depotModel->Where('id',$this->attributes['depots_id_source'])->find();
-  // }
-  // public function getDepotsIdDest(){
-  //   return $this->depotModel->Where('id',$this->attributes['depots_id_dest'])->find();
-  // }
+  public function getUsersIdSource(){
+    return $this->userModel->Where('id',$this->attributes['users_id_source'])->find();
+  }
+  public function getUsersIdDest(){
+    return $this->userModel->Where('id',$this->attributes['users_id_dest'])->find();
+  }
   // public function getLogicDataArticle(){
   //   return $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id',$this->attributes['id'])->findAll();
   // }

@@ -93,4 +93,14 @@ class StockPersonnelModel extends Model{
     }
     return true;
   }
+
+  public function beginTrans(){
+    $this->db->transBegin();
+  }
+  public function RollbackTrans(){
+    $this->db->transRollback();
+  }
+  public function commitTrans(){
+    $this->db->transCommit();
+  }
 }
