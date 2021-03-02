@@ -107,9 +107,12 @@ class Approvisionnement extends ResourceController {
         $Qte = $initqte->qte_stock + $qte[$i];//ADDITION ANCIENNE + NOUVELLE
         $QteVirtuel = $initqte->qte_stock_virtuel + $qte[$i];
 
+        //UPDATE AND ADD TO QTE PERSONNEL
+        $udpateStockPersonnel = $this->StockPersonnelModel->updateAddQtePersonnel($data->users_id->id,$article[$i], $qte[$i]);
+
         // return $this->respond([$initqte]);
 
-        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel])){
+        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel]) || !$udpateStockPersonnel){
           $this->model->RollbackTrans();
           $message = [
             'success' =>null,

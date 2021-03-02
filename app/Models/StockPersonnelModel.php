@@ -32,13 +32,24 @@ class StockPersonnelModel extends Model{
             'users_id' =>$idUser,
             'qte_stock' => 0
           ];
-          // print_r($value->id);
-          // die();
           $insert = $this->insert($data);
         }
         return true;
       }
       return true;
+
+  }
+
+  public function updateAddQtePersonnel($idUser, $idArticle, $newQteToUpdate){
+    $searchLine = $this->Where('articles_id', $idArticle)->Where('users_id',$idUser)->find();
+    $oldQte = $searchLine[0]->qte_stock + $newQteToUpdate;
+    if($searchLine){
+      $update = $this->update($searchLine[0]->id, ['qte_stock'=>$oldQte]);
+      if($update){
+        return true;
+      }
+    }
+    return false;
 
   }
 }
