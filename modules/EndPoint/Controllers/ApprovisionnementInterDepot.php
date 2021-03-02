@@ -145,9 +145,7 @@ class ApprovisionnementInterDepot extends ResourceController {
       $depot_source = $infoAppro->depots_id_source[0]->id;
       $depot_dest = $infoAppro->depots_id_dest[0]->id;
       $userSource = $infoAppro->users_id->id;
-      // 
-      // print_r($infoAppro->users_id->id);
-      // die();
+    
 
 
       $data = ['status_operation'=>2];

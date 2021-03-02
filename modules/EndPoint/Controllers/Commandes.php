@@ -11,6 +11,7 @@ use App\Models\UsersAuthModel;
 use App\Models\EncaissementModel;
 use App\Models\CaisseModel;
 use App\Models\StockModel;
+use App\Models\StockPersonnelModel;
 
 
 
@@ -23,6 +24,7 @@ class Commandes extends ResourceController {
   protected $caisseModel = null;
   protected $commandesDetailModel = null;
   protected $stockModel = null;
+  protected $stockPersonnelModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -32,6 +34,7 @@ class Commandes extends ResourceController {
     $this->encaissementModel = new EncaissementModel();
     $this->caisseModel = new CaisseModel();
     $this->stockModel = new StockModel();
+    $this->stockPersonnelModel = new StockPersonnelModel();
   }
   public function commandes_get(){
     $data = $this->model->orderBy('id','DESC')->findAll();
@@ -541,6 +544,7 @@ class Commandes extends ResourceController {
             //   $insertHisto = $this->commandesStatusHistoriqueModel->insert($dataStatusHistorique);
             // }
             if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+
               //DECOMPTE DU STOCK DEOPOTS
               $allArt = $this->commandesDetailModel->Where('vente_id',$idcommande)->where('is_validate_livrer',0)->findAll();
               foreach ($allArt as $key => $value) {
@@ -550,6 +554,12 @@ class Commandes extends ResourceController {
                 $nvlleqte = $stokinit-$qte_a_retrancher;
                 $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
                 $this->commandesDetailModel->update($value->id, ['is_validate_livrer'=>1]);
+
+                //DECOMPTE STOCK PERSONNEL LORS DE LA VALIDATION ACHAT
+                $this->stockPersonnelModel->updateQtePersonnel($iduser, $value->articles_id[0]->id, $qte_a_retrancher,0);
+
+
+
               }
               $status = 200;
               $message = [
