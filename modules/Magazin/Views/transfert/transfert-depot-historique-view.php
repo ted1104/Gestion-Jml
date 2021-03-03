@@ -51,7 +51,7 @@
 														<div class="table-responsive card-body">
 															<!-- {{checkBoxAchatSelected}} -->
 															<div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
-																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_appro_annulation()"><i class="mdi mdi-delete"></i>Annuler approvisionnement</button>
+																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_appro_annulation()"><i class="mdi mdi-delete"></i>Annuler transfert</button>
 															</div>
 															<table class="table margin-top-8">
 																<thead>
@@ -91,7 +91,7 @@
 																			<span v-if="dt.status_operation==3" class="badge badge-danger">ANNULER</span>
 																		</td>
 																		<td>
-																			<button v-if="dt.users_id_dest[0].id == users_id && (dt.status_operation ==0 || dt.status_operation == 1)" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_validate_appro_inter_depot(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
+																			<button v-if="dt.users_id_dest[0].id == users_id && (dt.status_operation ==0 || dt.status_operation == 1)" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_transfert(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
 
 																			<i v-if="dt.users_id_source[0].id == users_id || (dt.status_operation !=0 && dt.status_operation !=1)" class='mdi mdi-checkbox-marked-circle-outline'></i>
 																		</td>
@@ -225,7 +225,7 @@
 										<label for="password_op">Mot de passe *</label>
 										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 									</div>
-									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_appro_inter_depot()" class="btn btn-primary">Confirmer</button>
+									<button v-if="!isLoadSaveMainButtonModal" @click="add_validation_transfert()" class="btn btn-primary">Confirmer</button>
 									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 								</div>
 								<!-- <div v-if="isNoQuantity" class="text-center">

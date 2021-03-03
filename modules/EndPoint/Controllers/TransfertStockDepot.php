@@ -9,6 +9,7 @@ use App\Models\StockPersonnelModel;
 use CodeIgniter\I18n\Time;
 
 use App\Models\TransfertStockDetailModel;
+use App\Models\UsersAuthModel;
 
 
 
@@ -19,6 +20,7 @@ class TransfertStockDepot extends ResourceController {
   protected $stockModel = null;
   protected $stockPersonnelModel = null;
   protected $transfertStockDetailModel = null;
+  protected $usersAuthModel = null;
 
 
   public function __construct(){
@@ -26,6 +28,7 @@ class TransfertStockDepot extends ResourceController {
     $this->stockModel = new StockModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
     $this->transfertStockDetailModel = new TransfertStockDetailModel();
+    $this->usersAuthModel = new UsersAuthModel();
 
   }
 
@@ -107,6 +110,63 @@ class TransfertStockDepot extends ResourceController {
       'message' => 'success',
       'data' => $data,
       'all'=> count($data = $this->model->Where($conditionSource)->Where($conditionDest)->orderBy('id','DESC')->findAll())
+    ]);
+  }
+  public function validateTransfert($pwd,$idTransfert,$iduser){
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+    }else{
+      $infoTransfert = $this->model->find($idTransfert);
+      $user_source = $infoTransfert->users_id_source[0]->id;
+      $user_dest = $infoTransfert->users_id_dest[0]->id;
+      // $userSource = $infoTransfert->users_id->id;
+
+      $data = ['status_operation'=>2];
+      if(!$updateData = $this->model->update($idTransfert,$data)){
+        $status = 400;
+        $message = [
+          'success' => null,
+          'errors' => $this->model->erros()
+        ];
+        $data = "";
+      }else{
+        $allArt = $this->transfertStockDetailModel->Where('transfert_id',$idTransfert)->Where('is_validate',0)->findAll();
+        foreach ($allArt as $key => $value) {
+          //UPDATE STOCK PERSONNEL
+          $upd = $this->stockPersonnelModel->updateQtePersonnel($iduser,$value->articles_id[0]->id,$value->qte); //STOCK PERSONNEL DESTINATION
+          $updat = $this->transfertStockDetailModel->update($value->id, ['is_validate'=>1]);
+        }
+
+        if(!$upd and !$updat){
+          $this->model->RollbackTrans();
+          $message = [
+            'success' =>null,
+            'errors'=>$this->stockPersonnelModel->errors()
+          ];
+          return $this->respond([
+            'status' => '200',
+            'message' =>$message,
+            // 'data'=> $dtStock
+          ]);
+        }
+
+        $status = 200;
+        $message = [
+          'success' => 'Le transfert a été validé avec succès',
+          'errors' => null
+        ];
+        $data = null;
+      }
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
     ]);
   }
 }

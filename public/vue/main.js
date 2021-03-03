@@ -2116,6 +2116,33 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    add_validation_transfert(){ //from : 1 faveur ou 2 achat normal
+      const newurl = this.url+"transfert-validate/"+this.password_op+"/"+this.commande_id+"/"+this.users_id+"/validate";
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
+      this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_historique_transfert_magaz_by_magaz();
+                this._u_close_mod_form();
+                this.password_op= "";
+                this.isLoadSaveMainButtonModal = false;
+                return;
+            }
+            var err = response.data.message.errors;
+            this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+            this.isLoadSaveMainButtonModal = false;
+          }).catch(error =>{
+            console.log(error);
+          })
+  },
 
 
 
@@ -2642,6 +2669,12 @@ var vthis = new Vue({
     },
     _u_open_mod_popup_magaz_validate_appro_inter_depot(cmd,val){
       this.modalTitle = "VALIDATION DE L'APPROVISIONNEMENT VENANT DU "+cmd.depots_id_source[0].nom+" EN DATE DU "+cmd.date_approvisionnement;
+      this.commande_id = cmd.id;
+      this.styleModal = 'block';
+      console.log(cmd);
+    },
+    _u_open_mod_popup_magaz_transfert(cmd,val){
+      this.modalTitle = "VALIDATION DU TRANSFERT VENANT DE "+cmd.users_id_source[0].nom+" "+cmd.users_id_source[0].prenom+" EN DATE DU "+cmd.date_transfert;
       this.commande_id = cmd.id;
       this.styleModal = 'block';
       console.log(cmd);
