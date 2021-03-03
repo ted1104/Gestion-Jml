@@ -121,13 +121,13 @@ class TransfertStockDepot extends ResourceController {
       ];
       $data = "";
     }else{
-      $infoTransfert = $this->model->find($idTransfert);
+      $infoTransfert = $this->model->find($idtransfert);
       $user_source = $infoTransfert->users_id_source[0]->id;
       $user_dest = $infoTransfert->users_id_dest[0]->id;
       // $userSource = $infoTransfert->users_id->id;
 
       $data = ['status_operation'=>2];
-      if(!$updateData = $this->model->update($idTransfert,$data)){
+      if(!$updateData = $this->model->update($idtransfert,$data)){
         $status = 400;
         $message = [
           'success' => null,
@@ -135,7 +135,7 @@ class TransfertStockDepot extends ResourceController {
         ];
         $data = "";
       }else{
-        $allArt = $this->transfertStockDetailModel->Where('transfert_id',$idTransfert)->Where('is_validate',0)->findAll();
+        $allArt = $this->transfertStockDetailModel->Where('transfert_id',$idtransfert)->Where('is_validate',0)->findAll();
         foreach ($allArt as $key => $value) {
           //UPDATE ADD STOCK PERSONNEL
           $upd = $this->stockPersonnelModel->updateQtePersonnel($iduser,$value->articles_id[0]->id,$value->qte); //STOCK PERSONNEL DESTINATION
@@ -232,16 +232,7 @@ class TransfertStockDepot extends ResourceController {
 
         $infotransfert = $this->model->find($idtransfert);
         $allArticleIn = $this->transfertStockDetailModel->Where('transfert_id',$idtransfert)->Where('articles_id',$idarticle[$i])->find();
-          // //UPDATE STOCK IN STOCK DEPOT SOURCE
-          // $conditionSource =[
-          //   'depot_id'=>$infotransfert->depots_id_source[0]->id,
-          //   'articles_id'=>$allArticleIn[0]->articles_id[0]->id
-          // ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
-          // $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
-          // //$QteSource = $initqteSource->qte_stock - $qte[$i];//ADDITION ANCIENNE + NOUVELLE
-          // $QteVirtuelSource = $initqteSource->qte_stock_virtuel + $allArticleIn[0]->qte;
-          // // return $this->respond([$initqte]);
-          // $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock_virtuel'=>$QteVirtuelSource]);
+
 
           $upd = $this->stockPersonnelModel->updateQtePersonnel($infotransfert->users_id_source[0]->id,$idarticle[$i],$allArticleIn[0]->qte);
           if($upd){
@@ -276,6 +267,66 @@ class TransfertStockDepot extends ResourceController {
       $message = [
         'success' => null,
         'errors' => ['Impossible de supprimer tous les articles du transfert!']
+      ];
+      $data = "";
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+  public function transfert_validate_partiel_articles(){
+    $idtransfert = $this->request->getPost('idtransfert');
+    $idarticle = $this->request->getPost('idarticle');
+    $getAllarticleDeTransfert = $this->transfertStockDetailModel->Where('transfert_id', $idtransfert)->Where('is_validate', 0)->findAll();
+    if(count($idarticle) < count($getAllarticleDeTransfert)){
+    for ($i=0; $i < count($idarticle); $i++) {
+        $condition = [
+          'transfert_id' =>$idtransfert,
+          'articles_id'=>$idarticle[$i]
+        ];
+        $data = $this->transfertStockDetailModel->getWhere($condition)->getRow();
+
+        $infoTransfert = $this->model->find($idtransfert);
+        $allArticleIn = $this->transfertStockDetailModel->Where('transfert_id',$idtransfert)->Where('articles_id',$idarticle[$i])->find();
+
+
+          //UPDATE ADD STOCK PERSONNEL
+          $upd = $this->stockPersonnelModel->updateQtePersonnel($infoTransfert->users_id_dest[0]->id,$idarticle[$i],$allArticleIn[0]->qte); //STOCK PERSONNEL DESTINATION
+
+          if($upd){
+            if($this->transfertStockDetailModel->update($allArticleIn[0]->id, ['is_validate'=>1]) and $this->model->update($idtransfert, ['status_operation'=>1])){
+              $textArt = $i > 1 ? 'ont':'a';
+              $status = 200;
+              $message = [
+                'success' => ($i+1).' article(s) de ce transfert '.$textArt.' été validé avec succès ',
+                'errors' => null
+              ];
+              $data = "";
+
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => "Echec de la suppression d'article"
+              ];
+              $data = "";
+            }
+          }else{
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => "Echec de la suppression d'article veuilez contactez l'administrateur"
+            ];
+            $data = "";
+          }
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Impossible de valider tous les articles de ce transfert, veuillez par contre valider tout le transfert dans son ensemble!']
       ];
       $data = "";
     }

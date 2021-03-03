@@ -139,7 +139,7 @@
 																		<div class="row">
 																			<div class="col-md-6 text-left">
 																				<div v-if="detailTab.users_id_dest[0].id == users_id">
-																					<button v-if="!isLoadNego" type="button" class="btn btn-rounded btn-success padding-4-l-g font-size-2" @click="validate_partiel_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Valider</button>
+																					<button v-if="!isLoadNego" type="button" class="btn btn-rounded btn-success padding-4-l-g font-size-2" @click="validate_partiel_article_transfert(detailTab.id)"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Valider</button>
 																					<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																				</div>
 																			</div>
