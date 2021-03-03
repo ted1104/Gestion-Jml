@@ -218,4 +218,71 @@ class TransfertStockDepot extends ResourceController {
       'data' => $data
     ]);
   }
+  public function transfert_delete_articles(){
+    $idtransfert = $this->request->getPost('idtransfert');
+    $idarticle = $this->request->getPost('idarticle');
+    $getAllarticleDeTransfert = $this->transfertStockDetailModel->Where('transfert_id', $idtransfert)->findAll();
+    if(count($idarticle) < count($getAllarticleDeTransfert)){
+    for ($i=0; $i < count($idarticle); $i++) {
+        $condition = [
+          'transfert_id' =>$idtransfert,
+          'articles_id'=>$idarticle[$i]
+        ];
+        $data = $this->transfertStockDetailModel->getWhere($condition)->getRow();
+
+        $infotransfert = $this->model->find($idtransfert);
+        $allArticleIn = $this->transfertStockDetailModel->Where('transfert_id',$idtransfert)->Where('articles_id',$idarticle[$i])->find();
+          // //UPDATE STOCK IN STOCK DEPOT SOURCE
+          // $conditionSource =[
+          //   'depot_id'=>$infotransfert->depots_id_source[0]->id,
+          //   'articles_id'=>$allArticleIn[0]->articles_id[0]->id
+          // ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+          // $initqteSource = $this->stockModel->getWhere($conditionSource)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
+          // //$QteSource = $initqteSource->qte_stock - $qte[$i];//ADDITION ANCIENNE + NOUVELLE
+          // $QteVirtuelSource = $initqteSource->qte_stock_virtuel + $allArticleIn[0]->qte;
+          // // return $this->respond([$initqte]);
+          // $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock_virtuel'=>$QteVirtuelSource]);
+
+          $upd = $this->stockPersonnelModel->updateQtePersonnel($infotransfert->users_id_source[0]->id,$idarticle[$i],$allArticleIn[0]->qte);
+          if($upd){
+            if($this->transfertStockDetailModel->delete(['id' =>$data->id ])){
+              $textArt = $i > 1 ? 'ont':'a';
+              $status = 200;
+              $message = [
+                'success' => ($i+1).' article(s) de ce transfert '.$textArt.' été supprimer avec succès',
+                'errors' => null
+              ];
+              $data = "";
+
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => "Echec de la suppression d'article"
+              ];
+              $data = "";
+            }
+          }else{
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => "Echec de la suppression d'article veuilez contactez l'administrateur"
+            ];
+            $data = "";
+          }
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Impossible de supprimer tous les articles du transfert!']
+      ];
+      $data = "";
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
 }

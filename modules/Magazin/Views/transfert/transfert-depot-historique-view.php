@@ -144,7 +144,7 @@
 																				</div>
 																			</div>
 																			<div class="col-md-6 text-right">
-																				<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_approvisionnement_inter_depot(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
+																				<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_transfert(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
 																				<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																			</div>
 																		</div>
