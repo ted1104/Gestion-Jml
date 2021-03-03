@@ -37,6 +37,7 @@
                       <li><a href="<?=base_url('admin-list-article') ?>">Liste et Prix</a></li>
                       <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
                       <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <li><a href="<?=base_url('admin-stock-personnel') ?>">Stock Personnel</a></li>
                   </ul>
               </li>
               <li>
