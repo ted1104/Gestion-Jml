@@ -1137,7 +1137,7 @@ var vthis = new Vue({
           .then(response =>{
             this.dataToDisplay = response.data.data;
             this.CritiqueDataTab = response.data.critique;
-            console.log(this.dataToDisplay);
+            // console.log(this.dataToDisplay);
           }).catch(error =>{
             console.log(error);
           })
@@ -2255,6 +2255,23 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_stock_personnel_par_magaz(){
+    const newurl = this.url+"stock-personnel-magaz/"+this.users_id;
+    this.dataToDisplay=[];
+    this.isNoReturnedData = false;
+    return axios
+          .get(newurl,{headers: this.tokenConfig})
+          .then(response =>{
+            this.dataToDisplay = response.data.data;
+            this.CritiqueDataTab = response.data.critique;
+            if(this.dataToDisplay.length < 1){
+              this.isNoReturnedData = true;
+            }
+            console.log(this.dataToDisplay);
+          }).catch(error =>{
+            console.log(error);
+          })
+        },
 
 
 
@@ -3454,6 +3471,12 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'admin-histo-transfert'){
       this.get_historique_transfert_admin();
     }
+
+    if(pth[this.indexRoute] == 'magaz-stock-perso'){
+      this.get_stock_personnel_par_magaz();
+    }
+
+
 
 
 

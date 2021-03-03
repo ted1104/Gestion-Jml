@@ -16,6 +16,7 @@ $routes->get('magaz-config-system','Dashboard::getConfigSystem',['filter' => 'is
 
 $routes->get('magaz-add-transfert-to-magaz','Achat::addTransfertDepot',['filter' => 'isMagazinier']);
 $routes->get('magaz-histo-transfert-to-magaz','Achat::getTransfertDepot',['filter' => 'isMagazinier']);
+$routes->get('magaz-stock-perso','Achat::getStockPersonnelMagaz',['filter' => 'isMagazinier']);
 
 
 

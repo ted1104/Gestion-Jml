@@ -74,6 +74,15 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\transfert\transfert-depot-historique-view', $data);
   }
+  public function getStockPersonnelMagaz(){
+    $data = [
+      'titlePage' => 'MON STOCK PERSONNEL : Dépôt'
+    ];
+    // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    echo view($this->linkMod.'\stock\depots-stock-personnel-magaz-view', $data);
+  }
+
+
 
 
 }
