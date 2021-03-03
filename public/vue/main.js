@@ -2233,6 +2233,28 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_historique_transfert_admin(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"transfert-get-all/"+limit+"/"+offset+"/"+this.dateFilter;
+      this.dataToDisplay=[];
+      this.isNoReturnedData = false;
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
 
@@ -3429,6 +3451,11 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'magaz-histo-transfert-to-magaz'){
       this.get_historique_transfert_magaz_by_magaz();
     }
+    if(pth[this.indexRoute] == 'admin-histo-transfert'){
+      this.get_historique_transfert_admin();
+    }
+
+
 
 
 

@@ -27,7 +27,13 @@ class Approv extends BaseController {
     ];
     echo view($this->linkMod.'\appro\appro-inter-depot-historique-view', $data);
   }
-
+  public function getHistoTransfert()
+  {
+    $data = [
+      'titlePage' => 'HISTORIQUE TRANSFERTS : Administration'
+    ];
+    echo view($this->linkMod.'\transfert\transfert-historique-view', $data);
+  }
 
 
 }

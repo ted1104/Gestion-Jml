@@ -22,6 +22,9 @@ $routes->get('admin-stock-pv','Dashboard::getStockPv',['filter' => 'isLoggedIn']
 $routes->get('admin-rapport','Dashboard::getRapport',['filter' => 'isLoggedIn']);
 $routes->get('admin-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'isLoggedIn']);
 $routes->get('admin-config-system','Dashboard::getConfigSystem',['filter' => 'isLoggedIn']);
+$routes->get('admin-histo-transfert','Approv::getHistoTransfert',['filter' => 'isLoggedIn']);
+
+
 
 
 

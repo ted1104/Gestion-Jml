@@ -132,6 +132,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('transfert-annuler','TransfertStockDepot::annuler_transfert');
   $routes->post('delete-article-transfert','TransfertStockDepot::transfert_delete_articles');
   $routes->post('validate-partiel-article-transfert','TransfertStockDepot::transfert_validate_partiel_articles');
+  $routes->get('transfert-get-all/(:num)/(:num)/(:any)','TransfertStockDepot::transfert_get/$1/$2/$3');
 
 
 

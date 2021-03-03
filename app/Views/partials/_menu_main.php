@@ -53,6 +53,7 @@
                       <!-- <li><a href="<?=base_url('admin-add-appro') ?>">Créer</a></li> -->
                       <li><a href="<?=base_url('admin-histo-appro') ?>">Historique </a></li>
                       <li><a href="<?=base_url('admin-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
+                      <li><a href="<?=base_url('admin-histo-transfert') ?>">Historique Transferts</a></li>
                   </ul>
 
               </li>

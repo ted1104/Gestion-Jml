@@ -32,7 +32,18 @@ class TransfertStockDepot extends ResourceController {
 
   }
 
-
+  public function transfert_get($limit, $offset,$dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){ $dateFilter = $d; }
+    $conditionDate =['date_transfert'=> $dateFilter];
+    $data = $this->model->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'all'=> count($data = $this->model->Where($conditionDate)->orderBy('id','DESC')->findAll())
+    ]);
+  }
   public function transfert_create(){
     $this->model->beginTrans();
     $data = new TransfertStockEntity($this->request->getPost());
