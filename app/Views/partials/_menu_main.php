@@ -272,6 +272,7 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
+                    <li><a href="<?=base_url('magaz-stock-perso') ?>">Mon stock Personnel</a></li>
                     <?php if(session('accessDroit')['g_pv'] == 1): ?>
                       <li><a href="<?=base_url('magaz-stock-pv') ?>">PV Stock</a></li>
                     <?php endif; ?>
