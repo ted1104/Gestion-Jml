@@ -43,7 +43,7 @@
 																<div class="col-md-5">
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_transfert_magaz_by_magaz)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_transfert_admin)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 															</div>
@@ -101,11 +101,11 @@
 															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_historique_transfert_magaz_by_magaz)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_historique_transfert_admin)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_transfert_magaz_by_magaz(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_transfert_admin(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_historique_transfert_magaz_by_magaz)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_historique_transfert_admin)">Next</button>
                                     </li>
                                   </ul>
                                 </nav>
