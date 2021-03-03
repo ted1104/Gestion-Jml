@@ -2664,7 +2664,7 @@ var vthis = new Vue({
             })
     },
     _u_create_line_article_appro_inter_depot(){
-      const newurl = this.url+"articles-search-data-appro-inte-depot/"+this.codeArticle+"/"+this.qte+"/"+this.dpot_id+"/search";
+      const newurl = this.url+"articles-search-data-appro-inte-depot/"+this.codeArticle+"/"+this.qte+"/"+this.dpot_id+"/"+this.users_id+"/search";
 
       if(this.codeArticle ==""){
         this._u_fx_config_error_message_bottom("Message",['Le champs article ne doit pas être vide'],'alert-danger');

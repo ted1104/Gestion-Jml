@@ -428,7 +428,7 @@ class Articles extends ResourceController {
     ]);
 
   }
-  public function article_search_for_appro_inter_depot($codeArticle,$qte,$depotid){
+  public function article_search_for_appro_inter_depot($codeArticle,$qte,$depotid,$idUser){
     $codeArt = $codeArticle;
     $Qte = $qte;
     $depot = $depotid;
@@ -439,18 +439,24 @@ class Articles extends ResourceController {
         'depot_id'=>$depot,
         'articles_id'=>$data[0]->id
       ];
+
+      $condtionPersonnel = [
+        'users_id'=>$idUser,
+        'articles_id' =>$data[0]->id
+      ];
       //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
       $initqte = $this->stockModel->getWhere($condition)->getRow();
-      if(!$initqte){
+      $initqtePersonnel = $this->stockPersonnelModel->getWhere($condtionPersonnel)->getRow();
+      if(!$initqte or !$initqtePersonnel){
         $status = 400;
         $message = [
           'success' =>null,
-          'errors'=>'Impossible de trouver cet article dans le dépôt veuillez contacter l\'administrateur du système'
+          'errors'=>'Impossible de trouver cet article dans le dépôt ou dans votre stock personnel veuillez contacter l\'administrateur du système'
         ];
         $data = null;
       }else{
         if($Qte <= $initqte->qte_stock_virtuel and $Qte <= $initqte->qte_stock){
-        // return $this->respond([$initqte->qte_stock]);
+          if($Qte <= $initqtePersonnel->qte_stock){
             $status = 200;
             $message = [
               'success' =>'Bien ajouté ',
@@ -462,12 +468,21 @@ class Articles extends ResourceController {
               'nom_article' => $data[0]->nom_article,
               'qte' => $Qte,
             ];
+          }else{
+            $status = 400;
+            $message = [
+              'success' =>null,
+              'errors'=>'La quantité à approvisionner doit être inférieure ou égale à la quantité  réelle personnel'
+            ];
+            $data = null;
+          }
+
 
       }else{
         $status = 400;
         $message = [
           'success' =>null,
-          'errors'=>'La quantité à approvisionner doit être inférieure ou égale à votre quantité physique et réelle'
+          'errors'=>'La quantité à approvisionner doit être inférieure ou égale à la quantité physique et réelle dans le dépôt général'
         ];
         $data = null;
       }
