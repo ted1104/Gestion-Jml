@@ -2263,10 +2263,26 @@ var vthis = new Vue({
           .get(newurl,{headers: this.tokenConfig})
           .then(response =>{
             this.dataToDisplay = response.data.data;
-            this.CritiqueDataTab = response.data.critique;
+            // this.CritiqueDataTab = response.data.critique;
             if(this.dataToDisplay.length < 1){
               this.isNoReturnedData = true;
             }
+            console.log(this.dataToDisplay);
+          }).catch(error =>{
+            console.log(error);
+          })
+        },
+    get_stock_personnel_admin(){
+    const newurl = this.url+"stock-personnel-get-all";
+    if(this.isShow){
+      this.isShow = !this.isShow;
+    }
+    this.dataToDisplay=[];
+    return axios
+          .get(newurl,{headers: this.tokenConfig})
+          .then(response =>{
+            this.dataToDisplay = response.data.data;
+            // this.CritiqueDataTab = response.data.critique;
             console.log(this.dataToDisplay);
           }).catch(error =>{
             console.log(error);
@@ -2834,13 +2850,20 @@ var vthis = new Vue({
       this.qte_virtuelle = art.qte_stock_virtuel;
       this.depots_id = cmd.id;
       this.articles_id = art.articles_id[0].id;
-      // // this.qte_restaurer = cmd.qte_stock_pv;
-      // this.qte_restaurer = Number(cmd.pv_en_kg)/Number(cmd.poids);
-      // this.poids_article = cmd.poids;
-      // this.qte_restaurer_init = cmd.qte_stock_pv;
-      // this.qte_pv_kg = cmd.pv_en_kg;
-      // this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
-      // this.depots_id ="";
+
+      this.styleModal = 'block';
+      console.log(cmd);
+      console.log(art);
+      // console.log(this.qte_pv_kg);
+    },
+    _u_open_mod_popup_edit_qte_stock_personnel(cmd, art){
+      // console.log(cmd);
+      this.modalTitle = "AJUSTEMENT STOCK PERSONNEL DE L'ARTICLE "+art.code_article+" : "+art.nom_article+" DU MAGASINIER "+cmd.nom;
+      this.qte_reelle = art.qte_stock;
+      // this.qte_virtuelle = art.qte_stock_virtuel;
+      // this.depots_id = cmd.id;
+      // this.articles_id = art.articles_id[0].id;
+
       this.styleModal = 'block';
       console.log(cmd);
       console.log(art);
@@ -3475,11 +3498,9 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'magaz-stock-perso'){
       this.get_stock_personnel_par_magaz();
     }
-
-
-
-
-
+    if(pth[this.indexRoute] == 'admin-stock-personnel'){
+      this.get_stock_personnel_admin();
+    }
 
 
   }

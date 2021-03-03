@@ -23,6 +23,7 @@ $routes->get('admin-rapport','Dashboard::getRapport',['filter' => 'isManager']);
 $routes->get('admin-list-achat-partiel','Achat::getAchatPartiel',['filter' => 'isManager']);
 $routes->get('admin-config-system','Dashboard::getConfigSystem',['filter' => 'isManager']);
 $routes->get('admin-histo-transfert','Approv::getHistoTransfert',['filter' => 'isManager']);
+$routes->get('admin-stock-personnel','Approv::getStockPersonnel',['filter' => 'isManager']);
 
 
 

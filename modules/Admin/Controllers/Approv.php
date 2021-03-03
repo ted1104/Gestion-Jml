@@ -34,6 +34,15 @@ class Approv extends BaseController {
     ];
     echo view($this->linkMod.'\transfert\transfert-historique-view', $data);
   }
+  public function getStockPersonnel()
+  {
+    $data = [
+      'titlePage' => 'STOCK PERSONNEL MAGASINIER : Administration'
+    ];
+    echo view($this->linkMod.'\stock\stock-personnel-view', $data);
+  }
+
+
 
 
 }
