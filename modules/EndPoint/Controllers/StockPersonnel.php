@@ -67,6 +67,31 @@ class StockPersonnel extends ResourceController {
       'data' => $data
     ]);
   }
+  public function ajustementStockPersonnel($idStockPersonnel, $newQuantite){
+    // $getLine = $this->stockModel->Where('articles_id',$idArticle)->Where('depot_id',$idDepot)->find();
+    if(!$this->model->update($idStockPersonnel, ['qte_stock'=>$newQuantite])){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->model->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' =>"Ajustement du stock personnel avec succès",
+        'errors'=>null
+      ];
+      $data = null;
+    }
+
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
+  
   public function injectStockPersonnelManuel(){
     $this->stockPersonnelModel->InjectStockPersonnelAllExisitingMagazinier();
     return $this->respond([

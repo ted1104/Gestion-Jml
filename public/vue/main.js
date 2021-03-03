@@ -254,7 +254,8 @@ var vthis = new Vue({
       //TRANSFERT
       usersListParDepot : [],
       usersDestTransfert : null,
-      date_transfert: ""
+      date_transfert: "",
+      idStockPerso : "" //Lors de l'ajustement stock
     }
   },
 
@@ -2288,6 +2289,31 @@ var vthis = new Vue({
             console.log(error);
           })
         },
+    ajustement_stock_personnel(){
+          const newurl = this.url+"stock-personnel-ajustement/"+this.idStockPerso+"/"+this.qte_reelle;
+
+          this.isLoadSaveMainButton = true;
+          this.messageError = false;
+          return axios
+                .get(newurl,{headers: this.tokenConfig})
+                .then(response =>{
+                    if(response.data.message.success !=null){
+                      var err = response.data.message.success;
+                      this._u_fx_config_error_message("Succès",[err],'alert-success');
+                      this.get_stock_personnel_admin();
+                      this._u_close_mod_form();
+                      this.isLoadSaveMainButton = false;
+                      // this.tabListData=[];
+                      return;
+                    }
+                    var err = response.data.message.errors;
+                    this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                    this.isLoadSaveMainButton = false;
+                })
+                .catch(error =>{
+                  console.log(error);
+                })
+        },
 
 
 
@@ -2860,13 +2886,14 @@ var vthis = new Vue({
       // console.log(cmd);
       this.modalTitle = "AJUSTEMENT STOCK PERSONNEL DE L'ARTICLE "+art.code_article+" : "+art.nom_article+" DU MAGASINIER "+cmd.nom;
       this.qte_reelle = art.qte_stock;
+      this.idStockPerso = art.idStockPerso;
       // this.qte_virtuelle = art.qte_stock_virtuel;
       // this.depots_id = cmd.id;
       // this.articles_id = art.articles_id[0].id;
 
       this.styleModal = 'block';
-      console.log(cmd);
-      console.log(art);
+      // console.log(cmd);
+      console.log(this.idStockPerso);
       // console.log(this.qte_pv_kg);
     },
     _u_open_mod_popup_photo(userid){
