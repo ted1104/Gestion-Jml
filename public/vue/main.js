@@ -2143,6 +2143,40 @@ var vthis = new Vue({
             console.log(error);
           })
   },
+    add_annuler_transfert(){
+      const newurl = this.url+"transfert-annuler";
+      if(this.password_op ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le mot de passe des opération est obligatoire'],'alert-danger');
+        return;
+      }
+      var form = new FormData();
+      form.append('pwd',this.password_op);
+      form.append('iduser',this.users_id);
+      for(var i=0; i< this.checkBoxAchatSelected.length; i++){
+        form.append('idtransfert[]', this.checkBoxAchatSelected[i]);
+      }
+      this.isLoadSaveMainButtonModal = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_historique_transfert_magaz_by_magaz();
+                this._u_close_mod_form();
+                this.password_op= "";
+                this.isLoadSaveMainButtonModal = false;
+                this.checkBoxAchatSelected = [];
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
 
@@ -2635,6 +2669,10 @@ var vthis = new Vue({
     },
     _u_open_mod_popup_appro_annulation(){
       this.modalTitle = "ANNULER "+this.checkBoxAchatSelected.length+" APPROVISIONNEMENT(S)";
+      this.styleModalFaveur = 'block';
+    },
+    _u_open_mod_popup_transfert(){
+      this.modalTitle = "ANNULER "+this.checkBoxAchatSelected.length+" TRANSFERT(S)";
       this.styleModalFaveur = 'block';
     },
     _u_open_mod_popup_caissier_principal_validation_decaissement(dec){

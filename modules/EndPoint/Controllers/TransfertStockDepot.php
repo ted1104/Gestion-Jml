@@ -112,7 +112,7 @@ class TransfertStockDepot extends ResourceController {
       'all'=> count($data = $this->model->Where($conditionSource)->Where($conditionDest)->orderBy('id','DESC')->findAll())
     ]);
   }
-  public function validateTransfert($pwd,$idTransfert,$iduser){
+  public function validateTransfert($pwd,$idtransfert,$iduser){
     if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
       $status = 400;
       $message = [
@@ -137,7 +137,7 @@ class TransfertStockDepot extends ResourceController {
       }else{
         $allArt = $this->transfertStockDetailModel->Where('transfert_id',$idTransfert)->Where('is_validate',0)->findAll();
         foreach ($allArt as $key => $value) {
-          //UPDATE STOCK PERSONNEL
+          //UPDATE ADD STOCK PERSONNEL
           $upd = $this->stockPersonnelModel->updateQtePersonnel($iduser,$value->articles_id[0]->id,$value->qte); //STOCK PERSONNEL DESTINATION
           $updat = $this->transfertStockDetailModel->update($value->id, ['is_validate'=>1]);
         }
@@ -167,6 +167,55 @@ class TransfertStockDepot extends ResourceController {
       'status' => $status,
       'message' =>$message,
       'data'=> $data
+    ]);
+  }
+  public function annuler_transfert(){
+    $pwd = $this->request->getPost('pwd');
+    $idtransfert = $this->request->getPost('idtransfert');
+    $iduser = $this->request->getPost('iduser');
+
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+    }else{
+      //SUITES VALIDATIONS
+      $nbrAnnule = 1;
+      for ($i=0; $i < count($idtransfert); $i++) {
+        $data = ['status_operation'=>3];
+        if(!$updateData = $this->model->update($idtransfert[$i],$data)){
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => $this->model->erros()
+          ];
+          $data = "";
+        }else {
+          $infotransfert = $this->model->find($idtransfert[$i]);
+          $allArticleIn = $this->transfertStockDetailModel->Where('transfert_id',$idtransfert[$i])->findAll();
+          foreach ($allArticleIn as $key => $value) {
+            //UPDATE ADD STOCK PERSONNEL
+            $upd = $this->stockPersonnelModel->updateQtePersonnel($infotransfert->users_id_source[0]->id,$value->articles_id[0]->id,$value->qte); //STOCK PERSONNEL DESTINATION
+
+          }
+
+          $status = 200;
+          $message = [
+            'success' => $nbrAnnule++ .' Transfert(s) annulé(s) avec succès',
+            'errors' => null
+          ];
+          $data = "";
+        }
+      }
+    }
+    // $this->model->RollbackTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => $data
     ]);
   }
 }

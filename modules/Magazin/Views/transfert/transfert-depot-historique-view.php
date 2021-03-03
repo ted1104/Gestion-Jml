@@ -51,7 +51,7 @@
 														<div class="table-responsive card-body">
 															<!-- {{checkBoxAchatSelected}} -->
 															<div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
-																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_appro_annulation()"><i class="mdi mdi-delete"></i>Annuler transfert</button>
+																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_transfert()"><i class="mdi mdi-delete"></i>Annuler transfert</button>
 															</div>
 															<table class="table margin-top-8">
 																<thead>
@@ -218,7 +218,7 @@
 							</div>
 							<div class="modal-body">
 								<div class="text-center">
-									<span>Vous êtes sur le point d'approuver un approvisionnement,</span>
+									<span>Vous êtes sur le point d'approuver un transfert,</span>
 									<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
 									<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
 									<div class="form-group col-md-12 text-center">
@@ -253,14 +253,14 @@
 						</div>
 						<div class="modal-body">
 							<div class="text-center">
-								<span>Attention!! Vous êtes sur le point d'annuler un ou plusieurs approvisionnement(s),</span>
+								<span>Attention!! Vous êtes sur le point d'annuler un ou plusieurs transfert(s),</span>
 								<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
 								<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
 								<div class="form-group col-md-12 text-center">
 									<label for="password_op">Mot de passe *</label>
 									<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
 								</div>
-								<button v-if="!isLoadSaveMainButtonModal" @click="add_annuler_approvisionnement" class="btn btn-primary">Confirmer</button>
+								<button v-if="!isLoadSaveMainButtonModal" @click="add_annuler_transfert" class="btn btn-primary">Confirmer</button>
 								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 							</div>
 						</div>

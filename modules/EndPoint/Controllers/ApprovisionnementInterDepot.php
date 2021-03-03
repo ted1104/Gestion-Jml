@@ -145,7 +145,7 @@ class ApprovisionnementInterDepot extends ResourceController {
       $depot_source = $infoAppro->depots_id_source[0]->id;
       $depot_dest = $infoAppro->depots_id_dest[0]->id;
       $userSource = $infoAppro->users_id->id;
-    
+
 
 
       $data = ['status_operation'=>2];
@@ -235,7 +235,7 @@ class ApprovisionnementInterDepot extends ResourceController {
       //SUITES VALIDATIONS
       $nbrAnnule = 1;
       for ($i=0; $i < count($idappro); $i++) {
-        $data = ['status_operation'=>2];
+        $data = ['status_operation'=>3];
         if(!$updateData = $this->model->update($idappro[$i],$data)){
           $status = 400;
           $message = [

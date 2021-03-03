@@ -129,7 +129,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('transfert-create','TransfertStockDepot::transfert_create');
   $routes->get('transfert-magaz-get-by-magaz/(:num)/(:num)/(:num)/(:any)','TransfertStockDepot::transfert_get_by_depot/$1/$2/$3/$4');
   $routes->get('transfert-validate/(:any)/(:num)/(:num)/validate','TransfertStockDepot::validateTransfert/$1/$2/$3');
-
+  $routes->post('transfert-annuler','TransfertStockDepot::annuler_transfert');
 
 
 
