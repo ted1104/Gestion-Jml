@@ -14,6 +14,7 @@ class PvRestaurationEntity extends Entity{
     'id' => null,
     'date_restaurer' => null,
     'depots_id_dest' => null,
+    'magaz_dest_id' => null,
     'users_id' => null,
     'qte_restaure'=>null,
     'pv_en_kg' => null,
@@ -39,6 +40,9 @@ class PvRestaurationEntity extends Entity{
   }
   public function getUsersId(){
     return $this->userModel->select("id,nom, prenom")->find($this->attributes['users_id']);
+  }
+  public function getMagazDestId(){
+    return $this->userModel->select("id,nom, prenom")->find($this->attributes['magaz_dest_id']);
   }
   public function getDepotsIdDest(){
     return $this->depotModel->select("id,nom")->Where('id',$this->attributes['depots_id_dest'])->find();

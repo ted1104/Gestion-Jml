@@ -6,20 +6,25 @@ class PvRestaurationModel extends Model{
   protected $table = 'g_interne_pv_restaure';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['users_id','depots_id_dest','qte_restaure','date_restaurer','articles_id','qte_perdue','pv_en_kg'];
+  protected $allowedFields = ['users_id','depots_id_dest','qte_restaure','date_restaurer','articles_id','qte_perdue','pv_en_kg','magaz_dest_id'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'date_restaurer' => 'required|valid_date[Y-m-d]',
     'depots_id_dest' => 'required|checkingForeignKeyExist[st_depots,id]',
     'articles_id' => 'required|checkingForeignKeyExist[g_articles,id]',
     'users_id'=>'required|checkingForeignKeyExist[g_users,id]',
-    'qte_restaure' => 'required|greater_than[0]'
+    'qte_restaure' => 'required|greater_than[0]',
+    'magaz_dest_id' =>'required|checkingForeignKeyExist[g_users,id]'
 
   ];
 	protected $validationMessages = [
     'depots_id_dest'=>[
       'required' => 'Le depôt est obligatoire',
       'checkingForeignKeyExist'=>'Le depôt choisit n\'existe pas'
+    ],
+    'magaz_dest_id'=>[
+      'required' => 'Le magasinier destination est obligatoire',
+      'checkingForeignKeyExist'=>'Le magasinier choisit n\'existe pas'
     ],
     'date_restaurer'=>[
       'required' => 'La date de restauration est obligatoire',

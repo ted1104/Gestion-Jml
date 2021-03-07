@@ -1775,11 +1775,10 @@ var vthis = new Vue({
       form.append('users_id',this.users_id);
       form.append('articles_id',this.articles_id);
       form.append('qte_restaure', Math.floor(this.qte_restaurer));
-
       form.append('qte_perdue', this.qte_perdue);
-
       form.append('pv_en_kg',qtPVKg);
       form.append('depots_id_dest',this.depots_id);
+      form.append('magaz_dest_id',this.usersDestTransfert);
       form.append('date_restaurer',this.date_approvisionnement);
 
       if(this.qte_restaurer_init < 1){
@@ -2866,6 +2865,7 @@ var vthis = new Vue({
       this.qte_pv_kg = cmd.pv_en_kg;
       this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
       this.depots_id ="";
+      this.usersDestTransfert = "";
       this.usersListParDepot = [];
       this.styleModal = 'block';
       // console.log(cmd);

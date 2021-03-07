@@ -206,7 +206,11 @@ class Approvisionnement extends ResourceController {
         $initqte = $this->stockModel->getWhere($condition)->getRow();//RECUPERATION DE LA LIGNE DANS STOCK
         $Qte = $initqte->qte_stock + $data->qte_restaure;//ADDITION ANCIENNE + NOUVELLE
         $QteVirtuel = $initqte->qte_stock_virtuel + $data->qte_restaure;
-        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel])){
+
+        //UPDATE STOCK PERSONNEL MAGAZINIER DESTINATION RESTATURATION
+        $udpateStockPersonnel = $this->stockPersonnelModel->updateQtePersonnel($data->magaz_dest_id->id,$data->articles_id, $data->qte_restaure);
+
+        if(!$this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel]) OR !$udpateStockPersonnel){
           $this->pvRestaurationModel->RollbackTrans();
           $message = [
             'success' =>null,
