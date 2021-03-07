@@ -2856,7 +2856,7 @@ var vthis = new Vue({
       console.log(cmd);
     },
     _u_open_mod_popup_magaz_restaure_pv(cmd,val){
-      console.log(cmd);
+      // console.log(cmd);
       this.modalTitle = "APPROVISIONNEMENT PV RESTAURATION DE L'ARTICLE "+cmd.code_article+" : "+cmd.nom_article;
       this.articles_id = cmd.id;
       // this.qte_restaurer = cmd.qte_stock_pv;
@@ -2866,8 +2866,9 @@ var vthis = new Vue({
       this.qte_pv_kg = cmd.pv_en_kg;
       this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
       this.depots_id ="";
+      this.usersListParDepot = [];
       this.styleModal = 'block';
-      console.log(cmd);
+      // console.log(cmd);
       // console.log(this.qte_pv_kg);
     },
     _u_open_mod_popup_edit_qte_stock(cmd, art){
@@ -3576,14 +3577,12 @@ var vthis = new Vue({
     depots_id : function(val){
       //
       if(this.isLinkToLoadUserDepot){
-      this.get_magasinier_by_depot(val);
+        if(val){
+          this.get_magasinier_by_depot(val);
+        }
       }
 
     }
-    // accessGestionPv : function(val){
-    //   // console.log(val);
-    //   this._u_change_droit_access();
-    // }
   }
 })
 
