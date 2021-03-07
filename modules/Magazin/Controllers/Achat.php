@@ -50,7 +50,7 @@ class Achat extends BaseController {
   }
   public function getStockPv(){
     $data = [
-      'titlePage' => 'MON STOCK : Dépôt'
+      'titlePage' => 'MON STOCK PV : Dépôt'
     ];
     // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
     echo view('Modules\Admin\Views\stock\depots-stock-pv-view', $data);

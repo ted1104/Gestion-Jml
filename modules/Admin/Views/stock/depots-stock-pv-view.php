@@ -191,6 +191,12 @@
                 </select>
               </div>
 							<div class="form-group">
+								<label for="depots_id">Magasinier Destination</label>
+								<select class="form-control" v-model="usersDestTransfert">
+									<option v-for="(u, i) in usersListParDepot" :value="u.id" v-if="u.id != dpot_id">{{u.nom+' '+u.prenom}}</option>
+								</select>
+							</div>
+							<div class="form-group">
     						<label for="qte_restaurer_init">Quantité Initial déclarée *</label>
     						<input type="text" class="form-control" id="qte_restaurer_init" aria-describedby="qte_restaurer_init" v-model="qte_restaurer_init" disabled>
 								<!-- {{checkBoxAchatSelected}} -->

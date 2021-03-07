@@ -255,7 +255,8 @@ var vthis = new Vue({
       usersListParDepot : [],
       usersDestTransfert : null,
       date_transfert: "",
-      idStockPerso : "" //Lors de l'ajustement stock
+      idStockPerso : "", //Lors de l'ajustement stock
+      isLinkToLoadUserDepot : false
     }
   },
 
@@ -2043,8 +2044,8 @@ var vthis = new Vue({
                   console.log(error);
                 })
         },
-    get_magasinier_by_depot(){
-      const newurl = this.url+"users-get-magaz-by-depot/"+this.dpot_id;
+    get_magasinier_by_depot(depotID = this.dpot_id){
+      const newurl = this.url+"users-get-magaz-by-depot/"+depotID;
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
@@ -3528,6 +3529,9 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'admin-stock-personnel'){
       this.get_stock_personnel_admin();
     }
+    if(pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
+      this.isLinkToLoadUserDepot = true;
+    }
 
 
   }
@@ -3568,6 +3572,13 @@ var vthis = new Vue({
       this.qte_restaurer = Number(this.qte_pv_kg) / Number(this.poids_article);
       this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
       this.qte_perdue = this.qte_perdue.toFixed(2);
+    },
+    depots_id : function(val){
+      //
+      if(this.isLinkToLoadUserDepot){
+      this.get_magasinier_by_depot(val);
+      }
+
     }
     // accessGestionPv : function(val){
     //   // console.log(val);
