@@ -39,8 +39,19 @@
                           <div class="card-header bg-white">
                                 <h5 class="card-title text-black">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
 															<div class="">
+
 																<div class="pull-right row">
-																	<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+																	<div class="form-group">
+																		<select class="form-control" v-model="destination">
+																			<option value="" disabled>--Choisir Destination Type--</option>
+																			<option value="0">Tout</option>
+																			<option v-for="(det, i) in ListMotifDecaissement" :value="det.id">{{det.description}}</option>
+																		</select>
+																	</div>
+																	<div class="margin-left-4">
+																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
+
+																	</div>
 
 																	<!-- BOUTTON DECAISSEMENT EXTERNE -->
 																	<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_decaisssement_externe_admin)"><i class="mdi mdi-search-web"></i> </button>

@@ -191,15 +191,21 @@ class OperationCaisseEncaissement extends ResourceController {
   }
 
   //LISTE DE DECAIISEMENT EXTERNE EFFECTUE PAR LE CAISSIER PRINCIPAL
-  public function getDecaissementExterne($idCaissier,$dateFilter){
+  public function getDecaissementExterne($idCaissier,$typeDestination,$dateFilter){
     $d = Time::today();
     if($dateFilter == "null"){ $dateFilter = $d; }
     $conditionDate =['date_decaissement'=> $dateFilter];
+
+  
     $conditionUserFrom = [];
+    $conditionDestination = [];
     if($idCaissier != 0){
       $conditionUserFrom = ['users_id_from'=>$idCaissier];
     }
-    $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->orderBy('id','DESC')->findAll();
+    if($typeDestination > 0){
+      $conditionDestination = ['destination' =>$typeDestination];
+    }
+    $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',

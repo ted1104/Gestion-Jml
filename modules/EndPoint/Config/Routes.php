@@ -123,7 +123,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('create-decaissement-solde','OperationCaisseEncaissement::createDecaissement');
   $routes->get('get-decaissement-par-caissier/(:num)','OperationCaisseEncaissement::getDecaissementParCaissier/$1');
   $routes->get('validation-decaissement/(:num)/(:num)/(:any)/validate','OperationCaisseEncaissement::validateDecaissement/$1/$2/$3');
-  $routes->get('get-decaissement-externe-par-caissier/(:num)/(:any)','OperationCaisseEncaissement::getDecaissementExterne/$1/$2');
+  $routes->get('get-decaissement-externe-par-caissier/(:num)/(:num)/(:any)','OperationCaisseEncaissement::getDecaissementExterne/$1/$2/$3');
   $routes->post('create-decaissement--solde-externe','OperationCaisseEncaissement::createDecaissementExterne');
   $routes->get('get-all-encaissement-externe/(:num)/(:any)/enc','OperationCaisseEncaissement::getEncaissementExterne/$1/$2');
   $routes->post('create-encaissement-externe','OperationCaisseEncaissement::createEncaissementExterne');

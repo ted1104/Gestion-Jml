@@ -1009,7 +1009,7 @@ var vthis = new Vue({
             })
     },
     get_decaisssement_externe_admin(NoVariable=null){
-      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.dateFilter;
+      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.destination+"/"+this.dateFilter;
       this.tabListData =[];
       this.isNoReturnedData = false;
       this.isDecaissementExterne = true;
@@ -3552,7 +3552,9 @@ var vthis = new Vue({
       this.get_encaisssement_externe(this.stateStatus);
     }
     if(pth[this.indexRoute] == 'admin-decaissement-externe'){
+      this.destination = 0;
       this.get_decaisssement_externe_admin();
+      this.get_destination_motif_decaissement();
     }
     if(pth[this.indexRoute] == 'admin-rapport'){
       this.get_depots();
