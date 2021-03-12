@@ -11,6 +11,7 @@ use App\Models\ClotureStockModel;
 use App\Models\ClotureCaisseModel;
 use App\Models\UsersModel;
 use App\Models\UsersAuthModel;
+use App\Models\StMotifDecaissementExterneModel;
 use CodeIgniter\I18n\Time;
 
 class TableStatique extends ResourceController {
@@ -24,6 +25,7 @@ class TableStatique extends ResourceController {
   protected $clotureCaisseModel = null;
   protected $userModel = null;
   protected $usersAuthModel = null;
+  protected $stMotifDecaissementExterneModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -36,6 +38,7 @@ class TableStatique extends ResourceController {
     $this->clotureCaisseModel =  new ClotureCaisseModel();
     $this->userModel = new UsersModel();
     $this->usersAuthModel = new UsersAuthModel();
+    $this->stMotifDecaissementExterneModel = new StMotifDecaissementExterneModel();
   }
 
   public function depot_get(){
@@ -213,4 +216,13 @@ class TableStatique extends ResourceController {
     ]);
   }
 
+  //MOTIF DECAISSEMENT DECAISSMENET
+  public function motif_decaissement_get(){
+    $data = $this->stMotifDecaissementExterneModel->Where('	is_active',1)->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+  }
 }

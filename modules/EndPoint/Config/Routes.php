@@ -14,6 +14,9 @@ $routes->group('api/v1', function($routes){
   $routes->get('stock-depot-by-depot/(:num)/depot','TableStatique::getStockDepotByDepot/$1');
   $routes->get('roles-get-all','TableStatique::getProfile');
   $routes->get('detect-etat-param-system','TableStatique::detectEtatDesParametresSysteme');
+  $routes->get('motif-decaissement-get-all','TableStatique::motif_decaissement_get');
+
+
 
 
   //ENDPOINTS LOGIQUES DATA
