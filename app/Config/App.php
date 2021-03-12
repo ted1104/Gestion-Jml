@@ -273,7 +273,12 @@ class App extends BaseConfig
 			if($_SERVER['SERVER_NAME']=='jml.local'){
 				$this->baseURL = 'http://jml.local';
 			}else{
-				$this->baseURL = 'http://169.255.189.89';
+				if($_SERVER['SERVER_NAME']=='societe-fl.com'){
+					$this->baseURL = 'http://societe-fl.com/';
+				}else{
+					$this->baseURL = 'http://169.255.189.89';
+				}
+
 			}
 
 		}
