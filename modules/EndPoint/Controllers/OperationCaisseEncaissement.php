@@ -191,7 +191,7 @@ class OperationCaisseEncaissement extends ResourceController {
   }
 
   //LISTE DE DECAIISEMENT EXTERNE EFFECTUE PAR LE CAISSIER PRINCIPAL
-  public function getDecaissementExterne($idCaissier,$typeDestination,$dateFilter,$dateFiltreEnd,$isInterval){
+  public function getDecaissementExterne($idCaissier,$typeDestination,$dateFilter,$dateFiltreEnd,$isInterval,$limit, $offset){
     $d = Time::today();
     if($dateFilter == "null"){ $dateFilter = $d; }
     $conditionDate =['date_decaissement'=> $dateFilter];
@@ -205,15 +205,19 @@ class OperationCaisseEncaissement extends ResourceController {
     if($typeDestination > 0){
       $conditionDestination = ['destination' =>$typeDestination];
     }
-    $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
+    $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll($limit, $offset);
+    //FOR PAGINATION
+    $dataAllCount = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
     if($isInterval ==1){
-      $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where('date_decaissement >=',$dateFilter)->Where('date_decaissement <=',$dateFiltreEnd)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
+      $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where('date_decaissement >=',$dateFilter)->Where('date_decaissement <=',$dateFiltreEnd)->Where($conditionDestination)->orderBy('id','DESC')->findAll($limit, $offset);
+      $dataAllCount =  $this->decaissementExterneModel->Where($conditionUserFrom)->Where('date_decaissement >=',$dateFilter)->Where('date_decaissement <=',$dateFiltreEnd)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
       // echo 'in interval'. $dateFiltreEnd;
     }
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all' => count($dataAllCount)
       // 'conti' => $conditionUserFrom
     ]);
   }

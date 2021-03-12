@@ -108,6 +108,18 @@
 																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>
+																<!-- PAGINATION -->
+																<nav aria-label="...">
+																		<ul class="pagination">
+																			<li class="page-item">
+																				<button class="page-link" @click="_u_previous_page_decaissement_externe(get_decaisssement_externe_admin)">Previous</button>
+																			</li>
+																			<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_decaisssement_externe_admin(null,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																			<li class="page-item">
+																				<button class="page-link" @click="_u_next_page_decaissement_externe(get_decaisssement_externe_admin)">Next</button>
+																			</li>
+																		</ul>
+																	</nav>
                               </div>
                           </div>
                         </div>

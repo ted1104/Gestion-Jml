@@ -1008,9 +1008,9 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_decaisssement_externe_admin(NoVariable=null){
+    get_decaisssement_externe_admin(NoVariable=null,limit=this.PerPaged,offset=0, indexPage=0){
       let isInterval = this.checkBoxArticles.length > 0 ? 1 : 0;
-      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.destination+"/"+this.dateFilter+"/"+this.dateFilterEnd+"/"+isInterval;
+      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.destination+"/"+this.dateFilter+"/"+this.dateFilterEnd+"/"+isInterval+"/"+limit+"/"+offset;
       this.tabListData =[];
       this.isNoReturnedData = false;
       this.isDecaissementExterne = true;
@@ -1021,6 +1021,10 @@ var vthis = new Vue({
               if(this.tabListData.length < 1){
                 this.isNoReturnedData = true;
               }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+
               this._u_fx_get_montant();
             }).catch(error =>{
               console.log(error);
@@ -3092,6 +3096,23 @@ var vthis = new Vue({
         this.currentIndexPage -=1;
         var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
         callbackFunctionGetList(this.PerPaged,offset,this.currentIndexPage);
+      }
+    },
+    _u_next_page_decaissement_externe(callbackFunctionGetList){
+      var i = (this.currentIndexPage+1)+1;
+      if(i <= this.pageNumber){
+        this.currentIndexPage +=1;
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        callbackFunctionGetList(null,this.PerPaged,offset,this.currentIndexPage);
+      }
+    },
+    _u_previous_page_decaissement_externe(callbackFunctionGetList){
+      var i = this.currentIndexPage;
+      console.log(this.currentIndexPage);
+      if(i < this.pageNumber && 0 < i){
+        this.currentIndexPage -=1;
+        var offset = i==1?'0':parseInt(this.PerPaged)*(i-1);
+        callbackFunctionGetList(null,this.PerPaged,offset,this.currentIndexPage);
       }
     },
 
