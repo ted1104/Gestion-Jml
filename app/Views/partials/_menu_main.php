@@ -77,7 +77,7 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-config-depot') ?>">C-Dépôt</a></li>
-                      <li><a href="<?=base_url('admin-config-etat-critique') ?>">C-Etat Critique</a></li>
+                      <li><a href="<?=base_url('admin-config-etat-critique') ?>">C-Etat Critique & Motif</a></li>
                       <li><a href="<?=base_url('admin-config-system') ?>">C-Système</a></li>
                   </ul>
               </li>

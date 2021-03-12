@@ -259,7 +259,8 @@ var vthis = new Vue({
       isLinkToLoadUserDepot : false,
 
       //MOTIF DECAISSEMENT GET
-      ListMotifDecaissement : []
+      ListMotifDecaissement : [],
+      nom_motif_decaissement : ""
     }
   },
 
@@ -2324,8 +2325,36 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.ListMotifDecaissement = response.data.data;
-              console.log(this.ListMotifDecaissement);
+              if(this.ListMotifDecaissement.length < 1){
+                this.isNoReturnedData = true;
+              }
 
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    add_motif_destination_decaissement(){
+      const newurl = this.url+"motif-decaissement-create-one";
+      var form = new FormData();
+      form.append('description',this.nom_motif_decaissement);
+
+      this.isLoadSaveMainButtonModal = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                // this.get_historique_transfert_magaz_by_magaz();
+                // this._u_close_mod_form();
+                this.nom_motif_decaissement= "";
+                this.isLoadSaveMainButtonModal = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
             }).catch(error =>{
               console.log(error);
             })
@@ -3488,6 +3517,7 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute]=='admin-config-etat-critique'){
       this.get_configuration_etat_critique();
+      this.get_destination_motif_decaissement();
     }
     if(pth[this.indexRoute]=='magaz-histo-appro'){
       this.get_historique_approvisionnement_by_depot();

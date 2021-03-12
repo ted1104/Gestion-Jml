@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>CONFIGURATION ETAT CRITIQUE STOCK</h4>
+													 <h4>CONFIGURATION ETAT CRITIQUE STOCK & MOTIF DECAISSEMENT</h4>
 
 											 </div>
 									 </div>
@@ -54,7 +54,62 @@
                             </div>
                         </div>
 												</div>
-												
+
+												<div class="col-md-4 col-lg-4 col-xl-4 ">
+													<div class="card m-b-30">
+														<div class="card-header bg-white">
+																<h5 class="card-title text-black">Ajouter Motif Destination decaissement</h5>
+														</div>
+														<div class="card-body">
+																	<div class="form-group">
+																		<label for="nom_motif_decaissement">Nom destination *</label>
+																		<input type="text" class="form-control" id="nom_motif_decaissement" aria-describedby="nom_motif_decaissement" v-model="nom_motif_decaissement">
+																	</div>
+
+																	<button v-if="!isLoadSaveMainButtonModal" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
+																	<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+														</div>
+												</div>
+												</div>
+												<div class="col-md-4 col-lg-4 col-xl-4">
+													<div class="card m-b-30">
+														<div class="card-body">
+														<div class="table-responsive">
+													<table class="table">
+														<thead>
+															<tr class="bg-secondary">
+																<th scope="col">Destination Type</th>
+																<th scope="col">Status</th>
+																<th scope="col">Action</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr v-for="(dt, index) in ListMotifDecaissement">
+																<th>{{dt.description}}</th>
+																<td>
+																	<span :class="dt.is_active==0?'badge badge-danger':'badge badge-success'">{{dt.is_active==0 ?'Desactiver':'Activer'}}</span>
+																</td>
+																<!-- <td>{{dt.responsable_id}}</td> -->
+																<!-- <td>{{dt.is_central ==1 ?'Oui':'Non'}}</td>-->
+																<td><a href="#"  class='btn btn-round btn-light' ><i class='mdi mdi-circle-edit-outline text-danger'></i> </a></td>
+
+															</tr>
+														</tbody>
+													</table>
+													<!-- LOAD FOR WAITING DATA -->
+													<div class="text-center" v-if="ListMotifDecaissement.length < 1 && !isNoReturnedData">
+														<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
+													</div>
+													<div class="text-center" alt="" v-if="ListMotifDecaissement.length < 1 && isNoReturnedData">
+														<img src="<?=base_url() ?>/public/load/empty.png" >
+														<h6 class="text-danger">Données vide!!</h6>
+													</div>
+													<!-- PAGINATION -->
+												</div>
+														</div>
+													</div>
+												</div>
+
 											</div>
                     </div>
                     <!-- End XP Col -->
