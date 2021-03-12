@@ -208,16 +208,23 @@ class OperationCaisseEncaissement extends ResourceController {
     $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll($limit, $offset);
     //FOR PAGINATION
     $dataAllCount = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
+
+    //MONTANT TOTAL DECAISSE
+    $montantTotal = $this->sommesMontantDecaissementExterne($conditionUserFrom,$conditionDate,$conditionDestination);
     if($isInterval ==1){
-      $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where('date_decaissement >=',$dateFilter)->Where('date_decaissement <=',$dateFiltreEnd)->Where($conditionDestination)->orderBy('id','DESC')->findAll($limit, $offset);
-      $dataAllCount =  $this->decaissementExterneModel->Where($conditionUserFrom)->Where('date_decaissement >=',$dateFilter)->Where('date_decaissement <=',$dateFiltreEnd)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
+      $conditionIntevalDate = ['date_decaissement >='=>$dateFilter,'date_decaissement <='=>$dateFiltreEnd];
+
+      $data = $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionIntevalDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll($limit, $offset);
+      $dataAllCount =  $this->decaissementExterneModel->Where($conditionUserFrom)->Where($conditionIntevalDate)->Where($conditionDestination)->orderBy('id','DESC')->findAll();
       // echo 'in interval'. $dateFiltreEnd;
+      $montantTotal = $this->sommesMontantDecaissementExterne($conditionUserFrom,$conditionIntevalDate,$conditionDestination);
     }
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all' => count($dataAllCount)
+      'all' => count($dataAllCount),
+      'montantTotalDecaissement' => $montantTotal
       // 'conti' => $conditionUserFrom
     ]);
   }
@@ -339,6 +346,11 @@ class OperationCaisseEncaissement extends ResourceController {
   public function sommesMontantEncaissement($conditionUserSource,$conditionDate){
     $SommeEncaissement = $this->encaissementExterneModel->selectSum('montant_encaissement')->Where($conditionUserSource)->Where($conditionDate)->find();
     return round($SommeEncaissement[0]->montant_encaissement,2);
+
+  }
+  public function sommesMontantDecaissementExterne($conditionUserFrom,$conditionDate,$conditionDestination){
+    $SommeDecaissement = $this->decaissementExterneModel->selectSum('montant')->Where($conditionUserFrom)->Where($conditionDate)->Where($conditionDestination)->find();
+    return round($SommeDecaissement[0]->montant,2);
 
   }
   // #########CLOTURE OPERATION AUTOMATIQUE

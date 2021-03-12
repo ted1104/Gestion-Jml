@@ -260,7 +260,9 @@ var vthis = new Vue({
 
       //MOTIF DECAISSEMENT GET
       ListMotifDecaissement : [],
-      nom_motif_decaissement : ""
+      nom_motif_decaissement : "",
+
+      montantTotatAllDecaissement : 0,
     }
   },
 
@@ -1018,6 +1020,7 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.tabListData = response.data.data;
+              this.montantTotatAllDecaissement = response.data.montantTotalDecaissement;
               if(this.tabListData.length < 1){
                 this.isNoReturnedData = true;
               }

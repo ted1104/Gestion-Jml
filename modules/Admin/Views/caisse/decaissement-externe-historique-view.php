@@ -37,7 +37,11 @@
 												<div class="col-md-12 col-lg-12 col-xl-12">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-                                <h5 class="card-title text-black">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+                                <!-- <h5 class="card-title text-black">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5> -->
+																<div class="row">
+																	<h5 class="card-title text-black col-md-9">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+																	<h5 class="col-md-3 text-right text-secondary">{{montantTotatAllDecaissement}} USD</h5>
+																</div>
 																<!-- {{checkBoxArticles}} -->
 															<div class="">
 																<div class="pull-left row">
