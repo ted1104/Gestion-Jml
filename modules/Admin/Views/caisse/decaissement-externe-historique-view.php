@@ -38,8 +38,16 @@
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
                                 <h5 class="card-title text-black">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+																<!-- {{checkBoxArticles}} -->
 															<div class="">
-
+																<div class="pull-left row">
+																	<div class="col-12">
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="checkBoxArticles" id="1" class="custom-control-input" value="1" v-model="checkBoxArticles">
+																			<label class="custom-control-label" for="1">{{checkBoxArticles.length > 0 ?'Désactiver': 'Activer'}} filtre d'interval</label>
+																		</div>
+																	</div>
+																</div>
 																<div class="pull-right row">
 																	<div class="form-group">
 																		<select class="form-control" v-model="destination">
@@ -48,9 +56,17 @@
 																			<option v-for="(det, i) in ListMotifDecaissement" :value="det.id">{{det.description}}</option>
 																		</select>
 																	</div>
+																	<div v-if="checkBoxArticles.length > 0" class="margin-left-4">
+																		<span>DE : </span>
+																	</div>
 																	<div class="margin-left-4">
 																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-
+																	</div>
+																	<div v-if="checkBoxArticles.length > 0" class="margin-left-4">
+																		<span>A : </span>
+																	</div>
+																	<div class="margin-left-4" v-if="checkBoxArticles.length > 0">
+																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilterEnd"></vuejs-datepicker>
 																	</div>
 
 																	<!-- BOUTTON DECAISSEMENT EXTERNE -->

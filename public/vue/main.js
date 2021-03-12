@@ -1009,7 +1009,8 @@ var vthis = new Vue({
             })
     },
     get_decaisssement_externe_admin(NoVariable=null){
-      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.destination+"/"+this.dateFilter;
+      let isInterval = this.checkBoxArticles.length > 0 ? 1 : 0;
+      const newurl = this.url+"get-decaissement-externe-par-caissier/0/"+this.destination+"/"+this.dateFilter+"/"+this.dateFilterEnd+"/"+isInterval;
       this.tabListData =[];
       this.isNoReturnedData = false;
       this.isDecaissementExterne = true;
@@ -2982,6 +2983,7 @@ var vthis = new Vue({
       this.dateRapportFin = currentDateWithFormat;
       this.dateRapportGen = currentDateWithFormat;
       this.dateFilter = currentDateWithFormat;
+      this.dateFilterEnd = currentDateWithFormat;
       this.date_transfert =currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
@@ -3113,7 +3115,9 @@ var vthis = new Vue({
     },
     _u_formatDateFilter(callbackFunction){
       var date = new Date(this.dateFilter);
+      var date2 = new Date(this.dateFilterEnd);
       this.dateFilter = this._u_formatOnlyDateAndReturn(date);
+      this.dateFilterEnd = this._u_formatOnlyDateAndReturn(date2);
       this._u_set_table_title_with_date();
       callbackFunction(this.stateStatus);
     },
