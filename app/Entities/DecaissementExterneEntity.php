@@ -4,6 +4,7 @@ use CodeIgniter\Entity;
 use Config\Services;
 use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
+use App\Models\StMotifDecaissementExterneModel;
 
 
 class DecaissementExterneEntity extends Entity{
@@ -24,10 +25,12 @@ class DecaissementExterneEntity extends Entity{
   protected $datamap = [];
   protected $userModel = null;
   protected $articlesPrixModel = null;
+  protected $stMotifDecaissementExterneModel = null;
 
   public function __construct(array $data = null){
     parent::__construct($data);
     $this->userModel = new UsersModel();
+    $this->stMotifDecaissementExterneModel = new StMotifDecaissementExterneModel();
     // $this->articlesPrixModel = new ArticlesPrixModel();
   }
   public function setDateDecaissement(){
@@ -36,15 +39,16 @@ class DecaissementExterneEntity extends Entity{
       return $this;
     }
   public function getUsersIdFrom(){
-    return $this->userModel->find($this->attributes['users_id_from']);
+    return $this->userModel->select('id, nom, prenom')->find($this->attributes['users_id_from']);
   }
 
   public function getDateDecaissement(){
     return $this->attributes['created_at'];
   }
   public function getDestination(){
-    $self = $this->attributes['destination'];
-    return $self==1?'BANQUE':($self==2?'ACHAT PRODUIT':'AUTRES');
+    // $self = $this->attributes['destination'];
+    // return $self==1?'BANQUE':($self==2?'ACHAT PRODUIT':'AUTRES');
+    return $this->stMotifDecaissementExterneModel->find($this->attributes['destination'])->description;
   }
 
 
