@@ -256,7 +256,10 @@ var vthis = new Vue({
       usersDestTransfert : null,
       date_transfert: "",
       idStockPerso : "", //Lors de l'ajustement stock
-      isLinkToLoadUserDepot : false
+      isLinkToLoadUserDepot : false,
+
+      //MOTIF DECAISSEMENT GET
+      ListMotifDecaissement : []
     }
   },
 
@@ -2315,6 +2318,19 @@ var vthis = new Vue({
                 })
         },
 
+    get_destination_motif_decaissement(){
+      const newurl = this.url+"motif-decaissement-get-all";
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.ListMotifDecaissement = response.data.data;
+              console.log(this.ListMotifDecaissement);
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3457,6 +3473,7 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute]=='caissier-list-decaissement'){
       this.get_decaisssement_caissier_principale();
+      this.get_destination_motif_decaissement();
     }
     if(pth[this.indexRoute]=='admin-histo-appro' || pth[this.indexRoute]=='gerant-histo-appro'){
       this.get_historique_approvisionnement();
@@ -3575,7 +3592,6 @@ var vthis = new Vue({
       this.qte_perdue = this.qte_perdue.toFixed(2);
     },
     depots_id : function(val){
-      //
       if(this.isLinkToLoadUserDepot){
         if(val){
           this.get_magasinier_by_depot(val);
