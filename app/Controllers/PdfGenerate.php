@@ -408,9 +408,6 @@ class PdfGenerate extends BaseController {
         }
 
       }
-
-
-
       //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET LIVRER
         $this->pdf->SetFont('Helvetica','B',6);
         $this->pdf->SetWidths($enteTableArticle);
@@ -438,10 +435,10 @@ class PdfGenerate extends BaseController {
         $this->pdf->Row($TotalArticleVenduNonPayer);
 
         //AFFICHAGE TOTAL PAYER MAIS NON  LIVRER
-        $this->pdf->SetFont('Helvetica','B',6);
-        $this->pdf->SetWidths($enteTableArticle);
-        $this->pdf->Cell(14,5,utf8_decode('Tot Rst Part'),1,0,'L');
-        $this->pdf->Row($qteTotalPayeMaisPasLivre);
+        // $this->pdf->SetFont('Helvetica','B',6);
+        // $this->pdf->SetWidths($enteTableArticle);
+        // $this->pdf->Cell(14,5,utf8_decode('Tot Rst Part'),1,0,'L');
+        // $this->pdf->Row($qteTotalPayeMaisPasLivre);
 
 
 
@@ -577,6 +574,9 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(100,7,utf8_decode('Montant Total Entré : '),1,0,'L');
     $this->pdf->Cell(100,7,round($situationMontantTotalEntre, 2).' USD',1,1,'L');
 
+    $this->pdf->Cell(100,7,utf8_decode('Montant Total Entré + Montant Initial Caisse : '),1,0,'L');
+    $this->pdf->Cell(100,7,round($situationMontantTotalInitialHier + $situationMontantTotalEntre, 2).' USD',1,1,'L');
+
     $this->pdf->Cell(100,7,utf8_decode('Décaissement Externe : '),1,0,'L');
     $this->pdf->Cell(100,7,round($situationMontantDecaissementExterne, 2).' USD',1,1,'L');
 
@@ -616,9 +616,9 @@ class PdfGenerate extends BaseController {
 
     }
 
-    // $this->outPut();
+    $this->outPut();
     $this->response->setHeader('Content-Type', 'application/pdf');
-    $this->pdf->Output('D',$dateRapport.'_Rapport_journalier_financier.pdf');
+    // $this->pdf->Output('D',$dateRapport.'_Rapport_journalier_financier.pdf');
   }
 
   public function rapport_stock_general($dateRapport){
