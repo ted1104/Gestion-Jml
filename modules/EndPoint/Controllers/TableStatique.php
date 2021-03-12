@@ -225,4 +225,29 @@ class TableStatique extends ResourceController {
       'data' => $data,
     ]);
   }
+  public function motif_decaissement_create(){
+    $data = $this->request->getPost();
+    $insertData = $this->stMotifDecaissementExterneModel->insert($data);
+     if(!$insertData){
+       $status = 400;
+       $message = [
+         'success' =>null,
+         'errors'=>$this->stMotifDecaissementExterneModel->errors()
+       ];
+       $data = null;
+     }else{
+       $status = 200;
+       $message = [
+         'success' => 'Enregistrement reussi',
+         'errors' => null
+       ];
+       $data = $insertData;
+     }
+
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> $data
+     ]);
+  }
 }

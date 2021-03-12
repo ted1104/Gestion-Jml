@@ -15,6 +15,10 @@ $routes->group('api/v1', function($routes){
   $routes->get('roles-get-all','TableStatique::getProfile');
   $routes->get('detect-etat-param-system','TableStatique::detectEtatDesParametresSysteme');
   $routes->get('motif-decaissement-get-all','TableStatique::motif_decaissement_get');
+  $routes->post('motif-decaissement-create-one','TableStatique::motif_decaissement_create');
+
+
+
 
 
 
