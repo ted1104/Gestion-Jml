@@ -200,6 +200,7 @@ class PdfGenerate extends BaseController {
       $DonneApprovisionnementTotal = array();
       $LineEmptyNumFacture = array();
       $DonneApprovisionnementInterDepot = array();
+      $DonneApprovisionnementInterDepotRecu = array();
       for($i = 0; $i < count($allArticle); $i++){
         //APPROVISIONNEMENT GENERAL
         $approGen = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
@@ -209,7 +210,9 @@ class PdfGenerate extends BaseController {
         $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
 
 
-        $approInterDepot = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_source",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
+        $approInterDepotExped = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_source",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $approInterDepotRecu = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_dest",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
         //GET QUANTITE INITIAL RESTANT EN STOCK HIER
 
         $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateRapport)->find();
@@ -225,7 +228,10 @@ class PdfGenerate extends BaseController {
         array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
         array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
         array_push($LineEmptyNumFacture,'');
-        array_push($DonneApprovisionnementInterDepot,$approInterDepot[0]->qte?$approInterDepot[0]->qte:0);
+        array_push($DonneApprovisionnementInterDepot,$approInterDepotExped[0]->qte?$approInterDepotExped[0]->qte:0);
+        array_push($DonneApprovisionnementInterDepotRecu,$approInterDepotRecu[0]->qte?$approInterDepotRecu[0]->qte:0);
+
+
       }
       $this->pdf->SetWidths($enteTableArticle);
 
@@ -326,8 +332,13 @@ class PdfGenerate extends BaseController {
       $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
       $this->pdf->Row($DonneApprovisionnementTotal);
 
-      $this->pdf->Cell(14,5,'Appro Inter',1,0,'L');
+      $this->pdf->Cell(14,5,'Appr Inter E',1,0,'L');
       $this->pdf->Row($DonneApprovisionnementInterDepot);
+
+      $this->pdf->Cell(14,5,'Appr Inter R',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementInterDepotRecu);
+
+
 
     //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET PAYER
       $this->pdf->SetFont('Helvetica','B',6);
@@ -376,8 +387,6 @@ class PdfGenerate extends BaseController {
         }
         array_push($qteTotalPayeMaisPasLivre, $qteTotal);
       }
-
-
 
 
       //RESTE EN Stock
@@ -541,14 +550,14 @@ class PdfGenerate extends BaseController {
         $chiffreDecaissementInterne,
         $chiffreEncaissementExterne,
         $chiffreDecaissementExterne,
-        $dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0,
-        round($dataCaisseMontant[0]->montant?$dataCaisseMontant[0]->montant:0, 2)
+        $dataCaisseMontantResteHier?$dataCaisseMontantResteHier[0]->montant:0,
+        round($dataCaisseMontant?$dataCaisseMontant[0]->montant:0, 2)
       ));
 
       // $idCaissierPrincipal = $value->is_main = 1 ? $value->id : 0;
       //CALCUL POUR SITUTATION TOTAL DE LA CAISSE
       if($value->is_main==1){
-        $situationMontantTotalInitialHier += $dataCaisseMontantResteHier[0]->montant?$dataCaisseMontantResteHier[0]->montant:0;
+        $situationMontantTotalInitialHier += $dataCaisseMontantResteHier?$dataCaisseMontantResteHier[0]->montant:0;
         $situationVenteTotaleJournaliere += $chiffreAchat + $chiffreEncaissementInterne;
         $situationMontantEncaissementExterne += $chiffreEncaissementExterne;
         $situationMontantTotalEntre += $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
