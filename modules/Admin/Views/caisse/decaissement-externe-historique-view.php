@@ -39,7 +39,7 @@
                           <div class="card-header bg-white">
                                 <!-- <h5 class="card-title text-black">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5> -->
 																<div class="row">
-																	<h5 class="card-title text-black col-md-9">DECAISSEMENT EXTERNE {{dateFilterDisplay}}</h5>
+																	<h5 class="card-title text-black col-md-9">DECAISSEMENT EXTERNE {{dateFilterDisplay}} {{checkBoxArticles.length > 0 ? 'AU '+dateFilterEnd : ''}}</h5>
 																	<h5 class="col-md-3 text-right text-secondary">{{montantTotatAllDecaissement}} USD</h5>
 																</div>
 																<!-- {{checkBoxArticles}} -->
@@ -70,7 +70,7 @@
 																		<span>A : </span>
 																	</div>
 																	<div class="margin-left-4" v-if="checkBoxArticles.length > 0">
-																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilterEnd"></vuejs-datepicker>
+																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true :disabled-dates="disabledDate" v-model="dateFilterEnd"></vuejs-datepicker>
 																	</div>
 
 																	<!-- BOUTTON DECAISSEMENT EXTERNE -->

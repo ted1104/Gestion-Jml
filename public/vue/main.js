@@ -263,6 +263,16 @@ var vthis = new Vue({
       nom_motif_decaissement : "",
 
       montantTotatAllDecaissement : 0,
+      disabledDate : {
+        // to: new Date(2021, 1, 1),
+        // from: new Date(2021, 3,10 ),
+        ranges : [
+          { // Disable dates in given ranges (exclusive).
+              from: new Date(1970, 0, 1),
+              to: new Date(this.dateFilter)
+            }
+        ]
+      }
     }
   },
 
@@ -273,6 +283,10 @@ var vthis = new Vue({
     this._u_get_today();
     this._u_fx_get_montant();
 
+
+    // this.disabledDate.ranges[0].to = new Date(this.dateFilter);
+    //
+    // console.log(this.disabledDate);
 
 
 
@@ -3617,7 +3631,12 @@ var vthis = new Vue({
   },
   watch : {
     messageError : function(val){
-      console.log("change to "+this.messageError);
+      // console.log("change to "+this.messageError);
+    },
+    dateFilter : function(val){
+      // console.log('date filter changed');
+      this.disabledDate.ranges[0].to = new Date(this.dateFilter);
+      // console.log(this.disabledDate);
     },
     dateRapport : function(val){
       var date = new Date(val);
