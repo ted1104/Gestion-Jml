@@ -2380,7 +2380,7 @@ var vthis = new Vue({
               if(response.data.message.success !=null){
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
-                // this.get_historique_transfert_magaz_by_magaz();
+                this.get_destination_motif_decaissement();
                 // this._u_close_mod_form();
                 this.nom_motif_decaissement= "";
                 this.isLoadSaveMainButtonModal = false;
