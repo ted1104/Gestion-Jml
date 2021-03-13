@@ -64,6 +64,24 @@ class CommandesModel extends Model{
     return $is;
 
   }
+  public function checkingIfOneArticleHasNotEnoughtQuanityVirtuelle($iddepot, $idcommande){
+    $this->commandeDetail = new CommandesDetailModel();
+    $this->stockModel  = new StockModel();
+    $is = false;
+    $depot = $iddepot;
+    $detail = $this->commandeDetail->Where('vente_id',$idcommande)->findAll();
+    foreach ($detail as $key => $value) {
+
+      $qte_vendue = $value->qte_vendue;
+      $stockqte = $this->stockModel->Where('depot_id',$depot)->Where('articles_id',$value->articles_id[0]->id)->first();
+      if($qte_vendue > $stockqte->qte_stock_virtuel){
+        $is = true;
+      }
+    }
+    return $is;
+
+  }
+
   public function checkingIfOneArticleHasNotEnoughtQuanityPartiel($iddepot,$idcommande, $idarticle){
     $this->commandeDetail = new CommandesDetailModel();
     $this->stockModel  = new StockModel();

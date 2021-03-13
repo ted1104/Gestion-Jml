@@ -169,6 +169,8 @@ class Commandes extends ResourceController {
   //FONCTION VALIDATION OPERATION PAR CAISSIER DONC VALIDATION DU PAYEMENT
   public function validation_operation_commande_caissier($pwd,$idcommande,$iduser,$somme){
     $infoCommande = $this->model->find($idcommande);
+    // print_r($infoCommande->depots_id[0]->id);
+    // die();
 
     if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
       $status = 400;
@@ -179,8 +181,8 @@ class Commandes extends ResourceController {
       $data = "";
     }else{
       //SUITES VALIDATIONS
+      if(!$this->model->checkingIfOneArticleHasNotEnoughtQuanityVirtuelle($infoCommande->depots_id[0]->id,$idcommande)){
       $data = ['status_vente_id'=>2];
-      // $this->model->beginTrans();
       if(!$updateData = $this->model->update($idcommande,$data)){
         $status = 400;
         $message = [
@@ -256,6 +258,14 @@ class Commandes extends ResourceController {
           ];
           $data = "";
         }
+      }
+    }else{
+        $status = 401;
+        $message = [
+          'success' => null,
+          'errors' => ['Impossible d\'executer cet achat vu que ce dépôt ne possède pas une quantité suffisante pour certains articles! Consulter le détail de l\'achat et tous les articles avec un point rouge cad cette quantité n\'est plus en stock']
+        ];
+        $data = "";
       }
     }
     // $this->model->RollbackTrans();

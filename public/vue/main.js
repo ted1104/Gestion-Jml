@@ -589,6 +589,9 @@ var vthis = new Vue({
               }
               var err = response.data.message.errors;
               this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              if(response.data.status==401){
+                  this.get_commande_caissier(1);
+              }
               this.isLoadSaveMainButtonModal = false;
             }).catch(error =>{
               console.log(error);
