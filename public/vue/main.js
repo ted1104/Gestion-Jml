@@ -2367,6 +2367,7 @@ var vthis = new Vue({
       const newurl = this.url+"motif-decaissement-create-one";
       var form = new FormData();
       form.append('description',this.nom_motif_decaissement);
+      form.append('is_active',1);
 
       this.isLoadSaveMainButtonModal = true;
       this.messageError = false;

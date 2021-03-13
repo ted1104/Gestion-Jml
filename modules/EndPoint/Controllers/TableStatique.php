@@ -218,7 +218,7 @@ class TableStatique extends ResourceController {
 
   //MOTIF DECAISSEMENT DECAISSMENET
   public function motif_decaissement_get(){
-    $data = $this->stMotifDecaissementExterneModel->Where('	is_active',1)->findAll();
+    $data = $this->stMotifDecaissementExterneModel->findAll();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
@@ -272,5 +272,30 @@ class TableStatique extends ResourceController {
       'message' =>$message,
       'data'=> $data
     ]);
+  }
+  public function motif_decaissement_enable_desable($id){
+    $motifState = $this->stMotifDecaissementExterneModel->find($id);
+    $data = ['is_active' =>$motifState->is_active==1 ? 0 : 1 ];
+    if(!$this->stMotifDecaissementExterneModel->update($id,$data)){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->stMotifDecaissementExterneModel->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $text = $motifState->is_active==1 ? 'desactivé' : 'activé';
+      $message = [
+        'success' => 'Le type de destination du decaissement externe a été '.$text.' avec succès',
+        'errors' => null
+      ];
+      $data = 'null';
+    }
+  return $this->respond([
+    'status' => $status,
+    'message' => $message,
+    'data' => $data
+  ]);
   }
 }

@@ -6,7 +6,7 @@ class StMotifDecaissementExterneModel extends Model{
   protected $table = 'st_motif_decaissement_externe';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['description'];
+  protected $allowedFields = ['description','is_active'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'description' => 'required|is_unique[st_motif_decaissement_externe.description]',

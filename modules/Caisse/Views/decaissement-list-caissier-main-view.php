@@ -44,7 +44,7 @@
 																		<label for="destination">Destination</label>
 																		<select class="form-control" v-model="destination">
 																			<option value="" disabled>--Choisir Destination--</option>
-																			<option v-for="(det, i) in ListMotifDecaissement" :value="det.id">{{det.description}}</option>
+																			<option v-for="(det, i) in ListMotifDecaissement" :value="det.id" v-if="det.is_active==1">{{det.description}}</option>
 																			<!-- <option value="1">BANQUE</option>
 																			<option value="2">ACHAT PRODUITS</option>
 																			<option value="3">AUTRES</option> -->
