@@ -67,55 +67,65 @@
 																	</div>
 
 																	<button v-if="!isLoadSaveMainButtonModal && !this.wantToUpdate" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
-																	<!-- <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
-																	<button v-if="!isLoadSaveMainButtonModal && this.wantToUpdate" @click="update_motif_decaissement_externe" class="btn btn-primary">Modifier</button>
-																	<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+
+																	<div class="row" v-if="this.wantToUpdate">
+																		<div class="col-6">
+																			<button v-if="!isLoadSaveMainButtonModal" @click="update_motif_decaissement_externe" class="btn btn-primary">Modifier</button>
+																			<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																		</div>
+																		<div class="col-6">
+																			<button v-if="!isLoadSaveMainButtonSecond" @click="desable_activated_status_motif_decaissement_externe" :class="this.MotifDecaissementStatus==1?'btn btn-danger pull-right':'btn btn-success pull-right'">{{this.MotifDecaissementStatus==1?'Désactiver':'Activer'}}</button>
+																			<img v-if="isLoadSaveMainButtonSecond" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																		</div>
+																	</div>
+
 														</div>
 												</div>
 												</div>
 												<div class="col-md-4 col-lg-4 col-xl-4">
+													<!-- {{checkBoxArticles}} -->
 													<div class="card m-b-30">
 														<div class="card-body">
-														<div class="table-responsive">
-													<table class="table">
-														<thead>
-															<tr class="bg-secondary">
-																<th scope="col">Destination Type</th>
-																<th scope="col">Status</th>
-																<th scope="col">Action</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr v-for="(dt, index) in ListMotifDecaissement">
-																<th>{{dt.description}}</th>
-																<td>
-																	<span :class="dt.is_active==0?'badge badge-danger':'badge badge-success'">{{dt.is_active==0 ?'Desactiver':'Activer'}}</span>
-																</td>
-																<!-- <td>{{dt.responsable_id}}</td> -->
-																<!-- <td>{{dt.is_central ==1 ?'Oui':'Non'}}</td>-->
-																<td>
-																	<div v-if="indexTopUpdate!=index">
-																		<button type="button" class='btn btn-round btn-secondary' name="button" @click="_u_update_motif(dt,index)" :disabled="indexTopUpdate"><i class='mdi mdi-circle-edit-outline text-white'></i></button>
 
-																	</div>
-																	<div v-if="indexTopUpdate==index">
-																		<button type="button" class='btn btn-round btn-info' name="button" @click="_u_update_motif(dt,index)"><i class='mdi mdi-close'></i></button>
-																	</div>
-																</td>
+															<div class="table-responsive">
+																	<table class="table">
+																<thead>
+																	<tr class="bg-secondary">
+																		<th scope="col">Destination Type</th>
+																		<th scope="col">Status</th>
+																		<th scope="col">Action</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr v-for="(dt, index) in ListMotifDecaissement">
+																		<th>{{dt.description}}</th>
+																		<td>
+																			<span :class="dt.is_active==0?'badge badge-danger':'badge badge-success'">{{dt.is_active==0 ?'Desactiver':'Activer'}}</span>
+																		</td>
+																		<!-- <td>{{dt.responsable_id}}</td> -->
+																		<!-- <td>{{dt.is_central ==1 ?'Oui':'Non'}}</td>-->
+																		<td>
+																			<div v-if="indexTopUpdate!=index">
+																				<button type="button" class='btn btn-round btn-secondary' name="button" @click="_u_update_motif(dt,index)" :disabled="indexTopUpdate"><i class='mdi mdi-circle-edit-outline text-white'></i></button>
+																			</div>
+																			<div v-if="indexTopUpdate==index">
+																				<button type="button" class='btn btn-round btn-info' name="button" @click="_u_update_motif(dt,index)"><i class='mdi mdi-close'></i></button>
+																			</div>
+																		</td>
 
-															</tr>
-														</tbody>
-													</table>
-													<!-- LOAD FOR WAITING DATA -->
-													<div class="text-center" v-if="ListMotifDecaissement.length < 1 && !isNoReturnedData">
-														<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
-													</div>
-													<div class="text-center" alt="" v-if="ListMotifDecaissement.length < 1 && isNoReturnedData">
-														<img src="<?=base_url() ?>/public/load/empty.png" >
-														<h6 class="text-danger">Données vide!!</h6>
-													</div>
-													<!-- PAGINATION -->
-												</div>
+																	</tr>
+																</tbody>
+															</table>
+																	<!-- LOAD FOR WAITING DATA -->
+																	<div class="text-center" v-if="ListMotifDecaissement.length < 1 && !isNoReturnedData">
+																		<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
+																	</div>
+																	<div class="text-center" alt="" v-if="ListMotifDecaissement.length < 1 && isNoReturnedData">
+																		<img src="<?=base_url() ?>/public/load/empty.png" >
+																		<h6 class="text-danger">Données vide!!</h6>
+																	</div>
+																	<!-- PAGINATION -->
+															</div>
 														</div>
 													</div>
 												</div>

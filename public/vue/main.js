@@ -58,6 +58,7 @@ var vthis = new Vue({
       isLoadDelete : false,
       isLoadNegoAnnuler : false,
       isLoadSaveMainButton : false,
+      isLoadSaveMainButtonSecond : false,
       isLoadSaveMainButtonModal : false,
       isDecaissementExterne : false,
       isNoReturnedData : false,
@@ -264,15 +265,14 @@ var vthis = new Vue({
 
       montantTotatAllDecaissement : 0,
       disabledDate : {
-        // to: new Date(2021, 1, 1),
-        // from: new Date(2021, 3,10 ),
         ranges : [
           { // Disable dates in given ranges (exclusive).
               from: new Date(1970, 0, 1),
               to: new Date(this.dateFilter)
             }
         ]
-      }
+      },
+      MotifDecaissementStatus : null,
     }
   },
 
@@ -2407,6 +2407,7 @@ var vthis = new Vue({
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   this.get_destination_motif_decaissement();
                   this.isLoadSaveMainButtonModal = false;
+                  this.nom_motif_decaissement = "";
                   this.wantToUpdate = false;
                   this.indexTopUpdate = null;
                   return;
@@ -2419,7 +2420,31 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    desable_activated_status_motif_decaissement_externe(){ //from : 1 faveur ou 2 achat normal
+      const newurl = this.url+"motif-decaissement-desable-activated/"+this.idElementSelected;
 
+      this.messageError = false;
+      this.isLoadSaveMainButtonSecond = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_destination_motif_decaissement();
+                this.wantToUpdate = false;
+                this.indexTopUpdate = null;
+                this.nom_motif_decaissement = "";
+                this.isLoadSaveMainButtonSecond = false;
+                return;
+            }
+            var err = response.data.message.errors;
+            this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+            this.isLoadSaveMainButtonSecond = false;
+          }).catch(error =>{
+            console.log(error);
+          })
+  },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3318,6 +3343,7 @@ var vthis = new Vue({
         this.indexTopUpdate = index;
         this.nom_motif_decaissement = art.description;
         this.wantToUpdate = true;
+        this.MotifDecaissementStatus = art.is_active;
       }else{
         this.indexTopUpdate = null;
         // this._u_fx_form_init_field();
@@ -3325,7 +3351,7 @@ var vthis = new Vue({
         this.wantToUpdate = false;
       }
 
-      console.log(art);
+      // console.log(art);
       // this.wantToUpdate = false;
       // console.log(this.indexTopUpdate);
 
