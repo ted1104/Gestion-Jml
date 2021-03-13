@@ -2354,6 +2354,7 @@ var vthis = new Vue({
 
     get_destination_motif_decaissement(){
       const newurl = this.url+"motif-decaissement-get-all";
+      this.ListMotifDecaissement = [];
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{

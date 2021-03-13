@@ -66,8 +66,8 @@
 																		<input type="text" class="form-control" id="nom_motif_decaissement" aria-describedby="nom_motif_decaissement" v-model="nom_motif_decaissement">
 																	</div>
 
-																	<div class="">
-																		<button v-if="!isLoadSaveMainButtonModal && !this.wantToUpdate" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
+																	<div class="" v-if="!this.wantToUpdate">
+																		<button v-if="!isLoadSaveMainButtonModal" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
 																		<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 
@@ -78,7 +78,7 @@
 																		</div>
 																		<div class="col-6">
 																			<button v-if="!isLoadSaveMainButtonSecond" @click="desable_activated_status_motif_decaissement_externe" :class="this.MotifDecaissementStatus==1?'btn btn-danger pull-right':'btn btn-success pull-right'">{{this.MotifDecaissementStatus==1?'Désactiver':'Activer'}}</button>
-																			<img v-if="isLoadSaveMainButtonSecond" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																			<img v-if="isLoadSaveMainButtonSecond" src="<?=base_url() ?>/public/load/loader.gif" alt="" class="pull-right">
 																		</div>
 																	</div>
 
