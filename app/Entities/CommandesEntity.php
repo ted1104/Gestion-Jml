@@ -127,7 +127,7 @@ class CommandesEntity extends Entity{
 
     $depot = $this->attributes['depots_id'];
     $depotCentral = $this->attributes['depots_id_faveur'];
-    $detail = $this->commandeDetail->Where('vente_id',$this->attributes['id'])->findAll();
+    $detail = $this->commandeDetail->Where('vente_id',$this->attributes['id'])->Where('is_validate_livrer',0)->findAll();
     foreach ($detail as $key => $value) {
       //print_r($depotCentral);
       $qte_vendue = $value->qte_vendue;
