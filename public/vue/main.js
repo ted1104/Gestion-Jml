@@ -2390,6 +2390,35 @@ var vthis = new Vue({
             })
     },
 
+    update_motif_decaissement_externe(e){
+      e.preventDefault();
+      this.isLoadSaveMainButtonModal = true;
+      const newurl = this.url+"motif-decaissement-update/"+this.idElementSelected+"/update";
+      var form = {
+        "description":this.nom_motif_decaissement,
+      }
+      this.messageError = false;
+      return axios
+            .put(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_destination_motif_decaissement();
+                  this.isLoadSaveMainButtonModal = false;
+                  this.wantToUpdate = false;
+                  this.indexTopUpdate = null;
+                  return;
+                }
+                var err = response.data.message.errors;
+                this.isLoadSaveMainButtonModal = false;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3281,6 +3310,25 @@ var vthis = new Vue({
       // console.log(this.indexTopUpdate);
 
     },
+    _u_update_motif(art, index){
+      this.idElementSelected = art.id;
+      // this.wantToUpdate = false;
+      if(!this.wantToUpdate){
+        this.indexTopUpdate = index;
+        this.nom_motif_decaissement = art.description;
+        this.wantToUpdate = true;
+      }else{
+        this.indexTopUpdate = null;
+        // this._u_fx_form_init_field();
+        this.nom_motif_decaissement = "";
+        this.wantToUpdate = false;
+      }
+
+      console.log(art);
+      // this.wantToUpdate = false;
+      // console.log(this.indexTopUpdate);
+
+    },
     _u_check_if_password_op_is_correct(){
       const newurl = this.url+"users-check-correct-password/"+this.users_id+"/"+this.password_op;
       if(this.password_op ==""){
@@ -3394,6 +3442,8 @@ var vthis = new Vue({
       //champs encaissement EXTERNE
       this.motif = "";
       this.montant_encaissement = "";
+
+
 
 
     },

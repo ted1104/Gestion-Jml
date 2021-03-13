@@ -102,7 +102,7 @@
 																			<td>
 																				<!-- <button class='btn btn-round btn-success' @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button> -->
 																				<div v-if="indexTopUpdate!=index">
-																					<button type="button" class='btn btn-round btn-success' name="button" @click="_u_update_article(dt,index)" :disabled="indexTopUpdate"><i class='mdi mdi-eye-outline'></i></button>
+																					<button type="button" class='btn btn-round btn-secondary' name="button" @click="_u_update_article(dt,index)" :disabled="indexTopUpdate"><i class='mdi mdi-circle-edit-outline text-white'></i></button>
 
 																				</div>
 																				<div v-if="indexTopUpdate==index">

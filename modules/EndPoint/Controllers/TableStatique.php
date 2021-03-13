@@ -257,12 +257,12 @@ class TableStatique extends ResourceController {
       $status = 400;
       $message = [
         'success' =>null,
-        'errors'=>'Ce type destination existe déjà'
+        'errors'=>['Ce type destination du decaissement externe existe déjà']
       ];
     }else{
       $status = 200;
       $message = [
-        'success' => 'Mise à jour reussie',
+        'success' => 'Mise à jour du type destination decaissement externe reussie',
         'errors' => null
       ];
       $data = $updateData;

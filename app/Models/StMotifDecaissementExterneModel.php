@@ -13,8 +13,8 @@ class StMotifDecaissementExterneModel extends Model{
   ];
   protected $validationMessages = [
     'description'=>[
-      'required' => 'Le nom de la destination du decaissement est obligatoire',
-      'is_unique' => 'Le nom de la destination du decaissement externe du renseigné existe déjà'],
+      'required' => 'Le nom du type de la destination du decaissement externe est obligatoire',
+      'is_unique' => 'ce nom du type la destination du decaissement externe renseigné existe déjà'],
   ];
   protected $returnType ='object';
 }

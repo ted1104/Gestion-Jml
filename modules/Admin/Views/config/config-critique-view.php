@@ -35,7 +35,7 @@
 									 <!-- End XP Col -->
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
-												<div class="col-md-4 col-lg-4 col-xl-4 ">
+												<div class="col-md-4 col-lg-4 col-xl-4">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
                                 <h5 class="card-title text-black">Information relative aux critiques</h5>
@@ -66,7 +66,9 @@
 																		<input type="text" class="form-control" id="nom_motif_decaissement" aria-describedby="nom_motif_decaissement" v-model="nom_motif_decaissement">
 																	</div>
 
-																	<button v-if="!isLoadSaveMainButtonModal" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
+																	<button v-if="!isLoadSaveMainButtonModal && !this.wantToUpdate" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
+																	<!-- <img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt=""> -->
+																	<button v-if="!isLoadSaveMainButtonModal && this.wantToUpdate" @click="update_motif_decaissement_externe" class="btn btn-primary">Modifier</button>
 																	<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 														</div>
 												</div>
@@ -91,7 +93,15 @@
 																</td>
 																<!-- <td>{{dt.responsable_id}}</td> -->
 																<!-- <td>{{dt.is_central ==1 ?'Oui':'Non'}}</td>-->
-																<td><a href="#"  class='btn btn-round btn-light' ><i class='mdi mdi-circle-edit-outline text-danger'></i> </a></td>
+																<td>
+																	<div v-if="indexTopUpdate!=index">
+																		<button type="button" class='btn btn-round btn-secondary' name="button" @click="_u_update_motif(dt,index)" :disabled="indexTopUpdate"><i class='mdi mdi-circle-edit-outline text-white'></i></button>
+
+																	</div>
+																	<div v-if="indexTopUpdate==index">
+																		<button type="button" class='btn btn-round btn-info' name="button" @click="_u_update_motif(dt,index)"><i class='mdi mdi-close'></i></button>
+																	</div>
+																</td>
 
 															</tr>
 														</tbody>
