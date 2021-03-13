@@ -66,7 +66,10 @@
 																		<input type="text" class="form-control" id="nom_motif_decaissement" aria-describedby="nom_motif_decaissement" v-model="nom_motif_decaissement">
 																	</div>
 
-																	<button v-if="!isLoadSaveMainButtonModal && !this.wantToUpdate" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
+																	<div class="">
+																		<button v-if="!isLoadSaveMainButtonModal && !this.wantToUpdate" @click="add_motif_destination_decaissement" class="btn btn-primary">Enregistrer</button>
+																		<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div>
 
 																	<div class="row" v-if="this.wantToUpdate">
 																		<div class="col-6">
