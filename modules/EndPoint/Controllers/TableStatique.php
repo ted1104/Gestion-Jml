@@ -250,4 +250,27 @@ class TableStatique extends ResourceController {
        'data'=> $data
      ]);
   }
+  public function motif_decaissement_update($id){
+    $data = $this->request->getJSON();
+    $updateData = $this->stMotifDecaissementExterneModel->update($id,$data);
+    if(!$updateData){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>'Ce type destination existe déjà'
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => 'Mise à jour reussie',
+        'errors' => null
+      ];
+      $data = $updateData;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
 }

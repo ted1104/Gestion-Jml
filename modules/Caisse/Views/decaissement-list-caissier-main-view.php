@@ -67,7 +67,15 @@
 												<div class="col-md-8 col-lg-8 col-xl-8">
 												<div class="card m-b-30">
                           <div class="card-header bg-white">
-                              <h5 class="card-title text-black">{{isDecaissementExterne?'Décaissement Externe':'Décaissement Interne'}}</h5>
+                              <!-- <h5 class="card-title text-black"></h5>
+															DECAISSEMENT EXTERNE {{dateFilterDisplay}} {{checkBoxArticles.length > 0 ? 'AU '+dateFilterEnd : ''}} -->
+
+															<div class="row">
+																<h5 class="card-title text-black col-md-9">
+																	{{isDecaissementExterne?'DECAISSEMENT EXTERNE '+dateFilterDisplay:'DECAISSEMENT INTERNE'}}
+																</h5>
+																<h5 class="col-md-3 text-right text-secondary">{{montantTotatAllDecaissement}} USD</h5>
+															</div>
 															<div class="">
 																<div @click="get_decaisssement_caissier_principale(2)" class="btn badge-warning padding-4" :id="!isDecaissementExterne?'border-menu':''">
 																		Decaissement Interne
@@ -126,6 +134,7 @@
 															</div>
 															<div class="table-responsive" v-if="isDecaissementExterne">
 																<!-- DECAISSEMENT EXTERNE TABLE -->
+
 																<table class="table" >
                                   <thead>
                                     <tr class="bg-secondary">

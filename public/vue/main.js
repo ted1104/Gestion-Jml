@@ -1017,6 +1017,8 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.tabListData = response.data.data;
+              this.montantTotatAllDecaissement = response.data.montantTotalDecaissement;
+              // console.log(response.data.montantTotalDecaissement);
               if(this.tabListData.length < 1){
                 this.isNoReturnedData = true;
               }

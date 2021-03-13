@@ -16,6 +16,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('detect-etat-param-system','TableStatique::detectEtatDesParametresSysteme');
   $routes->get('motif-decaissement-get-all','TableStatique::motif_decaissement_get');
   $routes->post('motif-decaissement-create-one','TableStatique::motif_decaissement_create');
+  $routes->put('motif-decaissement-update/(:num)/update','TableStatique::motif_decaissement_update/$1');
 
 
 
