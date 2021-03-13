@@ -1007,8 +1007,9 @@ var vthis = new Vue({
             console.log(error);
           })
   },
-    get_decaisssement_externe(NoVariable=null){
-      const newurl = this.url+"get-decaissement-externe-par-caissier/"+this.users_id+"/"+this.dateFilter;
+    get_decaisssement_externe(NoVariable=null,limit=this.PerPaged,offset=0, indexPage=0){
+      let isInterval = this.checkBoxArticles.length > 0 ? 1 : 0;
+      const newurl = this.url+"get-decaissement-externe-par-caissier/"+this.users_id+"/"+this.destination+"/"+this.dateFilter+"/"+this.dateFilterEnd+"/"+isInterval+"/"+limit+"/"+offset;;
       this.tabListData =[];
       this.isNoReturnedData = false;
       this.isDecaissementExterne = true;
@@ -1020,6 +1021,11 @@ var vthis = new Vue({
                 this.isNoReturnedData = true;
               }
               this._u_fx_get_montant();
+
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+
             }).catch(error =>{
               console.log(error);
             })
@@ -3543,6 +3549,7 @@ var vthis = new Vue({
       this.get_decaisssement_caissier_secondaire();
     }
     if(pth[this.indexRoute]=='caissier-list-decaissement'){
+      this.destination = 0;
       this.get_decaisssement_caissier_principale();
       this.get_destination_motif_decaissement();
     }
