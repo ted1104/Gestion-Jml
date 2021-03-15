@@ -136,6 +136,7 @@
 																					<th scope="col">code</th>
 																					<th scope="col">Article</th>
 																					<th scope="col">Qte</th>
+																					<th scope="col">Etat</th>
 
 																				</tr>
 																			</thead>
@@ -144,6 +145,10 @@
 																					<td>{{det.articles_id[0].code_article}}</td>
 																					<td>{{det.articles_id[0].nom_article}}</td>
 																					<td>{{det.qte}}</td>
+																					<td>
+																						<i :class="det.is_validate==0 ? 'mdi mdi-close text-danger':'mdi mdi-checkbox-marked-circle-outline text-success'"></i>
+																						<!-- <i class=""></i> -->
+																					</td>
 
 																				</tr>
 																			</tbody>
