@@ -129,7 +129,7 @@ class ApprovisionnementInterDepot extends ResourceController {
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> count($data = $this->model->Where($conditionSource)->Where($conditionDest)->orderBy('id','DESC')->findAll())
+      'all'=> count($data = $this->model->Where($where)->orderBy('id','DESC')->findAll())
     ]);
   }
   public function validateApprovisionnementInterDepot($pwd,$idAppro,$iduser){
