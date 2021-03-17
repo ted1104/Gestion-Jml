@@ -273,6 +273,12 @@ var vthis = new Vue({
         ]
       },
       MotifDecaissementStatus : null,
+
+      //CLIENTS OPERATIONS
+      nom_client_ab : "",
+      prenom_client_ab : "",
+      tel_client_ab : "",
+      adresse_client_ab : "",
     }
   },
 
@@ -2456,6 +2462,54 @@ var vthis = new Vue({
           })
   },
 
+    add_client_abonne(e){
+    e.preventDefault();
+    const newurl = this.url+"client-create-one";
+    var form = this._u_fx_form_data_client();
+    this.messageError = false;
+    this.isLoadSaveMainButton = true;
+    return axios
+          .post(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.get_client_abonne();
+                this.isLoadSaveMainButton = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButton = false;
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+  },
+    get_client_abonne(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"client-get-all/"+limit+"/"+offset;
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+              this.isShow = false;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -3480,6 +3534,12 @@ var vthis = new Vue({
       this.motif = "";
       this.montant_encaissement = "";
 
+      //champs add clients
+      this.nom_client_ab = "";
+      this.prenom_client_ab = "";
+      this.tel_client_ab = "";
+      this.adresse_client_ab = "";
+
 
 
 
@@ -3520,6 +3580,15 @@ var vthis = new Vue({
       formData.append('config_faveur_id',vthis.users_id);
       return formData;
     },
+    _u_fx_form_data_client(){
+     var formData = new FormData();
+     formData.append('nom_client',this.nom_client_ab);
+     formData.append('prenom_client',this.prenom_client_ab);
+     formData.append('telephone_client',this.tel_client_ab);
+     formData.append('addresse',this.adresse_client_ab);
+     formData.append('montant',0);
+     return formData;
+   },
     _u_fx_field_multi_form_art(){
       this.codeArticle ="";
       this.qte = 0;
@@ -3724,6 +3793,9 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
       this.isLinkToLoadUserDepot = true;
+    }
+    if(pth[this.indexRoute] ==='admin-add-client' || pth[this.indexRoute] ==='admin-list-client'){
+      this.get_client_abonne();
     }
 
 
