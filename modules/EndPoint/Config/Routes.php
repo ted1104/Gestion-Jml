@@ -54,6 +54,7 @@ $routes->group('api/v1', function($routes){
   //2. USERS CLIENTS
   $routes->get('client-get-all/(:num)/(:num)','Users::client_get/$1/$2');
   $routes->post('client-create-one','Users::client_create');
+  $routes->get('client-crediter-account/(:num)/(:any)','Users::client_creaditer_account/$1/$2');
 
 
 

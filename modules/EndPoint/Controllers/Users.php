@@ -637,4 +637,36 @@ class Users extends ResourceController {
        'data'=> null
      ]);
   }
+  public function client_creaditer_account($idclient, $montant){
+    $infoClient = $this->clientModel->find($idclient);
+    if(is_numeric($montant)){
+      $newAmount = $infoClient->montant + $montant;
+      if(!$this->clientModel->update($idclient,['montant'=>$newAmount])){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->clientModel->errors()
+        ];
+      }else{
+        $status = 200;
+        $message = [
+          'success' => 'Le compte du client a été credité avec succès',
+          'errors' => null
+        ];
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['Veuillez renseigner un montant valide']
+      ];
+    }
+
+    $this->model->commitTrans();
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> null
+     ]);
+  }
 }
