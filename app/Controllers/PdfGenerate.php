@@ -166,13 +166,7 @@ class PdfGenerate extends BaseController {
 
       $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll();
 
-      // print_r($AchatLivrePartiellement);
-      // die();
 
-
-
-      // print_r(count($AchatsHistoLivre));
-      // die();
 
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
       $this->pdf->AliasNbPages();
@@ -216,8 +210,6 @@ class PdfGenerate extends BaseController {
         //GET QUANTITE INITIAL RESTANT EN STOCK HIER
 
         $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateRapport)->find();
-
-
 
 
         array_push($enteTableArticle,273/count($allArticle));
@@ -312,10 +304,6 @@ class PdfGenerate extends BaseController {
       }
 
 
-
-
-
-
       $this->pdf->SetFont('Helvetica','B',6);
       $this->pdf->Cell(14,5,'Stock Init R',1,0,'L');
       $this->pdf->Row($DonneStockInitial);
@@ -354,16 +342,18 @@ class PdfGenerate extends BaseController {
         foreach ($AchatsHisto as $key => $value) {
           $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
 
+          $detAchatPaye = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('created_at',$dateRapport,'after')->findAll();
+
           //CHECK IF IS PAYED BUT NOT DELIVRED
           $checkIfIsNonLivred = $this->commandesStatusHistoriqueModel->Where('vente_id',$value->vente_id)->Where('status_vente_id',3)->find();
+
           if(count($checkIfIsNonLivred) < 1){
             $qteTotalNonPaye = $qteTotalNonPaye + $detAchat[0]->qte_vendue;
           }
           //FIN CHECK IF IS PAYED BUT NOT DELIVRED
 
-
-          if($detAchat){
-            $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+          if($detAchatPaye){
+            $qteTotal = $qteTotal + $detAchatPaye[0]->qte_vendue;
           }else{
             $qteTotal = $qteTotal + 0;
           }
@@ -415,7 +405,6 @@ class PdfGenerate extends BaseController {
           array_push($qteStockResteReelle,$stockInit ? $stockInit[0]->qte_stock : 0);
           array_push($qteStockResteVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         }
-
       }
       //RECHERCHE QUNATITE TOTAL PAR ARTICLE ET LIVRER
         $this->pdf->SetFont('Helvetica','B',6);
