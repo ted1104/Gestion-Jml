@@ -7,6 +7,8 @@ use App\Entities\UsersAuthEntity;
 use App\Models\UsersAuthModel;
 use App\Models\DroitAccessModel;
 use App\Models\StockPersonnelModel;
+use App\Models\ClientModel;
+use App\Entities\ClientEntity;
 
 
 
@@ -16,12 +18,14 @@ class Users extends ResourceController {
   protected $userAuthModel = null;
   protected $droitAccessModel = null;
   protected $stockPersonnelModel = null;
+  protected $clientModel = null;
 
   public function __construct(){
     helper(['global']);
     $this->userAuthModel = new UsersAuthModel();
     $this->droitAccessModel = new DroitAccessModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
+    $this->clientModel = new ClientModel();
 
   }
 
@@ -595,4 +599,17 @@ class Users extends ResourceController {
       // 'montantAllCaissier' => $this->model->getSommeAllCaissier()
     ]);
   }
+
+
+  //CLIENT FUNCTIONS
+  public function client_get($limit,$offset){
+    $data = $this->clientModel->findAll($limit,$offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'all' => count($this->clientModel->findAll())
+    ]);
+  }
+
 }
