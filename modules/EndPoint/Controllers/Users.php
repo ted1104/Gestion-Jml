@@ -611,5 +611,30 @@ class Users extends ResourceController {
       'all' => count($this->clientModel->findAll())
     ]);
   }
+  public function client_create(){
+    $this->model->beginTrans();
+    $data = new ClientEntity($this->request->getPost());
+    $insertData = $this->clientModel->insert($data);
+    if(!$insertData){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->clientModel->errors()
+      ];
+      // $data = null;
+    }else{
 
+        $status = 200;
+        $message = [
+          'success' => 'Enregistrement reussi du client',
+          'errors' => null
+        ];
+    }
+    $this->model->commitTrans();
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> null
+     ]);
+  }
 }
