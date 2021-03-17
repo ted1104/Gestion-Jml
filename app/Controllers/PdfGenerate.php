@@ -658,16 +658,10 @@ class PdfGenerate extends BaseController {
 
       $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
-      // print_r(count($AchatsHistoLivre));
-      // die();
 
-
-      // echo '<pre>';
-      // print_r(count($AchatsHisto));
-      // die();
       $qteTotalVendu = 0;
       foreach ($AchatsHisto as $key) {
-        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->like('updated_at',$dateRapport,'after')->findAll();
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->like('created_at',$dateRapport,'after')->findAll();
         if($detAchat){
           $qteTotalVendu += $detAchat[0]->qte_vendue;
         }
