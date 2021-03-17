@@ -584,4 +584,15 @@ class Users extends ResourceController {
       'data' => $data,
     ]);
   }
+  public function users_get_by_profile_main_Caissier_and_admin(){
+
+    $dataAdmin = $this->model->Where('roles_id',1)->findAll();
+    $dataCaissierMain = $this->model->Where('roles_id',3)->Where('is_main',1)->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => array_merge($dataAdmin, $dataCaissierMain),
+      // 'montantAllCaissier' => $this->model->getSommeAllCaissier()
+    ]);
+  }
 }

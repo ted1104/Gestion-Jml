@@ -33,6 +33,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-get-all/(:num)/(:num)','Users::users_get/$1/$2');
   $routes->post('users-create-one','Users::users_create');
   $routes->get('users-get-all/(:num)/profile','Users::users_get_by_profile/$1');
+  $routes->get('users-get-all-caissier-main-and-admin','Users::users_get_by_profile_main_Caissier_and_admin');
   $routes->get('users-get-all-is-main-by-profile/(:num)/(:num)/is-main','Users::users_get_by_profile_is_main/$1/$2');
   $routes->get('users-update-status-account/(:num)','Users::user_account_enable_disable/$1');
   $routes->get('users-reset-password/(:num)','Users::user_account_reset_password/$1');

@@ -284,16 +284,6 @@ var vthis = new Vue({
     this._u_fx_get_montant();
 
 
-    // this.disabledDate.ranges[0].to = new Date(this.dateFilter);
-    //
-    // console.log(this.disabledDate);
-
-
-
-    // alert(this.dpot_id);
-
-    // console.log(this.detailTab.logic_article);
-    // this._u_next_page(this._u_previous_page);
   },
   methods : {
     add_article(e){
@@ -458,6 +448,22 @@ var vthis = new Vue({
             .then(response =>{
               this.caissierList = response.data.data;
               this.montantTotalAllCommandeParTypeVente = response.data.montantAllCaissier;
+
+              if(this.caissierList.length < 1){
+                this.isNoReturnedData = true;
+              }
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_caissiers_main_and_admin(){
+      const newurl = this.url+"users-get-all-caissier-main-and-admin";
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.caissierList = response.data.data;
+              // this.montantTotalAllCommandeParTypeVente = response.data.montantAllCaissier;
 
               if(this.caissierList.length < 1){
                 this.isNoReturnedData = true;
@@ -3588,16 +3594,21 @@ var vthis = new Vue({
     if(pth[this.indexRoute] ==='admin-add-article' || pth[this.indexRoute] ==='admin-list-article' || pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
       this.get_article();
     }
-    if(pth[this.indexRoute] ==='admin-add-appro' || pth[this.indexRoute] ==='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' ||  pth[this.indexRoute]=='admin-add-users' || pth[this.indexRoute] === 'magaz-add-appro-to-depot' || pth[this.indexRoute] == 'magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
+    if(pth[this.indexRoute] ==='admin-add-appro' || pth[this.indexRoute] ==='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' ||  pth[this.indexRoute]=='admin-add-users' || pth[this.indexRoute] === 'magaz-add-appro-to-depot' || pth[this.indexRoute] == 'magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv' || pth[this.indexRoute] =='admin-add-vente'){
       this.get_depots();
     }
-    if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat'){
-      this.get_caissiers();
+    if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' || pth[this.indexRoute]==='admin-add-vente'){
+
       this.get_stock_depots();
 
-      if(pth[this.indexRoute]=='facturier-add-achat'){
+      if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]=='caissier-add-achat'){
         this._u_get_last_achat_facturier();
+        this.get_caissiers();
       }
+      if(pth[this.indexRoute]=='admin-add-vente'){
+        this.get_caissiers_main_and_admin();
+      }
+
     }
     if(pth[this.indexRoute]=='facturier-list-achat'){
       this.get_commande_facturier();
