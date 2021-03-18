@@ -99,21 +99,51 @@ class CommandesEntity extends Entity{
     return round($sommes,2);
   }
   public function getLogicStatusHisto(){
+    // $arr_main = [];
+    // for ($i=1; $i < 5; $i++) {
+    //   $user = null;
+    //   $date = null;
+    //   if($att = $this->commandesStatusHistoriqueModel->Where('vente_id',$this->attributes['id'])->Where('status_vente_id',$i)->first()){
+    //     $date = $att->created_at;
+    //     if($userAtt = $this->userModel->Where('id',$att->users_id)->first()){
+    //       $user = $userAtt->nom.' '.$userAtt->prenom;
+    //     }
+    //   }
+    //   $array = $i==1?'attente':($i==2?'payer_par':($i==3?'livre_par':'annuler_par'));
+    //   $a =
+    //     [
+    //       $array =>[
+    //         "user"=> $user,
+    //         "date"=> $date,
+    //       ]
+    //   ];
+    //   array_push($arr_main,$a);
+    // }
     $arr_main = [];
-    for ($i=1; $i < 5; $i++) {
-      $user = null;
-      $date = null;
-      if($att = $this->commandesStatusHistoriqueModel->Where('vente_id',$this->attributes['id'])->Where('status_vente_id',$i)->first()){
-        $date = $att->created_at;
-        if($userAtt = $this->userModel->Where('id',$att->users_id)->first()){
-          $user = $userAtt->nom.' '.$userAtt->prenom;
-        }
+    $user = null;
+    $date = null;
+    $name = null;
+    $allStatus = $this->commandesStatusHistoriqueModel->Where('vente_id',$this->attributes['id'])->findAll();
+    foreach ($allStatus as $key => $value) {
+      $array = $value->status_vente_id==1?'attente':($value->status_vente_id==2?'payer_par':($value->status_vente_id==3?'livre_par':'annuler_par'));
+
+      $name = $value->status_vente_id==1?'ATTENTE':($value->status_vente_id==2?'PAYER A':($value->status_vente_id==3?'LIVRER PAR':'ANNULER PAR'));
+      $classe = $value->status_vente_id==1?'badge badge-warning':($value->status_vente_id==2?'badge badge-info':($value->status_vente_id==3?'badge badge-success':'badge badge-danger'));
+
+      $date = $value->created_at;
+      if($userAtt = $this->userModel->Where('id',$value->users_id)->first()){
+        $user = $userAtt->nom.' '.$userAtt->prenom;
       }
-      $array = $i==1?'attente':($i==2?'payer_par':($i==3?'livre_par':'annuler_par'));
-      $a =[$array =>[
-        "user"=> $user,
-        "date"=> $date,
-      ]];
+      $a =
+          [
+            $array =>[
+              "state" => $value->status_vente_id,
+              "class" =>$classe,
+              "user"=> $user,
+              "date"=> $date,
+              "name" => $name
+            ]
+        ];
       array_push($arr_main,$a);
     }
     return $arr_main;

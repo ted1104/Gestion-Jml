@@ -253,33 +253,13 @@
 																</div>
 															</div>
 															<div class="row">
-																<div class="container" v-if="detailTab.status_vente_id.id >= 1">
-																	<span>Status : <span class="badge badge-warning">ATTENTE</span></span><br>
-																	<span>Créer par : {{detailTab.logic_status_histo[0].attente.user}}</span><br>
-																	<span>Date : {{detailTab.logic_status_histo[0].attente.date}}</span><br>
+																<div class="container" v-for="(ds,i) in detailTab.logic_status_histo">
+																	<span>Status : <span :class="ds[Object.keys(ds)[0]].class">{{ds[Object.keys(ds)[0]].name}}</span></span><br>
+																	<!-- {{Object.keys(ds)}} -->
+																	<span>Fait par : {{ds[Object.keys(ds)[0]].user}}</span><br>
+																	<span>Date : {{ds[Object.keys(ds)[0]].date}}</span><br>
 																	<hr>
 																</div>
-
-																<div class="container margin-top-8" v-if="detailTab.status_vente_id.id >= 2">
-																	<span>Status : <span class="badge badge-info">PAYER</span></span><br>
-																	<span>Payé à : {{detailTab.logic_status_histo[1].payer_par.user}}</span><br>
-																	<span>Date : {{detailTab.logic_status_histo[1].payer_par.date}}</span><br>
-																	<hr>
-																</div>
-
-																<div class="container margin-top-8" v-if="detailTab.status_vente_id.id >= 3">
-																	<span>Status : <span class="badge badge-success">LIVER</span></span><br>
-																	<span>Livré par : {{detailTab.logic_status_histo[2].livre_par.user}}</span><br>
-																	<span>Date : {{detailTab.logic_status_histo[2].livre_par.date}}</span><br>
-																	<hr>
-																</div>
-
-																<div class="container margin-top-8" v-if="detailTab.status_vente_id.id >= 4">
-																	<span>Status : <span class="badge badge-danger">ANNULER</span></span><br>
-																	<span>Annulé par : {{detailTab.logic_status_histo[3].annuler_par.user}}</span><br>
-																	<span>Date : {{detailTab.logic_status_histo[3].annuler_par.date}}</span><br>
-																</div>
-
 															</div>
 														</div>
 													</div>

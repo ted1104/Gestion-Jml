@@ -192,10 +192,17 @@
 
 												<div v-if="isShow" :class="isShow ? 'col-md-3 col-lg-3 col-xl-3':''">
 													<div class="card m-b-30 u-transition">
-														<div class="container">
+														<div class="container"  v-if="!isShowBlocHistoFactureStatus">
 															<div class="row">
-																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
-																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
+																	<div class="col-md-1">
+																		<i class="mdi mdi-eye  text-right text-success cursor" @click="isShowBlocHistoFactureStatus=!isShowBlocHistoFactureStatus"></i>
+																	</div>
+																	<div class="col-md-9">
+																		<h5 class="card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
+																	</div>
+																	<div class="col-md-1">
+																		<i class="mdi mdi-close-circle  text-right text-danger cursor" @click="isShow=!isShow"></i>
+																	</div>
 															</div>
 															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
 																<div class="row">
@@ -264,6 +271,28 @@
 																<hr>
 															</div>
 
+														</div>
+														<div class="container" v-if="isShowBlocHistoFactureStatus">
+															<div class="row">
+																<div class="col-md-1">
+																	<i class="mdi mdi-eye  text-right text-success cursor" @click="isShowBlocHistoFactureStatus=!isShowBlocHistoFactureStatus"></i>
+																</div>
+																<div class="col-md-9">
+																	<h5 class="card-title">HISTORIQUE STATUS FACTURE {{detailTab.numero_commande}}</h5>
+																</div>
+																<div class="col-md-1">
+																	<i class="mdi mdi-close-circle  text-right text-danger cursor" @click="isShow=!isShow"></i>
+																</div>
+															</div>
+															<div class="row">
+																<div class="container" v-for="(ds,i) in detailTab.logic_status_histo">
+																	<span>Status : <span :class="ds[Object.keys(ds)[0]].class">{{ds[Object.keys(ds)[0]].name}}</span></span><br>
+																	<!-- {{Object.keys(ds)}} -->
+																	<span>Fait par : {{ds[Object.keys(ds)[0]].user}}</span><br>
+																	<span>Date : {{ds[Object.keys(ds)[0]].date}}</span><br>
+																	<hr>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
