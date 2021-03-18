@@ -113,7 +113,7 @@
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
 																		<td v-if="stateStatus==1">
-																			{{dt.logic_status_histo[0].attente.user}}</td>
+																			{{dt.logic_status_histo.tab[0].attente.user}}</td>
 																		<td v-if="stateStatus==2">
 																			{{dt.payer_a[0].nom+' '+dt.payer_a[0].prenom}}
 																		</td>
