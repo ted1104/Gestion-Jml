@@ -1048,22 +1048,19 @@ class Commandes extends ResourceController {
   }
   //FONCTION COMPLEMENTAIRE DE POUR GET LE NOMBRES DES COMMANDES SELON LE USER OU TYPE DU USE OU TYPE DE COMMANDES EN LA RECHERCHE
   public function SearchcommandeByTypeByuser($iduser,$nomchamps,$conditionDate,$conditionLike){
-    // $conditionAttente =[];
-    // $conditionPayer =[];
-    // $conditionLivrer =[];
-    // $conditionAnnuler =[];
-    // if(count($conditionStatus) > 0){
+
       $conditionAttente = ['status_vente_id'=>1];
       $conditionPayer = ['status_vente_id'=>2];
       $conditionLivrer = ['status_vente_id'=>3];
       $conditionAnnuler = ['status_vente_id'=>4];
-    //}
-    return $array =[
-      'attente'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAttente)->like($conditionLike)->findAll()),
-      'payer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionPayer)->like($conditionLike)->findAll()),
-      'livrer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionLivrer)->like($conditionLike)->findAll()),
-      'annuler'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAnnuler)->like($conditionLike)->findAll()),
-    ];
+
+
+      return $array = [
+        'attente'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAttente)->like($conditionLike)->findAll()),
+        'payer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionPayer)->like($conditionLike)->findAll()),
+        'livrer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionLivrer)->like($conditionLike)->findAll()),
+        'annuler'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAnnuler)->like($conditionLike)->findAll()),
+      ];
 
   }
   //LISTE DE COMMANDE PAR UTILISATEUR CAISSIER : DONC LES COMMANDES CREES PAR UN FACTURIER
