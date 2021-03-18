@@ -640,6 +640,7 @@ class Users extends ResourceController {
   public function client_creaditer_account($idclient, $montant){
     $infoClient = $this->clientModel->find($idclient);
     if(is_numeric($montant)){
+      if($montant > 0){
       $newAmount = $infoClient->montant + $montant;
       if(!$this->clientModel->update($idclient,['montant'=>$newAmount])){
         $status = 400;
@@ -654,6 +655,13 @@ class Users extends ResourceController {
           'errors' => null
         ];
       }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['Le montant doit être superieur à 0']
+      ];
+    }
     }else{
       $status = 400;
       $message = [

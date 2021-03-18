@@ -28,6 +28,17 @@
                       <li><a href="<?=base_url('admin-list-achat-partiel') ?>">Achats Partiels</a></li>
                   </ul>
               </li>
+
+              <li>
+                  <a href="javaScript:void();">
+                      <i class="mdi mdi-chart-areaspline"></i><span>G-Operation-Ventes</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-add-vente') ?>">Créer</a></li>
+                      <li><a href="<?=base_url('admin-list-ventes') ?>">Mes Ventes</a></li>
+                      <li><a href="<?=base_url('admin-list-dettes') ?>">Mes Déttes</a></li>
+                  </ul>
+              </li>
               <li>
                   <a href="javaScript:void();">
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
@@ -73,6 +84,15 @@
               </li>
               <li>
                   <a href="javaScript:void();">
+                      <i class="mdi mdi-table"></i><span>G-Clients</span><i class="mdi mdi-chevron-right pull-right"></i>
+                  </a>
+                  <ul class="xp-vertical-submenu">
+                      <li><a href="<?=base_url('admin-add-client') ?>">Créer</a></li>
+                      <li><a href="<?=base_url('admin-list-client') ?>">Liste</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="javaScript:void();">
                       <i class="mdi mdi-table"></i><span>G-Config</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
@@ -88,10 +108,9 @@
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-users') ?>">Créer</a></li>
                       <li><a href="<?=base_url('admin-list-users') ?>">Liste</a></li>
-                      <!-- <li><a href="table-editable.html">Editable Table</a></li>
-                      <li><a href="table-rwdtable.html">RWD Table</a></li> -->
                   </ul>
               </li>
+
               <li>
                   <a href="<?=base_url('admin-rapport') ?>">
                       <i class="mdi mdi-email"></i><span>Rapport</span>

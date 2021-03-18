@@ -279,6 +279,10 @@ var vthis = new Vue({
       prenom_client_ab : "",
       tel_client_ab : "",
       adresse_client_ab : "",
+
+      //POUR CREDITER CLIENS
+      montant_actuel_client : 0,
+      montant_a_crediter_client : 0,
     }
   },
 
@@ -2510,6 +2514,33 @@ var vthis = new Vue({
             })
     },
 
+    add_crediter_amount_client(e){
+      e.preventDefault();
+      const newurl = this.url+"client-crediter-account/"+this.idElementSelected+"/"+this.montant_a_crediter_client;
+      this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  this.get_client_abonne();
+                  this.isLoadSaveMainButtonModal = false;
+                  this._u_close_mod_form();
+                  this.isShow = false;
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -2941,7 +2972,7 @@ var vthis = new Vue({
       }
 
 
-      console.log(art.logic_detail_data);
+      // console.log(art.logic_detail_data);
     },
     _u_open_mod_form_config_faveur(art, from=null){
 
@@ -2968,6 +2999,13 @@ var vthis = new Vue({
 
       this.styleModalFaveur = 'block';
       console.log(this.ListPricesArticle);
+    },
+    _u_open_mod_credite_account_client(client, from=null){
+      this.modalTitle = "CREDITER LE COMPTE DU CLIENT "+client.nom_client+" "+client.prenom_client;
+      this.montant_actuel_client = client.montant;
+      this.idElementSelected = client.id;
+      this.montant_a_crediter_client = 0;
+      this.styleModal = 'block';
     },
     _u_open_mod_add_kg_pv(art, from=null){
 

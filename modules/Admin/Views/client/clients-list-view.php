@@ -52,8 +52,8 @@
 																		<th scope="col">Adresse</th>
 																		<th scope="col">Montant en USD</th>
 																		<th scope="col">Dette en USD</th>
-																		<!-- <th scope="col">Config Prix</th>
-																		<th scope="col">Config Faveur</th>
+																		<th scope="col">Créditer</th>
+																		<!-- <th scope="col">Config Faveur</th>
 																		<th scope="col">Rapport</th> -->
 																		<th scope="col">Détail</th>
 
@@ -67,9 +67,9 @@
 																		<td>{{dt.addresse}}</td>
 																		<td>{{dt.montant}}</td>
 																		<td>{{dt.montant}}</td>
-																		<!-- <td>
-																			<button :class="dt.logic_detail_data.length > 0?'btn btn-round btn-success':'btn btn-round btn-light'" @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
-																		</td> -->
+																		<td>
+																			<button class="btn btn-round btn-success" @click="_u_open_mod_credite_account_client(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																		</td>
 																		<!-- <td>
 																			<button v-if="dt.logic_config_article_faveur.length < 1" class='btn btn-round btn-success' @click="_u_open_mod_form_config_faveur(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																			<button class="btn btn-round btn-light" v-if="dt.logic_config_article_faveur.length > 0" @click="_u_open_mod_form_config_faveur(dt,2)">
@@ -222,45 +222,24 @@
 						</div>
 						<div class="modal-body" v-if="!isWantBeDeleted">
 							<div class="form-group" v-if="isAction">
-								<label for="qte_decideur_min">Quantité Min Inclue*</label>
-								<input type="text" class="form-control" id="qte_decideur_min" aria-describedby="qte_decideur_min" v-model="qte_decideur_min" disabled>
+								<label for="montant_actuel_client">Montant Actuel*</label>
+								<input type="text" class="form-control" id="montant_actuel_client" aria-describedby="montant_actuel_client" v-model="montant_actuel_client" disabled>
 							</div>
 							<div class="form-group" v-if="isAction">
-								<label for="qte_decideur_max">Quantité Max Exclue*</label>
-								<input type="text" class="form-control" id="qte_decideur_max" aria-describedby="qte_decideur_max" v-model="qte_decideur_max">
-							</div>
-							<div class="form-group">
-
-								<label for="prix_unitaire">Prix Unitaire *</label>
-								<input type="text" class="form-control" id="prix_unitaire" aria-describedby="prix_unitaire" v-model="prix_unitaire">
-							</div>
-
-							<div v-if="!isAction">
-								<button v-if="!isLoadSaveMainButtonModal" @click="update_article_prix" class="btn btn-primary">Modifier</button>
+								<label for="montant_a_crediter_client">Montant à crediter*</label>
+								<input type="text" class="form-control" id="montant_a_crediter_client" aria-describedby="montant_a_crediter_client" v-model="montant_a_crediter_client">
 							</div>
 							<div v-if="isAction">
-								<button v-if="!isLoadSaveMainButtonModal" @click="add_article_prix" class="btn btn-primary">Enregistrer</button>
+								<button v-if="!isLoadSaveMainButtonModal" @click="add_crediter_amount_client" class="btn btn-primary">Enregistrer</button>
 							</div>
 							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 						</div>
-
-						<div class="modal-body text-center" v-if="isWantBeDeleted">
-							<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
-							<span class="text-danger">
-								Vous êtes sur le point de supprimer definitivement cette configuration du prix, cette action est irreversible. Si vous l'executer sans connaissance de cause ça peut causer un dysfonctionnement du système surtout coté prix de l'article!
-							</span>
-							<div class="">
-								<button v-if="!isLoadDelete" @click="delete_article_price" class="btn btn-danger">Supprimer</button>
-								<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-							</div>
-						</div>
-
 				</div>
 		</div>
 </div>
 
 <!-- MODAL CONFIGURATION FAVEUR A APPLIQUER -->
-<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalFaveur}">
+<!-- <div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalFaveur}">
 <div class="modal-dialog" role="document">
 		<div class="modal-content">
 				<div class="modal-header">
@@ -291,7 +270,7 @@
 				</div>
 		</div>
 </div>
-</div>
+</div> -->
 </div>
 
 
