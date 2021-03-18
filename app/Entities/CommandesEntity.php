@@ -99,26 +99,31 @@ class CommandesEntity extends Entity{
     return round($sommes,2);
   }
   public function getLogicStatusHisto(){
-    // $arr_main = [];
-    // for ($i=1; $i < 5; $i++) {
-    //   $user = null;
-    //   $date = null;
-    //   if($att = $this->commandesStatusHistoriqueModel->Where('vente_id',$this->attributes['id'])->Where('status_vente_id',$i)->first()){
-    //     $date = $att->created_at;
-    //     if($userAtt = $this->userModel->Where('id',$att->users_id)->first()){
-    //       $user = $userAtt->nom.' '.$userAtt->prenom;
-    //     }
-    //   }
-    //   $array = $i==1?'attente':($i==2?'payer_par':($i==3?'livre_par':'annuler_par'));
-    //   $a =
-    //     [
-    //       $array =>[
-    //         "user"=> $user,
-    //         "date"=> $date,
-    //       ]
-    //   ];
-    //   array_push($arr_main,$a);
-    // }
+    $arr_main1 = [];
+    $user = null;
+    $date = null;
+    for ($i=1; $i < 5; $i++) {
+      $user = null;
+      $date = null;
+      if($att = $this->commandesStatusHistoriqueModel->Where('vente_id',$this->attributes['id'])->Where('status_vente_id',$i)->first()){
+        $date = $att->created_at;
+        if($userAtt = $this->userModel->Where('id',$att->users_id)->first()){
+          $user = $userAtt->nom.' '.$userAtt->prenom;
+        }
+      }
+      $array = $i==1?'attente':($i==2?'payer_par':($i==3?'livre_par':'annuler_par'));
+      $a =
+        [
+          $array =>[
+            "user"=> $user,
+            "date"=> $date,
+          ]
+      ];
+      array_push($arr_main1,$a);
+    }
+    // $arr_main1 = $arr_main;
+
+
     $arr_main = [];
     $user = null;
     $date = null;
@@ -146,7 +151,10 @@ class CommandesEntity extends Entity{
         ];
       array_push($arr_main,$a);
     }
-    return $arr_main;
+    return [
+      'tab' => $arr_main1,
+      'status' =>$arr_main
+    ];
 
   }
 

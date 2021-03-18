@@ -118,10 +118,10 @@
 																			{{dt.payer_a[0].nom+' '+dt.payer_a[0].prenom}}
 																		</td>
 																		<td v-if="stateStatus==3">
-																			{{dt.logic_status_histo[0].livre_par.user}}
+																			{{dt.logic_status_histo.tab[2].livre_par.user}}
 																		</td>
 																		<td v-if="stateStatus==4">
-																			{{dt.logic_status_histo[0].annuler_par.user}}
+																			{{dt.logic_status_histo.tab[3].annuler_par.user}}
 																		</td>
 																		<!--  -->
 																		<td>{{dt.logic_somme}} USD</td>
@@ -285,9 +285,10 @@
 																</div>
 															</div>
 															<div class="row">
-																<div class="container" v-for="(ds,i) in detailTab.logic_status_histo">
+																<div class="container" v-for="(ds,i) in detailTab.logic_status_histo.status">
+																	<!-- {{ds}} -->
 																	<span>Status : <span :class="ds[Object.keys(ds)[0]].class">{{ds[Object.keys(ds)[0]].name}}</span></span><br>
-																	<!-- {{Object.keys(ds)}} -->
+
 																	<span>Fait par : {{ds[Object.keys(ds)[0]].user}}</span><br>
 																	<span>Date : {{ds[Object.keys(ds)[0]].date}}</span><br>
 																	<hr>
