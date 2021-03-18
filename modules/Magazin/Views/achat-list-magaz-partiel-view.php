@@ -113,15 +113,15 @@
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
 																		<td v-if="stateStatus==1">
-																			{{dt.logic_status_histo[0].attente.user}}</td>
+																			{{dt.logic_status_histo.tab[0].attente.user}}</td>
 																		<td v-if="stateStatus==2">
 																			{{dt.payer_a[0].nom+' '+dt.payer_a[0].prenom}}
 																		</td>
 																		<td v-if="stateStatus==3">
-																			{{dt.logic_status_histo[2].livre_par.user}}
+																			{{dt.logic_status_histo.tab[2].livre_par.user}}
 																		</td>
 																		<td v-if="stateStatus==4">
-																			{{dt.logic_status_histo[3].annuler_par.user}}
+																			{{dt.logic_status_histo.tab[3].annuler_par.user}}
 																		</td>
 																		<!--  -->
 																		<td>{{dt.logic_somme}} USD</td>
