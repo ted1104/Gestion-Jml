@@ -127,7 +127,7 @@
 																		<th scope="col">
 																			<button v-if="dt.status_vente_id.id==1 && !dt.logic_is.virtuel" class='btn btn-round btn-success' @click="_u_open_mod_popup_caisse(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 																			<i v-if="dt.status_vente_id.id==2" class='mdi mdi-checkbox-marked-circle-outline'></i>
-																			<span>{{dt.logic_status_histo[2].livre_par.user}}</span>
+																			<span>{{dt.logic_status_histo.tab[2].livre_par.user}}</span>
 
 																			<button v-if="dt.status_vente_id.id==1 && dt.logic_is.virtuel" class='btn btn-round btn-warning' @click="_u_open_mod_popup_caisse(dt,3)"><i class='mdi mdi-alert-circle'></i></button>
 																		</th>
