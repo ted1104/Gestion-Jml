@@ -124,7 +124,7 @@
 																		<td>{{dt.date_vente}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td v-if="stateStatus==3">
-																			{{dt.logic_status_histo[2].livre_par.user}}
+																			{{dt.logic_status_histo.tab[2].livre_par.user}}
 																		</td>
 																		<td v-if="stateStatus==1 || stateStatus==2">{{dt.payer_a[0].nom+' '+dt.payer_a[0].prenom}}</td>
 																		<td>{{dt.logic_somme}} USD</td>
