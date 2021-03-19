@@ -456,6 +456,7 @@ class PdfGenerate extends BaseController {
     }
 
   public function rapport_finacier_journalier($dateRapport){
+
     $dataAllCaissiers = $this->usersModel->Where('roles_id',3)->findAll();
 
     $this->pdf = new TableFpdf('P','mm','A4');
@@ -526,6 +527,9 @@ class PdfGenerate extends BaseController {
       $dataCaisseMontant = self::$caisseModel->Where('users_id',$value->id)->find();
       $dataCaisseMontantResteHier = self::$clotureCaisseModel->Where('users_id',$value->id)->Where('date_cloture', $dateReste)->find();
 
+      //IF DATE TODAY A DIFFERENT TO DATE RAPPORT SHOW CLOTURE MONTANT TO MONTANT TOTAL ACTUEL CAISSE
+      $dataCaisseMontantResteHierActuel = self::$clotureCaisseModel->Where('users_id',$value->id)->Where('date_cloture', $d)->find();
+
 
       $chiffreAchat = round($sommesAchatTotal,2);
       $chiffreEncaissementInterne = $sommesEncaissementInterne[0]->montant?round($sommesEncaissementInterne[0]->montant,2):0;
@@ -551,7 +555,18 @@ class PdfGenerate extends BaseController {
         $situationMontantEncaissementExterne += $chiffreEncaissementExterne;
         $situationMontantTotalEntre += $chiffreAchat + $chiffreEncaissementInterne + $chiffreEncaissementExterne;
         $situationMontantDecaissementExterne += $chiffreDecaissementExterne;
-        $situationMontantCaisseActuel += $dataCaisseMontant[0]->montant?$dataCaisseMontant[0]->montant:0;
+
+        $dateToday = Time::today();
+        $mois = strlen($dateToday->getMonth())==1?'0'.$dateToday->getMonth():$dateToday->getMonth();
+        $dayss = strlen($dateToday->getDay())==1?'0'. $dateToday->getDay():$dateToday->getDay();
+        $dateToday = $dateToday->getYear().'-'.$mois.'-'.$dayss;
+
+        if($dateToday===$d){
+          $situationMontantCaisseActuel += $dataCaisseMontant[0]->montant?$dataCaisseMontant[0]->montant:0;
+        }else{
+          $situationMontantCaisseActuel += $dataCaisseMontantResteHierActuel?$dataCaisseMontantResteHierActuel[0]->montant:0;
+        }
+
       }
 
     }
@@ -578,7 +593,7 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(100,7,utf8_decode('Décaissement Externe : '),1,0,'L');
     $this->pdf->Cell(100,7,round($situationMontantDecaissementExterne, 2).' USD',1,1,'L');
 
-    $this->pdf->Cell(100,7,utf8_decode('Montant caisse Actuel : '),1,0,'L');
+    $this->pdf->Cell(100,7,utf8_decode('Montant caisse Actuel (Final) : '),1,0,'L');
     $this->pdf->Cell(100,7,round($situationMontantCaisseActuel, 2).' USD',1,1,'L');
 
     $this->pdf->Ln();
