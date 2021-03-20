@@ -77,7 +77,7 @@
 																		<td>{{dt.date_vente}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td>
-																			{{dt.logic_status_histo[0].attente.user}}
+																			{{dt.logic_status_histo.tab[0].attente.user}}
 																		</td>
 
 																		<td>{{dt.logic_somme}} USD</td>
