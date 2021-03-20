@@ -283,6 +283,9 @@ var vthis = new Vue({
       //POUR CREDITER CLIENS
       montant_actuel_client : 0,
       montant_a_crediter_client : 0,
+
+
+      isInterval : 0
     }
   },
 
@@ -725,7 +728,7 @@ var vthis = new Vue({
               this.paginationTab=[];
               this.isResearchPagination = false;
               this._u_fx_generate_pagination(response.data.all);
-              // console.log(this.dataToDisplay);
+              console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
             })
@@ -1013,6 +1016,7 @@ var vthis = new Vue({
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
                 this._u_fx_form_init_field();
+                this.destination = 0;
                 this.get_decaisssement_externe();
                 this._u_fx_get_montant();
                 this.isLoadSaveMainButton = false;
@@ -1028,7 +1032,7 @@ var vthis = new Vue({
   },
     get_decaisssement_externe(NoVariable=null,limit=this.PerPaged,offset=0, indexPage=0){
       let isInterval = this.checkBoxArticles.length > 0 ? 1 : 0;
-      const newurl = this.url+"get-decaissement-externe-par-caissier/"+this.users_id+"/"+this.destination+"/"+this.dateFilter+"/"+this.dateFilterEnd+"/"+isInterval+"/"+limit+"/"+offset;;
+      const newurl = this.url+"get-decaissement-externe-par-caissier/"+this.users_id+"/"+this.destination+"/"+this.dateFilter+"/"+this.dateFilterEnd+"/"+isInterval+"/"+limit+"/"+offset;
       this.tabListData =[];
       this.isNoReturnedData = false;
       this.isDecaissementExterne = true;
@@ -3182,7 +3186,7 @@ var vthis = new Vue({
       if(indLine !=null){
         this.currentLineSelectedInList = indLine;
       }
-      console.log(this.detailTab);
+      console.log(this.detailTab.logic_status_histo);
     },
     _u_see_detail_tab_admin_users(data, indLine=null){
       this.codeIdArticlePrint = data.id;
