@@ -244,7 +244,7 @@ class PdfGenerate extends BaseController {
         $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
         $venteDetailArray = array();
         for($i = 0; $i < count($allArticle); $i++){
-          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',1)->like('updated_at',$dateRapport,'after')->findAll();
             array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
         }
         $this->pdf->Row($venteDetailArray);
@@ -261,7 +261,6 @@ class PdfGenerate extends BaseController {
       foreach ($AchatsHisto as $key => $value) {
 
         $checkIfIsNonLivred = $this->commandesStatusHistoriqueModel->Where('vente_id',$value->vente_id)->Where('status_vente_id',3)->find();
-
         $achat = $this->commande->find($value->vente_id);
         if(count($checkIfIsNonLivred) < 1){
           $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
@@ -270,7 +269,7 @@ class PdfGenerate extends BaseController {
         for($i = 0; $i < count($allArticle); $i++){
           // print_r($checkIfIsNonLivred);
           if(count($checkIfIsNonLivred) < 1){
-            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->findAll();
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',0)->like('updated_at',$dateRapport,'after')->findAll();
                 array_push($venteDetailFactureNonPayeArray,$detAchat?$detAchat[0]->qte_vendue:'-');
           }
         }
