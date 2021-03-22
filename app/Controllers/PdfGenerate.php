@@ -160,11 +160,16 @@ class PdfGenerate extends BaseController {
   public function rapport_journal_de_sorti_par_depot($idDepot,$dateRapport){
       $depotInfo = $this->depotModel->find($idDepot);
       $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
-      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll();
+
+      // $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll(); PAR DATE
+      //
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll(); //TOUTLES FACTURES PAYE MAIS NON LIVRER DU SYSTEME
 
       $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
-      $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll();
+      // $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); LIVRER PARTIELLEMENT PAR DATE 
+
+      $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); //TOUTLES FACTURES PAYE MAIS LIVRER PARTIELLEMENT DU SYSTEME
 
 
 
@@ -250,7 +255,7 @@ class PdfGenerate extends BaseController {
         $this->pdf->Row($venteDetailArray);
       }
 
-      //FACTURES PAYES MAIS NON LIVRER
+      //FACTURES PAYES MAIS NON LIVRER : TOUTLES
       $this->pdf->SetFont('Helvetica','B',6);
       $this->pdf->Cell(14,5,utf8_decode('Non livré'),1,0,'L');
       $this->pdf->SetWidths(array(273));
