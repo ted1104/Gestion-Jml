@@ -167,7 +167,7 @@ class PdfGenerate extends BaseController {
 
       $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
-      // $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); LIVRER PARTIELLEMENT PAR DATE 
+      // $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); LIVRER PARTIELLEMENT PAR DATE
 
       $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); //TOUTLES FACTURES PAYE MAIS LIVRER PARTIELLEMENT DU SYSTEME
 
@@ -238,9 +238,13 @@ class PdfGenerate extends BaseController {
 
       // DEBUT LISTE FACTURE JOURNALIERE
 
-      $this->pdf->Cell(14,5,'Facture',1,0,'L');
+      // $this->pdf->Cell(14,5,'Facture',1,0,'L');
+      $this->pdf->SetFillColor(96,96,96);
+      $this->pdf->SetTextColor(255,255,255);
+      $this->pdf->Cell(287,5,utf8_decode('TOUTES LES FACTURES LIVREES AUJOURD\'HUI'),0,1,'C',1);
+      $this->pdf->SetTextColor(0,0,0);
       $this->pdf->SetWidths(array(273));
-      $this->pdf->Row(array(''));
+      // $this->pdf->Row(array(''));
       $this->pdf->SetFont('Helvetica','',6);
       $this->pdf->SetWidths($enteTableArticle);
       // $venteArray = array();
@@ -255,11 +259,21 @@ class PdfGenerate extends BaseController {
         $this->pdf->Row($venteDetailArray);
       }
 
+      if(count($AchatsHistoLivre) < 1){
+        $this->pdf->Cell(287,5,utf8_decode('Pas de facture livrées aujord\'hui'),0,1,'C');
+      }
+
+
       //FACTURES PAYES MAIS NON LIVRER : TOUTLES
       $this->pdf->SetFont('Helvetica','B',6);
-      $this->pdf->Cell(14,5,utf8_decode('Non livré'),1,0,'L');
+      // $this->pdf->Cell(14,5,utf8_decode('Non livré'),1,0,'L');
+      $this->pdf->SetFillColor(96,96,96);
+      $this->pdf->SetTextColor(255,255,255);
+      $this->pdf->Cell(287,5,utf8_decode('TOUTES LES FACTURES NON LIVREES'),0,1,'C',1);
+      $this->pdf->SetTextColor(0,0,0);
       $this->pdf->SetWidths(array(273));
-      $this->pdf->Row(array(''));
+      // $this->pdf->SetWidths(array(273));
+      // $this->pdf->Row(array(''));
       $this->pdf->SetFont('Helvetica','',6);
       $this->pdf->SetWidths($enteTableArticle);
 
@@ -274,20 +288,30 @@ class PdfGenerate extends BaseController {
         for($i = 0; $i < count($allArticle); $i++){
           // print_r($checkIfIsNonLivred);
           if(count($checkIfIsNonLivred) < 1){
-            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',0)->like('updated_at',$dateRapport,'after')->findAll();
+            //like('updated_at',$dateRapport,'after')-> condition to add for speicific date
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',0)->findAll();
                 array_push($venteDetailFactureNonPayeArray,$detAchat?$detAchat[0]->qte_vendue:'-');
           }
         }
 
-            $this->pdf->Row($venteDetailFactureNonPayeArray);
+        $this->pdf->Row($venteDetailFactureNonPayeArray);
 
+      }
+
+      if(count($AchatsHisto) < 1){
+        $this->pdf->Cell(287,5,utf8_decode('Pas de factures non livrées'),1,1,'C');
       }
 
       //FACTURE PAYE PMAIS LIVRER PARTILLEMENT ALORS LISTE DES ARTICLES NON LIVRER
       $this->pdf->SetFont('Helvetica','B',6);
-      $this->pdf->Cell(14,5,utf8_decode('Payé Partiel'),1,0,'L');
+      // $this->pdf->Cell(14,5,utf8_decode('Payé Partiel'),1,1,'L');
+      $this->pdf->SetFillColor(96,96,96);
+      $this->pdf->SetTextColor(255,255,255);
+      $this->pdf->Cell(287,5,utf8_decode('TOUTES LES FACTURES PAYEES PARTIELLEMENT'),1,1,'C',1);
+      $this->pdf->SetTextColor(0,0,0);
       $this->pdf->SetWidths(array(273));
-      $this->pdf->Row(array(''));
+      // $this->pdf->Row(array('TOUTLES LES FACTURES PAYES PARTIELLEMENT'));
+
       $this->pdf->SetFont('Helvetica','',6);
       $this->pdf->SetWidths($enteTableArticle);
 
