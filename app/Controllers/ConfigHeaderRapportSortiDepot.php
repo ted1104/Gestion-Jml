@@ -20,6 +20,7 @@ class ConfigHeaderRapportSortiDepot extends TableFpdf
       }
       $this->SetWidths($enteTableArticle);
       $this->SetFont('Helvetica','B',6);
+      $this->SetTextColor(0,0,0);
       $this->Cell(14,5,'Produit',1,0,'L');
       $this->Row($DonneTableArticle);
     }
@@ -27,6 +28,7 @@ class ConfigHeaderRapportSortiDepot extends TableFpdf
   function Footer(){
       $this->SetY(-15);
       $this->SetFont('Arial','B',8);
+      $this->SetTextColor(0,0,0);
       $this->Cell(0,10,'Page : '.$this->PageNo().' sur {nb}',0,0,'C');
   }
 }
