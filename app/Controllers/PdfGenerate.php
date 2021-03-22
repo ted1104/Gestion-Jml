@@ -339,7 +339,12 @@ class PdfGenerate extends BaseController {
       foreach ($AchatLivrePartiellement as $key => $value) {
         // $achat = $this->commande->find($value->vente_id);
         $qteTotalPartiel = 0;
+        $this->pdf->SetTextColor(0,0,0);
+        if($dateRapport !== explode(' ',$value->date_vente)[0]){
+          $this->pdf->SetTextColor(255,0,0);
+        }
         $this->pdf->Cell(14,5,utf8_decode($value->numero_commande),1,0,'L');
+        $this->pdf->SetTextColor(0,0,0);
         $venteDetailArray = array();
         for($i = 0; $i < count($allArticle); $i++){
           $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->where('is_validate_livrer',0)->findAll();
