@@ -677,4 +677,42 @@ class Users extends ResourceController {
        'data'=> null
      ]);
   }
+
+  //MOBILE ENDPOINTS
+  public function loginUser(){
+    $data = $this->request->getPost();
+    $auth = $this->userAuthModel->authLogin($data);
+    if($auth){
+      if($auth !=2){
+        $redirectLink = checkroleandredirect($auth['info'][0]->roles_id);
+        $status = 200;
+        $message = null;
+        $isLog = true;
+        $data = [
+          'users' => $auth,
+          // 'access' =>getAllDroitAccess($auth['info'][0]->id),
+          'profile' =>$redirectLink->description,
+          'lieuAffectation' => getLieuAffectationDetail($auth['info'][0]->depot_id)->nom
+        ];
+      }else{
+        $status = 200;
+        $isLog = false;
+        $data  = null;
+        $message = 'Ce compte est bloqué temporairement; veuillez contacter l\'administrateur principal du système!!';
+      }
+      }else{
+        $status = 200;
+        $isLog = false;
+        $data = null;
+        $message = 'Identifiants ou Mot de passe incorrects!!';
+
+      }
+      return $this->respond([
+        'status' => $status,
+        'message' =>$message,
+        'isLoggedIn' => $isLog,
+        'data'=> $data
+      ]);
+  }
+
 }

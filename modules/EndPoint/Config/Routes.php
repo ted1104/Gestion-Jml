@@ -150,8 +150,6 @@ $routes->group('api/v1', function($routes){
 
 
 
-
-
   //TRANSFERT STOCK INTER MAGASININIER
   $routes->post('transfert-create','TransfertStockDepot::transfert_create');
   $routes->get('transfert-magaz-get-by-magaz/(:num)/(:num)/(:num)/(:any)','TransfertStockDepot::transfert_get_by_depot/$1/$2/$3/$4');
@@ -160,6 +158,11 @@ $routes->group('api/v1', function($routes){
   $routes->post('delete-article-transfert','TransfertStockDepot::transfert_delete_articles');
   $routes->post('validate-partiel-article-transfert','TransfertStockDepot::transfert_validate_partiel_articles');
   $routes->get('transfert-get-all/(:num)/(:num)/(:any)','TransfertStockDepot::transfert_get/$1/$2/$3');
+
+
+
+  //MOBILE ENDPOINT SPECIFIC
+  $routes->post('login-users-mobile','Users::loginUser');
 
 
 
