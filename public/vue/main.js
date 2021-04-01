@@ -2826,10 +2826,6 @@ var vthis = new Vue({
                 this.tabListData.push(response.data.data);
                 var mntAchatUni = parseFloat(response.data.data.prix_unit)*parseFloat(response.data.data.qte);
                 this.montantTotalAchat += mntAchatUni;
-                // mntAchatUni = 0;
-                // console.log("=====#####=======");
-                // console.log(response.data.data.prix_unit);
-                // console.log(this.tabListData[0].qte);
                 this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
                 this.codeArticle = "";
                 this.qte = 0;
@@ -2842,8 +2838,6 @@ var vthis = new Vue({
               }
               this._u_fx_config_error_message_bottom("Message",[response.data.message.errors],'alert-danger')
               this.isLoadSaveMainButtonModal = false;
-
-              // this._u_fx_field_multi_form_art();
             }).catch(error =>{
               console.log(error);
             })
@@ -3619,7 +3613,7 @@ var vthis = new Vue({
       formData.append('prix_id',vthis.prix_id);
       formData.append('qte_faveur',vthis.qte_faveur);
       formData.append('users_id',vthis.users_id);
-      formData.append('config_faveur_id',vthis.users_id);
+      formData.append('config_faveur_id',vthis.config_faveur_id);
       return formData;
     },
     _u_fx_form_data_client(){
