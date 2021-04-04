@@ -349,7 +349,7 @@ class Articles extends ResourceController {
 
   }
   public function article_search_by_code($code){
-    $data = $this->model->Where('code_article',$code)->find();
+    $data = $this->model->select('id,nom_article,code_article')->Where('code_article',$code)->find();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
