@@ -828,7 +828,8 @@ class PdfGenerate extends BaseController {
     $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
     $dyy = strlen($dateR->getDay())==1?'0'.$dateR->getDay():$dateR->getDay();
 
-    $this->pdf->Cell(200,7,utf8_decode('RAPPORT STOCK ENTREE - SORTIES '.$depotInfo->nom),0,1,'C');
+    $this->pdf->Cell(200,7,utf8_decode('RAPPORT STOCK ENTREE - SORTIES'),0,1,'C');
+    $this->pdf->Cell(200,7,utf8_decode($depotInfo->nom),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',12);
     // $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
     $this->pdf->Cell(200,7,'DU : '.$dateDebut.' AU '.$dateFin,0,1,'C');
