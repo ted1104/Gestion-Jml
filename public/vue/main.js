@@ -229,6 +229,8 @@ var vthis = new Vue({
       dateRapport : "",
       dateRapportFin : "",
       dateRapportGen : "",
+      dateRapportDebut : "",
+      dateRapportEnd : "",
 
       //VARIVALE POUR DROIT ACCESS
       accessGestionPv : "",
@@ -285,7 +287,8 @@ var vthis = new Vue({
       montant_a_crediter_client : 0,
 
 
-      isInterval : 0
+      isInterval : 0,
+      depot_id_in : ""
     }
   },
 
@@ -3169,6 +3172,8 @@ var vthis = new Vue({
       this.dateFilter = currentDateWithFormat;
       this.dateFilterEnd = currentDateWithFormat;
       this.date_transfert =currentDateWithFormat;
+      this.dateRapportDebut = currentDateWithFormat;
+      this.dateRapportEnd = currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
@@ -3872,6 +3877,24 @@ var vthis = new Vue({
       var day = date.getDate();
       day =  day.toString().length ==1 ? '0'+day: day;
       this.dateRapportGen = date.getFullYear()+'-'+month+'-'+day;
+      //console.log(this.dateRapport);
+    },
+    dateRapportDebut : function(val){
+      var date = new Date(val);
+      var month = date.getMonth()+1;
+      month = month.toString().length ==1 ? '0'+month: month;
+      var day = date.getDate();
+      day =  day.toString().length ==1 ? '0'+day: day;
+      this.dateRapportDebut = date.getFullYear()+'-'+month+'-'+day;
+      //console.log(this.dateRapport);
+    },
+    dateRapportEnd : function(val){
+      var date = new Date(val);
+      var month = date.getMonth()+1;
+      month = month.toString().length ==1 ? '0'+month: month;
+      var day = date.getDate();
+      day =  day.toString().length ==1 ? '0'+day: day;
+      this.dateRapportEnd = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
     },
     qte_pv_kg : function(val){
