@@ -758,41 +758,51 @@ class Commandes extends ResourceController {
     $idcommande = $this->request->getPost('idcommande');
     $idarticle = $this->request->getPost('idarticle');
 
-    $getAllarticleDeLaCommande = $this->commandesDetailModel->Where('vente_id', $idcommande)->findAll();
-    if(count($idarticle) < count($getAllarticleDeLaCommande)){
-    for ($i=0; $i < count($idarticle); $i++) {
-        $condition = [
-          'vente_id' =>$idcommande,
-          'articles_id'=>$idarticle[$i]
-        ];
-        $data = $this->commandesDetailModel->getWhere($condition)->getRow();
-        if($this->commandesDetailModel->delete(['id' =>$data->id ])){
-          $textArt = $i > 1 ? 'ont':'a';
-          $status = 200;
-          $message = [
-            'success' => ($i+1).' article(s) de cet achat '.$textArt.' été supprimer avec succès',
-            'errors' => null
+    if($this->model->find($idcommande)->status_vente_id->id==1){
+      $getAllarticleDeLaCommande = $this->commandesDetailModel->Where('vente_id', $idcommande)->findAll();
+      if(count($idarticle) < count($getAllarticleDeLaCommande)){
+      for ($i=0; $i < count($idarticle); $i++) {
+          $condition = [
+            'vente_id' =>$idcommande,
+            'articles_id'=>$idarticle[$i]
           ];
-          $data = "";
+          $data = $this->commandesDetailModel->getWhere($condition)->getRow();
+          if($this->commandesDetailModel->delete(['id' =>$data->id ])){
+            $textArt = $i > 1 ? 'ont':'a';
+            $status = 200;
+            $message = [
+              'success' => ($i+1).' article(s) de cet achat '.$textArt.' été supprimer avec succès',
+              'errors' => null
+            ];
+            $data = "";
 
-        }else{
-          $status = 400;
-          $message = [
-            'success' => null,
-            'errors' => "Echec de la suppression d'article"
-          ];
-          $data = "";
+          }else{
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => "Echec de la suppression d'article"
+            ];
+            $data = "";
+          }
+
         }
-
+      }else{
+        $status = 400;
+        $message = [
+          'success' => null,
+          'errors' => ['Impossible de supprimer tous les articles de l\'achat!']
+        ];
+        $data = "";
       }
     }else{
       $status = 400;
       $message = [
         'success' => null,
-        'errors' => ['Impossible de supprimer tous les articles de l\'achat!']
+        'errors' => ['Impossible de supprimer les articles car cette facture est déjà payée ou livrée!']
       ];
       $data = "";
     }
+
     return $this->respond([
       'status' => $status,
       'message' => $message,
