@@ -746,7 +746,7 @@ class PdfGenerate extends BaseController {
 
       $qteTotalLivre = 0;
       foreach ($AchatsHistoLivre as $key) {
-        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->like('updated_at',$dateRapport,'after')->findAll();
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->Where('is_validate_livrer',1)->like('updated_at',$dateRapport,'after')->findAll();
         if($detAchat){
           $qteTotalLivre += $detAchat[0]->qte_vendue;
         }
@@ -812,5 +812,141 @@ class PdfGenerate extends BaseController {
     // $this->outPut();
     $this->response->setHeader('Content-Type', 'application/pdf');
     $this->pdf->Output('D',$dateRapport.'_Rapport_stock_general.pdf');
+  }
+
+  public function rapport_stock_entree_sortie_interval($idDepot,$dateDebut, $dateFin){
+    $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
+
+    $this->pdf = new TableFpdf('P','mm','A4');
+    $this->pdf->AliasNbPages();
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->SetMargins(5,5,5);
+    $this->pdf->AddPage();
+
+    $dateR = Time::parse($dateDebut);
+    $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+    $dyy = strlen($dateR->getDay())==1?'0'.$dateR->getDay():$dateR->getDay();
+
+    $this->pdf->Cell(200,7,utf8_decode('RAPPORT STOCK ENTREE - SORTIES'),0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',12);
+    // $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
+    $this->pdf->Cell(200,7,'DU : '.$dateDebut.' AU '.$dateFin,0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',6);
+    $this->pdf->Ln(5);
+    $this->pdf->SetWidths(array(45,15,15,15,15,15));
+    $this->pdf->Row(array('Designation',utf8_decode('Total Entrée'),utf8_decode('Total Sorties virtuels '),utf8_decode('Total Sorties Réels'),utf8_decode('Diff Virtuelles'),utf8_decode('Diff Réelles')));
+    $this->pdf->SetFont('Helvetica','',6);
+    foreach ($allArticle as $key => $value) {
+      // // code... SI
+      // $stockInit = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
+      //
+      // $stockInitVirtuel = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
+      //
+      //Total Entree Stock
+      $conditionIntevalDate = ['g_interne_approvisionnement.date_approvisionnement >='=>$dateDebut,'g_interne_approvisionnement.date_approvisionnement <='=>$dateFin];
+      $approGenBonne = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->Where($conditionIntevalDate)->Where('depots_id',$idDepot)->Where('articles_id',$value->id)->find();
+
+      // $approGenPv = $this->approvisionnementsDetailModel->selectSum('qte_pv')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateDebut,'after')->Where('articles_id',$value->id)->find();
+      //
+      // $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateDebut,'after')->Where('articles_id',$value->id)->find();
+      //
+      // //code pour sorti virtuelles
+      $conditionIntevalDateSorti = ['g_interne_vente_historique_status.created_at >='=>$dateDebut,'g_interne_vente_historique_status.created_at <='=>$dateFin];
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where($conditionIntevalDateSorti)->findAll();
+
+      // //code pour sorti reels
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where($conditionIntevalDateSorti)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+
+      // echo count($AchatsHistoLivre);
+      // die();
+
+      //
+      $qteTotalVendu = 0;
+      foreach ($AchatsHisto as $key) {
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->findAll();
+        if($detAchat){
+          $qteTotalVendu += $detAchat[0]->qte_vendue;
+        }
+      }
+      //
+      $qteTotalLivre = 0;
+      foreach ($AchatsHistoLivre as $key) {
+        $conditionIntevalDateSortiLivre = ['updated_at >='=>$dateDebut,'updated_at <='=>$dateFin];
+        $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$value->id)->Where('is_validate_livrer',1)->Where($conditionIntevalDateSortiLivre)->findAll();
+        if($detAchat){
+          $qteTotalLivre += $detAchat[0]->qte_vendue;
+        }
+      }
+      //
+      // //RESTE EN Stock
+      // $todayDate = Time::today();
+      // $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
+      // $myday = strlen($todayDate->getDay())==1?'0'.$todayDate->getDay():$todayDate->getDay();
+      // $compareDate = $todayDate->getYear().'-'.$m.'-'.$myday;
+      //
+      // $qteResteEnStockReelle = 0;
+      // $qteResteEnStockVirtuelle = 0;
+      //
+      //   if($compareDate==$dateRapport){
+      //     // echo 'Here';
+      //     $stockVirtuelle = $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->find();
+      //     $stock = $this->stockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->find();
+      //     $qteResteEnStockReelle = $stock[0]->qte_stock ? $stock[0]->qte_stock:0;
+      //     $qteResteEnStockVirtuelle = $stockVirtuelle[0]->qte_stock_virtuel ? $stockVirtuelle[0]->qte_stock_virtuel:0;
+      //
+      //     // echo 'here </br>';
+      //   }else{
+      //     // echo 'Here Too';
+      //     $dateR = Time::parse($dateRapport);
+      //     $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+      //     $dy = $dateR->getDay()+1;
+      //     $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
+      //     $stockInitCloture = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateR)->find();
+      //     $stockInitClotureReelle = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateR)->find();
+      //
+      //     // echo '<pre>';
+      //     // print_r($dateR);
+      //     // die();
+      //     $qteResteEnStockReelle = $stockInitClotureReelle[0]->qte_stock? $stockInitClotureReelle[0]->qte_stock:0;
+      //     $qteResteEnStockVirtuelle = $stockInitCloture[0]->qte_stock_virtuel? $stockInitCloture[0]->qte_stock_virtuel:0;
+      //
+      //     // echo 'here too </br>';
+      //   }
+      //
+
+      $entre = $approGenBonne[0]->qte?$approGenBonne[0]->qte:0;
+      $diffVirtuel = $entre-$qteTotalVendu;
+      $diffReel = $entre-$qteTotalLivre;
+
+      $this->pdf->Row(array(
+            utf8_decode(strtoupper($value->nom_article)),
+            $entre,
+            $qteTotalVendu,
+            $qteTotalLivre,
+            $diffVirtuel,
+            $diffReel,
+            // $stockInit[0]->qte_stock?$stockInit[0]->qte_stock:0,
+            // $stockInitVirtuel[0]->qte_stock_virtuel?$stockInitVirtuel[0]->qte_stock_virtuel:0,
+
+            // $approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0,
+            // $approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0,
+            // $qteTotalVendu,
+            // $qteTotalLivre,
+            // $qteResteEnStockReelle,
+            // $qteResteEnStockVirtuelle,
+            ));
+    }
+
+    // $stockInit = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',1)->Where('date_cloture','2021-01-23')->find();
+    // echo '<pre>';
+    // print_r($stockInit);
+    // die();
+
+
+
+    // $this->outPut();
+    $this->response->setHeader('Content-Type', 'application/pdf');
+    // $this->pdf->Output('D',$dateDebut.'_Rapport_stock_general.pdf');
+    $this->outPut();
   }
 }
