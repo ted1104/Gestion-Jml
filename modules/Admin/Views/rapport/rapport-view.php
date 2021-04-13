@@ -89,16 +89,19 @@
 																			 </select>
 																		 </div>
 																			<div class="form-group">
-																				{{dateRapportDebut}}
+																				<!-- {{dateRapportDebut}} -->
 																				<label for="dateRapportDebut">Date Début</label>
 																				<vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapportDebut"></vuejs-datepicker>
 																			</div>
 																			<div class="form-group">
-																				{{dateRapportEnd}}
+																				<!-- {{dateRapportEnd}} -->
 																				<label for="dateRapportEnd">Date Fin</label>
 																				<vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapportEnd"></vuejs-datepicker>
 																			</div>
-																			<a target="_blank" :href="'<?=base_url() ?>/rapport-stock-entree-sortie/'+depot_id_in+'/'+dateRapportDebut+'/'+dateRapportEnd" class="btn btn-primary">Généré</a>
+																			<!-- {{dateRapportDebut < dateRapportEnd}} -->
+																			<a v-if="dateRapportDebut <= dateRapportEnd && depot_id_in > 0" target="_blank" :href="'<?=base_url() ?>/rapport-stock-entree-sortie/'+depot_id_in+'/'+dateRapportDebut+'/'+dateRapportEnd" class="btn btn-primary">Généré</a>
+
+																			<button v-if="dateRapportEnd < dateRapportDebut || !depot_id_in" type="button" disabled name="button" class="btn btn-primary">Généré</button>
 																		</div>
 																	</div>
 															</div>
