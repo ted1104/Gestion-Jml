@@ -959,42 +959,55 @@ class Commandes extends ResourceController {
       ];
       $data = "";
     }else{
-      //SUITES VALIDATIONS
+      //TEST IF COMMANDE STILL HAVE STATUS ATTENTE STATUS
 
+
+      //SUITES VALIDATIONS
       $nbrAnnule = 1;
       for ($i=0; $i < count($idcommande); $i++) {
         $data = ['status_vente_id'=>4];
-        if(!$updateData = $this->model->update($idcommande[$i],$data)){
-          $status = 400;
-          $message = [
-            'success' => null,
-            'errors' => $this->model->erros()
-          ];
-          $data = "";
-        }else {
-          //CREATION HISTORIQUE CHANGEMENT STATUS
-          $dataStatusHistorique=[
-              'vente_id' => $idcommande[$i],
-              'status_vente_id' => 4,
-              'users_id' => $iduser,
-          ];
-          if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
-            $status = 200;
-            $message = [
-              'success' => $nbrAnnule++ .' Achat(s) annulé(s) avec succès',
-              'errors' => null
-            ];
-            $data = "";
 
-          }else{
+        if($this->model->find($idcommande[$i])->status_vente_id->id==1){ // TEST IF ARTICLES
+          if(!$updateData = $this->model->update($idcommande[$i],$data)){
             $status = 400;
             $message = [
               'success' => null,
-              'errors' => $this->commandesStatusHistoriqueModel->erros()
+              'errors' => $this->model->erros()
             ];
             $data = "";
+          }else {
+            //CREATION HISTORIQUE CHANGEMENT STATUS
+            $dataStatusHistorique=[
+                'vente_id' => $idcommande[$i],
+                'status_vente_id' => 4,
+                'users_id' => $iduser,
+            ];
+            if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+              $status = 200;
+              $message = [
+                'success' => $nbrAnnule++ .' Achat(s) annulé(s) avec succès',
+                'errors' => null
+              ];
+              $data = "";
+
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->commandesStatusHistoriqueModel->erros()
+              ];
+              $data = "";
+            }
           }
+        }else{
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => ["Certaine(s) facture(s) pourraient ne pas être annuler car elles sont probablement déjà été payées ou livrées; veuillez actualiser svp"]
+          ];
+          $data = "";
         }
+
       }
 
     }
