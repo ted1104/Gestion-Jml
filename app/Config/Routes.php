@@ -42,6 +42,10 @@ $routes->get('config-pass-profile','Configuration::index',['filter' => 'isLogged
 $routes->get('rapport-journal-de-sorti-par-depot/(:num)/(:any)/','PdfGenerate::rapport_journal_de_sorti_par_depot/$1/$2',['filter' => 'isManager']);
 $routes->get('rapport-financier-journalier/(:any)','PdfGenerate::rapport_finacier_journalier/$1',['filter' => 'isManager']);
 $routes->get('rapport-stock-general/(:any)','PdfGenerate::rapport_stock_general/$1',['filter' => 'isManager']);
+$routes->get('rapport-stock-entree-sortie/(:num)/(:any)/(:any)','PdfGenerate::rapport_stock_entree_sortie_interval/$1/$2/$3',['filter' => 'isManager']);
+
+
+
 
 
 
