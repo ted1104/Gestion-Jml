@@ -835,14 +835,14 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(200,7,'DU : '.$dateDebut.' AU '.$dateFin,0,1,'C');
     $this->pdf->SetFont('Helvetica','B',6);
     $this->pdf->Ln(5);
-    $this->pdf->SetWidths(array(45,15,15,15,15,15));
-    $this->pdf->Row(array('Designation',utf8_decode('Total Entrée'),utf8_decode('Total Sorties virtuels '),utf8_decode('Total Sorties Réels'),utf8_decode('Diff Virtuelles'),utf8_decode('Diff Réelles')));
+    $this->pdf->SetWidths(array(45,15,15,15,15,15,15,15));
+    $this->pdf->Row(array('Designation',utf8_decode('Stock Initial Réel'),utf8_decode('Stock Initial Virtuel'),utf8_decode('Total Entrée'),utf8_decode('Total Sorties virtuels '),utf8_decode('Total Sorties Réels'),utf8_decode('Diff Virtuelles'),utf8_decode('Diff Réelles')));
     $this->pdf->SetFont('Helvetica','',6);
     foreach ($allArticle as $key => $value) {
-      // // code... SI
-      // $stockInit = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
-      //
-      // $stockInitVirtuel = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
+      // code... SI
+      $stockInit = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
+
+      $stockInitVirtuel = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
       //
       //Total Entree Stock
       $conditionIntevalDate = ['g_interne_approvisionnement.date_approvisionnement >='=>$dateDebut,'g_interne_approvisionnement.date_approvisionnement <='=>$dateFin];
@@ -915,13 +915,16 @@ class PdfGenerate extends BaseController {
       //     // echo 'here too </br>';
       //   }
       //
-
+      $stockInitReel = $stockInit[0]->qte_stock?$stockInit[0]->qte_stock:0;
+      $stockInitVirtuel = $stockInitVirtuel[0]->qte_stock_virtuel?$stockInitVirtuel[0]->qte_stock_virtuel:0;
       $entre = $approGenBonne[0]->qte?$approGenBonne[0]->qte:0;
-      $diffVirtuel = $entre-$qteTotalVendu;
-      $diffReel = $entre-$qteTotalLivre;
+      $diffVirtuel =($stockInitReel+$entre)-$qteTotalVendu;
+      $diffReel = ($stockInitVirtuel+$entre)-$qteTotalLivre;
 
       $this->pdf->Row(array(
             utf8_decode(strtoupper($value->nom_article)),
+            $stockInitReel,
+            $stockInitVirtuel,
             $entre,
             $qteTotalVendu,
             $qteTotalLivre,
