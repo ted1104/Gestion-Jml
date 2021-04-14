@@ -840,9 +840,9 @@ class PdfGenerate extends BaseController {
     $this->pdf->SetFont('Helvetica','',6);
     foreach ($allArticle as $key => $value) {
       // code... SI
-      $stockInit = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
+      $stockInit = $this->clotureStockModel->selectSum('qte_stock')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->Where('depot_id',$idDepot)->find();
 
-      $stockInitVirtuel = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->find();
+      $stockInitVirtuel = $this->clotureStockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$value->id)->Where('date_cloture',$dateDebut)->Where('depot_id',$idDepot)->find();
       //
       //Total Entree Stock
       $conditionIntevalDate = ['g_interne_approvisionnement.date_approvisionnement >='=>$dateDebut,'g_interne_approvisionnement.date_approvisionnement <='=>$dateFin];
@@ -854,10 +854,10 @@ class PdfGenerate extends BaseController {
       //
       // //code pour sorti virtuelles
       $conditionIntevalDateSorti = ['g_interne_vente_historique_status.created_at >='=>$dateDebut,'g_interne_vente_historique_status.created_at <='=>$dateFin];
-      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where($conditionIntevalDateSorti)->findAll();
+      $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('g_interne_vente.depots_id',$idDepot)->Where($conditionIntevalDateSorti)->findAll();
 
       // //code pour sorti reels
-      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where($conditionIntevalDateSorti)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.depots_id',$idDepot)->Where($conditionIntevalDateSorti)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
       // echo count($AchatsHistoLivre);
       // die();
