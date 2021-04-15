@@ -105,6 +105,36 @@
 																		</div>
 																	</div>
 															</div>
+
+															<div class="col-md-4 col-lg-4 col-xl-4 ">
+																	<div class="card m-b-30">
+																			<div class="card-header bg-white">
+																					<h5 class="card-title text-black">RAPPORT APPROVISIONNEMENT</h5>
+																			</div>
+																			<div class="card-body margin-bottom-8">
+																				<div class="form-group">
+																				 <label for="depots_id">Dépôt</label>
+																				 <select class="form-control" v-model="depot_id_in_app">
+																					 <option v-for="(dp, i) in depotList" :value="dp.id">{{dp.nom}}</option>
+																				 </select>
+																			 </div>
+																				<div class="form-group">
+																					<!-- {{dateRapportDebut}} -->
+																					<label for="dateRapportDebutAppro">Date Début</label>
+																					<vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapportDebutAppro"></vuejs-datepicker>
+																				</div>
+																				<div class="form-group">
+																					<!-- {{dateRapportEnd}} -->
+																					<label for="dateRapportEndAppro">Date Fin</label>
+																					<vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapportEndAppro"></vuejs-datepicker>
+																				</div>
+																				<!-- {{dateRapportDebut < dateRapportEnd}} -->
+																				<a v-if="dateRapportDebutAppro <= dateRapportEndAppro && depot_id_in_app > 0" target="_blank" :href="'<?=base_url() ?>/rapport-stock-approvisionnement/'+depot_id_in_app+'/'+dateRapportDebutAppro+'/'+dateRapportEndAppro" class="btn btn-primary">Généré</a>
+
+																				<button v-if="dateRapportEndAppro < dateRapportDebutAppro || !depot_id_in_app" type="button" disabled name="button" class="btn btn-primary">Généré</button>
+																			</div>
+																		</div>
+																</div>
 											</div>
                     </div>
                     <!-- End XP Col -->
