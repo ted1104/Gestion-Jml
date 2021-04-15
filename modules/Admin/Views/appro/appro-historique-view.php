@@ -63,7 +63,7 @@
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
-																		<td>{{dt.date_approvisionnement}}-{{index}}</td>
+																		<td>{{dt.date_time_approvissionnement.date.split('.')[0]}}</td>
 																		<td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td>
 																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td><button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button></td>
@@ -99,7 +99,7 @@
 													<div class="card m-b-30 u-transition">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_approvisionnement}}</h5>
+																<h5 class="col-md-9 card-title">DETAIL APPROVISIONNEMENT DU {{detailTab.date_time_approvissionnement.date.split('.')[0]}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
 

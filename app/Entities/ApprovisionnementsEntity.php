@@ -23,9 +23,10 @@ class ApprovisionnementsEntity extends Entity{
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
+    'date_time_approvissionnement' => null
   ];
 
-  protected $datamap = [];
+  protected $datamap = ['date_time_approvissionnement' => 'created_at'];
   protected $userModel = null;
   protected $articlesPrixModel = null;
   protected $depotModel = null;
@@ -48,9 +49,12 @@ class ApprovisionnementsEntity extends Entity{
   public function getLogicDataArticle(){
     return $this->approvisionnementsDetailModel->Where('approvisionnement_id',$this->attributes['id'])->findAll();
   }
-  public function getDateApprovisionnement(){
-    return $this->attributes['created_at'];
-  }
+  // public function getDateApprovisionnement(){
+  //   return $this->attributes['created_at'];
+  // }
+  // public function getDateTimeApprovissionnement(){
+  //   return $this->attributes['created_at'];
+  // }
   // public function getLogicDetailData(){
   //   return $this->articlesPrixModel->getWhere(['articles_id'=>$this->attributes['id']])->getResult();
   // }
