@@ -7,6 +7,7 @@ use App\Models\StDepotModel;
 use App\Models\ArticlesModel;
 use App\Models\CommandesDetailModel;
 use App\Models\CommandesStatusHistoriqueModel;
+use App\Models\ApprovisionnementsModel;
 use App\Models\ApprovisionnementsDetailModel;
 use App\Models\ApprovisionnementsInterDepotDetailModel;
 use App\Models\StockModel;
@@ -38,6 +39,7 @@ class PdfGenerate extends BaseController {
   protected $decaissementExterneModel = null;
   protected static $caisseModel = null;
   protected static $clotureCaisseModel = null;
+  protected $approvisionnementModel =  null;
 
 
 
@@ -59,8 +61,7 @@ class PdfGenerate extends BaseController {
     $this->decaissementExterneModel = new DecaissementExterneModel();
     self::$caisseModel = new CaisseModel();
     self::$clotureCaisseModel = new ClotureCaisseModel();
-
-
+    $this->approvisionnementModel = new ApprovisionnementsModel();
 
   }
   public function index($code){
@@ -183,9 +184,6 @@ class PdfGenerate extends BaseController {
 
 
       // $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); LIVRER PARTIELLEMENT PAR DATE
-
-
-
 
 
       $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
@@ -952,6 +950,87 @@ class PdfGenerate extends BaseController {
     // $this->outPut();
     $this->response->setHeader('Content-Type', 'application/pdf');
     // $this->pdf->Output('D',$dateDebut.'_Rapport_stock_general.pdf');
+    $this->outPut();
+  }
+
+  public function rapport_approvisionnemnt_interval($idDepot,$dateDebut, $dateFin){
+    $depotInfo = $this->depotModel->find($idDepot);
+    $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
+
+    $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
+    $this->pdf->AliasNbPages();
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->SetMargins(5,5,5);
+    $this->pdf->AddPage();
+
+    $this->pdf->Cell(287,5,utf8_decode('RAPPORT D\'APPROVISIONNEMENT'),0,1,'C');
+    $this->pdf->Cell(287,5,utf8_decode($depotInfo->nom),0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',8);
+    $this->pdf->Cell(287,5,'DU : '.$dateDebut.' AU '.$dateFin,0,1,'C');
+
+    if(!$allArticle){
+      $this->pdf->Cell(287,20,'AUCUN ARTICLE SELECTIONNER SUR LE RAPPORT',1,0,'C');
+      $this->outPut();
+    }
+
+    $enteTableArticle = array();
+    $DonneTableArticle = array();
+    $DonneTotalApprovisionnementTotal =  array();
+    for($i = 0; $i < count($allArticle); $i++){
+
+      $conditionIntevalDateMain = ['g_interne_approvisionnement.date_approvisionnement >='=>$dateDebut,'g_interne_approvisionnement.date_approvisionnement <='=>$dateFin];
+      $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->Where($conditionIntevalDateMain)->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+      array_push($enteTableArticle,273/count($allArticle));
+      array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
+      array_push($DonneTotalApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
+    }
+    $this->pdf->SetWidths($enteTableArticle);
+    $this->pdf->SetFont('Helvetica','B',6);
+    $this->pdf->Cell(14,5,'Produit',1,0,'L');
+    $this->pdf->Row($DonneTableArticle);
+
+
+    $this->pdf->SetFillColor(96,96,96);
+    $this->pdf->SetTextColor(255,255,255);
+    $this->pdf->Cell(287,5,utf8_decode('TOUS LES APPROVISIONNEMENT DU '.$dateDebut.' AU '.$dateFin),0,1,'C',1);
+    $this->pdf->SetTextColor(0,0,0);
+    $this->pdf->SetWidths(array(273));
+    // $this->pdf->Row(array(''));
+    $this->pdf->SetFont('Helvetica','',6);
+    $this->pdf->SetWidths($enteTableArticle);
+    // $venteArray = array();
+    $conditionIntevalDate = ['date_approvisionnement >='=>$dateDebut,'date_approvisionnement <='=>$dateFin];
+    $approDate = $this->approvisionnementModel->where($conditionIntevalDate)->Where('depots_id',$idDepot)->groupBy('date_approvisionnement')->findAll();
+
+    foreach ($approDate as $key => $value) {
+      // code...
+      $ApprovisionnementDetailArray = array();
+      $this->pdf->Cell(14,5,utf8_decode($value->date_approvisionnement),1,0,'L');
+        for($i = 0; $i < count($allArticle); $i++){
+          $detApprov = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->Where('depots_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->like('g_interne_approvisionnement_detail.created_at',$value->date_approvisionnement,'after')->findAll();
+            array_push($ApprovisionnementDetailArray,$detApprov?$detApprov[0]->qte_total:'-');
+        }
+        $this->pdf->Row($ApprovisionnementDetailArray);
+
+    }
+
+    $this->pdf->Cell(14,5,'Total',1,0,'L');
+    $this->pdf->Row($DonneTotalApprovisionnementTotal);
+
+    // foreach ($AchatsHistoLivre as $key => $value) {
+    //   $achat = $this->commande->find($value->vente_id);
+    //   $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
+    //   $venteDetailArray = array();
+    //   for($i = 0; $i < count($allArticle); $i++){
+    //     $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',1)->like('updated_at',$dateRapport,'after')->findAll();
+    //       array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
+    //   }
+    //   $this->pdf->Row($venteDetailArray);
+    // }
+
+    $this->response->setHeader('Content-Type', 'application/pdf');
+    // $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
     $this->outPut();
   }
 }
