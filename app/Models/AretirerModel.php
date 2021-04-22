@@ -6,7 +6,7 @@ class AretirerModel extends Model{
   protected $table = 'g_interne_a_retirer';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['vente_detail_id','qte_restante','users_id '];
+  protected $allowedFields = ['vente_detail_id','qte_restante','users_id'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'vente_detail_id' => 'required',

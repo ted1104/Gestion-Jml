@@ -5,6 +5,7 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\I18n\Time;
 
 use App\Entities\CommandesEntity;
+use App\Entities\AretirerEntity;
 use App\Models\CommandesDetailModel;
 use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\UsersAuthModel;
@@ -12,6 +13,7 @@ use App\Models\EncaissementModel;
 use App\Models\CaisseModel;
 use App\Models\StockModel;
 use App\Models\StockPersonnelModel;
+use App\Models\AretirerModel;
 
 
 
@@ -25,6 +27,7 @@ class Commandes extends ResourceController {
   protected $commandesDetailModel = null;
   protected $stockModel = null;
   protected $stockPersonnelModel = null;
+  protected $aretirerModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -35,6 +38,7 @@ class Commandes extends ResourceController {
     $this->caisseModel = new CaisseModel();
     $this->stockModel = new StockModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
+    $this->aretirerModel = new AretirerModel();
   }
   public function commandes_get(){
     $data = $this->model->orderBy('id','DESC')->findAll();
@@ -568,6 +572,10 @@ class Commandes extends ResourceController {
 
                 //DECOMPTE STOCK PERSONNEL LORS DE LA VALIDATION ACHAT
                 $this->stockPersonnelModel->updateQtePersonnel($iduser, $value->articles_id[0]->id, $qte_a_retrancher,0);
+
+                //CREATE HISTORIQUE A RETIRER
+                $data = ['vente_detail_id'=>$value->id,'qte_restante'=>0,'users_id'=>$iduser];
+                $this->aretirerModel->insert($data);
 
 
 
