@@ -576,6 +576,8 @@ class Commandes extends ResourceController {
                 //CREATE HISTORIQUE A RETIRER
                 $data = ['vente_detail_id'=>$value->id,'qte_restante'=>0,'users_id'=>$iduser];
                 $this->aretirerModel->insert($data);
+                // print_r($this->aretirerModel->insert($data));
+                // die();
 
 
 
