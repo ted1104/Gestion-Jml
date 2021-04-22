@@ -5,6 +5,7 @@ use Config\Services;
 use App\Models\CommandesModel;
 use App\Models\ArticlesModel;
 use App\Models\StockModel;
+use App\Models\AretirerModel;
 
 
 class CommandesDetailEntity extends Entity{
@@ -26,7 +27,7 @@ class CommandesDetailEntity extends Entity{
     'deleted_at' => null,
     'logic_article' => null,
     'logic_qte_stock_article_depot' => null,
-    'qte_a_retirer' => null
+    'logic_historique_a_retirer' => null
   ];
 
   protected $datamap = [];
@@ -34,6 +35,7 @@ class CommandesDetailEntity extends Entity{
   protected $articlesModel = null;
   protected $stockModel = null;
   protected $commandesModel = null;
+  protected $aretirerModel = null;
 
 
 
@@ -43,6 +45,7 @@ class CommandesDetailEntity extends Entity{
     $this->articlesModel = new ArticlesModel();
     $this->stockModel = new StockModel();
     $this->commandesModel = new CommandesModel();
+    $this->aretirerModel = new AretirerModel();
 
 
   }
@@ -65,6 +68,10 @@ class CommandesDetailEntity extends Entity{
       'stock_reel' => $stockqte->qte_stock
     );
 
+  }
+
+  public function getLogicHistoriqueARetirer(){
+    return $this->aretirerModel->Where('vente_detail_id',$this->attributes['id'])->findAll();
   }
 
 
