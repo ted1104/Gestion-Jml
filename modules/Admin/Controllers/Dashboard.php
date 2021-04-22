@@ -76,6 +76,24 @@ class Dashboard extends BaseController {
     ];
     echo view($this->linkMod.'\config\config-avance-view', $data);
   }
+  public function addClient(){
+    $data = [
+      'titlePage' => 'CLIENTS : Administration'
+    ];
+    echo view($this->linkMod.'\client\clients-add-view', $data);
+  }
+  public function getListClient(){
+    $data = [
+      'titlePage' => 'CLIENTS : Administration'
+    ];
+    echo view($this->linkMod.'\client\clients-list-view', $data);
+  }
+
+
+
+
+
+
 
 
 

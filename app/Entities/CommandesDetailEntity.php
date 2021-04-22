@@ -24,8 +24,9 @@ class CommandesDetailEntity extends Entity{
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
-    'logic_article'=>null,
-    'logic_qte_stock_article_depot'=>null,
+    'logic_article' => null,
+    'logic_qte_stock_article_depot' => null,
+    'qte_a_retirer' => null
   ];
 
   protected $datamap = [];

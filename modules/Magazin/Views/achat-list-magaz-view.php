@@ -112,7 +112,8 @@
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
 																		<td v-if="stateStatus==1">
-																			{{dt.logic_status_histo.tab[0].attente.user}}</td>
+																			{{dt.logic_status_histo.tab[0].attente.user}}
+																		</td>
 																		<td v-if="stateStatus==2">
 																			{{dt.payer_a[0].nom+' '+dt.payer_a[0].prenom}}
 																		</td>
@@ -123,7 +124,9 @@
 																			{{dt.logic_status_histo.tab[3].annuler_par.user}}
 																		</td>
 																		<!--  -->
-																		<td>{{dt.logic_somme}} USD</td>
+																		<td>
+																			{{dt.logic_somme}} USD
+																		</td>
 																		<td>
 																			<div class="">
 																				<span v-if="dt.status_vente_id.id==1" class="badge badge-warning">{{dt.status_vente_id.description}}</span>
@@ -160,9 +163,13 @@
 																		<li class="page-item">
 																			<button class="page-link" @click="_u_previous_page_for_list_achat(get_commande_magazinier)">Previous</button>
 																		</li>
-																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_commande_magazinier(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+																		<li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'">
+																			<button class="page-link" @click="get_commande_magazinier(stateStatus,pageData.limit,pageData.offset,index)">{{index+1}}</button>
+																		</li>
 																		<li class="page-item">
-																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_magazinier)">Next</button>
+																			<button class="page-link" @click="_u_next_page_for_list_achat(get_commande_magazinier)">
+																				Next
+																			</button>
 																		</li>
 																	</ul>
 																</nav>
@@ -192,16 +199,16 @@
 																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
 																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
-															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
+															<div class="col-md-12">
 																<div class="row">
-																	<div class="col-md-6">
+																	<div class="col-md-6 u-animation-FromTop" v-show="checkBoxArticles.length > 0">
 																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_magaz(detailTab,2, true)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Livrer</button>
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
-																	<!-- <div class="col-md-6 text-right">
-																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_commande(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
-																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-																	</div> -->
+																	<div class="col-md-6 u-animation-FromTop" v-show="detailTab.status_vente_id.id==3">
+																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_magaz(detailTab,2, true)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> A Rétirer</button>
+																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div>
 																</div>
 																<hr>
 															</div>
@@ -245,7 +252,16 @@
 																	<span class="col-md-4" v-if="stateStatus==2">Stock<br>
 																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
 																	</span>
-
+																</div>
+																<div class="row" v-if="detailTab.status_vente_id.id==3">
+																	<div class="col-md-6">
+																		<label for="" class="margin-top-3">Qte à retirer aprés</label>
+																	</div>
+																	{{Object.keys(ArticleValidateNego).length}}
+																	<div class="col-md-6">
+																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue,det.qte_a_retirer)" :value="Object.keys(ArticleValidateNego).length < 1 ?det.qte_a_retirer:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:det.qte_a_retirer)">
+																		{{ArticleValidateNego[det.id]}}
+																	</div>
 																</div>
 																<br>
 																<!-- <div class="row">

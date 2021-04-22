@@ -2524,7 +2524,6 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-
     add_crediter_amount_client(e){
       e.preventDefault();
       const newurl = this.url+"client-crediter-account/"+this.idElementSelected+"/"+this.montant_a_crediter_client;
@@ -3191,7 +3190,8 @@ var vthis = new Vue({
       if(indLine !=null){
         this.currentLineSelectedInList = indLine;
       }
-      console.log(this.detailTab.logic_status_histo);
+      console.log("==FromHere===");
+      console.log(this.detailTab);
     },
     _u_see_detail_tab_admin_users(data, indLine=null){
       this.codeIdArticlePrint = data.id;
@@ -3231,9 +3231,34 @@ var vthis = new Vue({
         if(valueMontantInput !="" && valueMontantInput > 0){
           var arry = [idarticle,valueMontantInput];
           this.ArticleValidateNego[idarticle] = arry;
+
         }else{
           delete this.ArticleValidateNego[idarticle];
         }
+        // console.log(this.ArticleValidateNego);
+
+    },
+    _u_fx_create_tab_a_retirer(idarticle, e, qte_vendue, qte_a_retirer){
+      if(e.target.value != "" && e.target.value > 0 && e.target.value <= qte_vendue){
+          var arry = [idarticle,e.target.value];
+          this.ArticleValidateNego[idarticle] = arry;
+      }else{
+        e.target.value = qte_a_retirer;
+        delete this.ArticleValidateNego[idarticle];
+        this._u_fx_config_error_message_bottom("Message",['Quantité renseignée invalide!!'],'alert-danger');
+      }
+
+      // e.target.value = 100;
+      console.log(this.ArticleValidateNego);
+        // if(valueMontantInput !="" && valueMontantInput > 0){
+        //   var arry = [idarticle,valueMontantInput];
+        //   this.ArticleValidateNego[idarticle] = arry;
+        //
+        // }else{
+        //   delete this.ArticleValidateNego[idarticle];
+        // }
+        // console.log("===here=====");
+        // console.log(this.ArticleValidateNego);
 
     },
     _u_fx_get_montant(){

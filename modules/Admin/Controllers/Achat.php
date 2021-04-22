@@ -20,5 +20,11 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\achat\achat-list-partiel-view', $data);
   }
+  public function achatAddAdmin(){
+    $data = [
+      'titlePage' => 'VENTES : ADMINISTRTION'
+    ];
+    echo view('Modules\Facturier\Views\achat-add-view', $data);
+  }
 
 }

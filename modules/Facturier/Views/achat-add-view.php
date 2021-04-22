@@ -28,14 +28,16 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-2">
-													 <h4>CREER UN ACHAT D'UN CLIENT</h4>
+													 <h4>CREER UNE VENTE D'UN CLIENT</h4>
 													 <!-- {{depot_central_id}} -->
 													 <!-- lastFactureEncodede -->
 
 													 <div class="">
 
 														 <button  class="btn btn-round btn-danger pull-right" @click="isStockIndicator=!isStockIndicator"><i class="mdi mdi-shopping"></i></button>
-														 <a :href="'<?=base_url()?>/print-code/'+lastFactureEncodede.code+'/code'" target="_blank" class='btn btn-info pull-right'><i class='mdi mdi-printer'></i> Imprimer Facture : {{lastFactureEncodede.numero}} </a>
+														 <?php if(session('users')['info'][0]->roles_id != 1): ?>
+														 	<a :href="'<?=base_url()?>/print-code/'+lastFactureEncodede.code+'/code'" target="_blank" class='btn btn-info pull-right'><i class='mdi mdi-printer'></i> Imprimer Facture : {{lastFactureEncodede.numero}} </a>
+													 	<?php endif ?>
 													 </div>
 
 											 </div>
@@ -47,7 +49,7 @@
 												<div class="col-md-5 col-lg-5 col-xl-5 ">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">Information relative à l'achat</h5>
+                                <h5 class="card-title text-black">Information relative à la vente</h5>
 																<!-- {{checkIsFaveur}}
 																{{ListIdArticleFaveur}} -->
                             </div>
@@ -133,9 +135,11 @@
 																			<button v-if="!isLoadSaveMainButton" @click="add_commande" class="btn btn-primary">Enregistrer</button>
 																			<img v-if="isLoadSaveMainButton" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																		</div>
+																		<?php if(session('users')['info'][0]->roles_id != 1): ?>
 																		<div class="col-md-6">
 																			<a :href="'<?=base_url()?>/print-code/'+lastFactureEncodede.code+'/code'" target="_blank" class='btn btn-info pull-right'><i class='mdi mdi-printer'></i> Imprimer : {{lastFactureEncodede.numero}} </a>
 																		</div>
+																		<?php endif; ?>
 																	</div>
 
                             </div>
