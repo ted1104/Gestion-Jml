@@ -671,6 +671,13 @@ class Commandes extends ResourceController {
                 //DECOMPTE STOCK PERSONNEL LORS DE LA VALIDATION ACHAT
                 $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle[$i], $qte_a_retrancher,0);
 
+                //CREATE HISTORIQUE A RETIRER
+                $data = ['vente_detail_id'=>$detArticleAchat[0]->id,'qte_restante'=>0,'users_id'=>$iduser];
+                $this->aretirerModel->insert($data);
+                // print_r($this->aretirerModel->insert($data));
+                // die();
+
+
               }
               $status = 200;
               $message = [

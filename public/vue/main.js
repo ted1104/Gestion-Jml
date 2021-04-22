@@ -2019,7 +2019,7 @@ var vthis = new Vue({
                 var err = response.data.message.success;
                 this.isLoadSaveMainButtonModal = false;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
-                alert(this.isPartielFecthData);
+                // alert(this.isPartielFecthData);
                 if(this.isPartielFecthData ==0){
                   this.get_commande_magazinier(2);
                 }else{
