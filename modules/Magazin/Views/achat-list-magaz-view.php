@@ -259,7 +259,7 @@
 																	</div>
 																	{{Object.keys(ArticleValidateNego).length}}
 																	<div class="col-md-6">
-																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue,det.qte_a_retirer)" :value="Object.keys(ArticleValidateNego).length < 1 ?det.qte_a_retirer:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:det.qte_a_retirer)">
+																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue,det.qte_a_retirer)" :value="Object.keys(ArticleValidateNego).length < 1 ?det.qte_a_retirer:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:det.qte_a_retirer)" :disabled="det.is_validate_livrer==0">
 																		{{ArticleValidateNego[det.id]}}
 																	</div>
 																</div>
