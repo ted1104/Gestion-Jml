@@ -10,7 +10,7 @@ class AretirerEntity extends Entity{
   protected $attributes = [
     'id' => null,
     'vente_detail_id' => null,
-    'qte_restante' => null,
+    'qte_retirer' => null,
     'users_id' => null,
     'created_at' => null,
     'updated_at' => null,
