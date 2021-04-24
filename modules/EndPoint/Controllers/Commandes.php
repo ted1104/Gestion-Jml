@@ -1047,6 +1047,37 @@ class Commandes extends ResourceController {
   }
   //############LES FONCTIONS DE LA RECHERCHE @@@@@@@@#############
 
+  //FUNCTION POUR ENREGISTRER LES QUANTITES D'ARTICLES RETIREE APRES LIVRAISON
+
+  public function save_article_retirer_commande(){
+    $iduser = $this->request->getPost('iduser');
+    $vente_detail_id = $this->request->getPost('vente_detail_id');
+    $qte = $this->request->getPost('qte');
+    $this->aretirerModel->beginTrans();
+
+
+    for ($i=0; $i < count($vente_detail_id); $i++) {
+      $data = ['vente_detail_id'=>$vente_detail_id[$i],'qte_retirer'=>$qte[$i],'users_id'=>$iduser];
+      // print_r($data);
+      // // die();
+      if(!$this->aretirerModel->insert($data)){
+        $this->aretirerModel->RollbackTrans();
+        return $this->respond([
+          'status' => 400,
+          'message' =>"Echec de l'opération; veuillez réesayer",
+          'data'=> $data=null
+        ]);
+      }
+    }
+    $this->aretirerModel->commitTrans();
+    return $this->respond([
+      'status' => 200,
+      'message' =>$message="Les quantités retirées ont été bien enregistrées avec succès",
+      'data'=> $data=null
+    ]);
+  }
+
+
 
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER LORS DE LA RECHERCHE: DONC LES COMMANDES CREES PAR UN FACTURIER
   public function search_commandes_get_user_facturier($iduser,$statutVente,$dateFilter,$dataToSearch,$type,$isParameterAdvanced,$limit,$offset){

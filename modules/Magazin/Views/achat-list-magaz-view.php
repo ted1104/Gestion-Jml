@@ -255,7 +255,7 @@
 																</div>
 																<div class="row" v-if="detailTab.status_vente_id.id==3">
 																	<div class="col-md-6">
-																		<label for="" class="margin-top-3">Qte à retirer aprés</label>
+																		<label for="" class="margin-top-3">Qte rétiréé</label>
 																	</div>
 																	{{Object.keys(ArticleValidateNego).length}}
 																	<div class="col-md-6">

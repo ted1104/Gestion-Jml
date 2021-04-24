@@ -10,7 +10,7 @@ class AretirerModel extends Model{
   protected $useTimestamps = true;
   protected $validationRules = [
     'vente_detail_id' => 'required',
-    'qte_restante' => 'required',
+    'qte_retirer' => 'required',
     'users_id' => 'required',
   ];
   protected $validationMessages = [
@@ -19,4 +19,15 @@ class AretirerModel extends Model{
     'users_id'=>['required' => 'Le champ users_id est obligatoire'],
   ];
   protected $returnType ='App\Entities\AretirerEntity';
+
+  // LES TRANSACTIONS
+  public function beginTrans(){
+    $this->db->transBegin();
+  }
+  public function RollbackTrans(){
+    $this->db->transRollback();
+  }
+  public function commitTrans(){
+    $this->db->transCommit();
+  }
 }
