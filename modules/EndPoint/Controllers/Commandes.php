@@ -1053,27 +1053,48 @@ class Commandes extends ResourceController {
     $iduser = $this->request->getPost('iduser');
     $vente_detail_id = $this->request->getPost('vente_detail_id');
     $qte = $this->request->getPost('qte');
+    $pwd = $this->request->getPost('pwd');
     $this->aretirerModel->beginTrans();
 
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
 
+    }else{
     for ($i=0; $i < count($vente_detail_id); $i++) {
-      $data = ['vente_detail_id'=>$vente_detail_id[$i],'qte_retirer'=>$qte[$i],'users_id'=>$iduser];
-      // print_r($data);
-      // // die();
-      if(!$this->aretirerModel->insert($data)){
-        $this->aretirerModel->RollbackTrans();
-        return $this->respond([
-          'status' => 400,
-          'message' =>"Echec de l'opération; veuillez réesayer",
-          'data'=> $data=null
-        ]);
+        $data = ['vente_detail_id'=>$vente_detail_id[$i],'qte_retirer'=>$qte[$i],'users_id'=>$iduser];
+        // print_r($data);
+        // // die();
+        if(!$this->aretirerModel->insert($data)){
+          $this->aretirerModel->RollbackTrans();
+          $message = [
+            'success' =>null,
+            'errors' => ["Echec de l'opération; veuillez réesayer"]
+          ];
+          return $this->respond([
+            'status' => 400,
+            'message' =>$message,
+            'data'=> $data=null
+          ]);
+        }
       }
+
+      $status = 200;
+      $message = [
+        'success' =>["Les quantités retirées ont été bien enregistrées avec succès"],
+        'errors' => null
+      ];
+      $data = "";
     }
     $this->aretirerModel->commitTrans();
     return $this->respond([
-      'status' => 200,
-      'message' =>$message="Les quantités retirées ont été bien enregistrées avec succès",
-      'data'=> $data=null
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
     ]);
   }
 
