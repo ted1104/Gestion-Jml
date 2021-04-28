@@ -206,7 +206,7 @@
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																	<div class="col-md-6 u-animation-FromTop" v-show="detailTab.status_vente_id.id==3">
-																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_magaz(detailTab,2, true)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> A Rétirer</button>
+																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_validation_a_retirer()" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> A Rétirer</button>
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div>
 																</div>
@@ -259,7 +259,7 @@
 																	</div>
 																	{{Object.keys(ArticleValidateNego).length}}
 																	<div class="col-md-6">
-																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue,det.qte_a_retirer)" :value="Object.keys(ArticleValidateNego).length < 1 ?det.qte_a_retirer:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:det.qte_a_retirer)" :disabled="det.is_validate_livrer==0">
+																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
 																		{{ArticleValidateNego[det.id]}}
 																	</div>
 																</div>
@@ -334,4 +334,40 @@
 					</div>
 			</div>
 	</div>
+
+
+	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalFaveur}">
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body" v-if="Object.keys(ArticleValidateNego).length > 0">
+							<div v-if="!isNoQuantity" class="text-center">
+								<span>Vous êtes sur le point de faire une valider un retrait à moitié,</span>
+								<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
+								<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+								<div class="form-group col-md-12 text-center">
+									<label for="password_op">Mot de passe *</label>
+									<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+								</div>
+								<button v-if="!isLoadSaveMainButtonModal" @click="add_qte_a_retirer()" class="btn btn-primary">Confirmer</button>
+								<!-- <button v-if="!isLoadSaveMainButtonModal && isPartielle" @click="add_validation_livraison_partielle()" class="btn btn-primary">Confirmer</button> -->
+								<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+							</div>
+
+						</div>
+						<div class="modal-body text-center" v-if="Object.keys(ArticleValidateNego).length < 1">
+							<span class="text-danger">
+							Impossibile de valider cette opération car aucun article n'a été renseigner à rétirer après!!
+							</span>
+						</div>
+
+
+				</div>
+		</div>
+</div>
 <?=$this->endSection() ?>

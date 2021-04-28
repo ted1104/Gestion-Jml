@@ -1085,7 +1085,7 @@ class Commandes extends ResourceController {
 
       $status = 200;
       $message = [
-        'success' =>["Les quantités retirées ont été bien enregistrées avec succès"],
+        'success' =>"Les quantités retirées ont été bien enregistrées avec succès",
         'errors' => null
       ];
       $data = "";
