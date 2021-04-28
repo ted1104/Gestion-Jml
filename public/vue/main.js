@@ -3294,10 +3294,20 @@ var vthis = new Vue({
         // console.log(this.ArticleValidateNego);
 
     },
-    _u_fx_create_tab_a_retirer(idarticle, e, qte_vendue){
+    _u_fx_create_tab_a_retirer(idarticle, e, qte_vendue,detOperation){
+      let totalQuantiteDejaRetirer = detOperation.logic_historique_a_retirer.reduce((accumulatedTotal, qteItem) =>parseFloat(accumulatedTotal)+parseFloat(qteItem.qte_retirer) ,0);
+
       if(e.target.value != "" && e.target.value > 0 && e.target.value <= qte_vendue){
-          var arry = [idarticle,e.target.value];
-          this.ArticleValidateNego[idarticle] = arry;
+        let tot = parseFloat(totalQuantiteDejaRetirer) + parseFloat(e.target.value);
+          if(tot <= qte_vendue){
+            var arry = [idarticle,e.target.value];
+            this.ArticleValidateNego[idarticle] = arry;
+          }else{
+            e.target.value = 0;
+            delete this.ArticleValidateNego[idarticle];
+            this._u_fx_config_error_message_bottom("Message",['La Somme de quantités déjà rétirées ne doit pas depasser la quantité totale vendue!!'],'alert-danger');
+          }
+
       }else{
         e.target.value = 0;
         delete this.ArticleValidateNego[idarticle];
@@ -3305,7 +3315,9 @@ var vthis = new Vue({
       }
 
       // e.target.value = 100;
+
       console.log(this.ArticleValidateNego);
+      console.log(totalQuantiteDejaRetirer);
         // if(valueMontantInput !="" && valueMontantInput > 0){
         //   var arry = [idarticle,valueMontantInput];
         //   this.ArticleValidateNego[idarticle] = arry;
