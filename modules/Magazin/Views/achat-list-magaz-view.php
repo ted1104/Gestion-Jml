@@ -253,7 +253,7 @@
 																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
 																	</span>
 																</div>
-																<div class="row u-border" v-if="detailTab.status_vente_id.id==3">
+																<div class="row" v-if="detailTab.status_vente_id.id==3">
 																	<div class="col-md-12">
 																		<label for="" class="margin-top-3">Qte rétiréé</label>
 																	</div>
@@ -382,6 +382,7 @@
 							</button>
 					</div>
 					<div class="modal-body">
+						<span>Quantités Rétirées : {{QteTotalOperationDejaRetirer}}</span><br>
 						<table class="table">
 							<thead>
 								<tr class="bg-secondary">
@@ -391,13 +392,14 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="(deet, index) in detailOperationAretirer" :class="currentLineSelectedInList==index?'bg-light':''">
+								<tr v-for="(deet, index) in detailOperationAretirer">
 									<td>{{deet.created_at.date.split('.')[0]}}</td>
 									<td>{{deet.qte_retirer}}</td>
 									<td>{{deet.users_id[0].nom+' '+deet.users_id[0].prenom}}</td>
 								</tr>
 								<!-- {{detailOperationAretirer}} -->
 							</tbody>
+
 						</table>
 					</div>
 

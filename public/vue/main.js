@@ -294,7 +294,8 @@ var vthis = new Vue({
       depot_id_in : "",
       depot_id_in_app : "",
 
-      detailOperationAretirer : null
+      detailOperationAretirer : null,
+      QteTotalOperationDejaRetirer : 0
 
     }
   },
@@ -3216,6 +3217,7 @@ var vthis = new Vue({
       this.modalTitle = "HISTORIQUE RETRAIT QUANTITE CLIENT - FACTURE "+factcode;
       this.styleModalDetail = 'block';
       this.detailOperationAretirer = det.logic_historique_a_retirer;
+      this.QteTotalOperationDejaRetirer = det.logic_historique_a_retirer.reduce((accumulatedTotal, qteItem) =>parseFloat(accumulatedTotal)+parseFloat(qteItem.qte_retirer) ,0);
       console.log("==DETAIL==");
       console.log(det.logic_historique_a_retirer);
     },
