@@ -30,6 +30,7 @@ var vthis = new Vue({
       dataToDisplaySecond : [],
       styleModal : 'none',
       styleModalFaveur : 'none',
+      styleModalDetail : 'none',
       display : this.styleModal,
       modalTitle :"",
       dateFilter :null,
@@ -291,7 +292,9 @@ var vthis = new Vue({
 
       isInterval : 0,
       depot_id_in : "",
-      depot_id_in_app : ""
+      depot_id_in_app : "",
+
+      detailOperationAretirer : null
 
     }
   },
@@ -3063,6 +3066,7 @@ var vthis = new Vue({
     _u_close_mod_form(){
       this.styleModal = 'none';
       this.styleModalFaveur = 'none';
+      this.styleModalDetail = 'none';
     },
     _u_open_mod_popup_caisse(cmd,val){
       if(val==3){
@@ -3207,6 +3211,13 @@ var vthis = new Vue({
     _u_open_mod_popup_validation_a_retirer(){
       this.modalTitle = "VALIDER DE RETRAIT RENSEIGNES";
       this.styleModalFaveur = 'block';
+    },
+    _u_open_mod_popup_detail(det, factcode){
+      this.modalTitle = "HISTORIQUE RETRAIT QUANTITE CLIENT - FACTURE "+factcode;
+      this.styleModalDetail = 'block';
+      this.detailOperationAretirer = det.logic_historique_a_retirer;
+      console.log("==DETAIL==");
+      console.log(det.logic_historique_a_retirer);
     },
     _u_get_today(){
       var currentDate = new Date();

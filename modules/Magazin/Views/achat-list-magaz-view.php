@@ -105,9 +105,9 @@
 																</thead>
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
-																		<th>
+																		<td>
 																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
-																		</th>
+																		</td>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>{{dt.date_vente}}</td>
 																		<!-- LOGIQUE HISTORIQUE  -->
@@ -253,14 +253,16 @@
 																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
 																	</span>
 																</div>
-																<div class="row" v-if="detailTab.status_vente_id.id==3">
-																	<div class="col-md-6">
+																<div class="row u-border" v-if="detailTab.status_vente_id.id==3">
+																	<div class="col-md-12">
 																		<label for="" class="margin-top-3">Qte rétiréé</label>
 																	</div>
-																	{{Object.keys(ArticleValidateNego).length}}
+
 																	<div class="col-md-6">
 																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
-																		{{ArticleValidateNego[det.id]}}
+																	</div>
+																	<div class="col-md-6">
+																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande)"><i class="mdi mdi-eye-outline" ></i></button>
 																	</div>
 																</div>
 																<br>
@@ -365,9 +367,41 @@
 							Impossibile de valider cette opération car aucun article n'a été renseigner à rétirer après!!
 							</span>
 						</div>
-
-
 				</div>
 		</div>
+</div>
+
+
+<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalDetail}">
+	<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+							<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+							<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+							</button>
+					</div>
+					<div class="modal-body">
+						<table class="table">
+							<thead>
+								<tr class="bg-secondary">
+									<th scope="col">Date</th>
+									<th scope="col">Quantité</th>
+									<th scope="col">Livré par</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(deet, index) in detailOperationAretirer" :class="currentLineSelectedInList==index?'bg-light':''">
+									<td>{{deet.created_at.date.split('.')[0]}}</td>
+									<td>{{deet.qte_retirer}}</td>
+									<td>{{deet.users_id[0].nom+' '+deet.users_id[0].prenom}}</td>
+								</tr>
+								<!-- {{detailOperationAretirer}} -->
+							</tbody>
+						</table>
+					</div>
+
+			</div>
+	</div>
 </div>
 <?=$this->endSection() ?>
