@@ -227,6 +227,14 @@
 																	<span :class="det.is_negotiate==2?'col-md-6 price-bare':'col-md-6'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
 																</div>
 																<br>
+																<div class="row" v-if="detailTab.status_vente_id.id==3">
+																	<div class="col-md-12">
+																		<label for="" class="margin-top-3">Qte rétiréé</label>
+																	</div>
+																	<div class="col-md-6">
+																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande)"><i class="mdi mdi-eye-outline" ></i></button>
+																	</div>
+																</div>
 																<!-- <div class="row">
 																	<span class="col-md-12">Avec Négociation
 																		<span v-if="detailTab.status_vente_id.id==1" :class="det.is_negotiate==0?'badge badge-info':(det.is_negotiate==1?'badge badge-warning':'badge badge-success')">{{det.is_negotiate==0?'Non':(det.is_negotiate==1?'En attente':'Valider')}}</span>
@@ -238,7 +246,6 @@
 																</div> -->
 																<hr>
 															</div>
-
 														</div>
 														<div class="container" v-if="isShowBlocHistoFactureStatus">
 															<div class="row">
@@ -305,5 +312,41 @@
 
 					</div>
 			</div>
+	</div>
+
+
+	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalDetail}">
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body">
+							<span>Quantités Rétirées : {{QteTotalOperationDejaRetirer}}</span><br>
+							<table class="table">
+								<thead>
+									<tr class="bg-secondary">
+										<th scope="col">Date</th>
+										<th scope="col">Quantité</th>
+										<th scope="col">Livré par</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="(deet, index) in detailOperationAretirer">
+										<td>{{deet.created_at.date.split('.')[0]}}</td>
+										<td>{{deet.qte_retirer}}</td>
+										<td>{{deet.users_id[0].nom+' '+deet.users_id[0].prenom}}</td>
+									</tr>
+									<!-- {{detailOperationAretirer}} -->
+								</tbody>
+
+							</table>
+						</div>
+
+				</div>
+		</div>
 	</div>
 <?=$this->endSection() ?>
