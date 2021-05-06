@@ -206,10 +206,10 @@
 															</div>
 															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
 																<div class="row">
-																	<div class="col-md-6">
+																	<!-- <div class="col-md-6">
 																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_magaz(detailTab,2, true)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Livrer</button>
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-																	</div>
+																	</div> -->
 																	<!-- <div class="col-md-6 text-right">
 																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_commande(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
 																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
@@ -233,7 +233,7 @@
 																	<div class="col-md-6">
 																		<span>Produit</span><br>
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
-																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
+																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue) && det.is_validate_livrer == 0" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
 																		</span>
 																	</div>
 																	<div class="col-md-2">
