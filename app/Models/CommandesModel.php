@@ -89,7 +89,7 @@ class CommandesModel extends Model{
     $depot = $iddepot;
     $idArticle = $idarticle;
     for ($i=0; $i < count($idarticle); $i++) {
-      $detail = $this->commandeDetail->Where('vente_id',$idcommande)->Where('articles_id',$idarticle[$i])->find();
+      $detail = $this->commandeDetail->Where('vente_id',$idcommande)->Where('articles_id',$idarticle[$i])->Where('is_validate_livrer',0)->find();
       $qte_vendue = $detail[0]->qte_vendue;
       $stockqte = $this->stockModel->Where('depot_id',$depot)->Where('articles_id',$idarticle[$i])->first();
       if($qte_vendue > $stockqte->qte_stock){
