@@ -52,7 +52,7 @@ class CommandesModel extends Model{
     $this->stockModel  = new StockModel();
     $is = false;
     $depot = $iddepot;
-    $detail = $this->commandeDetail->Where('vente_id',$idcommande)->findAll();
+    $detail = $this->commandeDetail->Where('vente_id',$idcommande)->Where('is_validate_livrer',0)->findAll();
     foreach ($detail as $key => $value) {
 
       $qte_vendue = $value->qte_vendue;
