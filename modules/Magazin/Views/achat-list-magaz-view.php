@@ -228,7 +228,7 @@
 																	<div class="col-md-6">
 																		<span>Produit</span><br>
 																		<span :class="det.is_faveur==1?'text-danger font-bold':''">{{det.articles_id[0].nom_article}}<span>
-																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue)" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
+																		<span v-if="parseFloat(det.logic_qte_stock_article_depot.stock_reel)<parseFloat(det.qte_vendue) && det.is_validate_livrer == 0" class="col-md-2 text-warning text-right"><i class="mdi mdi-alert-circle cursor"></i>
 																		</span>
 																	</div>
 																	<?php if(session('accessDroit')['g_achat_partiels'] == 1): ?>
