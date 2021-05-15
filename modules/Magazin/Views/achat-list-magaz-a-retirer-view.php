@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>LISTE DES ACHATS PARTIELS</h4>
+													 <h4>LISTE DES ACHATS A RETIRER</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -38,7 +38,7 @@
 												<div :class="isShow ? 'col-md-9 col-lg-9 col-xl-9':'col-md-12 u-transition'">
 													<div class="card m-b-30">
                             <div class="card-header bg-white">
-                                <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS LIVRES PARTIELLEMENT {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
+                                <h5 class="card-title text-black">INFORMATIONS SUR LES ACHATS AVEC OPERATION A RETIRER {{stateStatus==1?'EN ATTENTE':(stateStatus==2?'PAYE(S)':(stateStatus==3?'LIVRE(S)':'ANNULE(S)'))}} {{dateFilterDisplay}}</h5>
 																<div class="">
 																	<!-- <div @click="get_commande_magazinier(1)" class="btn badge-warning padding-4" :id="stateStatus==1?'border-menu':''">
                                       En attente <span class="badge badge-pill badge-light">{{ListFiltreData.attente==undefined?'0':ListFiltreData.attente}}</span>

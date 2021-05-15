@@ -282,6 +282,7 @@
                     <?php //if(session('lieuAffectation')->is_central == 1):  ?>
                     <!-- <li><a href="<?=base_url('magaz-list-achat-faveur') ?>">Mes Achats Faveurs</a></li> -->
                     <?php //endif; ?>
+                    <li><a href="<?=base_url('magaz-list-achat-a-retirer') ?>">Mes Achats à rétirer</a></li>
 
 
                   </ul>

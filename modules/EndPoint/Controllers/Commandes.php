@@ -1066,9 +1066,9 @@ class Commandes extends ResourceController {
 
     }else{
     for ($i=0; $i < count($vente_detail_id); $i++) {
+
         $data = ['vente_detail_id'=>$vente_detail_id[$i],'qte_retirer'=>$qte[$i],'users_id'=>$iduser];
-        // print_r($data);
-        // // die();
+
         if(!$this->aretirerModel->insert($data)){
           $this->aretirerModel->RollbackTrans();
           $message = [
@@ -1081,6 +1081,13 @@ class Commandes extends ResourceController {
             'data'=> $data=null
           ]);
         }
+
+        //Update commande to show that was a aretrire operatoon
+        $detailVente = $this->commandesDetailModel->Where('id',$vente_detail_id[$i])->find();
+        $updateCommande =  $this->model->update($detailVente[0]->vente_id,['have_oper_a_retirer' => 1]);
+        // print_r($detailVente[0]->vente_id);
+        //$this->commandesDetailModel->set('is_livrer',1)->Where('vente_id',$idcommande)->Where('is_faveur',1)->update();
+        // die();
       }
 
       $status = 200;

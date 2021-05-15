@@ -81,6 +81,12 @@ class Achat extends BaseController {
     // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
     echo view($this->linkMod.'\stock\depots-stock-personnel-magaz-view', $data);
   }
+  public function getAchatAretireMagaz(){
+    $data = [
+      'titlePage' => 'MES ACHATS A RETIRER : Dépôt'
+    ];
+    echo view($this->linkMod.'\achat-list-magaz-a-retirer-view', $data);
+  }
 
 
 
