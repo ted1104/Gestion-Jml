@@ -3298,8 +3298,10 @@ var vthis = new Vue({
     },
     _u_fx_create_tab_a_retirer(idarticle, e, qte_vendue,detOperation){
       let totalQuantiteDejaRetirer = detOperation.logic_historique_a_retirer.reduce((accumulatedTotal, qteItem) =>parseFloat(accumulatedTotal)+parseFloat(qteItem.qte_retirer) ,0);
+      console.log(e.target.value);
+      console.log(qte_vendue);
 
-      if(e.target.value != "" && e.target.value > 0 && e.target.value <= qte_vendue){
+      if(e.target.value != "" && parseFloat(e.target.value) > 0 && parseFloat(e.target.value) <= parseFloat(qte_vendue)){
         let tot = parseFloat(totalQuantiteDejaRetirer) + parseFloat(e.target.value);
           if(tot <= qte_vendue){
             var arry = [idarticle,e.target.value];
@@ -3318,8 +3320,8 @@ var vthis = new Vue({
 
       // e.target.value = 100;
 
-      console.log(this.ArticleValidateNego);
-      console.log(totalQuantiteDejaRetirer);
+      // console.log(this.ArticleValidateNego);
+      // console.log(totalQuantiteDejaRetirer);
         // if(valueMontantInput !="" && valueMontantInput > 0){
         //   var arry = [idarticle,valueMontantInput];
         //   this.ArticleValidateNego[idarticle] = arry;
@@ -3327,8 +3329,8 @@ var vthis = new Vue({
         // }else{
         //   delete this.ArticleValidateNego[idarticle];
         // }
-        // console.log("===here=====");
-        // console.log(this.ArticleValidateNego);
+        console.log("===here=====");
+        console.log(this.ArticleValidateNego);
 
     },
     _u_fx_get_montant(){
