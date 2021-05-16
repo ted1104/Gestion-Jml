@@ -295,7 +295,10 @@ var vthis = new Vue({
       depot_id_in_app : "",
 
       detailOperationAretirer : null,
-      QteTotalOperationDejaRetirer : 0
+      QteTotalOperationDejaRetirer : 0,
+
+      isGettingAretire : 0,
+
 
     }
   },
@@ -627,8 +630,8 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_commande_magazinier(statut=2,limit=this.PerPaged,offset=0, indexPage=0,isPartiel=this.isPartielFecthData){
-      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/"+isPartiel+"/depot";
+    get_commande_magazinier(statut=2,limit=this.PerPaged,offset=0, indexPage=0,isPartiel=this.isPartielFecthData, isAretirer = this.isGettingAretire){
+      const newurl = this.url+"commandes-get-by-depot/"+this.dpot_id+"/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/"+isPartiel+"/"+isAretirer+"/depot";
       this.stateStatus = statut;
       // alert(this.isPartielFecthData);
       // alert(this.dateFilter);
@@ -653,6 +656,8 @@ var vthis = new Vue({
               this.paginationTab=[];
               this.isResearchPagination = false;
               this._u_fx_generate_pagination(response.data.all);
+
+              console.log(this.dataToDisplay);
             }).catch(error =>{
               console.log(error);
             })
@@ -2962,6 +2967,35 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    _u_create_line_article_pv_perdue_depot(){
+      if(this.codeArticle ==""){
+        this._u_fx_config_error_message_bottom("Message",['Le champs article ne doit pas être vide'],'alert-danger');
+        return;
+      }
+      if(this.depots_id =="" || this.usersDestTransfert =="" || this.usersDestTransfert == null){
+        this._u_fx_config_error_message_bottom("Message",['Le champs dépôt et magasinier source ne doivent pas être vide'],'alert-danger');
+        return;
+      }
+      const newurl = this.url+"articles-search-data-pv-perdue-depot/"+this.codeArticle+"/"+this.qte+"/"+this.depots_id+"/"+this.usersDestTransfert+"/search";
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                this.tabListData.push(response.data.data);
+                this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
+                this.codeArticle = "";
+                this.qte = 0;
+                this.isLoadSaveMainButtonModal = false;
+                console.log(this.tabListData);
+                return;
+              }
+              this._u_fx_config_error_message_bottom("Message",[response.data.message.errors],'alert-danger')
+              this.isLoadSaveMainButtonModal = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
     _u_create_line_article_transfert(){
       const newurl = this.url+"articles-search-data-transfert/"+this.codeArticle+"/"+this.qte+"/"+this.users_id+"/search";
 
@@ -3807,7 +3841,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute] ==='admin-add-article' || pth[this.indexRoute] ==='admin-list-article' || pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){
       this.get_article();
     }
-    if(pth[this.indexRoute] ==='admin-add-appro' || pth[this.indexRoute] ==='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' ||  pth[this.indexRoute]=='admin-add-users' || pth[this.indexRoute] === 'magaz-add-appro-to-depot' || pth[this.indexRoute] == 'magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv' || pth[this.indexRoute] =='admin-add-vente'){
+    if(pth[this.indexRoute] ==='admin-add-appro' || pth[this.indexRoute] ==='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' ||  pth[this.indexRoute]=='admin-add-users' || pth[this.indexRoute] === 'magaz-add-appro-to-depot' || pth[this.indexRoute] == 'magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv' || pth[this.indexRoute] =='admin-add-vente' || pth[this.indexRoute]=='magaz-add-pv-historique'){
       this.get_depots();
     }
     if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' || pth[this.indexRoute]==='admin-add-vente'){
@@ -3940,6 +3974,10 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute] ==='admin-add-client' || pth[this.indexRoute] ==='admin-list-client'){
       this.get_client_abonne();
+    }
+    if(pth[this.indexRoute]=='magaz-list-achat-a-retirer'){
+      // this.isGettingAretire = 1;
+      this.get_commande_magazinier(3);
     }
 
 

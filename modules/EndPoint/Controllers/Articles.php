@@ -704,7 +704,79 @@ class Articles extends ResourceController {
     ]);
   }
 
+  public function article_search_for_pv_perdue($codeArticle,$qte,$depotid,$idUser){
+    $codeArt = $codeArticle;
+    $Qte = $qte;
+    $depot = $depotid;
+    $data = $this->model->Where('code_article',$codeArt)->find();
+    if($data){
+      //CHECK IF DEPOT HAS THIS QUANTIY
+      $condition =[
+        'depot_id'=>$depot,
+        'articles_id'=>$data[0]->id
+      ];
 
+      $condtionPersonnel = [
+        'users_id'=>$idUser,
+        'articles_id' =>$data[0]->id
+      ];
+      //CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+      $initqte = $this->stockModel->getWhere($condition)->getRow();
+      $initqtePersonnel = $this->stockPersonnelModel->getWhere($condtionPersonnel)->getRow();
+      if(!$initqte or !$initqtePersonnel){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'Impossible de trouver cet article dans le dépôt ou dans le stock personnel veuillez contacter l\'administrateur du système'
+        ];
+        $data = null;
+      }else{
+        if($Qte <= $initqte->qte_stock_virtuel and $Qte <= $initqte->qte_stock){
+          if($Qte <= $initqtePersonnel->qte_stock){
+            $status = 200;
+            $message = [
+              'success' =>'Bien ajouté ',
+              'errors'=> null
+            ];
+            $data = [
+              'id'=>$data[0]->id,
+              'code' => $codeArt,
+              'nom_article' => $data[0]->nom_article,
+              'qte' => $Qte,
+            ];
+          }else{
+            $status = 400;
+            $message = [
+              'success' =>null,
+              'errors'=>'La quantité perdue doit être inférieure ou égale à la quantité  réelle personnel'
+            ];
+            $data = null;
+          }
+
+      }else{
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'La quantité perdue doit être inférieure ou égale à la quantité physique et réelle dans le dépôt général'
+        ];
+        $data = null;
+      }
+    }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>'Aucun Article trouvé avec ce code'
+      ];
+      $data = null;
+    }
+
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
 
 
 

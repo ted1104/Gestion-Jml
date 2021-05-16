@@ -18,6 +18,10 @@ $routes->get('magaz-add-transfert-to-magaz','Achat::addTransfertDepot',['filter'
 $routes->get('magaz-histo-transfert-to-magaz','Achat::getTransfertDepot',['filter' => 'isMagazinier']);
 $routes->get('magaz-stock-perso','Achat::getStockPersonnelMagaz',['filter' => 'isMagazinier']);
 $routes->get('magaz-list-achat-a-retirer','Achat::getAchatAretireMagaz',['filter' => 'isMagazinier']);
+$routes->get('magaz-add-pv-historique','Achat::addPvPerdue',['filter' => 'isMagazinier']);
+
+
+
 
 
 

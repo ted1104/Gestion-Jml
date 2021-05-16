@@ -69,7 +69,6 @@ class CommandesDetailEntity extends Entity{
     );
 
   }
-
   public function getLogicHistoriqueARetirer(){
     return $this->aretirerModel->Where('vente_detail_id',$this->attributes['id'])->findAll();
   }

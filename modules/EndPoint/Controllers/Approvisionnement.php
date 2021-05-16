@@ -9,6 +9,7 @@ use App\Models\ArticlesModel;
 use App\Models\PvRestaurationModel;
 use App\Models\ClotureStockModel;
 use App\Models\StockPersonnelModel;
+use App\Models\PvPerdueHistoriqueModel;
 
 use App\Entities\StockEntity;
 use App\Entities\PvRestaurationEntity;
@@ -27,6 +28,7 @@ class Approvisionnement extends ResourceController {
   protected $pvRestaurationModel = null;
   protected $clotureStockModel = null;
   protected $stockPersonnelModel = null;
+  protected $pvPerdueHistoriqueModel = null;
 
 
 
@@ -38,6 +40,7 @@ class Approvisionnement extends ResourceController {
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->clotureStockModel = new ClotureStockModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
+    $this->pvPerdueHistoriqueModel = new PvPerdueHistoriqueModel();
 
 
   }
@@ -296,4 +299,100 @@ class Approvisionnement extends ResourceController {
     ]);
   }
 
+  public function addHistoriquePv(){
+    $depot = $this->request->getPost('depots_id');
+    $magaz_source = $this->request->getPost('magaz_source_id');
+    $articles = $this->request->getPost('articles_id');
+    $qte_perdue = $this->request->getPost('qte_perdue');
+    $users_id = $this->request->getPost('users_id');
+
+    //verfication si quantite est disponible dans le stock reel et virtuel
+    for ($i=0; $i < count($articles); $i++) {
+      // code...
+      $condition =[
+        'depot_id'=>$depot,
+        'articles_id'=>$articles[$i]
+      ];//CONDITION POUR TROUVER LA BONNE LIGNE DANS STOCK
+      $condtionPersonnel = [
+        'users_id'=>$magaz_source,
+        'articles_id' =>$articles[$i]
+      ];
+      $initqte = $this->stockModel->getWhere($condition)->getRow();
+      $initqtePersonnel = $this->stockPersonnelModel->getWhere($condtionPersonnel)->getRow();
+      if($initqte and $initqtePersonnel){
+          if($qte_perdue[$i] <= $initqte->qte_stock_virtuel and $qte_perdue[$i] <= $initqte->qte_stock){
+            if($qte_perdue[$i] <= $initqtePersonnel->qte_stock){
+              $Qte = $initqte->qte_stock - $qte_perdue[$i];//ADDITION ANCIENNE + NOUVELLE
+              $QteVirtuel = $initqte->qte_stock_virtuel - $qte_perdue[$i];
+              //UPDATE AND ADD TO QTE PERSONNEL
+              $udpateStockPersonnel = $this->stockPersonnelModel->updateQtePersonnel($magaz_source,$articles[$i], $qte_perdue[$i],0);
+              if($this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel])){
+                //create line histoirque
+                $dat = [
+                  'depots_id'=>$depot,
+                  'magaz_source_id'=>$magaz_source,
+                  'articles_id'=>$articles[$i],
+                  'qte_perdue'=>$qte_perdue[$i],
+                  'users_id'=>$users_id
+                ];
+                if($this->pvPerdueHistoriqueModel->insert($dat)){
+                  $status = 200;
+                  $message = [
+                    'success' => 'Les quantités PV ont a été bien rétirer avec succès',
+                    'errors' => null
+                  ];
+                  $data = null;
+                }else{
+                  $status = 400;
+                  $message = [
+                    'success' => null,
+                    'errors' => $this->pvPerdueHistoriqueModel->errors()
+                  ];
+                  $data = null;
+                }
+              }else{
+                $status = 400;
+                $message = [
+                  'success' =>'Action reussie, reussi mais c\'est probable que certaines actions n\'aient pas abouties! Veuillez verifier l\'historique afin de voir quel article a été affecté',
+                  'errors'=> null
+                ];
+                $data = null;
+              }
+            }else{
+              $status = 400;
+              $message = [
+                'success' =>'Action reussie, reussi mais c\'est probable que certaines actions n\'aient pas abouties! Veuillez verifier l\'historique afin de voir quel article a été affecté',
+                'errors'=> null
+              ];
+              $data = null;
+            }
+          }else{
+            $status = 200;
+            $message = [
+              'success' =>'Action reussie, reussi mais c\'est probable que certaines actions n\'aient pas abouties! Veuillez verifier l\'historique afin de voir quel article a été affecté',
+              'errors'=> null
+            ];
+            $data = null;
+          }
+      }else{
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>'Impossible de trouver cet article dans le dépôt ou dans le stock personnel veuillez contacter l\'administrateur du système'
+        ];
+        $data = null;
+      }
+    }
+
+
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+
+
+
+
+  }
 }

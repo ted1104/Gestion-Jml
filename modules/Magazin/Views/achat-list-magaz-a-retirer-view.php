@@ -99,7 +99,7 @@
 																		<th scope="col">{{stateStatus==1?'Commander par':(stateStatus==2?'Payer à':(stateStatus==3?'Livrer par':'Annuler par'))}}</th>
 																		<th scope="col">Montant</th>
 																		<th scope="col">Status</th>
-																		<th scope="col">Valider</th>
+																		<!-- <th scope="col">Valider</th> -->
 																		<th scope="col">{{stateStatus !=3?'Valider':'Print'}}</th>
 																		<th scope="col">Action</th>
 																	</tr>
@@ -135,12 +135,12 @@
 																			<!-- <span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==2" class="badge badge-success">TOUT</span> -->
 																			<span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==1" class="badge badge-warning">PARTIEL</span>
 																		</td>
-																		<td>
+																		<!-- <td>
 																			<button v-if="dt.status_vente_id.id==3 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 
 																			<button v-if="dt.status_vente_id.id==3 && dt.logic_is.reel" class='btn btn-round btn-warning' @click="_u_open_mod_popup_magaz(dt,3)"><i class='mdi mdi-alert-circle'></i></button>
 
-																		</td>
+																		</td> -->
 																		<td scope="col">
 																			<button v-if="dt.status_vente_id.id==2 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 
@@ -205,16 +205,16 @@
 																<h5 class="col-md-10 card-title">DETAIL FACTURE {{detailTab.numero_commande}}</h5>
 																<i class="mdi mdi-close-circle col-md-2 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
-															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
+															<div class="col-md-12 u-animation-FromTop">
 																<div class="row">
-																	<div class="col-md-6">
+																	<!-- <div class="col-md-6">
 																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_magaz(detailTab,2, true)" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Livrer</button>
 																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-																	</div>
-																	<!-- <div class="col-md-6 text-right">
-																		<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_commande(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
-																		<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																	</div> -->
+																	<div class="col-md-6 u-animation-FromTop" v-show="detailTab.status_vente_id.id==3">
+																		<button v-if="!isLoadNego" type="button" @click="_u_open_mod_popup_validation_a_retirer()" class="btn btn-rounded btn-info padding-4-l-g font-size-2"><i class="mdi mdi-checkbox-marked-circle-outline"></i> A Rétirer</button>
+																		<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div>
 																</div>
 																<hr>
 															</div>
@@ -258,6 +258,18 @@
 																		<span :class="parseFloat(det.logic_qte_stock_article_depot.stock_reel)>=parseFloat(det.qte_vendue)?'text-success':'text-danger'">{{det.logic_qte_stock_article_depot.stock_reel}}</span>
 																	</span>
 
+																</div>
+																<div class="row" v-if="detailTab.status_vente_id.id==3">
+																	<div class="col-md-12">
+																		<label for="" class="margin-top-3">Qte rétiréé</label>
+																	</div>
+
+																	<div class="col-md-6">
+																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue, det)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
+																	</div>
+																	<div class="col-md-6">
+																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande)"><i class="mdi mdi-eye-outline" ></i></button>
+																	</div>
 																</div>
 																<br>
 																<!-- <div class="row">
@@ -329,5 +341,75 @@
 
 					</div>
 			</div>
+	</div>
+
+
+		<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalFaveur}">
+			<div class="modal-dialog" role="document">
+					<div class="modal-content">
+							<div class="modal-header">
+									<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+									<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+									</button>
+							</div>
+							<div class="modal-body" v-if="Object.keys(ArticleValidateNego).length > 0">
+								<div v-if="!isNoQuantity" class="text-center">
+									<span>Vous êtes sur le point de faire une valider un retrait à moitié,</span>
+									<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?></span>
+									<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+									<div class="form-group col-md-12 text-center">
+										<label for="password_op">Mot de passe *</label>
+										<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+									</div>
+									<button v-if="!isLoadSaveMainButtonModal" @click="add_qte_a_retirer()" class="btn btn-primary">Confirmer</button>
+									<!-- <button v-if="!isLoadSaveMainButtonModal && isPartielle" @click="add_validation_livraison_partielle()" class="btn btn-primary">Confirmer</button> -->
+									<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+								</div>
+
+							</div>
+							<div class="modal-body text-center" v-if="Object.keys(ArticleValidateNego).length < 1">
+								<span class="text-danger">
+								Impossibile de valider cette opération car aucun article n'a été renseigner à rétirer après!!
+								</span>
+							</div>
+					</div>
+			</div>
+	</div>
+
+
+	<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalDetail}">
+		<div class="modal-dialog" role="document">
+				<div class="modal-content">
+						<div class="modal-header">
+								<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+								<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</button>
+						</div>
+						<div class="modal-body">
+							<span>Quantités Rétirées : {{QteTotalOperationDejaRetirer}}</span><br>
+							<table class="table">
+								<thead>
+									<tr class="bg-secondary">
+										<th scope="col">Date</th>
+										<th scope="col">Quantité</th>
+										<th scope="col">Livré par</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="(deet, index) in detailOperationAretirer">
+										<td>{{deet.created_at.date.split('.')[0]}}</td>
+										<td>{{deet.qte_retirer}}</td>
+										<td>{{deet.users_id[0].nom+' '+deet.users_id[0].prenom}}</td>
+									</tr>
+									<!-- {{detailOperationAretirer}} -->
+								</tbody>
+
+							</table>
+						</div>
+
+				</div>
+		</div>
 	</div>
 <?=$this->endSection() ?>

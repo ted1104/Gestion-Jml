@@ -10,6 +10,7 @@ use App\Models\CommandesStatusHistoriqueModel;
 use App\Models\StockModel;
 use CodeIgniter\I18n\Time;
 use App\Models\CommandesModel;
+use App\Models\AretirerModel;
 
 
 
@@ -30,7 +31,7 @@ class CommandesEntity extends Entity{
     'depots_id_faveur' => null,
     'depots_id_first_livrer' => null,
     'is_livrer_all' => null,
-    'have_oper_a_retirer' =>null,
+    'logic_have_oper_a_retirer' =>null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
@@ -51,6 +52,7 @@ class CommandesEntity extends Entity{
   protected $stockModel = null;
   protected $commandesModel = null;
   protected $encrypter;
+  protected $aretirerModel = null;
 
 
 
@@ -65,6 +67,7 @@ class CommandesEntity extends Entity{
     $this->stockModel = new StockModel();
     $this->encrypter = Services::encrypter();
     $this->commandesModel = new CommandesModel();
+    $this->aretirerModel = new AretirerModel();
   }
 
   public function getStatusVenteId(){
@@ -191,6 +194,16 @@ class CommandesEntity extends Entity{
     );
   }
 
+  public function getLogicHaveOperARetirer(){
+    $response = false;
+    $allDetailVente = $this->commandeDetail->Where('vente_id',$this->attributes['id'])->findAll();
+    foreach ($allDetailVente as $key => $value) {
+      if($this->aretirerModel->Where('vente_detail_id',$value->id)->findAll()){
+        $response = true;
+      }
+    }
+    return $response;
+  }
   // public function getLogicCodeFacture(){
   //   $plainText = 200;
   //   $ciphertext = base64_encode($this->encrypter->encrypt($plainText));

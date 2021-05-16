@@ -77,6 +77,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('article-change-visibilite-sur-rapport/(:num)','Articles::article_activate_visibilite_sur_rapport/$1');
   $routes->post('articles-set-kg-pv','Articles::article_set_kg_pv');
   $routes->put('update-article/(:num)/update','Articles::article_update/$1');
+  $routes->get('articles-search-data-pv-perdue-depot/(:any)/(:num)/(:num)/(:num)/search','Articles::article_search_for_pv_perdue/$1/$2/$3/$4');
 
 
   $routes->post('art-test','Articles::multitest');
@@ -88,7 +89,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('commandes-generate-code','Commandes::commande_generate_facture_code');
   $routes->get('commandes-get-all/(:num)/(:num)/(:any)/(:num)/(:num)/caissier','Commandes::commandes_get_user_caissier/$1/$2/$3/$4/$5');
   $routes->get('commandes-validation-caissier/(:any)/(:num)/(:num)/(:any)/validation','Commandes::validation_operation_commande_caissier/$1/$2/$3/$4');
-  $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/(:num)/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2/$3/$4/$5/$6');
+  $routes->get('commandes-get-by-depot/(:num)/(:num)/(:any)/(:num)/(:num)/(:num)/(:num)/depot','Commandes::commandes_get_by_depot/$1/$2/$3/$4/$5/$6/$7');
   $routes->get('commandes-validation-magaz/(:any)/(:num)/(:num)/(:num)/validation','Commandes::validation_operation_commande_magasinier/$1/$2/$3/$4');
   $routes->get('commandes-all-by-status/(:num)/(:any)/(:num)/(:num)/(:num)/status','Commandes::commandes_all_get_by_status/$1/$2/$3/$4/$5');
   $routes->post('demande-negotiation','Commandes::commandes_negotiate');
@@ -121,6 +122,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('pv-approvisionnement-restaure','Approvisionnement::approvisionementPvRestaure');
   $routes->post('validate-partiel-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_validate_partiel_articles');
   $routes->get('ajustement-stock-depot-virtuelle-reelle/(:num)/(:num)/(:any)/(:any)','Approvisionnement::ajustementStockDepot/$1/$2/$3/$4');
+  $routes->post('add-pv-historique', 'Approvisionnement::addHistoriquePv');
 
 
 
