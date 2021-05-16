@@ -10,6 +10,7 @@ use App\Models\PvRestaurationModel;
 use App\Models\ClotureStockModel;
 use App\Models\StockPersonnelModel;
 use App\Models\PvPerdueHistoriqueModel;
+use App\Models\PvPerdueHistoriqueDetailModel;
 
 use App\Entities\StockEntity;
 use App\Entities\PvRestaurationEntity;
@@ -29,6 +30,7 @@ class Approvisionnement extends ResourceController {
   protected $clotureStockModel = null;
   protected $stockPersonnelModel = null;
   protected $pvPerdueHistoriqueModel = null;
+  protected $pvPerdueHistoriqueDetailModel = null;
 
 
 
@@ -41,6 +43,7 @@ class Approvisionnement extends ResourceController {
     $this->clotureStockModel = new ClotureStockModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
     $this->pvPerdueHistoriqueModel = new PvPerdueHistoriqueModel();
+    $this->pvPerdueHistoriqueDetailModel = new PvPerdueHistoriqueDetailModel();
 
 
   }
@@ -305,6 +308,16 @@ class Approvisionnement extends ResourceController {
     $articles = $this->request->getPost('articles_id');
     $qte_perdue = $this->request->getPost('qte_perdue');
     $users_id = $this->request->getPost('users_id');
+    $dateHistorique = $this->request->getPost('date_historique');
+
+    $this->pvPerdueHistoriqueModel->beginTrans();
+    $dat = [
+      'depots_id'=>$depot,
+      'date_historique' =>$dateHistorique,
+      'magaz_source_id'=>$magaz_source,
+      'users_id'=>$users_id
+    ];
+    $idHistorique = $this->pvPerdueHistoriqueModel->insert($dat);
 
     //verfication si quantite est disponible dans le stock reel et virtuel
     for ($i=0; $i < count($articles); $i++) {
@@ -328,20 +341,28 @@ class Approvisionnement extends ResourceController {
               $udpateStockPersonnel = $this->stockPersonnelModel->updateQtePersonnel($magaz_source,$articles[$i], $qte_perdue[$i],0);
               if($this->stockModel->update($initqte->id,['qte_stock'=>$Qte,'qte_stock_virtuel'=>$QteVirtuel])){
                 //create line histoirque
-                $dat = [
-                  'depots_id'=>$depot,
-                  'magaz_source_id'=>$magaz_source,
-                  'articles_id'=>$articles[$i],
-                  'qte_perdue'=>$qte_perdue[$i],
-                  'users_id'=>$users_id
-                ];
-                if($this->pvPerdueHistoriqueModel->insert($dat)){
-                  $status = 200;
-                  $message = [
-                    'success' => 'Les quantités PV ont a été bien rétirer avec succès',
-                    'errors' => null
+                if($idHistorique){
+                  $datDetail = [
+                    'pv_historique_id' =>$idHistorique,
+                    'articles_id'=>$articles[$i],
+                    'qte_perdue'=>$qte_perdue[$i],
                   ];
-                  $data = null;
+
+                  if($this->pvPerdueHistoriqueDetailModel->insert($datDetail)){
+                    $status = 200;
+                    $message = [
+                      'success' => 'Les quantités PV ont a été bien rétirer avec succès',
+                      'errors' => null
+                    ];
+                    $data = null;
+                  }else{
+                    $status = 400;
+                    $message = [
+                      'success' => null,
+                      'errors' => $this->pvPerdueHistoriqueDetailModel->errors()
+                    ];
+                    $data = null;
+                 }
                 }else{
                   $status = 400;
                   $message = [
@@ -383,12 +404,12 @@ class Approvisionnement extends ResourceController {
         $data = null;
       }
     }
-
+    $this->pvPerdueHistoriqueModel->commitTrans();
 
     return $this->respond([
       'status' => $status,
       'message' =>$message,
-      'data'=> $data
+      'data'=> $idHistorique
     ]);
 
 

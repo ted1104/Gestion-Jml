@@ -2599,6 +2599,47 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    add_historique_retranche_pv(e){
+      e.preventDefault();
+      const newurl = this.url+"add-pv-historique";
+      var form = new FormData();
+      form.append('depots_id',this.depots_id);
+      form.append('magaz_source_id',this.usersDestTransfert);
+      form.append('users_id',this.users_id);
+      form.append('date_historique', this.date_approvisionnement);
+      // form.append('status_operation',0);
+
+        for(var i=0; i< this.tabListData.length; i++){
+          form.append('articles_id[]', this.tabListData[i]['id']);
+          form.append('qte_perdue[]', this.tabListData[i]['qte']);
+  			}
+        if(this.tabListData.length < 1){
+          this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
+          return;
+        }
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  // this.get_article();
+                  this.isLoadSaveMainButton = false;
+                  this.tabListData=[];
+                  this.usersListParDepot = [];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
