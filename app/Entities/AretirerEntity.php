@@ -5,6 +5,8 @@ use Config\Services;
 use App\Models\ArticlesModel;
 use App\Models\StEtatCritiqueModel;
 use App\Models\UsersModel;
+use App\Models\AretirerModel;
+
 
 class AretirerEntity extends Entity{
 
@@ -16,19 +18,26 @@ class AretirerEntity extends Entity{
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
+    'logic_historique_a_retirer' => null
   ];
 
   protected $datamap = [];
   protected static $userModel = null;
+  protected $aretirerModel = null;
+
   // protected static $etatcritique = null;
   public function __construct(array $data = null){
     parent::__construct($data);
     self::$userModel = new UsersModel();
+    $this->aretirerModel = new AretirerModel();
     // self::$etatcritique = new StEtatCritiqueModel();
 
   }
   public function getUsersId(){
     return self::$userModel->select('id,nom,prenom')->Where('id',$this->attributes['users_id'])->find();
+  }
+  public function getLogicHistoriqueARetirer(){
+    return 'pppappa';
   }
   //
   // protected function getArticlesId(){

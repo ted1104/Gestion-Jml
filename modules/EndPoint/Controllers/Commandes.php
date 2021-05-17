@@ -307,14 +307,39 @@ class Commandes extends ResourceController {
     //   $conditonAretirer = ['have_oper_a_retirer' =>1];
     // }
 
+    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->Where('status_vente_id',$statutVente)->Where($conditionPartiel)->findAll($limit,$offset);
 
 
-    $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->findAll($limit,$offset);
+    if($isAretirer ==1){
+      $dataAnc = $this->model->select("*, g_interne_vente.id")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll($limit,$offset);
+
+      $dataCount = $this->model->select("*, g_interne_vente.id")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
+
+      // $dataCount = $this->model->select("*, g_interne_vente.id")->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
+      // $dataNew = [];
+      // $i = 0;
+      // foreach ($dataAnc as $key => $value) {
+      //   if($value->logic_have_oper_a_retirer==1){
+      //     $i ++;
+      //     array_push($dataNew, $value);
+      //   }
+      // }
+      $data = $dataAnc;
+      //print_r($statutVente);
+      // print_r($data);
+    }
+
+
+
+
+
+    // print_r(count($data));
+    // die();
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> $this->model->selectCount('id')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->orderBy('id','DESC')->findAll()[0]->id,
+      'all'=> $isAretirer ==0 ? $this->model->selectCount('id')->Where($condition)->Where('depots_id',$iddepot)->where('status_vente_id',$statutVente)->Where($conditionPartiel)->orderBy('id','DESC')->findAll()[0]->id : count($dataCount),
       'nombreVenteType' => $this->commandeByTypeByuser($iddepot,'depots_id',$condition)
     ]);
   }

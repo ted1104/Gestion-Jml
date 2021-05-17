@@ -62,6 +62,7 @@ class ArticlesEntity extends Entity{
   public function getLogicQteVirtuelDispo(){
     return $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$this->attributes['id'])->find()[0]->qte_stock_virtuel;
   }
+  
 
 
 

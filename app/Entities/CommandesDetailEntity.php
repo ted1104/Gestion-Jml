@@ -27,7 +27,8 @@ class CommandesDetailEntity extends Entity{
     'deleted_at' => null,
     'logic_article' => null,
     'logic_qte_stock_article_depot' => null,
-    'logic_historique_a_retirer' => null
+    'logic_historique_a_retirer'=>null
+
   ];
 
   protected $datamap = [];
@@ -37,7 +38,7 @@ class CommandesDetailEntity extends Entity{
   protected $commandesModel = null;
   protected $aretirerModel = null;
 
-  
+
   public function __construct(array $data = null){
     parent::__construct($data);
     $this->articlesModel = new ArticlesModel();

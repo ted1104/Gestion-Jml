@@ -39,7 +39,8 @@ class CommandesEntity extends Entity{
     'logic_somme' =>null,
     'logic_status_histo'=>null,
     'logic_is' => null,
-    'logic_code_facture'=>null
+    'logic_code_facture'=>null,
+
   ];
 
   protected $datamap = [];
@@ -204,6 +205,7 @@ class CommandesEntity extends Entity{
     }
     return $response;
   }
+  
   // public function getLogicCodeFacture(){
   //   $plainText = 200;
   //   $ciphertext = base64_encode($this->encrypter->encrypt($plainText));

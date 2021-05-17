@@ -4043,7 +4043,7 @@ var vthis = new Vue({
       this.get_client_abonne();
     }
     if(pth[this.indexRoute]=='magaz-list-achat-a-retirer'){
-      // this.isGettingAretire = 1;
+      this.isGettingAretire = 1;
       this.get_commande_magazinier(3);
     }
     if(pth[this.indexRoute] == 'magaz-historique-pv' || pth[this.indexRoute] =='admin-historique-pv' || pth[this.indexRoute] =='facturier-historique-pv' || pth[this.indexRoute] =='caissier-historique-pv' || pth[this.indexRoute] =='gerant-historique-pv'){
