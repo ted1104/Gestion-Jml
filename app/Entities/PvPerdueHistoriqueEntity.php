@@ -5,6 +5,9 @@ use Config\Services;
 use App\Models\ArticlesModel;
 use App\Models\StEtatCritiqueModel;
 use App\Models\UsersModel;
+use App\Models\StDepotModel;
+use App\Models\PvPerdueHistoriqueDetailModel;
+
 
 class PvPerdueHistoriqueEntity extends Entity{
 
@@ -17,18 +20,33 @@ class PvPerdueHistoriqueEntity extends Entity{
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
+    'logic_detail_historique' => null
   ];
 
   protected $datamap = [];
   protected static $userModel = null;
+  protected static $depotModel = null;
+  protected $pvPerdueHistoriqueDetailModel = null;
+
+
   public function __construct(array $data = null){
     parent::__construct($data);
     self::$userModel = new UsersModel();
-    // self::$etatcritique = new StEtatCritiqueModel();
+    self::$depotModel = new StDepotModel();
+    $this->pvPerdueHistoriqueDetailModel = new PvPerdueHistoriqueDetailModel();
 
   }
   public function getUsersId(){
     return self::$userModel->select('id,nom,prenom')->Where('id',$this->attributes['users_id'])->find();
+  }
+  public function getMagazSourceId(){
+    return self::$userModel->select('id,nom,prenom')->Where('id',$this->attributes['magaz_source_id'])->find();
+  }
+  public function getDepotsId(){
+    return self::$depotModel->select('id,nom')->Where('id',$this->attributes['depots_id'])->find();
+  }
+  public function getLogicDetailHistorique(){
+    return $this->pvPerdueHistoriqueDetailModel->Where('pv_historique_id',$this->attributes['id'])->findAll();
   }
   //
   // protected function getArticlesId(){
