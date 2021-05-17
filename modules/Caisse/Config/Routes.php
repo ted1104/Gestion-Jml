@@ -10,3 +10,5 @@ $routes->get('caissier-list-caissier','Achat::listCaissier',['filter' => 'isCais
 $routes->get('caissier-encaissement-externe','Achat::getEncaissementExterne',['filter' => 'isCaissier']);
 $routes->get('caissier-config-system','Dashboard::getConfigSystem',['filter' => 'isCaissier']);
 $routes->get('caissier-stock-pv','Dashboard::getStockPv',['filter' => 'isCaissier']);
+$routes->get('caissier-add-pv-historique','Achat::addPvPerdue',['filter' => 'isCaissier']);
+$routes->get('caissier-historique-pv','Achat::getPvPerdue',['filter' => 'isCaissier']);

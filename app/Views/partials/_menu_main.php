@@ -204,7 +204,27 @@
                       <?php endif;?>
                       <li><a href="<?=base_url('caissier-list-achat') ?>">Mes Achats</a></li>
                       <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                        <li><a href="<?=base_url('caissier-stock-pv') ?>">PV Stock</a></li>
+                        <?php if(session('accessDroit')['g_pv'] == 1): ?>
+
+                          <li>
+                              <a href="javaScript:void();">
+                                  <span>G-PV</span><i class="mdi mdi-chevron-right pull-right"></i>
+                              </a>
+                              <ul class="xp-vertical-submenu">
+                                <li><a href="<?=base_url('caissier-stock-pv') ?>">PV Stock</a></li>
+                                <li>
+                                  <a href="javaScript:void();">
+                                      <span>PV Perdue</span><i class="mdi mdi-chevron-right pull-right"></i>
+                                  </a>
+                                  <ul class="xp-vertical-submenu">
+                                    <li><a href="<?=base_url('caissier-add-pv-historique') ?>">Créer</a></li>
+                                    <li><a href="<?=base_url('caissier-historique-pv') ?>">Historique</a></li>
+                                  </ul>
+                                </li>
+
+                              </ul>
+                          </li>
+                        <?php endif; ?>
                       <?php endif; ?>
                   </ul>
 
@@ -255,8 +275,7 @@
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('facturier-add-achat') ?>">Créer</a></li>
                       <li><a href="<?=base_url('facturier-list-achat') ?>">Mes Achats</a></li>
-                      <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                        
+
                         <?php if(session('accessDroit')['g_pv'] == 1): ?>
                           <!-- <li><a href="<?=base_url('facturier-stock-pv') ?>">PV Stock</a></li> -->
                           <li>
@@ -278,7 +297,7 @@
                               </ul>
                           </li>
                         <?php endif; ?>
-                      <?php endif; ?>
+
                   </ul>
               </li>
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
