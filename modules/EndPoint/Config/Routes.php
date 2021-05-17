@@ -123,7 +123,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('validate-partiel-article-approvisionnement','ApprovisionnementInterDepot::approvisionnement_validate_partiel_articles');
   $routes->get('ajustement-stock-depot-virtuelle-reelle/(:num)/(:num)/(:any)/(:any)','Approvisionnement::ajustementStockDepot/$1/$2/$3/$4');
   $routes->post('add-pv-historique', 'Approvisionnement::addHistoriquePv');
-  $routes->get('pv-historique/(:any)/(:num)/(:num)','Approvisionnement::getHistoriquePv/$1/$2/$3');
+  $routes->get('pv-historique/(:any)/(:num)/(:num)/(:num)','Approvisionnement::getHistoriquePv/$1/$2/$3/$4');
 
 
 

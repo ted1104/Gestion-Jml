@@ -416,16 +416,22 @@ class Approvisionnement extends ResourceController {
 
 
   }
-  public function getHistoriquePv($dateFilter,$limit, $offset){
+  public function getHistoriquePv($dateFilter,$limit, $offset,$idUser){
     $d = Time::today();
     if($dateFilter == "null"){ $dateFilter = $d; }
     $conditionDate =['date_historique'=> $dateFilter];
-    $data = $this->pvPerdueHistoriqueModel->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
+
+    $conditionMagasinier = [];
+    if($idUser > 0){
+      $conditionMagasinier = ['magaz_source_id'=>$idUser];
+    }
+
+    $data = $this->pvPerdueHistoriqueModel->Where($conditionMagasinier)->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> count($data = $this->pvPerdueHistoriqueModel->Where($conditionDate)->orderBy('id','DESC')->findAll())
+      'all'=> count($data = $this->pvPerdueHistoriqueModel->Where($conditionMagasinier)->Where($conditionDate)->orderBy('id','DESC')->findAll())
     ]);
   }
 }

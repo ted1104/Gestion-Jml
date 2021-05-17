@@ -29,7 +29,7 @@ class PvPerdueHistoriqueDetailModel extends Model{
       'greater_than' => 'La quantité perdue doit être superieure à 0'
     ],
   ];
-  protected $returnType ='object';
+  protected $returnType ='App\Entities\PvPerdueHistoriqueDetailEntity';
 
 
   // LES TRANSACTIONS

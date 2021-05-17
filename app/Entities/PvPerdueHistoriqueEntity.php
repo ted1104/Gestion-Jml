@@ -46,7 +46,7 @@ class PvPerdueHistoriqueEntity extends Entity{
     return self::$depotModel->select('id,nom')->Where('id',$this->attributes['depots_id'])->find();
   }
   public function getLogicDetailHistorique(){
-    return $this->pvPerdueHistoriqueDetailModel->Where('pv_historique_id',$this->attributes['id'])->findAll();
+    return $this->pvPerdueHistoriqueDetailModel->select('id,pv_historique_id,articles_id,qte_perdue')->Where('pv_historique_id',$this->attributes['id'])->findAll();
   }
   //
   // protected function getArticlesId(){
