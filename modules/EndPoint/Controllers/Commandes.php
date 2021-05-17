@@ -302,25 +302,24 @@ class Commandes extends ResourceController {
       }
     }
 
-    // $conditonAretirer = [];
-    // if($isAretirer==1){
-    //   $conditonAretirer = ['have_oper_a_retirer' =>1];
-    // }
 
     $data = $this->model->orderBy('id','DESC')->Where($condition)->Where('depots_id',$iddepot)->Where('status_vente_id',$statutVente)->Where($conditionPartiel)->findAll($limit,$offset);
 
 
     if($isAretirer ==1){
-      $dataAnc = $this->model->select("*, g_interne_vente.id, g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll($limit,$offset);
+      $conditionDate =['date_vente'=> $dateFilter];
+      if($dateFilter == $d){
+          $conditionDate =[];
+      }
 
-      $dataCount = $this->model->select("*, g_interne_vente.id,g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
+      $dataAnc = $this->model->select("*, g_interne_vente.id, g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->Where($conditionDate)->findAll($limit,$offset);
+
+      $dataCount = $this->model->select("*, g_interne_vente.id,g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->Where($conditionDate)->findAll();
 
 
       $data = $dataAnc;
 
     }
-
-
 
 
 
@@ -1374,9 +1373,15 @@ class Commandes extends ResourceController {
     $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->Where($conditionPartiel)->findAll($limit,$offset);
 
     if($isAretirer ==1){
-      $dataAnc = $this->model->select("*, g_interne_vente.id, g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('g_interne_vente.status_vente_id',$statutVente)->findAll($limit,$offset);
 
-      $dataCount = $this->model->select("*, g_interne_vente.id,g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
+      $conditionDate =['date_vente'=> $dateFilter];
+      if($dateFilter == $d){
+          $conditionDate =[];
+      }
+
+      $dataAnc = $this->model->select("*, g_interne_vente.id, g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('g_interne_vente.status_vente_id',$statutVente)->Where($conditionDate)->findAll($limit,$offset);
+
+      $dataCount = $this->model->select("*, g_interne_vente.id,g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('g_interne_vente.status_vente_id',$statutVente)->Where($conditionDate)->findAll();
 
 
       $data = $dataAnc;

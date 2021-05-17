@@ -54,11 +54,11 @@
                                   </div> -->
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
-																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_magazinier)"><i class="mdi mdi-restore"></i> </button>
+																			<button class="btn btn-round btn-outline-danger margin-left-4" @click="_refrechData(get_commande_admin)"><i class="mdi mdi-restore"></i> </button>
 																	</div>
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Rechercher par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_magazinier)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilter(get_commande_admin)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 																<div v-if="showAdvancedSearch" class="margin-top-4 u-animation-FromTop">
@@ -84,7 +84,7 @@
 																	</div>
 
 																	<div class="margin-top-7">
-																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataByMagazinier">
+																		<input type="text" class="form-control input-width" placeholder="Recherche ici...." v-model="dataToSearch" @keyup="_searchDataAdmin">
 																	</div>
 																</div>
 
