@@ -43,58 +43,37 @@
 																<div class="col-md-5">
 																	<div class="pull-right row">
 																		<vuejs-datepicker placeholder="Filtrer par date" input-class="form-control" clear-button-icon="mdi mdi-close-box text-danger" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateFilter"></vuejs-datepicker>
-																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_transfert_magaz_by_magaz)"><i class="mdi mdi-search-web"></i> </button>
+																		<button class="btn btn-round btn-outline-secondary margin-left-4" @click="_u_formatDateFilterWithoutStatus(get_historique_pv_magazinier)"><i class="mdi mdi-search-web"></i> </button>
 																	</div>
 																</div>
 															</div>
 														</div>
 														<div class="table-responsive card-body">
 															<!-- {{checkBoxAchatSelected}} -->
-															<div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
+															<!-- <div v-if="checkBoxAchatSelected.length > 0" class=" pull-right u-animation-FromTop">
 																<button type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="_u_open_mod_popup_transfert()"><i class="mdi mdi-delete"></i>Annuler transfert</button>
-															</div>
+															</div> -->
 															<table class="table margin-top-8">
 																<thead>
 																	<tr class="bg-secondary">
-																		<th>#</th>
+
 																		<th scope="col">Date</th>
+																		<th scope="col">Dépôt</th>
 																		<th scope="col">Magasinier Source</th>
-																		<th scope="col">Magasinier Destination</th>
-																		<th scope="col">Type</th>
-																		<th scope="col">Status</th>
-																		<th scope="col">Valider</th>
+																		<th scope="col">Fait par</th>>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
 																<tbody>
 
 																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
-																		<td>
-																			<div class="custom-control custom-checkbox custom-control-inline">
-																				<input type="checkbox" name="checkBoxAchatSelected" :id="dt.id+'ch'" class="custom-control-input" :value="dt.id" v-model="checkBoxAchatSelected" :disabled="dt.status_operation != 0">
-																				<label class="custom-control-label" :for="dt.id+'ch'"></label>
-																			</div>
-																		</td>
-																		<td>{{dt.date_transfert}}</td>
-																		<td>{{dt.users_id_source[0].nom+' '+dt.users_id_source[0].prenom}}</td>
-																		<td>{{dt.users_id_dest[0].nom+' '+dt.users_id_dest[0].prenom}}</td>
-																		<!-- <td>{{dt.users_id.nom+' '+dt.users_id.prenom}}</td> -->
-																		<td>
-																			<span :class="dt.users_id_source[0].id == users_id?'text-success':'text-danger'">
-																				<i :class="dt.users_id_source[0].id == users_id?'mdi mdi-arrow-right-thick':'mdi mdi-arrow-left-thick'"></i>
-																			</span>
-																		</td>
-																		<td>
-																			<span v-if="dt.status_operation==0" class="badge badge-warning">EN ATTENTE</span>
-																			<span v-if="dt.status_operation==1" class="badge badge-info">PARTIEL</span>
-																			<span v-if="dt.status_operation==2" class="badge badge-success">VALIDER</span>
-																			<span v-if="dt.status_operation==3" class="badge badge-danger">ANNULER</span>
-																		</td>
-																		<td>
-																			<button v-if="dt.users_id_dest[0].id == users_id && (dt.status_operation ==0 || dt.status_operation == 1)" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz_transfert(dt)"><i class='mdi mdi-checkbox-marked-circle-outline'></i></button>
 
-																			<i v-if="dt.users_id_source[0].id == users_id || (dt.status_operation !=0 && dt.status_operation !=1)" class='mdi mdi-checkbox-marked-circle-outline'></i>
-																		</td>
+																		<td>{{dt.date_historique}}</td>
+																		<td>{{dt.depots_id[0].nom}}</td>
+																		<td>{{dt.magaz_source_id[0].nom+' '+dt.magaz_source_id[0].prenom}}</td>
+																		<td>{{dt.users_id[0].nom+' '+dt.users_id[0].prenom}}</td>
+
+
 																		<td>
 																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																		</td>
@@ -106,7 +85,7 @@
 																<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 															</div>
 															<div class="text-center" alt="" v-if="dataToDisplay.length < 1 && isNoReturnedData">
-																<img src="<?=base_url() ?>/public/load/empty.png" >
+																<img src="<?=base_url() ?>/public/load/empty.png">
 																<h6 class="text-danger">Données vide!!</h6>
 															</div>
 															<!-- FIN LOAD FOR WAITING DATA AND SHOW EMPTY ICON IF NO DATA-->
@@ -114,11 +93,11 @@
 															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_historique_transfert_magaz_by_magaz)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_historique_pv_magazinier)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_transfert_magaz_by_magaz(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_historique_pv_magazinier(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_historique_transfert_magaz_by_magaz)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_historique_pv_magazinier)">Next</button>
                                     </li>
                                   </ul>
                                 </nav>
@@ -130,29 +109,9 @@
 												 <div class="card m-b-30">
 														<div class="container">
 															<div class="row">
-																<h5 class="col-md-9 card-title">DETAIL TRANSFERT DU {{detailTab.date_transfert}}</h5>
+																<h5 class="col-md-9 card-title">DETAIL HISTORIQUE DU {{detailTab.date_historique}}</h5>
 																<i class="mdi mdi-close-circle col-md-3 text-right text-danger cursor" @click="isShow=!isShow"></i>
 															</div>
-															<div v-show="checkBoxArticles.length > 0" class="col-md-12 u-animation-FromTop">
-																<div class="row">
-																	<div class="col-md-12">
-																		<div class="row">
-																			<div class="col-md-6 text-left">
-																				<div v-if="detailTab.users_id_dest[0].id == users_id">
-																					<button v-if="!isLoadNego" type="button" class="btn btn-rounded btn-success padding-4-l-g font-size-2" @click="validate_partiel_article_transfert(detailTab.id)"><i class="mdi mdi-checkbox-marked-circle-outline"></i> Valider</button>
-																					<img v-if="isLoadNego" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-																				</div>
-																			</div>
-																			<div class="col-md-6 text-right">
-																				<button v-if="!isLoadDelete" type="button" class="btn btn-rounded btn-danger padding-4-l-g font-size-2" @click="delete_article_transfert(detailTab.id)"><i class="mdi mdi-delete mr-2"></i> Supprimer</button>
-																				<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-
-
 															<div  class="margin-top-4">
 																<div class="row">
 																	<div class="table-responsive container">
@@ -167,16 +126,11 @@
 																				</tr>
 																			</thead>
 																			<tbody>
-																				<tr v-for="(det,i) in detailTab.logic_data_article">
-																					<td>
-																							<div class="custom-control custom-checkbox custom-control-inline">
-																								<input type="checkbox" name="checkBoxArticles" :id="det.articles_id[0].id" class="custom-control-input" :value="det.articles_id[0].id" v-model="checkBoxArticles" :disabled="(detailTab.status_operation != 0 && detailTab.status_operation != 1) || det.is_validate == 1">
-							                                  <label class="custom-control-label" :for="det.articles_id[0].id"></label>
-																							</div>
-																					</td>
+																				<tr v-for="(det,i) in detailTab.logic_detail_historique">
+
 																					<td>{{det.articles_id[0].code_article}}</td>
 																					<td>{{det.articles_id[0].nom_article}}</td>
-																					<td>{{det.qte}}</td>
+																					<td>{{det.qte_perdue}}</td>
 																				</tr>
 																			</tbody>
 																		</table>

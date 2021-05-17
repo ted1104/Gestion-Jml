@@ -2640,6 +2640,29 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_historique_pv_magazinier(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"pv-historique/"+this.dateFilter+"/"+limit+"/"+offset+"/"+this.users_id;
+      this.isNoReturnedData = false;
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              // console.log("===Log===");
+              // console.log(this.dataToDisplay);
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -4019,6 +4042,9 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='magaz-list-achat-a-retirer'){
       // this.isGettingAretire = 1;
       this.get_commande_magazinier(3);
+    }
+    if(pth[this.indexRoute] == 'magaz-historique-pv'){
+      this.get_historique_pv_magazinier();
     }
 
 

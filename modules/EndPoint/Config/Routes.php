@@ -21,13 +21,6 @@ $routes->group('api/v1', function($routes){
 
 
 
-
-
-
-
-
-
-
   //ENDPOINTS LOGIQUES DATA
   //1.USERS
   $routes->get('users-get-all/(:num)/(:num)','Users::users_get/$1/$2');
@@ -55,11 +48,6 @@ $routes->group('api/v1', function($routes){
   $routes->get('client-get-all/(:num)/(:num)','Users::client_get/$1/$2');
   $routes->post('client-create-one','Users::client_create');
   $routes->get('client-crediter-account/(:num)/(:any)','Users::client_creaditer_account/$1/$2');
-
-
-
-
-
 
 
 
