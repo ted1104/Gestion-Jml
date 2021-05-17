@@ -41,4 +41,12 @@ class Achat extends BaseController {
     echo view('Modules\ModulePartage\Views\pv-historique-list-view', $data);
   }
 
+
+  public function getAchatAretirer(){
+    $data = [
+      'titlePage' => 'ACHATS A RETIRER : ADMINISTRTION'
+    ];
+    echo view($this->linkMod.'\achat\achat-list-a-retirer-view', $data);
+  }
+
 }

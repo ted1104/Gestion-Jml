@@ -315,18 +315,9 @@ class Commandes extends ResourceController {
 
       $dataCount = $this->model->select("*, g_interne_vente.id,g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
 
-      // $dataCount = $this->model->select("*, g_interne_vente.id")->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->Where('depots_id',$iddepot)->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
-      // $dataNew = [];
-      // $i = 0;
-      // foreach ($dataAnc as $key => $value) {
-      //   if($value->logic_have_oper_a_retirer==1){
-      //     $i ++;
-      //     array_push($dataNew, $value);
-      //   }
-      // }
+
       $data = $dataAnc;
-      //print_r($statutVente);
-      // print_r($data);
+
     }
 
 
@@ -1359,7 +1350,7 @@ class Commandes extends ResourceController {
   //################ FONCTION ADMINISTRTION #####################
 
   //FONCTION POUR AFFICHER LA LISTE DE TOUTES LES OPERATIONS SANS EXCEPTIONS ADMIN
-  public function commandes_all_get_by_status($statutVente,$dateFilter,$limit,$offset,$isPartiel){
+  public function commandes_all_get_by_status($statutVente,$dateFilter,$limit,$offset,$isPartiel,$isAretirer){
     $d = Time::today();
     $d = explode(' ',$d);
     $d = $d[0];
@@ -1381,11 +1372,22 @@ class Commandes extends ResourceController {
       }
     }
     $data = $this->model->orderBy('id','DESC')->Where($condition)->where($conditionStatus)->Where($conditionPartiel)->findAll($limit,$offset);
+
+    if($isAretirer ==1){
+      $dataAnc = $this->model->select("*, g_interne_vente.id, g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('g_interne_vente.status_vente_id',$statutVente)->findAll($limit,$offset);
+
+      $dataCount = $this->model->select("*, g_interne_vente.id,g_interne_vente.created_at")->distinct('')->join('g_interne_vente_detail','g_interne_vente_detail.vente_id=g_interne_vente.id','right')->join('g_interne_a_retirer','g_interne_a_retirer.vente_detail_id=g_interne_vente_detail.id','right')->orderBy('g_interne_vente.id','DESC')->groupBy('g_interne_vente.numero_commande')->Where('g_interne_vente.status_vente_id',$statutVente)->findAll();
+
+
+      $data = $dataAnc;
+
+    }
+
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
-      'all'=> $this->model->selectCount('id')->Where($condition)->Where($conditionStatus)->Where($conditionPartiel)->orderBy('id','DESC')->findAll()[0]->id,
+      'all'=> $isAretirer ==0 ? $this->model->selectCount('id')->Where($condition)->Where($conditionStatus)->Where($conditionPartiel)->orderBy('id','DESC')->findAll()[0]->id : count($dataCount),
       'nombreVenteType' => $this->commandeByTypeByuser(null,'logic_article',$condition),
       'sommesTotalAllCommandes' =>$this->sommesMontantTotalParTypeDeVente($conditionStatus,$condition,$conditionLike)
     ]);

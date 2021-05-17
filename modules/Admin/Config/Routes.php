@@ -32,6 +32,9 @@ $routes->get('admin-list-client','Dashboard::getListClient',['filter' => 'isMana
 
 $routes->get('admin-add-pv-historique','Achat::addPvPerdue',['filter' => 'isManager']);
 $routes->get('admin-historique-pv','Achat::getPvPerdue',['filter' => 'isManager']);
+$routes->get('admin-list-achat-a-retirer','Achat::getAchatAretirer',['filter' => 'isManager']);
+
+
 
 
 

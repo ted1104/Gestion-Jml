@@ -722,8 +722,8 @@ var vthis = new Vue({
               console.log(error);
             })
     },
-    get_commande_admin(statut=1,limit=this.PerPaged,offset=0, indexPage=0,isPartiel=this.isPartielFecthData){
-      const newurl = this.url+"commandes-all-by-status/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/"+isPartiel+"/status";
+    get_commande_admin(statut=1,limit=this.PerPaged,offset=0, indexPage=0,isPartiel=this.isPartielFecthData,isAretirer = this.isGettingAretire){
+      const newurl = this.url+"commandes-all-by-status/"+statut+"/"+this.dateFilter+"/"+limit+"/"+offset+"/"+isPartiel+"/"+isAretirer+"/status";
       this.stateStatus = statut;
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -4052,6 +4052,10 @@ var vthis = new Vue({
           this.idUserToGetHistoPv = 0;
       }
       this.get_historique_pv_magazinier();
+    }
+    if(pth[this.indexRoute]=='admin-list-achat-a-retirer'){
+      this.isGettingAretire = 1;
+      this.get_commande_admin(3);
     }
 
 
