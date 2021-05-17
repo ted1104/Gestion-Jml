@@ -37,9 +37,7 @@ class CommandesDetailEntity extends Entity{
   protected $commandesModel = null;
   protected $aretirerModel = null;
 
-
-
-
+  
   public function __construct(array $data = null){
     parent::__construct($data);
     $this->articlesModel = new ArticlesModel();

@@ -30,6 +30,9 @@ $routes->get('admin-add-vente','Achat::achatAddAdmin',['filter' => 'isManager'])
 $routes->get('admin-add-client','Dashboard::addClient',['filter' => 'isManager']);
 $routes->get('admin-list-client','Dashboard::getListClient',['filter' => 'isManager']);
 
+$routes->get('admin-add-pv-historique','Achat::addPvPerdue',['filter' => 'isManager']);
+$routes->get('admin-historique-pv','Achat::getPvPerdue',['filter' => 'isManager']);
+
 
 
 

@@ -119,7 +119,7 @@
 																		<table class="table">
 																			<thead>
 																				<tr class="bg-secondary">
-																					<th>#</th>
+																					
 																					<th scope="col">code</th>
 																					<th scope="col">Article</th>
 																					<th scope="col">Qte</th>

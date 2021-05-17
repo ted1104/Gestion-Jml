@@ -47,7 +47,25 @@
                       <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
                       <li><a href="<?=base_url('admin-list-article') ?>">Liste et Prix</a></li>
                       <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
-                      <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                      <li>
+                          <a href="javaScript:void();">
+                              <span>G-PV</span><i class="mdi mdi-chevron-right pull-right"></i>
+                          </a>
+                          <ul class="xp-vertical-submenu">
+                            <li><a href="<?=base_url('admin-stock-pv') ?>">PV Stock</a></li>
+                            <li>
+                              <a href="javaScript:void();">
+                                  <span>PV Perdue</span><i class="mdi mdi-chevron-right pull-right"></i>
+                              </a>
+                              <ul class="xp-vertical-submenu">
+                                <li><a href="<?=base_url('admin-add-pv-historique') ?>">Créer</a></li>
+                                <li><a href="<?=base_url('admin-historique-pv') ?>">Historique</a></li>
+                              </ul>
+                            </li>
+
+                          </ul>
+                      </li>
+
                       <li><a href="<?=base_url('admin-stock-personnel') ?>">Stock Personnel</a></li>
                   </ul>
               </li>
@@ -295,14 +313,23 @@
                     <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
                     <li><a href="<?=base_url('magaz-stock-perso') ?>">Mon stock Personnel</a></li>
                     <?php if(session('accessDroit')['g_pv'] == 1): ?>
-                      <li><a href="<?=base_url('magaz-stock-pv') ?>">PV Stock</a></li>
+                      <!-- <li><a href="<?=base_url('magaz-stock-pv') ?>">PV Stock</a></li> -->
                       <li>
                           <a href="javaScript:void();">
-                              <span>PV Perdue</span><i class="mdi mdi-chevron-right pull-right"></i>
+                              <span>G-PV</span><i class="mdi mdi-chevron-right pull-right"></i>
                           </a>
                           <ul class="xp-vertical-submenu">
-                            <li><a href="<?=base_url('magaz-add-pv-historique') ?>">Créer</a></li>
-                            <li><a href="<?=base_url('magaz-historique-pv') ?>">Historique</a></li>
+                            <li><a href="<?=base_url('magaz-stock-pv') ?>">PV Stock</a></li>
+                            <li>
+                              <a href="javaScript:void();">
+                                  <span>PV Perdue</span><i class="mdi mdi-chevron-right pull-right"></i>
+                              </a>
+                              <ul class="xp-vertical-submenu">
+                                <li><a href="<?=base_url('magaz-add-pv-historique') ?>">Créer</a></li>
+                                <li><a href="<?=base_url('magaz-historique-pv') ?>">Historique</a></li>
+                              </ul>
+                            </li>
+
                           </ul>
                       </li>
                     <?php endif; ?>
