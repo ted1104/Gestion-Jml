@@ -15,5 +15,19 @@ class Achat extends BaseController {
     ];
     echo view($this->linkMod.'\achat-list-view', $data);
   }
+  public function addPvPerdue(){
+    $data = [
+      'titlePage' => 'PV PERDUE : Facturation'
+    ];
+    // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    echo view('Modules\ModulePartage\Views\pv-historique-add-view', $data);
+  }
+  public function getPvPerdue(){
+    $data = [
+      'titlePage' => 'PV PERDUE : Facturation'
+    ];
+    // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    echo view('Modules\ModulePartage\Views\pv-historique-list-view', $data);
+  }
 
 }

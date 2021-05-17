@@ -422,11 +422,13 @@ class Approvisionnement extends ResourceController {
     $conditionDate =['date_historique'=> $dateFilter];
 
     $conditionMagasinier = [];
+    $conditionCreator =[];
     if($idUser > 0){
       $conditionMagasinier = ['magaz_source_id'=>$idUser];
+      $conditionCreator = ['users_id' => $idUser];
     }
 
-    $data = $this->pvPerdueHistoriqueModel->Where($conditionMagasinier)->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
+    $data = $this->pvPerdueHistoriqueModel->Where($conditionMagasinier)->orWhere($conditionCreator)->Where($conditionDate)->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
