@@ -9,3 +9,5 @@ $routes->get('gerant-stock-pv','Dashboard::getStockPv',['filter' => 'isGerant'])
 $routes->get('gerant-histo-appro','Dashboard::getHistoriqueAppro',['filter' => 'isGerant']);
 $routes->get('gerant-histo-appro-inter-depot','Dashboard::getHistoriqueApproInterDepot',['filter' => 'isGerant']);
 $routes->get('gerant-config-system','Dashboard::getConfigSystem',['filter' => 'isGerant']);
+$routes->get('gerant-add-pv-historique','Dashboard::addPvPerdue',['filter' => 'isGerant']);
+$routes->get('gerant-historique-pv','Dashboard::getPvPerdue',['filter' => 'isGerant']);

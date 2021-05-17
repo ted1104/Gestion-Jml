@@ -51,6 +51,21 @@ class Dashboard extends BaseController {
     ];
     echo view('Modules\Admin\Views\achat\achat-list-partiel-view', $data);
   }
+  public function addPvPerdue(){
+    $data = [
+      'titlePage' => 'PV PERDUE : Gérant'
+    ];
+    // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    echo view('Modules\ModulePartage\Views\pv-historique-add-view', $data);
+  }
+  public function getPvPerdue(){
+    $data = [
+      'titlePage' => 'PV PERDUE : Gérant'
+    ];
+    // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
+    echo view('Modules\ModulePartage\Views\pv-historique-list-view', $data);
+  }
+
 
 
 
