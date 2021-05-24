@@ -246,7 +246,7 @@ class PdfGenerate extends BaseController {
         array_push($DonneStockInitialVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         array_push($DonneApprovisionnement,$approGen[0]->qte?$approGen[0]->qte:0);
         // array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
-        array_push($DonneApprovisionnementPv,$pvPerdue?$pvPerdue[0]->qte_perdue:0);
+        array_push($DonneApprovisionnementPv,$pvPerdue[0]->qte_perdue?$pvPerdue[0]->qte_perdue:0);
 
         array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
         array_push($LineEmptyNumFacture,'');
