@@ -19,6 +19,8 @@ use App\Models\EncaissementExterneModel;
 use App\Models\DecaissementExterneModel;
 use App\Models\CaisseModel;
 use App\Models\ClotureCaisseModel;
+use App\Models\PvPerdueHistoriqueModel;
+use App\Models\PvPerdueHistoriqueDetailModel;
 
 
 
@@ -40,12 +42,13 @@ class PdfGenerate extends BaseController {
   protected static $caisseModel = null;
   protected static $clotureCaisseModel = null;
   protected $approvisionnementModel =  null;
+  protected $pvPerdueHistoriqueModel =  null;
+  protected $pvPerdueHistoriqueDetailModel = null;
 
 
 
   public function __construct(){
     $this->pdf = new FPDF();
-
     $this->commande = new CommandesModel();
     $this->depotModel = new StDepotModel();
     $this->articlesModel = new ArticlesModel();
@@ -62,6 +65,8 @@ class PdfGenerate extends BaseController {
     self::$caisseModel = new CaisseModel();
     self::$clotureCaisseModel = new ClotureCaisseModel();
     $this->approvisionnementModel = new ApprovisionnementsModel();
+    $this->pvPerdueHistoriqueModel = new PvPerdueHistoriqueModel();
+    $this->pvPerdueHistoriqueDetailModel = new PvPerdueHistoriqueDetailModel();
 
   }
   public function index($code){
@@ -221,6 +226,11 @@ class PdfGenerate extends BaseController {
 
         $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
 
+        $pvPerdue = $this->pvPerdueHistoriqueModel->selectSum('qte_perdue')->join('g_interne_pv_perdue_historique_detail','g_interne_pv_perdue_historique.id = g_interne_pv_perdue_historique_detail.pv_historique_id')->Where('g_interne_pv_perdue_historique.date_historique',$dateRapport)->Where('g_interne_pv_perdue_historique.depots_id',$idDepot)->Where('g_interne_pv_perdue_historique_detail.articles_id',$allArticle[$i]->id)->find();
+
+        // print_r($pvPerdue[0]->qte_perdue);
+        // die();
+
 
         $approInterDepotExped = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_source",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
 
@@ -235,7 +245,9 @@ class PdfGenerate extends BaseController {
         array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock : 0);
         array_push($DonneStockInitialVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
         array_push($DonneApprovisionnement,$approGen[0]->qte?$approGen[0]->qte:0);
-        array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
+        // array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
+        array_push($DonneApprovisionnementPv,$pvPerdue?$pvPerdue[0]->qte_perdue:0);
+
         array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
         array_push($LineEmptyNumFacture,'');
         array_push($DonneApprovisionnementInterDepot,$approInterDepotExped[0]->qte?$approInterDepotExped[0]->qte:0);
