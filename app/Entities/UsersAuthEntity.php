@@ -14,6 +14,7 @@ class UsersAuthEntity extends Entity{
     'users_id' => null,
     'role_id' => null,
     'status_users_id' => null,
+    'bloque_account_tempo' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

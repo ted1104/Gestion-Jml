@@ -32,11 +32,11 @@ class UsersAuthModel extends Model{
   protected $returnType ='App\Entities\UsersAuthEntity';
 
   public function authLogin($user){
-    $userData = $this->select('id,username,password_main,status_users_id,users_id')->Where('username',$user['username'])->findAll();
+    $userData = $this->select('id,username,password_main,status_users_id,users_id,bloque_account_tempo')->Where('username',$user['username'])->findAll();
     if(count($userData) > 0){
       $verify = password_verify($user['password_main'], $userData[0]->password_main);
       if($verify){
-        if($userData[0]->status_users_id==1){
+        if($userData[0]->status_users_id==1 and $userData[0]->bloque_account_tempo==1){
           return [
             'info'=> $userData[0]->users_id,
             'isLoggedIn' => true

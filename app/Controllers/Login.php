@@ -31,7 +31,7 @@ class Login extends BaseController {
         $data = [
           'titlePage' => $this->title,
         ];
-        $this->session->setFlashData('message',['title' => 'Compte bloqué', 'content' => 'Ce compte est bloqué temporairement; veuillez contacter l\'administrateur principal du système!!','color'=>'alert-info']);
+        $this->session->setFlashData('message',['title' => 'Compte bloqué', 'content' => 'Ce compte est bloqué ou temporairement non opérationnel; veuillez contacter l\'administrateur principal du système!!','color'=>'alert-info']);
         return redirect()->to(base_url())->withInput();
       }
       }else{

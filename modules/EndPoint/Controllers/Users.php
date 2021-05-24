@@ -58,7 +58,7 @@ class Users extends ResourceController {
         'password_op' => $dAuth->password_op,
         'users_id' => $this->model->insertID(),
         'status_users_id' => 1,
-        'bloque_account_tempo' => 1
+        'bloque_account_tempo' => 2
       ];
 
       if(!$this->userAuthModel->insert($dataAuth)){
