@@ -57,7 +57,8 @@ class Users extends ResourceController {
         'password_main' => $dAuth->password_main,
         'password_op' => $dAuth->password_op,
         'users_id' => $this->model->insertID(),
-        'status_users_id' => 1
+        'status_users_id' => 1,
+        'bloque_account_tempo' => 1
       ];
 
       if(!$this->userAuthModel->insert($dataAuth)){
@@ -118,6 +119,29 @@ class Users extends ResourceController {
       $status = 200;
       $message = [
         'success' => $newStatus==1?'Compte activé avec succès':'Compte bloqué avec succès',
+        'errors' => null
+      ];
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' => $message,
+      'data' => null
+    ]);
+
+  }
+  public function user_account_enable_disable_tempo($iduser){
+    $data = $this->userAuthModel->Where('users_id',$iduser)->find();
+    $newStatus = $data[0]->bloque_account_tempo==1?2:1;
+    if(!$this->userAuthModel->update($data[0]->id,['bloque_account_tempo'=>$newStatus])){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ['Echec d\update du statut du compte']
+      ];
+    }else{
+      $status = 200;
+      $message = [
+        'success' => $newStatus==1?'Compte activé temporairement avec succès':'Compte bloqué temporairement avec succès',
         'errors' => null
       ];
     }

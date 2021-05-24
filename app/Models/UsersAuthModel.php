@@ -6,14 +6,15 @@ class UsersAuthModel extends Model{
   protected $table = 'g_users_auth';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['username','password_main','password_op','users_id','status_users_id'];
+  protected $allowedFields = ['username','password_main','password_op','users_id','status_users_id','bloque_account_tempo'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'username' => 'required|is_unique[g_users_auth.username]',
     'password_main' => 'required|min_length[8]',
     'password_op' => 'required|min_length[8]',
     'users_id' => 'required',
-    'status_users_id' => 'required'
+    'status_users_id' => 'required',
+    'bloque_account_tempo' => 'required'
   ];
 	protected $validationMessages = [
     'username'=>[
@@ -24,7 +25,8 @@ class UsersAuthModel extends Model{
     'password_op'=>['required' => 'Le mot de passe des opérations est obligatoire'],
     'users_id'=>['required' => 'Le user_id est obligatoire'],
     'role_id'=>['required' => 'Le profile est obligatoire'],
-    'status_users_id'=>['required' => 'La status_users_id obligatoire'],
+    'status_users_id'=>['required' => 'Le status_users_id obligatoire'],
+    'bloque_account_tempo' => ['required' => 'bloque_account_tempo est obligatoire']
 
   ];
   protected $returnType ='App\Entities\UsersAuthEntity';
