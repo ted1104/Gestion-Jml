@@ -136,14 +136,21 @@
 																	<div class="col-md-12 text-left">
 																		<h5 class="card-title">SECURITE COMPTE</h5>
 																	</div>
-																	<div class="col-md-6">
+																	<div class="col-md-4">
 																		<p>Status Compte</p>
 																		<p :class="detailTab.logic_auth.status_users_id==1?'badge badge-success':'badge badge-danger'">{{detailTab.logic_auth.status_users_id==1?'ACTIF':'BLOQUER'}}</p>
 																		<p>
 																			<button  :class="detailTab.logic_auth.status_users_id==1?'btn btn-round btn-danger':'btn btn-round btn-info'" class="" @click="update_status_account_users(detailTab.id)"><i :class="detailTab.logic_auth.status_users_id==1?'mdi mdi-lock':'mdi mdi-lock-open'"></i></button>
 																		</p>
 																	</div>
-																	<div class="col-md-6">
+																	<div class="col-md-4">
+																		<p>Operationnel</p>
+																		<p :class="detailTab.logic_auth.bloque_account_tempo==1?'badge badge-success':'badge badge-danger'">{{detailTab.logic_auth.bloque_account_tempo==1?'OUI':'NON'}}</p>
+																		<p>
+																			<button  :class="detailTab.logic_auth.bloque_account_tempo==1?'btn btn-round btn-danger':'btn btn-round btn-info'" class="" @click="update_status_account_users_tempo(detailTab.id)"><i :class="detailTab.logic_auth.bloque_account_tempo==1?'mdi mdi-lock':'mdi mdi-lock-open'"></i></button>
+																		</p>
+																	</div>
+																	<div class="col-md-4">
 																		<p>Mot de passe</p>
 																		<p class='badge badge-success'>***********</p><br>
 																		<p>

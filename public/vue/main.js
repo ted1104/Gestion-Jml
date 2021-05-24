@@ -1373,6 +1373,31 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    update_status_account_users_tempo(iduser){
+      // console.log(iduser);
+      const newurl = this.url+"users-update-status-account-tempo/"+iduser;
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_users_admin();
+                  // this.get_article();
+                  this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
     reset_password_account_users(iduser){
       // console.log(iduser);
       const newurl = this.url+"users-reset-password/"+iduser;
