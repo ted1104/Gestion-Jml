@@ -11,3 +11,5 @@ $routes->get('gerant-histo-appro-inter-depot','Dashboard::getHistoriqueApproInte
 $routes->get('gerant-config-system','Dashboard::getConfigSystem',['filter' => 'isGerant']);
 $routes->get('gerant-add-pv-historique','Dashboard::addPvPerdue',['filter' => 'isGerant']);
 $routes->get('gerant-historique-pv','Dashboard::getPvPerdue',['filter' => 'isGerant']);
+$routes->get('gerant-stock-personnel','Dashboard::getStockPersonnel',['filter' => 'isGerant']);
+$routes->get('gerant-histo-transfert','Dashboard::getHistoTransfert',['filter' => 'isGerant']);

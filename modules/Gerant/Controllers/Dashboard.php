@@ -65,6 +65,20 @@ class Dashboard extends BaseController {
     // echo view($this->linkMod.'\stock\depots-stock-pv-view', $data);
     echo view('Modules\ModulePartage\Views\pv-historique-list-view', $data);
   }
+  public function getHistoTransfert()
+  {
+    $data = [
+      'titlePage' => 'HISTORIQUE TRANSFERTS : Gérant'
+    ];
+    echo view('Modules\Admin\Views\transfert\transfert-historique-view', $data);
+  }
+  public function getStockPersonnel()
+  {
+    $data = [
+      'titlePage' => 'STOCK PERSONNEL MAGASINIER : Gérant'
+    ];
+    echo view('Modules\Admin\Views\stock\stock-personnel-view', $data);
+  }
 
 
 

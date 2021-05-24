@@ -4026,14 +4026,14 @@ var vthis = new Vue({
     if(pth[this.indexRoute] == 'magaz-histo-transfert-to-magaz'){
       this.get_historique_transfert_magaz_by_magaz();
     }
-    if(pth[this.indexRoute] == 'admin-histo-transfert'){
+    if(pth[this.indexRoute] == 'admin-histo-transfert' ||pth[this.indexRoute] == 'gerant-histo-transfert'){
       this.get_historique_transfert_admin();
     }
 
     if(pth[this.indexRoute] == 'magaz-stock-perso'){
       this.get_stock_personnel_par_magaz();
     }
-    if(pth[this.indexRoute] == 'admin-stock-personnel'){
+    if(pth[this.indexRoute] == 'admin-stock-personnel' || pth[this.indexRoute] == 'gerant-stock-personnel'){
       this.get_stock_personnel_admin();
     }
     if(pth[this.indexRoute]=='magaz-pv' || pth[this.indexRoute]=='admin-stock-pv' || pth[this.indexRoute]=='gerant-stock-pv' || pth[this.indexRoute]=='magaz-stock-pv' || pth[this.indexRoute]=='facturier-stock-pv' || pth[this.indexRoute]=='caissier-stock-pv'){

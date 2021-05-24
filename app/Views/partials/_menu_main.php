@@ -48,6 +48,7 @@
                       <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
                       <li><a href="<?=base_url('admin-list-article') ?>">Liste et Prix</a></li>
                       <li><a href="<?=base_url('admin-stock') ?>">Stock</a></li>
+                      <li><a href="<?=base_url('admin-stock-personnel') ?>">Stock Personnel</a></li>
                       <li>
                           <a href="javaScript:void();">
                               <span>G-PV</span><i class="mdi mdi-chevron-right pull-right"></i>
@@ -67,7 +68,7 @@
                           </ul>
                       </li>
 
-                      <li><a href="<?=base_url('admin-stock-personnel') ?>">Stock Personnel</a></li>
+
                   </ul>
               </li>
               <li>
@@ -162,6 +163,7 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('gerant-stock') ?>">Stock</a></li>
+                      <li><a href="<?=base_url('admin-stock-personnel') ?>">Stock Personnel</a></li>
                       <?php if(session('accessDroit')['g_pv'] == 1): ?>
 
                           <li>
@@ -194,6 +196,7 @@
 
                       <li><a href="<?=base_url('gerant-histo-appro') ?>">Historique </a></li>
                       <li><a href="<?=base_url('gerant-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
+                      <li><a href="<?=base_url('admin-histo-transfert') ?>">Historique Transferts</a></li>
                   </ul>
 
               </li>
