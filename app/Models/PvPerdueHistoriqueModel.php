@@ -6,7 +6,7 @@ class PvPerdueHistoriqueModel extends Model{
   protected $table = 'g_interne_pv_perdue_historique';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['depots_id','magaz_source_id','users_id','date_historique'];
+  protected $allowedFields = ['depots_id','magaz_source_id','users_id','date_historique','note'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'depots_id' => 'required|checkingForeignKeyExist[st_depots,id]',

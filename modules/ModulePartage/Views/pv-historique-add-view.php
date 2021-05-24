@@ -55,6 +55,10 @@
 
                                   </div>
 																	<div class="form-group">
+                                    <label for="note">Note *</label>
+                                    <textarea class="form-control" name="inputTextarea" id="description" rows="3" v-model="note"></textarea>
+                                  </div>
+																	<div class="form-group">
                                     <label for="date_approvisionnement">Date</label>
                                     <input type="text" class="form-control" id="date_approvisionnement" v-model="date_approvisionnement" disabled>
                                   </div>

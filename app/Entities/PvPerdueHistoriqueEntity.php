@@ -17,6 +17,7 @@ class PvPerdueHistoriqueEntity extends Entity{
     'magaz_source_id' => null,
     'date_historique' => null,
     'users_id' =>null,
+    'note' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

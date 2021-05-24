@@ -2607,6 +2607,7 @@ var vthis = new Vue({
       form.append('depots_id',this.depots_id);
       form.append('magaz_source_id',this.usersDestTransfert);
       form.append('users_id',this.users_id);
+      form.append('note', this.note);
       form.append('date_historique', this.date_approvisionnement);
       // form.append('status_operation',0);
 

@@ -307,6 +307,7 @@ class Approvisionnement extends ResourceController {
     $magaz_source = $this->request->getPost('magaz_source_id');
     $articles = $this->request->getPost('articles_id');
     $qte_perdue = $this->request->getPost('qte_perdue');
+    $note = $this->request->getPost('note');
     $users_id = $this->request->getPost('users_id');
     $dateHistorique = $this->request->getPost('date_historique');
 
@@ -314,6 +315,7 @@ class Approvisionnement extends ResourceController {
     $dat = [
       'depots_id'=>$depot,
       'date_historique' =>$dateHistorique,
+      'note' => $note,
       'magaz_source_id'=>$magaz_source,
       'users_id'=>$users_id
     ];

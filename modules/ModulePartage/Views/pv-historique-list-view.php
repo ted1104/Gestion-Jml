@@ -60,7 +60,8 @@
 																		<th scope="col">Date</th>
 																		<th scope="col">Dépôt</th>
 																		<th scope="col">Magasinier Source</th>
-																		<th scope="col">Fait par</th>>
+																		<th scope="col">Fait par</th>
+																		<th scope="col">Note</th>
 																		<th scope="col">Action</th>
 																	</tr>
 																</thead>
@@ -72,7 +73,7 @@
 																		<td>{{dt.depots_id[0].nom}}</td>
 																		<td>{{dt.magaz_source_id[0].nom+' '+dt.magaz_source_id[0].prenom}}</td>
 																		<td>{{dt.users_id[0].nom+' '+dt.users_id[0].prenom}}</td>
-
+																		<td>{{dt.note}}</td>
 
 																		<td>
 																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
@@ -119,7 +120,7 @@
 																		<table class="table">
 																			<thead>
 																				<tr class="bg-secondary">
-																					
+
 																					<th scope="col">code</th>
 																					<th scope="col">Article</th>
 																					<th scope="col">Qte</th>
