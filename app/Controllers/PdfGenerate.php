@@ -724,8 +724,8 @@ class PdfGenerate extends BaseController {
     $this->pdf->Cell(200,7,'Date : '.$dyy.'-'.$m.'-'. $dateR->getYear(),0,1,'C');
     $this->pdf->SetFont('Helvetica','B',6);
     $this->pdf->Ln(5);
-    $this->pdf->SetWidths(array(45,15,15,15,15,15,15,15,15,15,20));
-    $this->pdf->Row(array('Designation',utf8_decode('Stock Initial Réelle'),utf8_decode('Stock Initial Virtuelle'),utf8_decode('Entrée Qte Bonne'),utf8_decode('Entrée Qte PV'),utf8_decode('Entrée Qte Totale'),utf8_decode('Sorti (Total Vendu)'),utf8_decode('Sorti (Total livré)'),utf8_decode('Stock Final Réelle'),utf8_decode('Stock Final Virtuelle'),utf8_decode('Observation')));
+    $this->pdf->SetWidths(array(45,15,15,15,15,15,15,15,15,15,15,5));
+    $this->pdf->Row(array('Designation',utf8_decode('Stock Initial Réelle'),utf8_decode('Stock Initial Virtuelle'),utf8_decode('Entrée Qte Bonne'),utf8_decode('Entrée Qte PV'),utf8_decode('PV perdue'),utf8_decode('Entrée Qte Totale'),utf8_decode('Sorti (Total Vendu)'),utf8_decode('Sorti (Total livré)'),utf8_decode('Stock Final Réelle'),utf8_decode('Stock Final Virtuelle'),utf8_decode('Obs')));
     $this->pdf->SetFont('Helvetica','',6);
     foreach ($allArticle as $key => $value) {
       // code... SI
@@ -737,6 +737,8 @@ class PdfGenerate extends BaseController {
       $approGenBonne = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where('articles_id',$value->id)->find();
 
       $approGenPv = $this->approvisionnementsDetailModel->selectSum('qte_pv')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where('articles_id',$value->id)->find();
+
+      $pvPerdue = $this->pvPerdueHistoriqueModel->selectSum('qte_perdue')->join('g_interne_pv_perdue_historique_detail','g_interne_pv_perdue_historique.id = g_interne_pv_perdue_historique_detail.pv_historique_id')->Where('g_interne_pv_perdue_historique.date_historique',$dateRapport)->Where('g_interne_pv_perdue_historique_detail.articles_id',$value->id)->find();
 
       $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where('articles_id',$value->id)->find();
 
@@ -804,6 +806,7 @@ class PdfGenerate extends BaseController {
             $stockInitVirtuel[0]->qte_stock_virtuel?$stockInitVirtuel[0]->qte_stock_virtuel:0,
             $approGenBonne[0]->qte?$approGenBonne[0]->qte:0,
             $approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0,
+            $pvPerdue[0]->qte_perdue?$pvPerdue[0]->qte_perdue:0,
             $approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0,
             $qteTotalVendu,
             $qteTotalLivre,
