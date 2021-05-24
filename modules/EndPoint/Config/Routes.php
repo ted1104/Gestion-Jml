@@ -134,7 +134,7 @@ $routes->group('api/v1', function($routes){
 
   //5. STOCK PERSONNEL !!!!==!!!!
   $routes->get('injection-manuelle-stock-personnel','StockPersonnel::injectStockPersonnelManuel');
-  $routes->get('articles-search-data-transfert/(:any)/(:num)/(:num)/search','Articles::article_search_for_transfert/$1/$2/$3');
+  $routes->get('articles-search-data-transfert/(:any)/(:any)/(:num)/search','Articles::article_search_for_transfert/$1/$2/$3');
   $routes->get('stock-personnel-magaz/(:num)','StockPersonnel::stock_personnel_mag/$1');
   $routes->get('stock-personnel-get-all','StockPersonnel::stock_personnel_get');
   $routes->get('stock-personnel-ajustement/(:num)/(:any)','StockPersonnel::ajustementStockPersonnel/$1/$2');

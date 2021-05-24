@@ -47,7 +47,7 @@
                                   <div class="form-group">
                                     <label for="depots_id">Magasinier Destination</label>
 																		<select class="form-control" v-model="usersDestTransfert">
-																			<option v-for="(u, i) in usersListParDepot" :value="u.id" v-if="u.id != dpot_id">{{u.nom+' '+u.prenom}}</option>
+																			<option v-for="(u, i) in usersListParDepot" :value="u.id" v-if="u.id != users_id">{{u.nom+' '+u.prenom}}</option>
 																		</select>
 
                                   </div>
