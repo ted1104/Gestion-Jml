@@ -70,6 +70,8 @@
 																			<td>{{dt.logic_role_depot.depot.nom}}</td>
 																			<td>
 																				<span :class="dt.logic_auth.status_users_id==1?'badge badge-success':'badge badge-danger'">{{dt.logic_auth.status_users_id==1?'ACTIF':'BLOQUER'}}</span>
+																				<br>
+																				<span :class="dt.logic_auth.bloque_account_tempo==1?'badge badge-success':'badge badge-danger'">{{dt.logic_auth.bloque_account_tempo==1?'OP':'NON OP'}}</span>
 																			</td>
 																			<td>
 																				<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>

@@ -102,7 +102,7 @@ class UsersEntity extends Entity{
 
   }
   public function getLogicAuth(){
-    $data = self::$usersAuthModel->select('id,username,status_users_id')->getWhere(['users_id' => $this->attributes['id']])->getRow();
+    $data = self::$usersAuthModel->select('id,username,status_users_id,bloque_account_tempo')->getWhere(['users_id' => $this->attributes['id']])->getRow();
     return $data;
   }
 
