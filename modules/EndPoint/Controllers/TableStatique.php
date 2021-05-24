@@ -12,6 +12,7 @@ use App\Models\ClotureCaisseModel;
 use App\Models\UsersModel;
 use App\Models\UsersAuthModel;
 use App\Models\StMotifDecaissementExterneModel;
+use App\Models\StZoneModel;
 use CodeIgniter\I18n\Time;
 
 class TableStatique extends ResourceController {
@@ -26,6 +27,7 @@ class TableStatique extends ResourceController {
   protected $userModel = null;
   protected $usersAuthModel = null;
   protected $stMotifDecaissementExterneModel = null;
+  protected $stZoneModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -39,6 +41,7 @@ class TableStatique extends ResourceController {
     $this->userModel = new UsersModel();
     $this->usersAuthModel = new UsersAuthModel();
     $this->stMotifDecaissementExterneModel = new StMotifDecaissementExterneModel();
+    $this->stZoneModel = new StZoneModel();
   }
 
   public function depot_get(){
@@ -292,10 +295,45 @@ class TableStatique extends ResourceController {
       ];
       $data = 'null';
     }
-  return $this->respond([
-    'status' => $status,
-    'message' => $message,
-    'data' => $data
-  ]);
+      return $this->respond([
+        'status' => $status,
+        'message' => $message,
+        'data' => $data
+      ]);
+  }
+
+  //CREATION ZONE
+  public function zone_create(){
+    $data = $this->request->getPost();
+            $insertData = $this->stZoneModel->insert($data);
+             if(!$insertData){
+               $status = 400;
+               $message = [
+                 'success' =>null,
+                 'errors'=>$this->stZoneModel->errors()
+               ];
+               $data = null;
+             }else{
+               $status = 200;
+               $message = [
+                 'success' => 'La zône a été bien créee',
+                 'errors' => null
+               ];
+               $data = $insertData;
+             }
+
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> $data
+     ]);
+  }
+  public function zone_get(){
+    $data = $this->stZoneModel->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
   }
 }
