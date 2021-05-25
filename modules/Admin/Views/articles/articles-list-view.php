@@ -53,9 +53,9 @@
 																		<th scope="col">Qte virt</th>
 																		<th scope="col">Config Prix</th>
 																		<th scope="col">Config Faveur</th>
+																		<th scope="col">Config Prix Transp</th>
 																		<th scope="col">Rapport</th>
 																		<th scope="col">Détail</th>
-
 																	</tr>
 																</thead>
 																<tbody>
@@ -73,6 +73,9 @@
 																			<button class="btn btn-round btn-light" v-if="dt.logic_config_article_faveur.length > 0" @click="_u_open_mod_form_config_faveur(dt,2)">
 																				<i class="mdi mdi-circle-edit-outline"></i>
 																			</button>
+																		</td>
+																		<td>
+																			<button class="btn btn-round btn-info" @click="_u_open_mod_form_transport(dt)"><i class='mdi mdi-plus'></i> </button>
 																		</td>
 																		<td>
 																			<span :class="dt.is_show_on_rapport==1?'text-success':'text-danger'">{{dt.is_show_on_rapport==1 ? 'Oui':'Non'}}</span>
@@ -187,6 +190,15 @@
 																	<button v-if="!isLoadSaveMainButtonModal" @click="active_article_visibilite_sur_rapport(detailTab.id)" :class="detailTab.is_show_on_rapport==1?'btn btn-danger':'btn btn-success'">{{detailTab.is_show_on_rapport==1?'Désactiver':'Activer'}}</button>
 																	<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 																</div>
+
+																<!-- CONFIGURATION PRIX PAR ZONE TRANSPORT  -->
+																<hr>
+																<div class="">
+																	<div class="row text-center">
+																		<h5 class="col-md-12 card-title">CONFIGURATION PRIX TRANSPORT</h5>
+																	</div>
+
+																</div>
 															</div>
 
 														</div>
@@ -277,6 +289,42 @@
 					<div class="form-group">
 						<label for="prix_unitaire">Quantité conditionnelle *</label>
 						<input type="text" class="form-control" id="qte_faveur" aria-describedby="qte_faveur" v-model="qte_faveur">
+					</div>
+
+					<div v-if="!isActionFaveur">
+						<button v-if="!isLoadSaveMainButtonModal" @click="udpate_article_config_faveur" class="btn btn-primary">Modifier</button>
+					</div>
+					<div v-if="isActionFaveur">
+						<button v-if="!isLoadSaveMainButtonModal" @click="add_article_config_faveur" class="btn btn-primary">Enregistrer</button>
+					</div>
+					<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+				</div>
+		</div>
+</div>
+</div>
+
+
+
+<!-- MODAL CONFIGURATION FAVEUR A APPLIQUER -->
+<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalDetail}">
+<div class="modal-dialog" role="document">
+		<div class="modal-content">
+				<div class="modal-header">
+						<h5 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h5>
+						<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+						</button>
+				</div>
+				<div class="modal-body" v-if="!isWantBeDeleted">
+					<div class="form-group">
+						<label for="depots_id">Zone de destination *</label>
+						<select class="form-control" v-model="zone_destination">
+							<option v-for="(dtZone, i) in depotList" :value="dtZone.id">{{dtZone.nom}}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="prix_unitaire">Prix *</label>
+						<input type="text" class="form-control" id="prix_transport" aria-describedby="prix_transport" v-model="prix_transport">
 					</div>
 
 					<div v-if="!isActionFaveur">

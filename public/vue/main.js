@@ -301,6 +301,11 @@ var vthis = new Vue({
       idUserToGetHistoPv : null,
 
 
+      //configuartion prix TRANSPORT
+      zone_destination:null,
+      prix_transport:0
+
+
     }
   },
 
@@ -2706,7 +2711,7 @@ var vthis = new Vue({
                 var err = response.data.message.success;
                 this._u_fx_config_error_message("Succès",[err],'alert-success');
                 this._u_fx_form_init_field();
-                this.get_depots();
+                this.get_zones();
                 this.isLoadSaveMainButton = false;
                 return;
               }
@@ -3186,7 +3191,6 @@ var vthis = new Vue({
         this.styleModal = 'block';
       }
 
-
       // console.log(art.logic_detail_data);
     },
     _u_open_mod_form_config_faveur(art, from=null){
@@ -3214,6 +3218,11 @@ var vthis = new Vue({
 
       this.styleModalFaveur = 'block';
       console.log(this.ListPricesArticle);
+    },
+    _u_open_mod_form_transport(art){
+      console.log(art);
+      this.modalTitle = "CONFIGURER PRIX ARTICLE PAR ZONE : "+art.code_article+ " - "+art.nom_article+" - QU : 1";
+      this.styleModalDetail = 'block';
     },
     _u_open_mod_credite_account_client(client, from=null){
       this.modalTitle = "CREDITER LE COMPTE DU CLIENT "+client.nom_client+" "+client.prenom_client;
@@ -4129,7 +4138,7 @@ var vthis = new Vue({
       this.isGettingAretire = 1;
       this.get_commande_admin(3);
     }
-    if(pth[this.indexRoute]=='admin-config-zone'){
+    if(pth[this.indexRoute]=='admin-config-zone' || pth[this.indexRoute] ==='admin-list-article'){
       this.get_zones();
     }
 

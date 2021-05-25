@@ -9,6 +9,8 @@ use App\Models\StockModel;
 use App\Models\StDepotModel;
 use App\Models\ArticlesConfigFaveurModel;
 use App\Models\StockPersonnelModel;
+use App\Models\TransportPrixArticlesModel;
+use App\Entities\TransportPrixArticlesEntity;
 
 class Articles extends ResourceController {
   protected $format = 'json';
@@ -19,6 +21,7 @@ class Articles extends ResourceController {
   protected $depotModel = null;
   protected $articlesConfigFaveurModel = null;
   protected $stockPersonnelModel = null;
+  protected $transportPrixArticlesModel = null;
 
 
   public function __construct(){
@@ -29,6 +32,7 @@ class Articles extends ResourceController {
     $this->depotModel = new StDepotModel();
     $this->articlesConfigFaveurModel = new ArticlesConfigFaveurModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
+    $this->transportPrixArticlesModel = new TransportPrixArticlesModel();
   }
   public function articles_get($limit, $offset){
     $data = $this->model->findAll($limit, $offset);
@@ -777,7 +781,44 @@ class Articles extends ResourceController {
       'data'=> $data
     ]);
   }
+  public function article_set_prix_transport(){
+    $this->transportPrixArticlesModel->beginTrans();
+    $data = $this->request->getPost();
+  
+    if(!$this->transportPrixArticlesModel->checkingIfConfigExist($data['zone_id'], $data['article_id'])){
+      $insertData = $this->transportPrixArticlesModel->insert($data);
+      if(!$insertData){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->transportPrixArticlesModel->errors()
+        ];
+        $data = null;
+      }else{
 
+        $status = 200;
+        $message = [
+          'success' => 'Enregistrement du prix de l\'article reussi avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['cet article possède déjà une configuration dans cette zone']
+      ];
+      $data = null;
+    }
+
+    $this->transportPrixArticlesModel->commitTrans();
+     return $this->respond([
+       'status' => $status,
+       'message' =>$message,
+       'data'=> $data
+     ]);
+  }
 
 
   public function multitest(){
