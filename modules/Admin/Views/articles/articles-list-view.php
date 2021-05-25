@@ -331,7 +331,7 @@
 						<button v-if="!isLoadSaveMainButtonModal" @click="udpate_article_config_faveur" class="btn btn-primary">Modifier</button>
 					</div>
 					<div v-if="isActionFaveur">
-						<button v-if="!isLoadSaveMainButtonModal" @click="add_article_config_faveur" class="btn btn-primary">Enregistrer</button>
+						<button v-if="!isLoadSaveMainButtonModal" @click="add_price_transport_article_zone" class="btn btn-primary">Enregistrer</button>
 					</div>
 					<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
 				</div>

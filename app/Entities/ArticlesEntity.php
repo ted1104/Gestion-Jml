@@ -7,6 +7,8 @@ use App\Models\ArticlesPrixModel;
 use App\Models\ArticlesConfigFaveurModel;
 use App\Models\PvRestaurationModel;
 use App\Models\StockModel;
+use App\Models\TransportPrixArticlesModel;
+
 
 
 class ArticlesEntity extends Entity{
@@ -28,7 +30,8 @@ class ArticlesEntity extends Entity{
     'logic_detail_data' => null,
     'logic_config_article_faveur' => null,
     'logic_operation_pv_restaurer' => null,
-    'logic_qte_virtuel_dispo' => null
+    'logic_qte_virtuel_dispo' => null,
+    'logic_detail_transport_price_zone' => null
   ];
 
   protected $datamap = [];
@@ -37,6 +40,7 @@ class ArticlesEntity extends Entity{
   protected $articlesConfigFaveurModel = null;
   protected $pvRestaurationModel = null;
   protected $stockModel = null;
+  protected $transportPrixArticlesModel = null;
 
 
   public function __construct(array $data = null){
@@ -46,6 +50,7 @@ class ArticlesEntity extends Entity{
     $this->articlesConfigFaveurModel = new ArticlesConfigFaveurModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->stockModel = new StockModel();
+    $this->transportPrixArticlesModel = new TransportPrixArticlesModel();
   }
   public function getUsersId(){
     return $this->userModel->select('id,nom,prenom')->find($this->attributes['users_id']);
@@ -62,7 +67,10 @@ class ArticlesEntity extends Entity{
   public function getLogicQteVirtuelDispo(){
     return $this->stockModel->selectSum('qte_stock_virtuel')->Where('articles_id',$this->attributes['id'])->find()[0]->qte_stock_virtuel;
   }
-  
+  public function getLogicDetailTransportPriceZone(){
+    return $this->transportPrixArticlesModel->Where('article_id', $this->attributes['id'])->findAll();
+  }
+
 
 
 

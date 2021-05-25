@@ -2737,6 +2737,32 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    add_price_transport_article_zone(e){
+    e.preventDefault();
+    this.isLoadSaveMainButtonModal = true;
+    const newurl = this.url+"articles-create-transport-price";
+    var form = this._u_fx_form_data_price_transport_article();
+    this.messageError = false;
+    return axios
+          .post(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this._u_close_mod_form();
+                this.get_article();
+                this.isLoadSaveMainButtonModal = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this.isLoadSaveMainButtonModal = false;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+        },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3222,6 +3248,7 @@ var vthis = new Vue({
     _u_open_mod_form_transport(art){
       console.log(art);
       this.modalTitle = "CONFIGURER PRIX ARTICLE PAR ZONE : "+art.code_article+ " - "+art.nom_article+" - QU : 1";
+      this.codeIdArticlePrint = art.id;
       this.styleModalDetail = 'block';
     },
     _u_open_mod_credite_account_client(client, from=null){
@@ -3860,6 +3887,10 @@ var vthis = new Vue({
       this.tel_client_ab = "";
       this.adresse_client_ab = "";
 
+      //champs price transport configuration
+      this.zone_destination = null;
+      this.prix_transport = 0;
+
 
 
 
@@ -3967,12 +3998,19 @@ var vthis = new Vue({
      formData.append('is_central', this.RadioCheckedIsMain);
      return formData;
    },
-   _u_fx_form_data_zone(){
-    var formData = new FormData();
-    formData.append('nom',vthis.nom);
-    formData.append('description',vthis.adresse);
-    return formData;
-  },
+    _u_fx_form_data_zone(){
+      var formData = new FormData();
+      formData.append('nom',vthis.nom);
+      formData.append('description',vthis.adresse);
+      return formData;
+    },
+    _u_fx_form_data_price_transport_article(){
+      var formData = new FormData();
+      formData.append('zone_id',this.zone_destination);
+      formData.append('article_id',this.codeIdArticlePrint);
+      formData.append('prix', this.prix_transport)
+      return formData;
+    },
     _u_set_base_url(){
       if(window.location.host==='127.0.0.1' || window.location.host==='localhost'){
         this.url = 'http://'+window.location.host+'/GestionBoutique/api/v1/';

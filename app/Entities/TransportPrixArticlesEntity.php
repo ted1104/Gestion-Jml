@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity;
 use Config\Services;
-// use App\Models\StockModel;
+use App\Models\StZoneModel;
 // use App\Models\UsersModel;
 
 
@@ -19,15 +19,18 @@ class TransportPrixArticlesEntity extends Entity{
   ];
 
   protected $datamap = [];
-  // protected static $stockModel = null;
+  protected static $zoneModel = null;
   // protected static $userModel = null;
 
 
   public function __construct(array $data = null){
     parent::__construct($data);
-    // self::$stockModel = new StockModel();
+    self::$zoneModel = new StZoneModel();
     // self::$userModel = new UsersModel();
 
+  }
+  public function getZoneId(){
+    return self::$zoneModel->select('id, nom')->Where('id', $this->attributes['zone_id'])->find();
   }
 
   // public function getLogicArticleStock(){
