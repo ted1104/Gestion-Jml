@@ -2693,6 +2693,46 @@ var vthis = new Vue({
             })
     },
 
+    add_zone(e){
+    e.preventDefault();
+    this.isLoadSaveMainButton = true;
+    const newurl = this.url+"zone-create-one";
+    var form = this._u_fx_form_data_zone();
+    this.messageError = false;
+    return axios
+          .post(newurl,form,{headers: this.tokenConfig})
+          .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.get_depots();
+                this.isLoadSaveMainButton = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this.isLoadSaveMainButton = false;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+          })
+          .catch(error =>{
+            console.log(error);
+          })
+        },
+    get_zones(){
+      const newurl = this.url+"zone-get-all";
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.depotList = response.data.data;
+              // console.log(this.depotList);
+              if(this.depotList.length < 1){
+                this.isNoReturnedData = true;
+              }
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
 
@@ -3918,6 +3958,12 @@ var vthis = new Vue({
      formData.append('is_central', this.RadioCheckedIsMain);
      return formData;
    },
+   _u_fx_form_data_zone(){
+    var formData = new FormData();
+    formData.append('nom',vthis.nom);
+    formData.append('description',vthis.adresse);
+    return formData;
+  },
     _u_set_base_url(){
       if(window.location.host==='127.0.0.1' || window.location.host==='localhost'){
         this.url = 'http://'+window.location.host+'/GestionBoutique/api/v1/';
@@ -4082,6 +4128,9 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='admin-list-achat-a-retirer'){
       this.isGettingAretire = 1;
       this.get_commande_admin(3);
+    }
+    if(pth[this.indexRoute]=='admin-config-zone'){
+      this.get_zones();
     }
 
 

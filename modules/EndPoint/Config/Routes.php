@@ -19,6 +19,7 @@ $routes->group('api/v1', function($routes){
   $routes->put('motif-decaissement-update/(:num)/update','TableStatique::motif_decaissement_update/$1');
   $routes->get('motif-decaissement-desable-activated/(:num)','TableStatique::motif_decaissement_enable_desable/$1');
   $routes->post('zone-create-one','TableStatique::zone_create');
+  $routes->get('zone-get-all','TableStatique::zone_get');
 
 
 

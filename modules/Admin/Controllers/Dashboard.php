@@ -90,6 +90,12 @@ class Dashboard extends BaseController {
   }
 
 
+  public function getConfigZone(){
+    $data = [
+      'titlePage' => 'ZONES : Administration'
+    ];
+    echo view($this->linkMod.'\config\config-zone-view', $data);
+  }
 
 
 
