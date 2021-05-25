@@ -784,7 +784,7 @@ class Articles extends ResourceController {
   public function article_set_prix_transport(){
     $this->transportPrixArticlesModel->beginTrans();
     $data = $this->request->getPost();
-  
+
     if(!$this->transportPrixArticlesModel->checkingIfConfigExist($data['zone_id'], $data['article_id'])){
       $insertData = $this->transportPrixArticlesModel->insert($data);
       if(!$insertData){
@@ -819,7 +819,30 @@ class Articles extends ResourceController {
        'data'=> $data
      ]);
   }
+  public function article_delete_price_transport($idprice){
+    if($this->transportPrixArticlesModel->delete(['id' =>$idprice ])){
+      $status = 400;
+      $message = [
+        'success' =>'La configuration du prix de transport d\'article a été supprimée',
+        'errors'=>null
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' =>null,
+        'errors'=>['Echec de la supprission contacter le concepteur système']
+      ];
+      $data = null;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data,
 
+    ]);
+
+  }
 
   public function multitest(){
     print_r($this->request->getPost());

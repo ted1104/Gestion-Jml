@@ -75,7 +75,7 @@
 																			</button>
 																		</td>
 																		<td>
-																			<button class="btn btn-round btn-info" @click="_u_open_mod_form_transport(dt)"><i class='mdi mdi-plus'></i> </button>
+																			<button :class="dt.logic_detail_transport_price_zone.length > 0?'btn btn-round btn-info':'btn btn-round btn-light'" @click="_u_open_mod_form_transport(dt)"><i class='mdi mdi-plus'></i> </button>
 																		</td>
 																		<td>
 																			<span :class="dt.is_show_on_rapport==1?'text-success':'text-danger'">{{dt.is_show_on_rapport==1 ? 'Oui':'Non'}}</span>
@@ -196,6 +196,38 @@
 																<div class="">
 																	<div class="row text-center">
 																		<h5 class="col-md-12 card-title">CONFIGURATION PRIX TRANSPORT</h5>
+																	</div>
+																	<div class="row">
+																		<div class="table-responsive container">
+																			<table class="table">
+																				<thead>
+																					<tr class="bg-secondary">
+																						<th scope="col">Zone</th>
+																						<th scope="col">Prix</th>
+																						<th scope="col">Action</th>
+																						<!-- <th scope="col">Qte Virtuelle</th>
+																						<th scope="col">Etat</th> -->
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<tr v-for="(det,i) in detailTab.logic_detail_transport_price_zone">
+																						<td>{{det.zone_id[0].nom}}</td>
+																						<td>{{det.prix}} USD</td>
+																						<td>
+																							<span class="btn btn-round btn-light">
+																								<i class="mdi mdi-circle-edit-outline" @click="_u_open_mod_form(det,2)"></i>
+																							</span>
+																							<button v-if = "+i+1 == detailTab.logic_detail_transport_price_zone.length" class="btn btn-round btn-danger" @click="_u_open_mod_form(det,3)"><i class="mdi mdi-delete-sweep" ></i></button>
+																						</td>
+
+																					</tr>
+																				</tbody>
+																			</table>
+																			<div v-if="detailTab.logic_detail_transport_price_zone.length < 1" class="text-center">
+																				<span >Aucune configuration des prix de transport pour cet article </span><br>
+																				<i class="mdi mdi-cancel" style="font-size:40px"></i>
+																			</div>
+																		</div>
 																	</div>
 
 																</div>
