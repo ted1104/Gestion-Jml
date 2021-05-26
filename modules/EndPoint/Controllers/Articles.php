@@ -843,7 +843,44 @@ class Articles extends ResourceController {
     ]);
 
   }
+  public function article_update_price_transport(){
+    $idprice = $this->request->getPost('price_id');
+    $newPrice = $this->request->getPost('prix');
+    if(is_numeric ($newPrice)){
+      $data =[
+        'prix'=>$newPrice,
+      ];
 
+      if($this->transportPrixArticlesModel->update($idprice,$data)){
+          $status = 400;
+          $message = [
+            'success' =>'Modification du prix avec succès',
+            'errors'=>null
+          ];
+          $data = null;
+      }else{
+          $status = 400;
+          $message = [
+            'success' =>null,
+            'errors'=>['Erreur de la mise à jour']
+          ];
+          $data = null;
+      }
+    }else{
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>['Le montant ou la quantité est invalide']
+      ];
+      $data = null;
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data,
+
+    ]);
+  }
   public function multitest(){
     print_r($this->request->getPost());
 

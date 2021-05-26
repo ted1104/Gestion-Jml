@@ -63,6 +63,7 @@ var vthis = new Vue({
       isLoadSaveMainButtonModal : false,
       isDecaissementExterne : false,
       isNoReturnedData : false,
+      isWantBeModified : false,
 
       //SHOW BOOLEAN
       isStockIndicator : false,
@@ -3287,6 +3288,7 @@ var vthis = new Vue({
       if(from==3){
         console.log(art);
         this.modalTitle = "MODIFIER LE PRIX DE TRANSPORT DE L'ARTICLE";
+        this.isWantBeModified = true;
         this.prix_transport = art.prix;
         this.zone_destination = art.zone_id[0].id;
       }
@@ -3311,6 +3313,7 @@ var vthis = new Vue({
     },
     _u_close_mod_form(){
       this.isWantBeDeleted = false;
+      this.isWantBeModified = false;
       this.styleModal = 'none';
       this.styleModalFaveur = 'none';
       this.styleModalDetail = 'none';
