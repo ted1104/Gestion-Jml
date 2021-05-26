@@ -360,7 +360,7 @@
 					</div>
 
 					<div v-if="isWantBeModified">
-						<button v-if="!isLoadSaveMainButtonModal" @click="udpate_article_config_faveur" class="btn btn-primary">Modifier</button>
+						<button v-if="!isLoadSaveMainButtonModal" @click="udpate_article_price_transport" class="btn btn-primary">Modifier</button>
 					</div>
 					<div v-if="!isWantBeModified">
 						<button v-if="!isLoadSaveMainButtonModal" @click="add_price_transport_article_zone" class="btn btn-primary">Enregistrer</button>

@@ -846,7 +846,7 @@ class Articles extends ResourceController {
   public function article_update_price_transport(){
     $idprice = $this->request->getPost('price_id');
     $newPrice = $this->request->getPost('prix');
-    if(is_numeric ($newPrice)){
+    if(is_numeric ($newPrice) and $newPrice > 0){
       $data =[
         'prix'=>$newPrice,
       ];
@@ -854,7 +854,7 @@ class Articles extends ResourceController {
       if($this->transportPrixArticlesModel->update($idprice,$data)){
           $status = 400;
           $message = [
-            'success' =>'Modification du prix avec succès',
+            'success' =>'Modification du prix de transport avec succès',
             'errors'=>null
           ];
           $data = null;

@@ -2790,6 +2790,35 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    udpate_article_price_transport(e){
+      e.preventDefault();
+      const newurl = this.url+"articles-update-price-transport";
+      var formData = new FormData();
+      formData.append('price_id',this.price_transport_id);
+      formData.append('prix',this.prix_transport);
+      this.messageError = false;
+      this.isLoadSaveMainButtonModal = true;
+      return axios
+            .post(newurl,formData,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this._u_fx_form_init_field();
+                  this.get_article();
+                  this.isLoadSaveMainButtonModal = false;
+                  this._u_close_mod_form();
+                  this.isShow = false;
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButtonModal = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3290,6 +3319,7 @@ var vthis = new Vue({
         this.modalTitle = "MODIFIER LE PRIX DE TRANSPORT DE L'ARTICLE";
         this.isWantBeModified = true;
         this.prix_transport = art.prix;
+        this.price_transport_id = art.id;
         this.zone_destination = art.zone_id[0].id;
       }
       this.styleModalDetail = 'block';
