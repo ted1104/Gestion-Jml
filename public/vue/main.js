@@ -303,7 +303,8 @@ var vthis = new Vue({
 
       //configuartion prix TRANSPORT
       zone_destination:null,
-      prix_transport:0
+      prix_transport:0,
+      price_transport_id : null
 
 
     }
@@ -2763,6 +2764,31 @@ var vthis = new Vue({
             console.log(error);
           })
         },
+    delete_article_price_transport(){
+      this.isLoadDelete = true;
+      const newurl = this.url+"articles-delete-price-transport/"+this.price_transport_id+"/del";
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadDelete = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this._u_fx_form_init_field();
+                this.get_article();
+                this._u_close_mod_form();
+                this.isWantBeDeleted = false;
+                this.isShow = false;
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadDelete = false;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3245,11 +3271,27 @@ var vthis = new Vue({
       this.styleModalFaveur = 'block';
       console.log(this.ListPricesArticle);
     },
-    _u_open_mod_form_transport(art){
-      console.log(art);
-      this.modalTitle = "CONFIGURER PRIX ARTICLE PAR ZONE : "+art.code_article+ " - "+art.nom_article+" - QU : 1";
-      this.codeIdArticlePrint = art.id;
+    _u_open_mod_form_transport(art,from=null){
+
+      if(from==1){
+        this.modalTitle = "CONFIGURER PRIX TRANSPORT ARTICLE PAR ZONE : "+art.code_article+ " - "+art.nom_article+" - QU : 1";
+        this.codeIdArticlePrint = art.id;
+
+      }
+      if(from==2){
+        this.modalTitle = "SUPPRESSION PRIX TRANSPORT ARTICLE PAR ZONE - QU : 1";
+        this.price_transport_id = art.id;
+        this.isWantBeDeleted = true;
+        console.log(this.price_transport_id);
+      }
+      if(from==3){
+        console.log(art);
+        this.modalTitle = "MODIFIER LE PRIX DE TRANSPORT DE L'ARTICLE";
+        this.prix_transport = art.prix;
+        this.zone_destination = art.zone_id[0].id;
+      }
       this.styleModalDetail = 'block';
+
     },
     _u_open_mod_credite_account_client(client, from=null){
       this.modalTitle = "CREDITER LE COMPTE DU CLIENT "+client.nom_client+" "+client.prenom_client;
@@ -3268,9 +3310,11 @@ var vthis = new Vue({
       console.log(this.ListPricesArticle);
     },
     _u_close_mod_form(){
+      this.isWantBeDeleted = false;
       this.styleModal = 'none';
       this.styleModalFaveur = 'none';
       this.styleModalDetail = 'none';
+
     },
     _u_open_mod_popup_caisse(cmd,val){
       if(val==3){

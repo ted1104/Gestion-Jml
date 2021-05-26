@@ -71,6 +71,9 @@ $routes->group('api/v1', function($routes){
   $routes->get('articles-search-data-pv-perdue-depot/(:any)/(:num)/(:num)/(:num)/search','Articles::article_search_for_pv_perdue/$1/$2/$3/$4');
 
   $routes->post('articles-create-transport-price','Articles::article_set_prix_transport');
+  $routes->get('articles-delete-price-transport/(:num)/del','Articles::article_delete_price_transport/$1');
+
+
 
 
   $routes->post('art-test','Articles::multitest');

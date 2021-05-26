@@ -75,7 +75,7 @@
 																			</button>
 																		</td>
 																		<td>
-																			<button :class="dt.logic_detail_transport_price_zone.length > 0?'btn btn-round btn-info':'btn btn-round btn-light'" @click="_u_open_mod_form_transport(dt)"><i class='mdi mdi-plus'></i> </button>
+																			<button :class="dt.logic_detail_transport_price_zone.length > 0?'btn btn-round btn-info':'btn btn-round btn-light'" @click="_u_open_mod_form_transport(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																		</td>
 																		<td>
 																			<span :class="dt.is_show_on_rapport==1?'text-success':'text-danger'">{{dt.is_show_on_rapport==1 ? 'Oui':'Non'}}</span>
@@ -215,9 +215,9 @@
 																						<td>{{det.prix}} USD</td>
 																						<td>
 																							<span class="btn btn-round btn-light">
-																								<i class="mdi mdi-circle-edit-outline" @click="_u_open_mod_form(det,2)"></i>
+																								<i class="mdi mdi-circle-edit-outline" @click="_u_open_mod_form_transport(det,3)"></i>
 																							</span>
-																							<button v-if = "+i+1 == detailTab.logic_detail_transport_price_zone.length" class="btn btn-round btn-danger" @click="_u_open_mod_form(det,3)"><i class="mdi mdi-delete-sweep" ></i></button>
+																							<button class="btn btn-round btn-danger" @click="_u_open_mod_form_transport(det,2)"><i class="mdi mdi-delete-sweep" ></i></button>
 																						</td>
 
 																					</tr>
@@ -349,9 +349,9 @@
 				</div>
 				<div class="modal-body" v-if="!isWantBeDeleted">
 					<div class="form-group">
-						<label for="depots_id">Zone de destination *</label>
+						<label for="zone_destination">Zone de destination *</label>
 						<select class="form-control" v-model="zone_destination">
-							<option v-for="(dtZone, i) in depotList" :value="dtZone.id">{{dtZone.nom}}</option>
+							<option v-for="(dtZone, i) in depotList" :value="dtZone.id" :selected="zone_destination==dtZone.id">{{dtZone.nom}}</option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -366,6 +366,16 @@
 						<button v-if="!isLoadSaveMainButtonModal" @click="add_price_transport_article_zone" class="btn btn-primary">Enregistrer</button>
 					</div>
 					<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+				</div>
+				<div class="modal-body text-center" v-if="isWantBeDeleted">
+					<span class=""><i class="mdi mdi-alert icon-size-1x"></i></span><br>
+					<span class="text-danger">
+						Vous êtes sur le point de supprimer definitivement cette configuration du prix, cette action est irreversible. Si vous l'executer sans connaissance de cause ça peut causer un dysfonctionnement du système surtout coté prix de l'article!
+					</span>
+					<div class="">
+						<button v-if="!isLoadDelete" @click="delete_article_price_transport" class="btn btn-danger">Supprimer</button>
+						<img v-if="isLoadDelete" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+					</div>
 				</div>
 		</div>
 </div>
