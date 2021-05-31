@@ -38,7 +38,7 @@
 
                     <li class="list-inline-item">
                         <div class="dropdown xp-notification mr-3">
-                            <?php if(session('users')['info'][0]->roles_id == 3): ?>
+                            <?php if(session('users')['info'][0]->roles_id == 3 OR session('users')['info'][0]->roles_id == 1): ?>
                               <a class="dropdown-toggle user-profile-img text-white" href="#" role="button" id="xp-notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   <i class="mdi mdi-currency-usd font-18 v-a-m"></i>
                               </a>

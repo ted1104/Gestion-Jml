@@ -4123,7 +4123,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='facturier-list-achat'){
       this.get_commande_facturier();
     }
-    if(pth[this.indexRoute]=='caissier-list-achat'){
+    if(pth[this.indexRoute]=='caissier-list-achat' || pth[this.indexRoute]=='admin-list-ventes'){
       this.get_commande_caissier();
     }
     if(pth[this.indexRoute]=='magaz-list-achat'){

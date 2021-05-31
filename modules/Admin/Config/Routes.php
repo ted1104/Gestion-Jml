@@ -26,6 +26,7 @@ $routes->get('admin-histo-transfert','Approv::getHistoTransfert',['filter' => 'i
 $routes->get('admin-stock-personnel','Approv::getStockPersonnel',['filter' => 'isManager']);
 
 $routes->get('admin-add-vente','Achat::achatAddAdmin',['filter' => 'isManager']);
+$routes->get('admin-list-ventes','Achat::achatListAdmin',['filter' => 'isManager']);
 
 $routes->get('admin-add-client','Dashboard::addClient',['filter' => 'isManager']);
 $routes->get('admin-list-client','Dashboard::getListClient',['filter' => 'isManager']);

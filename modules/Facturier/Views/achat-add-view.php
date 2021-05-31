@@ -116,7 +116,7 @@
                                     <input type="text" class="form-control" id="nom_client" v-model="nom_client">
                                   </div>
 																	<div class="form-group">
-                                    <label for="telephone_client">Nom Téléphone client</label>
+                                    <label for="telephone_client">Numéro de Téléphone client</label>
                                     <input type="text" class="form-control" id="telephone_client" v-model="telephone_client">
                                   </div>
 

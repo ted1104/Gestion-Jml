@@ -30,16 +30,16 @@
                   </ul>
               </li>
 
-              <!-- <li>
+              <li>
                   <a href="javaScript:void();">
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Operation-Ventes</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-vente') ?>">Créer</a></li>
-                      <li><a href="<?=base_url('admin-list-ventes') ?>">Mes Ventes</a></li>
-                      <li><a href="<?=base_url('admin-list-dettes') ?>">Mes Déttes</a></li>
+                      <li><a href="<?=base_url('admin-list-ventes') ?>">Mes Achats</a></li>
+                      <!-- <li><a href="<?=base_url('admin-list-dettes') ?>">Mes Déttes</a></li> -->
                   </ul>
-              </li> -->
+              </li>
               <li>
                   <a href="javaScript:void();">
                       <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>

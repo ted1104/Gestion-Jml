@@ -22,9 +22,15 @@ class Achat extends BaseController {
   }
   public function achatAddAdmin(){
     $data = [
-      'titlePage' => 'VENTES : ADMINISTRTION'
+      'titlePage' => 'VENTES : ADMINISTRATION'
     ];
     echo view('Modules\Facturier\Views\achat-add-view', $data);
+  }
+  public function achatListAdmin(){
+    $data = [
+      'titlePage' => 'VENTES : ADMINISTRATION'
+    ];
+    echo view('Modules\Caisse\Views\achat-list-caisse-view', $data);
   }
   public function addPvPerdue(){
     $data = [
