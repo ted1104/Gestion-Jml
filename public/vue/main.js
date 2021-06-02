@@ -4031,6 +4031,7 @@ var vthis = new Vue({
      formData.append('qte_stock_pv',0);
      formData.append('pv_en_kg',0);
      formData.append('is_eligible_add_kg',0);
+     formData.append('is_visible',1);
 
 
 
