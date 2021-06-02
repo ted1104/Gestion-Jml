@@ -305,7 +305,8 @@ var vthis = new Vue({
       //configuartion prix TRANSPORT
       zone_destination:null,
       prix_transport:0,
-      price_transport_id : null
+      price_transport_id : null,
+
 
 
     }
@@ -348,6 +349,28 @@ var vthis = new Vue({
   },
     get_article(limit=this.PerPaged,offset=0, indexPage=0){
       const newurl = this.url+"articles-get-all/"+limit+"/"+offset;
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log(this.dataToDisplay);
+              this.isShow = false;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_article_config(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"articles-get-all-config/"+limit+"/"+offset;
       this.dataToDisplay=[];
       if(this.isShow){
         this.isShow = !this.isShow;
@@ -1928,6 +1951,31 @@ var vthis = new Vue({
                   var err = response.data.message.success;
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
                   this.get_article();
+                  // this.get_article();
+                  this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
+    active_article_visibilite_sur_liste(idarticle){
+      // console.log(iduser);
+      const newurl = this.url+"article-change-visibilite-sur-liste/"+idarticle;
+      this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_article_config();
                   // this.get_article();
                   this.isLoadSaveMainButton = false;
                   // this.tabListData=[];
@@ -4255,6 +4303,9 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute]=='admin-config-zone' || pth[this.indexRoute] ==='admin-list-article'){
       this.get_zones();
+    }
+    if(pth[this.indexRoute]=='admin-config-list-article'){
+      this.get_article_config();
     }
 
 

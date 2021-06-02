@@ -24,6 +24,7 @@ class ArticlesEntity extends Entity{
     'qte_stock_pv' => null,
     'pv_en_kg' => null,
     'is_eligible_add_kg' => null,
+    'is_visible' => null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,

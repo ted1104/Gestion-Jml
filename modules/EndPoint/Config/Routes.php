@@ -56,6 +56,9 @@ $routes->group('api/v1', function($routes){
 
   //2.ARTCILES
   $routes->get('articles-get-all/(:num)/(:num)','Articles::articles_get/$1/$2');
+  $routes->get('articles-get-all-config/(:num)/(:num)','Articles::articles_get_all/$1/$2');
+
+
   $routes->post('articles-create-one','Articles::articles_create');
   $routes->post('articles-create-price','Articles::articles_set_price');
   $routes->get('articles-search-data-commande/(:any)/(:any)/(:num)/(:num)/search','Articles::article_search_data_commande/$1/$2/$3/$4');
@@ -66,6 +69,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('articles-create-config-faveur','Articles::create_configuration_faveur_article');
   $routes->post('articles-update-configuration-faveur','Articles::article_configuration_faveur_article');
   $routes->get('article-change-visibilite-sur-rapport/(:num)','Articles::article_activate_visibilite_sur_rapport/$1');
+  $routes->get('article-change-visibilite-sur-liste/(:num)','Articles::article_activate_visibilite_sur_liste/$1');
   $routes->post('articles-set-kg-pv','Articles::article_set_kg_pv');
   $routes->put('update-article/(:num)/update','Articles::article_update/$1');
   $routes->get('articles-search-data-pv-perdue-depot/(:any)/(:num)/(:num)/(:num)/search','Articles::article_search_for_pv_perdue/$1/$2/$3/$4');

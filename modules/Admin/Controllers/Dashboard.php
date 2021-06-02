@@ -97,6 +97,12 @@ class Dashboard extends BaseController {
     echo view($this->linkMod.'\config\config-zone-view', $data);
   }
 
+  public function config_articles(){
+    $data = [
+      'titlePage' => 'ARTICLES : Administration'
+    ];
+    echo view($this->linkMod.'\config\config-articles-view', $data);
+  }
 
 
 

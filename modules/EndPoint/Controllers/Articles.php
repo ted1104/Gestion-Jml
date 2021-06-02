@@ -35,6 +35,15 @@ class Articles extends ResourceController {
     $this->transportPrixArticlesModel = new TransportPrixArticlesModel();
   }
   public function articles_get($limit, $offset){
+    $data = $this->model->Where('is_visible', 1)->findAll($limit, $offset);
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+      'all'=> count($data = $this->model->Where('is_visible', 1)->findAll())
+    ]);
+  }
+  public function articles_get_all($limit, $offset){
     $data = $this->model->findAll($limit, $offset);
     return $this->respond([
       'status' => 200,
@@ -590,6 +599,31 @@ class Articles extends ResourceController {
       $message = [
         'success' => $statusArticle==0?'Article activé pour être visible sur le rapport':'Article désactivé pour ne pas être visible sur le rapport',
         'errors' => $data->is_show_on_rapport
+      ];
+      $data = 'null';
+    }
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+
+  }
+  public function article_activate_visibilite_sur_liste($idArticle){
+    $data = $this->model->find($idArticle);
+    $statusArticle = $data->is_visible==1?0:1;
+    if(!$this->model->set('is_visible',$statusArticle)->Where('id',$idArticle)->update()){
+      $status = 400;
+      $message = [
+        'success' =>null,
+        'errors'=>$this->model->errors()
+      ];
+      $data = null;
+    }else{
+      $status = 200;
+      $message = [
+        'success' => $statusArticle==0?'Article activé pour être visible sur la liste':'Article désactivé pour ne pas être visible sur la liste',
+        'errors' => $data->is_visible
       ];
       $data = 'null';
     }

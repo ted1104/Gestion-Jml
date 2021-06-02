@@ -10,6 +10,9 @@ $routes->get('admin-list-article','Articles::list',['filter' => 'isManager']);
 $routes->get('admin-histo-appro','Approv::historique',['filter' => 'isManager']);
 $routes->get('admin-stock','Approv::stockDepots',['filter' => 'isManager']);
 $routes->get('admin-config-depot','Dashboard::config_depot',['filter' => 'isManager']);
+$routes->get('admin-config-list-article','Dashboard::config_articles',['filter' => 'isManager']);
+
+
 $routes->get('admin-config-etat-critique','Dashboard::config_critique',['filter' => 'isManager']);
 $routes->get('admin-caisse','Dashboard::getCaissierMontant',['filter' => 'isManager']);
 $routes->get('admin-encaissement-interne','Dashboard::getEncaissementInterne',['filter' => 'isManager']);
