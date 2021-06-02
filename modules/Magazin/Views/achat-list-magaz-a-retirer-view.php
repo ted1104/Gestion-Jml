@@ -266,7 +266,7 @@
 																	</div>
 
 																	<div class="col-md-6">
-																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue, det)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
+																		<input type="text" class="form-control margin-top-3" placeholder="Qte rétiréé" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue, det)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
 																	</div>
 																	<div class="col-md-6">
 																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande)"><i class="mdi mdi-eye-outline" ></i></button>

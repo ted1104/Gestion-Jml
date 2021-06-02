@@ -1086,9 +1086,23 @@ class Commandes extends ResourceController {
 
     }else{
     for ($i=0; $i < count($vente_detail_id); $i++) {
+      //CHECK IF HISTOR A RETIRER EXISTE DEJA
+      $infoDetailVente = $this->commandesDetailModel->find($vente_detail_id[$i]);
+      $infoVente = $this->model->find($infoDetailVente->vente_id);
+
+      $qtevendue = $infoDetailVente->qte_vendue;
+      $idarticle = $infoDetailVente->articles_id[0]->id;
+      $iddepot = $infoVente->depots_id[0]->id;
+
+      if(!$this->aretirerModel->Where('vente_detail_id', $vente_detail_id[$i])->find()){
+          //on rajoute la quantite vendue dans stock reel et personnel
+
+          if($this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1)){
+            $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle, $qtevendue,1);
+          }
+      }
 
         $data = ['vente_detail_id'=>$vente_detail_id[$i],'qte_retirer'=>$qte[$i],'users_id'=>$iduser];
-
         if(!$this->aretirerModel->insert($data)){
           $this->aretirerModel->RollbackTrans();
           $message = [
@@ -1101,6 +1115,10 @@ class Commandes extends ResourceController {
             'data'=> $data=null
           ]);
         }
+
+        $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qte[$i],0);
+        $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle, $qte[$i],0);
+
 
         //Update commande to show that was a aretrire operatoon
         // $detailVente = $this->commandesDetailModel->Where('id',$vente_detail_id[$i])->find();
