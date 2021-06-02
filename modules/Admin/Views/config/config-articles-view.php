@@ -102,11 +102,11 @@
 															<nav aria-label="...">
                                   <ul class="pagination">
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_previous_page(get_article)">Previous</button>
+                                      <button class="page-link" @click="_u_previous_page(get_article_config)">Previous</button>
                                     </li>
-                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_article(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
+                                    <li v-for="(pageData, index) in paginationTab" :class="currentIndexPage==index?'page-item active':'page-item'"><button class="page-link" @click="get_article_config(pageData.limit,pageData.offset,index)">{{index+1}}</button></li>
                                     <li class="page-item">
-                                      <button class="page-link" @click="_u_next_page(get_article)">Next</button>
+                                      <button class="page-link" @click="_u_next_page(get_article_config)">Next</button>
                                     </li>
                                   </ul>
                                 </nav>
