@@ -1043,6 +1043,68 @@ class PdfGenerate extends BaseController {
     //   }
     //   $this->pdf->Row($venteDetailArray);
     // }
+    // #################rapport appro detaillé################
+    $this->pdf->Ln(10);
+
+    $this->pdf->SetFont('Helvetica','B',12);
+    $this->pdf->SetMargins(5,5,5);
+    $this->pdf->Cell(287,5,utf8_decode('RAPPORT D\'APPROVISIONNEMENT DETAILLE'),0,1,'C');
+    $this->pdf->Cell(287,5,utf8_decode($depotInfo->nom),0,1,'C');
+    $this->pdf->SetFont('Helvetica','B',8);
+    $this->pdf->Cell(287,5,'DU : '.$dateDebut.' AU '.$dateFin,0,1,'C');
+
+    if(!$allArticle){
+      $this->pdf->Cell(287,20,'AUCUN ARTICLE SELECTIONNER SUR LE RAPPORT',1,0,'C');
+      $this->outPut();
+    }
+    $enteTableArticle = array();
+    $DonneTableArticle = array();
+    $DonneTotalApprovisionnementTotal =  array();
+    for($i = 0; $i < count($allArticle); $i++){
+
+      $conditionIntevalDateMain = ['g_interne_approvisionnement.date_approvisionnement >='=>$dateDebut,'g_interne_approvisionnement.date_approvisionnement <='=>$dateFin];
+      $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->Where($conditionIntevalDateMain)->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+      array_push($enteTableArticle,259/count($allArticle));
+      array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
+      array_push($DonneTotalApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
+    }
+    $this->pdf->SetWidths($enteTableArticle);
+    $this->pdf->SetFont('Helvetica','B',6);
+    $this->pdf->Cell(14,5,'Produit',1,0,'L');
+    $this->pdf->Cell(14,5,'PLAQUE',1,0,'L');
+    $this->pdf->Row($DonneTableArticle);
+
+
+    $this->pdf->SetFillColor(96,96,96);
+    $this->pdf->SetTextColor(255,255,255);
+    $this->pdf->Cell(287,5,utf8_decode('TOUS LES APPROVISIONNEMENT DU '.$dateDebut.' AU '.$dateFin),0,1,'C',1);
+    $this->pdf->SetTextColor(0,0,0);
+    $this->pdf->SetWidths(array(273));
+    // $this->pdf->Row(array(''));
+    $this->pdf->SetFont('Helvetica','',6);
+    $this->pdf->SetWidths($enteTableArticle);
+    // $venteArray = array();
+    $conditionIntevalDate = ['date_approvisionnement >='=>$dateDebut,'date_approvisionnement <='=>$dateFin];
+    $approDate = $this->approvisionnementModel->where($conditionIntevalDate)->Where('depots_id',$idDepot)->findAll();
+
+    foreach ($approDate as $key => $value) {
+
+      // code...
+      $ApprovisionnementDetailArray = array();
+      $this->pdf->Cell(14,5,utf8_decode($value->date_approvisionnement),1,0,'L');
+      $this->pdf->Cell(14,5,utf8_decode($value->plaque_vehicule),1,0,'L');
+        for($i = 0; $i < count($allArticle); $i++){
+          $detApprov = $this->approvisionnementsDetailModel->select('qte_total')->Where('approvisionnement_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+            array_push($ApprovisionnementDetailArray,$detApprov?$detApprov[0]->qte_total:'-');
+        }
+        $this->pdf->Row($ApprovisionnementDetailArray);
+
+    }
+
+    $this->pdf->Cell(14,5,'Total',1,0,'L');
+    $this->pdf->Cell(14,5,'',1,0,'L');
+    $this->pdf->Row($DonneTotalApprovisionnementTotal);
 
     $this->response->setHeader('Content-Type', 'application/pdf');
     // $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
