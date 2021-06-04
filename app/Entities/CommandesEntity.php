@@ -116,11 +116,11 @@ class CommandesEntity extends Entity{
           $user = $userAtt->nom.' '.$userAtt->prenom;
         }
       }
-      $array = $i==1?'attente':($i==2?'payer_par':($i==3?'livre_par':'annuler_par'));
+      $array = $i==1?'attente':($i==2?'payer_par':($i==3?'livre_par':($i==4 ? 'annuler_par' : 'deleted_by')));
       $a =
         [
           $array =>[
-            "user"=> $user,
+            "user"=> $user ? $user : 'Système',
             "date"=> $date,
           ]
       ];
@@ -135,9 +135,10 @@ class CommandesEntity extends Entity{
     $name = null;
     $allStatus = $this->commandesStatusHistoriqueModel->Where('vente_id',$this->attributes['id'])->findAll();
     foreach ($allStatus as $key => $value) {
-      $array = $value->status_vente_id==1?'attente':($value->status_vente_id==2?'payer_par':($value->status_vente_id==3?'livre_par':'annuler_par'));
+      $array = $value->status_vente_id==1?'attente':($value->status_vente_id==2?'payer_par':($value->status_vente_id==3?'livre_par':($value->status_vente_id===4 ? 'annuler_par' : 'deleted_by')));
 
-      $name = $value->status_vente_id==1?'ATTENTE':($value->status_vente_id==2?'PAYER A':($value->status_vente_id==3?'LIVRER PAR':'ANNULER PAR'));
+      $name = $value->status_vente_id==1?'ATTENTE':($value->status_vente_id==2?'PAYER A':($value->status_vente_id==3?'LIVRER PAR':($value->status_vente_id==4 ? 'ANNULER PAR' : 'SUPPRIMER PAR')));
+
       $classe = $value->status_vente_id==1?'badge badge-warning':($value->status_vente_id==2?'badge badge-info':($value->status_vente_id==3?'badge badge-success':'badge badge-danger'));
 
       $date = $value->created_at;
@@ -149,7 +150,7 @@ class CommandesEntity extends Entity{
             $array =>[
               "state" => $value->status_vente_id,
               "class" =>$classe,
-              "user"=> $user,
+              "user"=> $user ? $user : 'Système',
               "date"=> $date,
               "name" => $name
             ]
@@ -205,7 +206,7 @@ class CommandesEntity extends Entity{
     }
     return $response;
   }
-  
+
   // public function getLogicCodeFacture(){
   //   $plainText = 200;
   //   $ciphertext = base64_encode($this->encrypter->encrypt($plainText));

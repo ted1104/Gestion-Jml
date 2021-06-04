@@ -149,6 +149,7 @@ class Commandes extends ResourceController {
       'payer'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',2)->findAll()),
       'livrer'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',3)->findAll()),
       'annuler'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',4)->findAll()),
+      'delete'=>count($this->model->orderBy('id','DESC')->Where($condition)->Where($nomchamps,$iduser)->Where('status_vente_id',5)->findAll()),
     ];
 
   }
@@ -1190,6 +1191,7 @@ class Commandes extends ResourceController {
       $conditionPayer = ['status_vente_id'=>2];
       $conditionLivrer = ['status_vente_id'=>3];
       $conditionAnnuler = ['status_vente_id'=>4];
+      $conditionSupprimer = ['status_vente_id' => 5];
 
 
       return $array = [
@@ -1197,6 +1199,7 @@ class Commandes extends ResourceController {
         'payer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionPayer)->like($conditionLike)->findAll()),
         'livrer'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionLivrer)->like($conditionLike)->findAll()),
         'annuler'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionAnnuler)->like($conditionLike)->findAll()),
+        'delete'=>count($this->model->Where($conditionDate)->Where($nomchamps,$iduser)->Where($conditionSupprimer)->like($conditionLike)->findAll()),
       ];
 
   }
@@ -1378,7 +1381,7 @@ class Commandes extends ResourceController {
     $condition =['date_vente'=> $dateFilter];
     $conditionLike =[];
     $conditionStatus =[];
-    if($statutVente!=5){
+    if($statutVente!=6){
       $conditionStatus = ['status_vente_id'=>$statutVente];
     }
     $conditionPartiel = [];

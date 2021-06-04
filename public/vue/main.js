@@ -776,6 +776,7 @@ var vthis = new Vue({
               this.isResearchPagination = false;
               this._u_fx_generate_pagination(response.data.all);
               console.log(this.dataToDisplay);
+              console.log(this.ListFiltreData);
             }).catch(error =>{
               console.log(error);
             })

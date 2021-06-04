@@ -55,8 +55,11 @@
 																	<div @click="get_commande_admin(4)" class="btn btn-danger padding-4" :id="stateStatus==4?'border-menu':''">
                                       Annulée <span class="badge badge-pill badge-light">{{ListFiltreData.annuler==undefined?'0':ListFiltreData.annuler}}</span>
                                   </div>
-																	<div @click="get_commande_admin(5)" class="btn btn-secondary padding-4" :id="stateStatus==5?'border-menu':''">
+																	<div @click="get_commande_admin(6)" class="btn btn-secondary padding-4" :id="stateStatus==6?'border-menu':''">
                                       Tout <span class="badge badge-pill badge-light">{{parseInt(ListFiltreData.attente)+parseInt(ListFiltreData.payer)+parseInt(ListFiltreData.livrer)+parseInt(ListFiltreData.annuler)}}</span>
+                                  </div>
+																	<div @click="get_commande_admin(5)" class="btn btn-danger padding-4" :id="stateStatus==5?'border-menu':''">
+                                      Supprimée <span class="badge badge-pill badge-light">{{ListFiltreData.delete==undefined?'0':ListFiltreData.delete}}</span>
                                   </div>
 																	<div class="padding-4 btn">
 																			<button class="btn btn-round btn-outline-secondary margin-left-4" @click="showAdvancedSearch=!showAdvancedSearch"><i class="mdi mdi-search-web"></i> </button>
@@ -132,6 +135,7 @@
 																				<span v-if="dt.status_vente_id.id==2" class="badge badge-info">{{dt.status_vente_id.description}}</span>
 																				<span v-if="dt.status_vente_id.id==3" class="badge badge-success">{{dt.status_vente_id.description}}</span>
 																				<span v-if="dt.status_vente_id.id==4" class="badge badge-danger">{{dt.status_vente_id.description}}</span>
+																				<span v-if="dt.status_vente_id.id==5" class="badge badge-danger">{{dt.status_vente_id.description}}</span>
 																			</div>
 																			<span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==1" class="badge badge-warning">PARTIEL</span>
 																			<span v-if="dt.logic_have_oper_a_retirer" class="badge badge-info">A RETIRER</span>
