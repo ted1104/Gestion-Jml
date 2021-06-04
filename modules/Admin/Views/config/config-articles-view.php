@@ -67,23 +67,28 @@
 																		<td>{{dt.nombre_piece}}</td>
 																		<td>{{dt.logic_qte_virtuel_dispo}}</td>
 																		<td>
-																			<button :class="dt.logic_detail_data.length > 0?'btn btn-round btn-success':'btn btn-round btn-light'" @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																			<!-- <button :class="dt.logic_detail_data.length > 0?'btn btn-round btn-success':'btn btn-round btn-light'" @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button> -->
+
+																			<span :class="dt.logic_detail_data.length > 0?'badge badge-info':'badge badge-danger'">{{dt.logic_detail_data.length > 0 ? 'Oui':'Non'}}</span>
 																		</td>
 																		<td>
-																			<button v-if="dt.logic_config_article_faveur.length < 1" class='btn btn-round btn-success' @click="_u_open_mod_form_config_faveur(dt,1)"><i class='mdi mdi-plus'></i> </button>
+																			<!-- <button v-if="dt.logic_config_article_faveur.length < 1" class='btn btn-round btn-success' @click="_u_open_mod_form_config_faveur(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																			<button class="btn btn-round btn-light" v-if="dt.logic_config_article_faveur.length > 0" @click="_u_open_mod_form_config_faveur(dt,2)">
 																				<i class="mdi mdi-circle-edit-outline"></i>
-																			</button>
+																			</button> -->
+
+																			<span :class="dt.logic_config_article_faveur.length < 1?'badge badge-info':'badge badge-danger'">{{dt.logic_config_article_faveur.length < 1 ? 'Oui':'Non'}}</span>
 																		</td>
 																		<!-- <td>
 																			<button :class="dt.logic_detail_transport_price_zone.length > 0?'btn btn-round btn-info':'btn btn-round btn-light'" @click="_u_open_mod_form_transport(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																		</td> -->
 																		<td>
-																			<span :class="dt.is_show_on_rapport==1?'text-success':'text-danger'">{{dt.is_show_on_rapport==1 ? 'Oui':'Non'}}</span>
+																			<span :class="dt.is_show_on_rapport==1?'badge badge-info':'badge badge-danger'">{{dt.is_show_on_rapport==1 ? 'Oui':'Non'}}</span>
 																		</td>
 																		<td>
-																			<span :class="dt.is_visible==1?'text-success':'text-danger'">{{dt.is_visible==1 ? 'Oui':'Non'}}</span>
+																			<span :class="dt.is_visible==1?'badge badge-info':'badge badge-danger'">{{dt.is_visible==1 ? 'Oui':'Non'}}</span>
 																		</td>
+																		<!-- <span v-if="dt.status_vente_id.id==1" class="badge badge-warning">{{dt.status_vente_id.description}}</span> -->
 																		<td>
 																			<button  class="btn btn-round btn-secondary" @click="_u_see_detail_tab(dt,index)"><i class="mdi mdi-eye-outline" ></i></button>
 																		</td>
