@@ -171,6 +171,7 @@ var vthis = new Vue({
       currentIndexPage :0,
       PerPaged:5,
       totalData : 0,
+      currentOffset : 0,
 
       //VARIABLE CREATION UTILISATEUR
       nom :"",
@@ -309,6 +310,7 @@ var vthis = new Vue({
 
 
 
+
     }
   },
 
@@ -379,7 +381,7 @@ var vthis = new Vue({
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
               this.dataToDisplay = response.data.data;
-              console.log(this.dataToDisplay);
+              // console.log(this.dataToDisplay);
               this.isShow = false;
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
@@ -387,6 +389,8 @@ var vthis = new Vue({
               this.currentIndexPage = indexPage;
               this.paginationTab=[];
               this._u_fx_generate_pagination(response.data.all);
+
+              this.currentOffset = offset;
             }).catch(error =>{
               console.log(error);
             })
@@ -1976,7 +1980,11 @@ var vthis = new Vue({
                 if(response.data.message.success !=null){
                   var err = response.data.message.success;
                   this._u_fx_config_error_message("Succès",[err],'alert-success');
-                  this.get_article_config();
+                  this.get_article_config(limit=this.PerPaged,offset=this.currentOffset,indexPage=this.currentIndexPage);
+                  // limit=this.PerPaged,offset=0,indexPage=this.currentIndexPage
+
+                  console.log("current offset", this.currentOffset);
+
                   // this.get_article();
                   this.isLoadSaveMainButton = false;
                   // this.tabListData=[];
@@ -3694,6 +3702,10 @@ var vthis = new Vue({
           "offset":parseInt(offset)
         }
         this.paginationTab.push(this.paginationTabIn);
+
+
+        // console.log("====OBJECT=====");
+        // console.log(this.paginationTabIn);
 
       }
       // console.log(this.paginationTab);
