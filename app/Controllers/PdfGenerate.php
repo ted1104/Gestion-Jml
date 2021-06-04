@@ -168,7 +168,7 @@ class PdfGenerate extends BaseController {
       $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
 
       //===LISTE DES TOUTES LES FACTURES PAYES ET LIVRES AUJOURDHUI==========
-      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
       // $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll(); PAR DATE
       //
@@ -745,7 +745,7 @@ class PdfGenerate extends BaseController {
       //code pour sorti
       $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->findAll();
 
-      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
 
       $qteTotalVendu = 0;
@@ -870,7 +870,7 @@ class PdfGenerate extends BaseController {
       $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('g_interne_vente.depots_id',$idDepot)->Where($conditionIntevalDateSorti)->findAll();
 
       // //code pour sorti reels
-      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.depots_id',$idDepot)->Where($conditionIntevalDateSorti)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.status_vente_id',3)->Where('g_interne_vente.depots_id',$idDepot)->Where($conditionIntevalDateSorti)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
 
       // echo count($AchatsHistoLivre);
       // die();
