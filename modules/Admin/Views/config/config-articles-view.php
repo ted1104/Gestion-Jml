@@ -51,9 +51,9 @@
 																		<th scope="col">Nom Article</th>
 																		<th scope="col">Pièces</th>
 																		<th scope="col">Qte virt</th>
-																		<!-- <th scope="col">Config Prix</th>
+																		<th scope="col">Config Prix</th>
 																		<th scope="col">Config Faveur</th>
-																		<th scope="col">Config Prix Transp</th> -->
+																		<!-- <th scope="col">Config Prix Transp</th> -->
 																		<th scope="col">Visible Rapport</th>
 																		<th scope="col">Visible Liste</th>
 																		<th scope="col">Détail</th>
@@ -66,7 +66,7 @@
 																		<td>{{dt.nom_article}}</td>
 																		<td>{{dt.nombre_piece}}</td>
 																		<td>{{dt.logic_qte_virtuel_dispo}}</td>
-																		<!-- <td>
+																		<td>
 																			<button :class="dt.logic_detail_data.length > 0?'btn btn-round btn-success':'btn btn-round btn-light'" @click="_u_open_mod_form(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																		</td>
 																		<td>
@@ -75,7 +75,7 @@
 																				<i class="mdi mdi-circle-edit-outline"></i>
 																			</button>
 																		</td>
-																		<td>
+																		<!-- <td>
 																			<button :class="dt.logic_detail_transport_price_zone.length > 0?'btn btn-round btn-info':'btn btn-round btn-light'" @click="_u_open_mod_form_transport(dt,1)"><i class='mdi mdi-plus'></i> </button>
 																		</td> -->
 																		<td>
