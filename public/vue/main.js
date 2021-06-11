@@ -91,6 +91,7 @@ var vthis = new Vue({
       checkIsFaveur : [],
       ListIdArticleFaveur : new Array(), //La liste de tous les artilces qui possede une faveur
       ListPricesArticle : new Array(),
+      ZoneList : new Array(),
 
       //VARIABLE FORM ADD ARTICLE
       code_article :"",
@@ -2787,9 +2788,9 @@ var vthis = new Vue({
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
-              this.depotList = response.data.data;
+              this.ZoneList = response.data.data;
               // console.log(this.depotList);
-              if(this.depotList.length < 1){
+              if(this.ZoneList.length < 1){
                 this.isNoReturnedData = true;
               }
             }).catch(error =>{
@@ -3156,6 +3157,7 @@ var vthis = new Vue({
               if(response.data.message.success !=null){
                 response.data.data.isfaveur = isFaveur;
                 this.tabListData.push(response.data.data);
+                console.log(this.tabListData);
                 var mntAchatUni = parseFloat(response.data.data.prix_unit)*parseFloat(response.data.data.qte);
                 this.montantTotalAchat += mntAchatUni;
                 this._u_fx_config_error_message_bottom("Message",[response.data.message.success],'alert-success');
@@ -3175,6 +3177,43 @@ var vthis = new Vue({
             })
 
 
+    },
+    _u_create_line_article_transport_price_added(){
+      // e.preventDefault();
+      const newurl = this.url+"articles-search-data-commande-with-transport-added";
+      var form = new FormData();
+      // this.isLoadSaveMainButton = true;
+      this.messageError = false;
+      form.append('zone',this.zone_destination);
+
+      for(var i=0; i< this.tabListData.length; i++){
+        form.append('id[]', this.tabListData[i]['id']);
+        form.append('code[]', this.tabListData[i]['code']);
+        form.append('nom_article[]', this.tabListData[i]['nom_article']);
+        form.append('qte[]', this.tabListData[i]['qte']);
+        form.append('prix_unit[]', this.tabListData[i]['prix_unit']);
+        form.append('interval[]', this.tabListData[i]['interval']);
+      }
+
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message_bottom("Succès",[err],'alert-success');
+                  this.tabListData=[];
+                  this.tabListData = response.data.data;
+                  console.log("===DATA FROM TRAINSPORT+++");
+                  console.log(this.tabListData);
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message_bottom("Erreur",Object.values(err),'alert-danger');
+                // this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
     },
     _u_remove_line_list_art(index){
       var montantAretrancher = parseFloat(this.tabListData[index].prix_unit) * parseInt(this.tabListData[index].qte);
@@ -4172,6 +4211,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]==='caissier-add-achat' || pth[this.indexRoute]==='admin-add-vente'){
 
       this.get_stock_depots();
+      this.get_zones();
 
       if(pth[this.indexRoute]=='facturier-add-achat' || pth[this.indexRoute]=='caissier-add-achat'){
         this._u_get_last_achat_facturier();

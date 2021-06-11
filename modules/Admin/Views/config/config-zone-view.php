@@ -90,7 +90,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr v-for="(dt, index) in depotList">
+                                    <tr v-for="(dt, index) in ZoneList">
                                       <th>{{dt.nom}}</th>
                                       <td>{{dt.description}}</td>
                                       <td><a href="#"  class='btn btn-round btn-light' ><i class='mdi mdi-circle-edit-outline text-danger'></i> </a></td>
@@ -99,10 +99,10 @@
                                   </tbody>
                                 </table>
 																<!-- LOAD FOR WAITING DATA -->
-																<div class="text-center" v-if="depotList.length < 1 && !isNoReturnedData">
+																<div class="text-center" v-if="ZoneList.length < 1 && !isNoReturnedData">
 																	<img src="<?=base_url() ?>/public/load/load-tab.gif" alt="">
 																</div>
-																<div class="text-center" alt="" v-if="depotList.length < 1 && isNoReturnedData">
+																<div class="text-center" alt="" v-if="ZoneList.length < 1 && isNoReturnedData">
 																	<img src="<?=base_url() ?>/public/load/empty.png" >
 																	<h6 class="text-danger">Données vide!!</h6>
 																</div>

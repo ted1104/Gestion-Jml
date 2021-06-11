@@ -130,6 +130,19 @@
                                     <label for="date_vente">Date commande</label>
                                     <input type="text" class="form-control" id="date_vente" v-model="date_vente" disabled>
                                   </div>
+																	{{checkBoxArticles}}
+																	<div class="form-group">
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="checkBoxArticles" id="transport" class="custom-control-input" value="1" v-model="checkBoxArticles">
+																			<label class="custom-control-label" for="transport">Prise en charge transport</label>
+																		</div>
+																	</div>
+																	<div class="form-group" v-if="checkBoxArticles.length > 0">
+																		<label for="zone_destination">Zone destination</label>
+																		<select class="form-control" v-model="zone_destination" @change="_u_create_line_article_transport_price_added">
+																			<option v-for="(dp, i) in ZoneList" :value="dp.id">{{dp.nom}}</option>
+																		</select>
+																	</div>
 																	<div class="row">
 																		<div class="col-md-6">
 																			<button v-if="!isLoadSaveMainButton" @click="add_commande" class="btn btn-primary">Enregistrer</button>
@@ -165,6 +178,7 @@
 																			<th scope="col">PU</th>
 																			<th scope="col">PT</th>
 																			<th scope="col">Faveur</th>
+																			<th scope="col">P.Trans</th>
 																			<th scope="col">Stock</th>
 																			<th scope="col">Action</th>
 																		</tr>
@@ -178,6 +192,7 @@
 																			<!-- <td>{{dt.interval}}</td> -->
 																			<td>{{parseFloat(dt.prix_unit) * dt.qte}}</td>
 																			<td><span :class="dt.isfaveur == 1?'text-success':'text-danger'">{{dt.isfaveur == 1?'Oui':'Non'}}</span></td>
+																			<td>{{dt.prix_transp}}</td>
 																			<td>{{dt.qteStock}}</td>
 																			<td><button  class="btn btn-round btn-danger" @click="_u_remove_line_list_art(index)"><i class="mdi mdi-delete-sweep" ></i></button></td>
 																		</tr>

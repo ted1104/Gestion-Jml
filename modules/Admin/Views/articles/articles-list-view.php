@@ -348,12 +348,12 @@
 						</button>
 				</div>
 				<div class="modal-body" v-if="!isWantBeDeleted">
-					<!-- <div class="form-group">
+					<div class="form-group">
 						<label for="zone_destination">Zone de destination *</label>
 						<select class="form-control" v-model="zone_destination">
-							<option v-for="(dtZone, i) in depotList" :value="dtZone.id" :selected="zone_destination==dtZone.id">{{dtZone.nom}}</option>
+							<option v-for="(dtZone, i) in ZoneList" :value="dtZone.id" :selected="zone_destination==dtZone.id">{{dtZone.nom}}</option>
 						</select>
-					</div> -->
+					</div>
 					<div class="form-group">
 						<label for="prix_unitaire">Prix *</label>
 						<input type="text" class="form-control" id="prix_transport" aria-describedby="prix_transport" v-model="prix_transport">

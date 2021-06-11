@@ -77,7 +77,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('articles-create-transport-price','Articles::article_set_prix_transport');
   $routes->get('articles-delete-price-transport/(:num)/del','Articles::article_delete_price_transport/$1');
   $routes->post('articles-update-price-transport','Articles::article_update_price_transport');
-
+  $routes->post('articles-search-data-commande-with-transport-added','Articles::articles_list_with_transport_price');
 
 
   $routes->post('art-test','Articles::multitest');

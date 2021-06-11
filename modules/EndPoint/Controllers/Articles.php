@@ -275,6 +275,7 @@ class Articles extends ResourceController {
                          'qte' => $Qte,
                          'prix_unit' =>$PU,
                          'interval' => $interval,
+                         'prix_transp' => 0
 
                        ];
                      }else{
@@ -308,7 +309,8 @@ class Articles extends ResourceController {
                      'qte' => $Qte,
                      'prix_unit' =>$PU,
                      'interval' => $interval,
-                     'qteStock' => $initqte->qte_stock_virtuel
+                     'qteStock' => $initqte->qte_stock_virtuel,
+                     'prix_transp' => 0
 
                    ];
                  }
@@ -913,6 +915,45 @@ class Articles extends ResourceController {
       'message' =>$message,
       'data'=> $data,
 
+    ]);
+  }
+
+  public function articles_list_with_transport_price(){
+    $id = $this->request->getPost('id');
+    $code = $this->request->getPost('code');
+    $nom_article = $this->request->getPost('nom_article');
+    $qte = $this->request->getPost('qte');
+    $prix_unit = $this->request->getPost('prix_unit');
+    $interval = $this->request->getPost('interval');
+    // $prix_transp = $this->request->getPost('prix_transp');
+
+    $zone = $this->request->getPost('zone');
+    $dataFinal = array();
+
+    for ($i=0; $i < count($id); $i++) {
+      $prix_transport = $this->transportPrixArticlesModel->Where('article_id',$id[$i])->Where('zone_id',$zone)->find();
+      $data = [
+        'id'=>$id[$i],
+        'code' => $code[$i],
+        'nom_article' => $nom_article[$i],
+        'qte' => $qte[$i],
+        'prix_unit' =>$prix_unit[$i],
+        'interval' => $interval[$i],
+        'prix_transp' =>$prix_transport ? $prix_transport[0]->prix : 0
+      ];
+      array_push($dataFinal, $data);
+    }
+    $status = 200;
+    $message = [
+      'success' =>'Prix transport bien appliqué',
+      'errors'=> null
+    ];
+    $data = $dataFinal;
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=>$data,
+      // 'msg' => fmod($calc, 1) == 0.00
     ]);
   }
   public function multitest(){
