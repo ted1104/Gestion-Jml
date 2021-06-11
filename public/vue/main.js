@@ -143,6 +143,7 @@ var vthis = new Vue({
       stateStatus :"",
       montantTotalAllCommandeParTypeVente : "",
       montantTotalAchat : 0,
+      montantTotalTransport : 0,
 
       //VARIABLE DEMANDE DECAISSSEMENT
       caissier:"",
@@ -447,6 +448,7 @@ var vthis = new Vue({
         form.append('prix_unitaire[]', this.tabListData[i]['prix_unit']);
 				form.append('type_prix[]', this.tabListData[i]['type_id']);
         form.append('is_faveur[]', this.tabListData[i]['isfaveur']);
+        form.append('prix_transport[]', this.tabListData[i]['prix_transp']);
 			}
       if(this.tabListData.length < 1){
         this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
@@ -3192,6 +3194,7 @@ var vthis = new Vue({
         form.append('nom_article[]', this.tabListData[i]['nom_article']);
         form.append('qte[]', this.tabListData[i]['qte']);
         form.append('prix_unit[]', this.tabListData[i]['prix_unit']);
+        form.append('qteStock[]', this.tabListData[i]['qteStock']);
         form.append('interval[]', this.tabListData[i]['interval']);
       }
 
@@ -3205,6 +3208,7 @@ var vthis = new Vue({
                   this.tabListData = response.data.data;
                   console.log("===DATA FROM TRAINSPORT+++");
                   console.log(this.tabListData);
+                  this.montantTotalTransport = this.tabListData.reduce((accumulatedTotal, qteItem) =>parseFloat(accumulatedTotal)+parseFloat(qteItem.prix_transp) ,0);
                   return;
                 }
                 var err = response.data.message.errors;

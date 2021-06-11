@@ -19,6 +19,7 @@ class CommandesDetailEntity extends Entity{
     'type_prix ' => null,
     'is_negotiate ' => null,
     'prix_negociation'=>null,
+    'prix_transport' => null,
     'is_faveur' => null,
     'is_livrer' => null,
     'is_validate_livrer' => null,

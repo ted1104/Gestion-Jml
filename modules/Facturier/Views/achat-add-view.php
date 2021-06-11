@@ -163,8 +163,13 @@
 													<div class="card m-b-30">
 														<div class="container">
 															<div class="row margin-top-8">
-																<h5 class="card-title text-black col-md-9">PANNIER DES ARTICLES</h5>
-																<h5 class="col-md-3 text-right text-secondary">{{montantTotalAchat}} USD</h5>
+																<h5 class="card-title text-black col-md-4">PANNIER DES ARTICLES</h5>
+																<div class="col-md-8">
+																	<div class="row">
+																		<h6 class="col-md-6 text-right text-secondary">Achat : {{montantTotalAchat}} USD</h6>
+																		<h6 class="col-md-6 text-right text-secondary"> Transport : {{montantTotalTransport}} USD</h6>
+																	</div>
+																</div>
 															</div>
 														</div>
 

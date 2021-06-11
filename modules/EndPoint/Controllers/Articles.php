@@ -925,6 +925,7 @@ class Articles extends ResourceController {
     $qte = $this->request->getPost('qte');
     $prix_unit = $this->request->getPost('prix_unit');
     $interval = $this->request->getPost('interval');
+    $qteStock = $this->request->getPost('qteStock');
     // $prix_transp = $this->request->getPost('prix_transp');
 
     $zone = $this->request->getPost('zone');
@@ -939,6 +940,7 @@ class Articles extends ResourceController {
         'qte' => $qte[$i],
         'prix_unit' =>$prix_unit[$i],
         'interval' => $interval[$i],
+        'qteStock' =>$qteStock[$i],
         'prix_transp' =>$prix_transport ? $prix_transport[0]->prix * $qte[$i]: 0
       ];
       array_push($dataFinal, $data);
