@@ -140,6 +140,7 @@
 																	<div class="form-group" v-if="checkBoxArticles.length > 0">
 																		<label for="zone_destination">Zone destination</label>
 																		<select class="form-control" v-model="zone_destination" @change="_u_create_line_article_transport_price_added">
+																			<option value="0">--Aucune zone--</option>
 																			<option v-for="(dp, i) in ZoneList" :value="dp.id">{{dp.nom}}</option>
 																		</select>
 																	</div>

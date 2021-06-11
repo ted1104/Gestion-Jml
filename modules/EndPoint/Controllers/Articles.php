@@ -939,7 +939,7 @@ class Articles extends ResourceController {
         'qte' => $qte[$i],
         'prix_unit' =>$prix_unit[$i],
         'interval' => $interval[$i],
-        'prix_transp' =>$prix_transport ? $prix_transport[0]->prix : 0
+        'prix_transp' =>$prix_transport ? $prix_transport[0]->prix * $qte[$i]: 0
       ];
       array_push($dataFinal, $data);
     }
