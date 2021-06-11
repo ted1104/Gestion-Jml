@@ -49,6 +49,7 @@ class Commandes extends ResourceController {
     ]);
   }
   public function commandes_create(){
+
     $this->model->beginTrans();
     $data = new CommandesEntity($this->request->getPost());
     if(!$insertData = $this->model->insert($data)){
@@ -73,7 +74,7 @@ class Commandes extends ResourceController {
           'articles_id'=>$article[$i],
           'qte_vendue'=>$qte_vendue[$i],
           'prix_unitaire' =>$prix_unitaire[$i],
-          'prix_transport' =>$prix_transport[$i],
+          'prix_transport' =>$data->is_transported ==1 ? $prix_transport[$i] : 0,
           'is_faveur' => $is_faveur[$i],
           'is_validate_livrer'=>0
         ];

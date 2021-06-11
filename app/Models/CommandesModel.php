@@ -8,7 +8,7 @@ class CommandesModel extends Model{
   protected $table = 'g_interne_vente';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['numero_commande','nom_client','telephone_client','date_vente','status_vente_id','users_id','depots_id','payer_a','is_negotiate','container_faveur','depots_id_faveur','depots_id_first_livrer','is_livrer_all'];
+  protected $allowedFields = ['numero_commande','nom_client','telephone_client','date_vente','status_vente_id','users_id','depots_id','payer_a','is_negotiate','is_transported','container_faveur','depots_id_faveur','depots_id_first_livrer','is_livrer_all'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'numero_commande' => 'required|is_unique[g_interne_vente.numero_commande]',

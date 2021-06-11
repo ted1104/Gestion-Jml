@@ -27,6 +27,7 @@ class CommandesEntity extends Entity{
     'users_id ' => null,
     'depots_id ' => null,
     'payer_a'=>null,
+    'is_transported' => null,
     'container_faveur' => null,
     'depots_id_faveur' => null,
     'depots_id_first_livrer' => null,
@@ -98,7 +99,7 @@ class CommandesEntity extends Entity{
     $detail = $this->commandeDetail->Where('vente_id',$this->attributes['id'])->findAll();
     $sommes= 0;
     foreach ($detail as $key => $value) {
-      $montant = ($value->is_negotiate == 0 || $value->is_negotiate == 1) ?$value->qte_vendue * $value->prix_unitaire:$value->qte_vendue * $value->prix_negociation;
+      $montant = ($value->is_negotiate == 0 || $value->is_negotiate == 1) ?($value->qte_vendue * $value->prix_unitaire)+$value->prix_transport:($value->qte_vendue * $value->prix_negociation)+$value->prix_transport;
       $sommes +=$montant;
     }
     return round($sommes,2);

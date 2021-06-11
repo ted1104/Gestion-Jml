@@ -130,14 +130,14 @@
                                     <label for="date_vente">Date commande</label>
                                     <input type="text" class="form-control" id="date_vente" v-model="date_vente" disabled>
                                   </div>
-																	{{checkBoxArticles}}
-																	<div class="form-group">
+																	<!-- {{checkBoxArticles}} -->
+																	<div class="form-group" v-if="tabListData.length > 0">
 																		<div class="custom-control custom-checkbox custom-control-inline">
-																			<input type="checkbox" name="checkBoxArticles" id="transport" class="custom-control-input" value="1" v-model="checkBoxArticles">
+																			<input type="checkbox" name="checkBoxTransport" id="transport" class="custom-control-input" value="1" v-model="checkBoxTransport">
 																			<label class="custom-control-label" for="transport">Prise en charge transport</label>
 																		</div>
 																	</div>
-																	<div class="form-group" v-if="checkBoxArticles.length > 0">
+																	<div class="form-group" v-if="checkBoxTransport.length > 0">
 																		<label for="zone_destination">Zone destination</label>
 																		<select class="form-control" v-model="zone_destination" @change="_u_create_line_article_transport_price_added">
 																			<option value="0">--Aucune zone--</option>

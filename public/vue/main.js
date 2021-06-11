@@ -85,6 +85,7 @@ var vthis = new Vue({
       detailTab : [],
       ListFiltreData : [], //POUR MENU LISTE
       checkBoxArticles: [],
+      checkBoxTransport : [],
       ArticleValidateNego : {},
       CritiqueDataTab:[],
       checkBoxAchatSelected:[],
@@ -322,6 +323,8 @@ var vthis = new Vue({
     this._u_get_code_facture();
     this._u_get_today();
     this._u_fx_get_montant();
+    console.log("==on mOunted ==");
+    console.log(this.zone_destination);
 
 
   },
@@ -441,6 +444,8 @@ var vthis = new Vue({
       form.append('container_faveur',this.ListIdArticleFaveur.length > 0 ? 1 : 0);
       form.append('depots_id_faveur', this.depot_central_id);
       form.append('is_livrer_all', 0);
+      var transported = this.checkBoxTransport.length > 0 && this.zone_destination != null && this.zone_destination != 0  ? 1 : 0;
+      form.append('is_transported',transported);
 
       for(var i=0; i< this.tabListData.length; i++){
         form.append('articles_id[]', this.tabListData[i]['id']);
@@ -469,6 +474,8 @@ var vthis = new Vue({
                   this.telephone_client = "";
                   this.depots_id = "";
                   this.payer_a = "";
+                  this.zone_destination = "";
+                  this.checkBoxTransport = [];
                   this.isLoadSaveMainButton = false;
                   this.checkIsFaveur = new Array();
                   this.ListIdArticleFaveur = new Array();
@@ -3139,6 +3146,7 @@ var vthis = new Vue({
     },
     //FONCTION POUR RECHERCHER FIN
     _u_create_line_article(){
+
     const isFaveur = this.checkIsFaveur.length > 0 ? 1 : 0;
     // const depots = isFaveur == 1 ? this.depot_central_id : this.depots_id;
     const depots = this.depots_id;

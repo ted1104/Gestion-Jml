@@ -136,7 +136,7 @@
 																			</div>
 																			<!-- <span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==2" class="badge badge-success">TOUT</span> -->
 																			<span v-if="dt.status_vente_id.id==3 && dt.is_livrer_all ==1" class="badge badge-warning">PARTIEL</span>
-																			<span v-if="dt.logic_have_oper_a_retirer" class="badge badge-info">A RETIRER</span>
+																			<span v-if="dt.logic_have_oper_a_retirer" class="badge badge-info">RETIRER</span>
 																		</td>
 																		<td scope="col">
 																			<button v-if="dt.status_vente_id.id==2 && !dt.logic_is.reel" class='btn btn-round btn-success' @click="_u_open_mod_popup_magaz(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
@@ -260,7 +260,7 @@
 																	</div>
 
 																	<div class="col-md-6">
-																		<input type="text" class="form-control margin-top-3" placeholder="Qte à retirer" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue, det)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
+																		<input type="text" class="form-control margin-top-3" placeholder="Qte retirée" @change="_u_fx_create_tab_a_retirer(det.id, $event, det.qte_vendue, det)" :value="Object.keys(ArticleValidateNego).length < 1 ? 0:(ArticleValidateNego[det.id] ?ArticleValidateNego[det.id][1]:0)" :disabled="det.is_validate_livrer==0">
 																	</div>
 																	<div class="col-md-6">
 																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande)"><i class="mdi mdi-eye-outline" ></i></button>

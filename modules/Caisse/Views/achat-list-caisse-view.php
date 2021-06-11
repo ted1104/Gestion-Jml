@@ -75,7 +75,7 @@
 																			<label class="custom-control-label" for="customRadioInline2">Nom client</label>
 																		</div>
 																		<div class="custom-control custom-checkbox custom-control-inline">
-																			<input type="checkbox" name="checkBoxArticles" id="1" class="custom-control-input" value="1" v-model="checkBoxArticles">
+																			<input type="checkbox" name="checkBoxTransport" id="1" class="custom-control-input" value="1" v-model="checkBoxArticles">
 																			<label class="custom-control-label" for="1">Date</label>
 																		</div>
 																		<div class="custom-control custom-checkbox custom-control-inline">
