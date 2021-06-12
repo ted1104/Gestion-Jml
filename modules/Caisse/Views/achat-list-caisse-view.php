@@ -110,13 +110,15 @@
 																<tbody>
 																	<tr v-for="(dt, index) in dataToDisplay" :class="currentLineSelectedInList==index?'bg-light':''">
 																		<th>
-																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}}</span>
+																			<span :class="dt.container_faveur==1?'text-danger font-bold':''" title="Cette facture passsed">{{dt.numero_commande}} <br> <i v-if="dt.is_transported ==1" class="text-success mdi mdi-car-side"></i></span>
+
+
 																		</th>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
 																		<td>
 																			{{dt.date_vente}}
 																		</td>
-																		<td>{{dt.depots_id[0].nom}}</td>
+																		<td>{{dt.depots_id[0].nom}} </td>
 																		<td>{{dt.logic_somme}} USD</td>
 																		<td>
 																			<span v-if="dt.status_vente_id.id==1" class="badge badge-warning">{{dt.status_vente_id.description}}</span>
@@ -127,7 +129,7 @@
 																		<th scope="col">
 																			<button v-if="dt.status_vente_id.id==1 && !dt.logic_is.virtuel" class='btn btn-round btn-success' @click="_u_open_mod_popup_caisse(dt,2)"><i class='mdi mdi-checkbox-marked-circle-outline'></i> </button>
 																			<i v-if="dt.status_vente_id.id==2" class='mdi mdi-checkbox-marked-circle-outline'></i>
-																			<span>{{dt.logic_status_histo.tab[2].livre_par.user}}</span>
+																			<span v-if="dt.logic_status_histo.tab[2].livre_par.user!='Système'">{{dt.logic_status_histo.tab[2].livre_par.user}}</span>
 
 																			<button v-if="dt.status_vente_id.id==1 && dt.logic_is.virtuel" class='btn btn-round btn-warning' @click="_u_open_mod_popup_caisse(dt,3)"><i class='mdi mdi-alert-circle'></i></button>
 																		</th>
@@ -243,9 +245,9 @@
 																<br>
 																<div class="row">
 																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
-
-																	<span :class="det.is_negotiate==2?'col-md-6 price-bare':'col-md-6'">Prix: <br> {{det.prix_unitaire}} USD</span>
-																	<span :class="det.is_negotiate==2?'col-md-6 price-bare':'col-md-6'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
+																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
+																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
+																	<span :class="col-md-4">Prix Transp: <br> {{parseFloat(det.prix_transport)}} USD</span>
 																</div>
 																<br>
 																<!-- <div class="row">

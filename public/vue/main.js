@@ -632,6 +632,7 @@ var vthis = new Vue({
             .then(response =>{
               this.dataToDisplay = response.data.data;
               this.ListFiltreData = response.data.nombreVenteType;
+              console.log(this.dataToDisplay);
               if(this.dataToDisplay.length < 1){
                 this.isNoReturnedData = true;
               }

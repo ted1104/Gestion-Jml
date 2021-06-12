@@ -117,7 +117,7 @@
 																			</div>
 																		</td>
 																		<td>
-																			<span :class="dt.container_faveur==1?'text-danger font-bold':''">{{dt.numero_commande}}</span>
+																			<span :class="dt.container_faveur==1?'text-danger font-bold':''">{{dt.numero_commande}} <br> <i v-if="dt.is_transported ==1" class="text-success mdi mdi-car-side"></i></span>
 																			<!-- <span class="badge badge-pill badge-info div-carre-1">F</span> -->
 																		</td>
 																		<td>{{dt.nom_client}} <br><span class="font-size-3">{{dt.telephone_client}}</span></td>
@@ -234,8 +234,9 @@
 																<div class="row">
 																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
 
-																	<span :class="det.is_negotiate==2?'col-md-6 price-bare':'col-md-6'">Prix: <br> {{det.prix_unitaire}} USD</span>
-																	<span :class="det.is_negotiate==2?'col-md-6 price-bare':'col-md-6'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
+																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
+																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
+																	<span :class="col-md-4">Prix Transp: <br> {{parseFloat(det.prix_transport)}} USD</span>
 																</div>
 																<br>
 																<!-- <div class="row">
