@@ -237,7 +237,7 @@
 																		<label for="" class="margin-top-3">Qte rétiréé</label>
 																	</div>
 																	<div class="col-md-6">
-																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande)"><i class="mdi mdi-eye-outline" ></i></button>
+																		<button  class="btn btn-round btn-info" @click="_u_open_mod_popup_detail(det,detailTab.numero_commande,det.qte_vendue)"><i class="mdi mdi-eye-outline" ></i></button>
 																	</div>
 																</div>
 																<!-- <div class="row">
@@ -330,7 +330,14 @@
 								</button>
 						</div>
 						<div class="modal-body">
-							<span>Quantités Rétirées : {{QteTotalOperationDejaRetirer}}</span><br>
+							<div class="row">
+								<div class="col-md-6">
+									<span>Quantités Rétirées : {{QteTotalOperationDejaRetirer}}</span><br>
+								</div>
+								<div class="col-md-6">
+									<span>Quantités Non Rétirées : {{QteTotalOperationNonRetirer}}</span><br>
+								</div>
+							</div>
 							<table class="table">
 								<thead>
 									<tr class="bg-secondary">

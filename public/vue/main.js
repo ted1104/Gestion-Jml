@@ -301,6 +301,7 @@ var vthis = new Vue({
 
       detailOperationAretirer : null,
       QteTotalOperationDejaRetirer : 0,
+      QteTotalOperationNonRetirer : 0,
 
       isGettingAretire : 0,
       idUserToGetHistoPv : null,
@@ -3602,11 +3603,13 @@ var vthis = new Vue({
       this.modalTitle = "VALIDER DE RETRAIT RENSEIGNES";
       this.styleModalFaveur = 'block';
     },
-    _u_open_mod_popup_detail(det, factcode){
+    _u_open_mod_popup_detail(det, factcode, qtevendue){
       this.modalTitle = "HISTORIQUE RETRAIT QUANTITE CLIENT - FACTURE "+factcode;
       this.styleModalDetail = 'block';
       this.detailOperationAretirer = det.logic_historique_a_retirer;
       this.QteTotalOperationDejaRetirer = det.logic_historique_a_retirer.reduce((accumulatedTotal, qteItem) =>parseFloat(accumulatedTotal)+parseFloat(qteItem.qte_retirer) ,0);
+
+      this.QteTotalOperationNonRetirer = parseFloat(qtevendue) - this.QteTotalOperationDejaRetirer;
       console.log("==DETAIL==");
       console.log(det.logic_historique_a_retirer);
     },
