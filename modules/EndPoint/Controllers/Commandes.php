@@ -592,7 +592,7 @@ class Commandes extends ResourceController {
                 $qte_a_retrancher = $value->qte_vendue;
                 $nvlleqte = $stokinit-$qte_a_retrancher;
                 $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
-                $this->commandesDetailModel->update($value->id, ['is_validate_livrer'=>1]);
+                $this->commandesDetailModel->update($value->id, ['is_validate_livrer'=>1,'livrer_by'=>$iduser]);
 
                 //DECOMPTE STOCK PERSONNEL LORS DE LA VALIDATION ACHAT
                 $this->stockPersonnelModel->updateQtePersonnel($iduser, $value->articles_id[0]->id, $qte_a_retrancher,0);
@@ -690,7 +690,7 @@ class Commandes extends ResourceController {
                 $qte_a_retrancher = $detArticleAchat[0]->qte_vendue;
                 $nvlleqte = $stokinit-$qte_a_retrancher;
                 $this->stockModel->update($stokdepot->id,['qte_stock'=>$nvlleqte]);
-                $this->commandesDetailModel->update($detArticleAchat[0]->id, ['is_validate_livrer'=>1]);
+                $this->commandesDetailModel->update($detArticleAchat[0]->id, ['is_validate_livrer'=>1,'livrer_by'=>$iduser]);
 
                 //DECOMPTE STOCK PERSONNEL LORS DE LA VALIDATION ACHAT
                 $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle[$i], $qte_a_retrancher,0);
@@ -1147,6 +1147,106 @@ class Commandes extends ResourceController {
     ]);
   }
 
+  public function retourne_facture_livre_en_paye(){
+    $iduser = $this->request->getPost('iduser');
+    $vente_id = $this->request->getPost('vente_id');
+    $pwd = $this->request->getPost('pwd');
+    $this->commandesStatusHistoriqueModel->beginTrans();
+
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+
+    }else{
+
+        $infoVente = $this->model->find($vente_id);
+        $histo = $this->commandesStatusHistoriqueModel->Where('vente_id',$vente_id)->Where('status_vente_id',3)->find();
+        // foreach ($histo as $key => $value) {
+        //   // code...
+        //   // $this->commandesStatusHistoriqueModel->delete(['id' =>$value->id ]);
+        // }
+
+
+        // $iddepot = $infoVente->depots_id[0]->id;
+        //
+        // $infoDetailVente = $this->commandesDetailModel->Where('vente_id',$vente_id)->find();
+        // foreach ($infoDetailVente as $key => $value) {
+        //   $qtevendue = $infoDetailVente->qte_vendue;
+        //   $idarticle = $infoDetailVente->articles_id[0]->id;
+        //
+        //   // $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1)
+        //   // $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle, $qtevendue,1)
+        //   $array=[$qtevendue,$idarticle,]
+
+        //}
+
+        // $qtevendue = $infoDetailVente->qte_vendue;
+        // $idarticle = $infoDetailVente->articles_id[0]->id;
+        $status = 201;
+        $message = [
+          'success' => "La facture est passé du status livré à payer avec succès",
+          'errors' => null
+        ];
+        $data = $histo[0]->id;
+
+    }
+    $this->commandesStatusHistoriqueModel->commitTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
+  public function delete_facture(){
+    $iduser = $this->request->getPost('iduser');
+    $vente_id = $this->request->getPost('vente_id');
+    $pwd = $this->request->getPost('pwd');
+    $this->commandesStatusHistoriqueModel->beginTrans();
+
+    if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
+      $status = 400;
+      $message = [
+        'success' => null,
+        'errors' => ["Mot de passe des opérations incorrect"]
+      ];
+      $data = "";
+
+    }else{
+      $checkIfThereNoArticleLivredInThisCommand = $this->commandesDetailModel->Where('is_validate_livrer',1)->Where('vente_id',$vente_id)->find();
+      if($checkIfThereNoArticleLivredInThisCommand){
+        $status = 400;
+        $message = [
+          'success' => null,
+          'errors' => ["Impossible d'annuler cette facture car certain(s) article(s) sont déjà livré(s)"]
+        ];
+        $data = "";
+      }else{
+        $infoVente = $this->model->find($vente_id);
+        $histo = $this->commandesStatusHistoriqueModel->Where('vente_id',$vente_id)->Where('status_vente_id',3)->find();
+
+        $iddepot = $infoVente->depots_id[0]->id;
+
+        // $qtevendue = $infoDetailVente->qte_vendue;
+        // $idarticle = $infoDetailVente->articles_id[0]->id;
+        $status = 201;
+        $message = [
+          'success' => "La facture est passé du status livré à payer avec succès",
+          'errors' => null
+        ];
+        $data = $histo;
+      }
+    }
+    $this->commandesStatusHistoriqueModel->commitTrans();
+    return $this->respond([
+      'status' => $status,
+      'message' =>$message,
+      'data'=> $data
+    ]);
+  }
 
 
   //LISTE DE COMMANDE PAR UTILISATEUR FACTURIER LORS DE LA RECHERCHE: DONC LES COMMANDES CREES PAR UN FACTURIER
