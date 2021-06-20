@@ -280,6 +280,18 @@
 																<hr>
 															</div>
 
+															<!-- OPERATION AVANCEE SUR FACTURE -->
+															<div class="" v-if="detailTab.status_vente_id.id ==3">
+																<div class="row">
+																	<h5 class="col-md-12 card-title">OPERATION AVANCEE FACTURE</h5>
+																</div>
+																<div class="col-md-12">
+																	<div class="text-center">
+																		<button v-if="!isLoadSaveMainButtonModal" @click="_u_open_mod_popup_retour_payer(detailTab)" class="btn btn-danger">REMETRE EN PAYER</button>
+																		<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+																	</div>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -411,6 +423,41 @@
 						</table>
 					</div>
 
+			</div>
+	</div>
+</div>
+
+<!-- REMETRE FACTURE LIVRER EN PAYER  -->
+<div class="modal fade show u-animation-FromTop" tabindex="-1" role="dialog" aria-hidden="true" :style="{display: styleModalShow}">
+	<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+							<h6 class="modal-title text-center" id="exampleModalLongTitle-1">{{modalTitle}}</h6>
+							<button type="button" class="close" @click="_u_close_mod_form" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+							</button>
+					</div>
+					<div class="modal-body">
+						<div v-if="!isNoQuantity" class="text-center">
+							<span>Vous êtes sur le point de remetre une facture déjà livrée en status payé,</span>
+							<span>saches bien que cette opération est irreversible,</span>
+							<span>êtes vous le(la) magasinier(e) <?=session('users')['info'][0]->nom.' '.session('users')['info'][0]->prenom ?> ? </span>
+							<span> Si Oui, renseigner votre mot de passe de validation des opérations</span><br>
+							<div class="form-group col-md-12 text-center">
+								<label for="password_op">Mot de passe *</label>
+								<input type="password" class="form-control" id="password_op" aria-describedby="password_op" v-model="password_op">
+							</div>
+							<button v-if="!isLoadSaveMainButtonModal" @click="change_facture_livrer_en_payer()" class="btn btn-primary">Confirmer</button>
+							<!-- <button v-if="!isLoadSaveMainButtonModal && isPartielle" @click="add_validation_livraison_partielle()" class="btn btn-primary">Confirmer</button> -->
+							<img v-if="isLoadSaveMainButtonModal" src="<?=base_url() ?>/public/load/loader.gif" alt="">
+						</div>
+
+					</div>
+					<!-- <div class="modal-body text-center" v-if="Object.keys(ArticleValidateNego).length < 1">
+						<span class="text-danger">
+						Impossibile de valider cette opération car aucun article n'a été renseigner à rétirer après!!
+						</span>
+					</div> -->
 			</div>
 	</div>
 </div>

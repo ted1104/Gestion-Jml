@@ -31,6 +31,7 @@ var vthis = new Vue({
       styleModal : 'none',
       styleModalFaveur : 'none',
       styleModalDetail : 'none',
+      styleModalShow : 'none',
       display : this.styleModal,
       modalTitle :"",
       dateFilter :null,
@@ -248,6 +249,8 @@ var vthis = new Vue({
       wantToUpdate : false,
       indexTopUpdate : null,
       idElementSelected : null,
+      AchatIdSelected : null,
+
 
       //validation Action Livraison Partielle
       isPartielle : false,
@@ -2888,6 +2891,52 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    change_facture_livrer_en_payer(){
+      this.isLoadSaveMainButtonModal = true;
+      console.log(this.ArticleValidateNego);
+      const newurl = this.url+"retourner-livrer-en-payer";
+      var form = new FormData();
+      // form.append('idcommande',cmd);
+      form.append('iduser',this.users_id);
+      form.append('pwd', this.password_op);
+      form.append('vente_id', this.AchatIdSelected);
+      if(this.AchatIdSelected < 1 ){
+          this._u_fx_config_error_message_bottom("Message",['Veuillez séléctionner une commande'],'alert-danger');
+          this.isLoadSaveMainButtonModal = false;
+          return;
+      }
+      // if(Object.keys(this.ArticleValidateNego).length < 1){
+      //   this._u_fx_config_error_message_bottom("Message",['Impossible de valider cette operation car aucun article n\'a été déclaré à rétirer'],'alert-danger');
+      //   this.isLoadSaveMainButtonModal = false;
+      //   return;
+      // }
+      this.messageError = false;
+      // for(key in this.ArticleValidateNego){
+      //     form.append('vente_detail_id[]', this.ArticleValidateNego[key][0]);
+      //     form.append('qte[]', this.ArticleValidateNego[key][1]);
+    	// }
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadSaveMainButtonModal = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_commande_magazinier(3);
+                this.ArticleValidateNego = {}
+                this.password_op = null;
+                this.AchatIdSelected = null;
+                this._u_close_mod_form();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3457,6 +3506,7 @@ var vthis = new Vue({
       this.styleModal = 'none';
       this.styleModalFaveur = 'none';
       this.styleModalDetail = 'none';
+      this.styleModalShow = 'none'
 
     },
     _u_open_mod_popup_caisse(cmd,val){
@@ -3613,6 +3663,12 @@ var vthis = new Vue({
       console.log("==DETAIL==");
       console.log(det.logic_historique_a_retirer);
     },
+    _u_open_mod_popup_retour_payer(det){
+      this.modalTitle = "REMETRE LA FACTURE "+det.numero_commande+" EN STATUS PAYER";
+      this.styleModalShow = 'block';
+      this.AchatIdSelected = det.id;
+      console.log("detailll", det);
+    },
     _u_get_today(){
       var currentDate = new Date();
       var currentDateWithFormat = new Date().toJSON().slice(0,10).replace(/-/g,'-');
@@ -3640,8 +3696,8 @@ var vthis = new Vue({
         this.currentLineSelectedInList = indLine;
       }
       this.ArticleValidateNego = {};
-      // console.log("==FromHere===");
-      // console.log(this.detailTab);
+      console.log("==FromHere===");
+      console.log(this.detailTab);
     },
     _u_see_detail_tab_admin_users(data, indLine=null){
       this.codeIdArticlePrint = data.id;
