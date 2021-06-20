@@ -1274,8 +1274,7 @@ class Commandes extends ResourceController {
                 $idarticle = $value->articles_id[0]->id;
                 $magaz = $value->livrer_by;
 
-                $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1);
-                $this->stockPersonnelModel->updateQtePersonnel($magaz, $idarticle, $qtevendue,1);
+                $this->stockModel->updateQteVirtuelleStockDepot($iddepot, $idarticle, $qtevendue,1);
               }
               $status = 200;
               $message = [
@@ -1320,6 +1319,8 @@ class Commandes extends ResourceController {
                 $magaz = $value->livrer_by;
 
                 $this->stockModel->updateQteVirtuelleStockDepot($iddepot, $idarticle, $qtevendue,1);
+                $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1);
+                $this->stockPersonnelModel->updateQtePersonnel($magaz, $idarticle, $qtevendue,1);
               }
               $status = 200;
               $message = [
