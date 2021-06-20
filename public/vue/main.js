@@ -2937,6 +2937,45 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    supprimer_facture(){
+      this.isLoadSaveMainButtonModal = true;
+      // console.log(this.ArticleValidateNego);
+      const newurl = this.url+"supprimer-facturer-payer";
+      var form = new FormData();
+      // form.append('idcommande',cmd);
+      form.append('iduser',this.users_id);
+      form.append('pwd', this.password_op);
+      form.append('vente_id', this.AchatIdSelected);
+      if(this.AchatIdSelected < 1 ){
+          this._u_fx_config_error_message_bottom("Message",['Veuillez séléctionner une commande'],'alert-danger');
+          this.isLoadSaveMainButtonModal = false;
+          return;
+      }
+
+      this.messageError = false;
+
+      return axios
+            .post(newurl,form,{headers: this.tokenConfig})
+            .then(response =>{
+              if(response.data.message.success !=null){
+                var err = response.data.message.success;
+                this.isLoadSaveMainButtonModal = false;
+                this._u_fx_config_error_message("Succès",[err],'alert-success');
+                this.get_commande_admin(this.stateStatus);
+                this.ArticleValidateNego = {}
+                this.password_op = null;
+                this.AchatIdSelected = null;
+                this._u_close_mod_form();
+                return;
+              }
+              var err = response.data.message.errors;
+              this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+              this.isLoadSaveMainButtonModal = false;
+
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -3665,6 +3704,12 @@ var vthis = new Vue({
     },
     _u_open_mod_popup_retour_payer(det){
       this.modalTitle = "REMETRE LA FACTURE "+det.numero_commande+" EN STATUS PAYER";
+      this.styleModalShow = 'block';
+      this.AchatIdSelected = det.id;
+      console.log("detailll", det);
+    },
+    _u_open_mod_popup_supprimer(det){
+      this.modalTitle = "SUPPRESSION LA FACTURE "+det.numero_commande;
       this.styleModalShow = 'block';
       this.AchatIdSelected = det.id;
       console.log("detailll", det);
