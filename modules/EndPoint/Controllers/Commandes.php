@@ -1151,7 +1151,7 @@ class Commandes extends ResourceController {
     $iduser = $this->request->getPost('iduser');
     $vente_id = $this->request->getPost('vente_id');
     $pwd = $this->request->getPost('pwd');
-    $this->commandesStatusHistoriqueModel->beginTrans();
+    $this->model->beginTrans();
 
     if(!$this->usersAuthModel->authPasswordOperation($iduser,$pwd)){
       $status = 400;
@@ -1164,7 +1164,47 @@ class Commandes extends ResourceController {
     }else{
 
         $infoVente = $this->model->find($vente_id);
-        $histo = $this->commandesStatusHistoriqueModel->Where('vente_id',$vente_id)->Where('status_vente_id',3)->find();
+        $iddepot = $infoVente->depots_id[0]->id;
+        $infoDetailVente = $this->commandesDetailModel->Where('vente_id',$vente_id)->Where('is_validate_livrer',1)->findAll();
+        $array = [];
+        if($infoDetailVente and $infoVente->status_vente_id->id==3){
+          foreach ($infoDetailVente as $key => $value) {
+            $qtevendue = $value->qte_vendue;
+            $idarticle = $value->articles_id[0]->id;
+            $magaz = $value->livrer_by;
+
+            $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1);
+            $this->stockPersonnelModel->updateQtePersonnel($magaz, $idarticle, $qtevendue,1);
+            // $array=[$qtevendue,$idarticle,];
+            // array_push($array,[$qtevendue,$idarticle,$magaz]);
+
+            $this->commandesDetailModel->update($value->id, ['is_validate_livrer'=>0,'livrer_by'=>null]);
+
+          }
+          //UPDATE VENTE OPERATIONS
+          $data = ['status_vente_id'=>2,'retour_en_payer'=>1,'is_livrer_all'=>0];
+          $updateData = $this->model->update($vente_id,$data);
+
+          $status = 200;
+          $message = [
+            'success' => "La facture est passé du status livré à payer avec succès",
+            'errors' => null
+          ];
+          $data = $array;
+        }else{
+          $status = 400;
+          $message = [
+            'success' => null,
+            'errors' => ["Impossible d'effectuer cette operation sur cette facture, il semble qu'elle est encore en status payé!"]
+          ];
+          $data = $array;
+        }
+
+
+
+
+
+        // $histo = $this->commandesStatusHistoriqueModel->Where('vente_id',$vente_id)->Where('status_vente_id',3)->find();
         // foreach ($histo as $key => $value) {
         //   // code...
         //   // $this->commandesStatusHistoriqueModel->delete(['id' =>$value->id ]);
@@ -1186,15 +1226,10 @@ class Commandes extends ResourceController {
 
         // $qtevendue = $infoDetailVente->qte_vendue;
         // $idarticle = $infoDetailVente->articles_id[0]->id;
-        $status = 201;
-        $message = [
-          'success' => "La facture est passé du status livré à payer avec succès",
-          'errors' => null
-        ];
-        $data = $histo[0]->id;
+
 
     }
-    $this->commandesStatusHistoriqueModel->commitTrans();
+    $this->model->commitTrans();
     return $this->respond([
       'status' => $status,
       'message' =>$message,
