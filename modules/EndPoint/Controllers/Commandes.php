@@ -1201,16 +1201,11 @@ class Commandes extends ResourceController {
         }
 
 
-
-
-
         // $histo = $this->commandesStatusHistoriqueModel->Where('vente_id',$vente_id)->Where('status_vente_id',3)->find();
         // foreach ($histo as $key => $value) {
         //   // code...
         //   // $this->commandesStatusHistoriqueModel->delete(['id' =>$value->id ]);
         // }
-
-
         // $iddepot = $infoVente->depots_id[0]->id;
         //
         // $infoDetailVente = $this->commandesDetailModel->Where('vente_id',$vente_id)->find();
@@ -1221,9 +1216,7 @@ class Commandes extends ResourceController {
         //   // $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1)
         //   // $this->stockPersonnelModel->updateQtePersonnel($iduser, $idarticle, $qtevendue,1)
         //   $array=[$qtevendue,$idarticle,]
-
         //}
-
         // $qtevendue = $infoDetailVente->qte_vendue;
         // $idarticle = $infoDetailVente->articles_id[0]->id;
 
@@ -1236,7 +1229,8 @@ class Commandes extends ResourceController {
       'data'=> $data
     ]);
   }
-  public function delete_facture(){
+  public function supprimer_facture_payee(){
+    // Cette fonction ramene la facture deja payee en status supprimer : tout en touchant uniquement le stock virtuelle
     $iduser = $this->request->getPost('iduser');
     $vente_id = $this->request->getPost('vente_id');
     $pwd = $this->request->getPost('pwd');
@@ -1251,29 +1245,116 @@ class Commandes extends ResourceController {
       $data = "";
 
     }else{
-      $checkIfThereNoArticleLivredInThisCommand = $this->commandesDetailModel->Where('is_validate_livrer',1)->Where('vente_id',$vente_id)->find();
-      if($checkIfThereNoArticleLivredInThisCommand){
+      $infoVente = $this->model->find($vente_id);
+      $iddepot = $infoVente->depots_id[0]->id;
+
+      $array = [];
+      if($infoVente->status_vente_id->id==3 or $infoVente->status_vente_id->id==2){
+        if($infoVente->status_vente_id->id==2){
+          $data = ['status_vente_id'=>5];
+          // $this->model->beginTrans();
+          if(!$updateData = $this->model->update($vente_id,$data)){
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => $this->model->erros()
+            ];
+            $data = "";
+          }else {
+            //CREATION HISTORIQUE CHANGEMENT STATUS
+            $dataStatusHistorique=[
+                'vente_id' => $vente_id,
+                'status_vente_id' =>5,
+                'users_id' => $iduser,
+            ];
+            if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+              $infoDetailVente = $this->commandesDetailModel->Where('vente_id',$vente_id)->findAll();
+              foreach ($infoDetailVente as $key => $value) {
+                $qtevendue = $value->qte_vendue;
+                $idarticle = $value->articles_id[0]->id;
+                $magaz = $value->livrer_by;
+
+                $this->stockModel->updateQteReelleStockDepot($iddepot, $idarticle, $qtevendue,1);
+                $this->stockPersonnelModel->updateQtePersonnel($magaz, $idarticle, $qtevendue,1);
+              }
+              $status = 200;
+              $message = [
+                'success' => "La facture a été supprimée avec succès",
+                'errors' => null
+              ];
+              $data = $array;
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->commandesStatusHistoriqueModel->erros()
+              ];
+              $data = "";
+            }
+          }
+        }
+
+        // OPERATION LORS QUE FACTURE EST DEJA PAYEE
+        if($infoVente->status_vente_id->id==3){
+          $data = ['status_vente_id'=>5];
+          // $this->model->beginTrans();
+          if(!$updateData = $this->model->update($vente_id,$data)){
+            $status = 400;
+            $message = [
+              'success' => null,
+              'errors' => $this->model->erros()
+            ];
+            $data = "";
+          }else {
+            //CREATION HISTORIQUE CHANGEMENT STATUS
+            $dataStatusHistorique=[
+                'vente_id' => $vente_id,
+                'status_vente_id' =>5,
+                'users_id' => $iduser,
+            ];
+            if($this->commandesStatusHistoriqueModel->insert($dataStatusHistorique)){
+              $infoDetailVente = $this->commandesDetailModel->Where('vente_id',$vente_id)->findAll();
+              foreach ($infoDetailVente as $key => $value) {
+                $qtevendue = $value->qte_vendue;
+                $idarticle = $value->articles_id[0]->id;
+                $magaz = $value->livrer_by;
+
+                $this->stockModel->updateQteVirtuelleStockDepot($iddepot, $idarticle, $qtevendue,1);
+              }
+              $status = 200;
+              $message = [
+                'success' => "La facture a été supprimée avec succès",
+                'errors' => null
+              ];
+              $data = $array;
+            }else{
+              $status = 400;
+              $message = [
+                'success' => null,
+                'errors' => $this->commandesStatusHistoriqueModel->erros()
+              ];
+              $data = "";
+            }
+          }
+
+        }
+
+
+      }else{
         $status = 400;
         $message = [
           'success' => null,
-          'errors' => ["Impossible d'annuler cette facture car certain(s) article(s) sont déjà livré(s)"]
+          'errors' => ["Impossible d'éffectuer cette operation sur cette facture, il semble qu'elle est encore en status en attente!"]
         ];
-        $data = "";
-      }else{
-        $infoVente = $this->model->find($vente_id);
-        $histo = $this->commandesStatusHistoriqueModel->Where('vente_id',$vente_id)->Where('status_vente_id',3)->find();
-
-        $iddepot = $infoVente->depots_id[0]->id;
-
-        // $qtevendue = $infoDetailVente->qte_vendue;
-        // $idarticle = $infoDetailVente->articles_id[0]->id;
-        $status = 201;
-        $message = [
-          'success' => "La facture est passé du status livré à payer avec succès",
-          'errors' => null
-        ];
-        $data = $histo;
+        $data = $array;
       }
+
+        // $status = 201;
+        // $message = [
+        //   'success' => "La facture a été supprimée avec succès",
+        //   'errors' => null
+        // ];
+        // $data = null;
     }
     $this->commandesStatusHistoriqueModel->commitTrans();
     return $this->respond([
