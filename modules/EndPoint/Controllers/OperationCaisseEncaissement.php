@@ -12,6 +12,8 @@ use App\Models\EncaissementExterneModel;
 use App\Entities\EncaissementExterneEntity;
 use CodeIgniter\I18n\Time;
 use App\Models\ClotureCaisseModel;
+use App\Models\LogSystemModel;
+
 
 
 
@@ -26,6 +28,8 @@ class OperationCaisseEncaissement extends ResourceController {
   protected $decaissementExterneModel = null;
   protected $encaissementExterneModel = null;
   protected $clotureCaisseModel = null;
+  protected $logSystemModel = null;
+
 
 
 
@@ -38,6 +42,8 @@ class OperationCaisseEncaissement extends ResourceController {
     $this->usersAuthModel = new UsersAuthModel();
     $this->encaissementExterneModel = new EncaissementExterneModel();
     $this->clotureCaisseModel =  new ClotureCaisseModel();
+    $this->logSystemModel = new LogSystemModel();
+
   }
   //MONTANT SOLDE DU CAISSIER
   public function getMontantCaisse($idCaissier){
@@ -354,9 +360,11 @@ class OperationCaisseEncaissement extends ResourceController {
 
   }
   // #########CLOTURE OPERATION AUTOMATIQUE
-  public function clotureJournalierCaisse(){
+  public function clotureJournalierCaisse($iduser){
     $d = Time::today();
     $initCaisse = $this->caisseModel->findAll();
+    $this->caisseModel->beginTrans();
+
     if(!$this->clotureCaisseModel->Where('date_cloture',$d)->find()){
       foreach ($initCaisse as $key => $value) {
         $data = [
@@ -365,6 +373,9 @@ class OperationCaisseEncaissement extends ResourceController {
           'date_cloture' =>$d
         ];
         $insertData = $this->clotureCaisseModel->insert($data);
+      }
+      if(!$this->logSystemModel->addLogSys($iduser, 4)){
+        $this->caisseModel->RollbackTrans();
       }
       $message = [
         'success' => "La cloture journalière de la caisse a été effectuée avec succès",
@@ -376,6 +387,7 @@ class OperationCaisseEncaissement extends ResourceController {
         'errors' => ["Merci de reessayer demain car la cloture journalière de la caisse est déjà faite"]
       ];
     }
+    $this->caisseModel->commitTrans();
     return $this->respond([
       'status' => 200,
       'message' =>$message,

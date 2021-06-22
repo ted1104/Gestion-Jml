@@ -9,6 +9,8 @@ use App\Models\DroitAccessModel;
 use App\Models\StockPersonnelModel;
 use App\Models\ClientModel;
 use App\Entities\ClientEntity;
+use App\Models\LogSystemModel;
+
 
 
 
@@ -19,6 +21,8 @@ class Users extends ResourceController {
   protected $droitAccessModel = null;
   protected $stockPersonnelModel = null;
   protected $clientModel = null;
+  protected $logSystemModel = null;
+
 
   public function __construct(){
     helper(['global']);
@@ -26,6 +30,8 @@ class Users extends ResourceController {
     $this->droitAccessModel = new DroitAccessModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
     $this->clientModel = new ClientModel();
+    $this->logSystemModel = new LogSystemModel();
+
 
   }
 
@@ -281,11 +287,13 @@ class Users extends ResourceController {
   }
 
 
-  public function bloqueAllCountUsers(){
+  public function bloqueAllCountUsers($iduser){
     $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
+    $this->logSystemModel->addLogSys($iduser, 7);
     foreach ($allUserToBlockAccount as $key => $value) {
       $in = $this->userAuthModel->Where('users_id',$value->id)->find();
       if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>2])){
+
         $message = [
           'success' => 'Tous les comptes sont desactivés',
           'errors' => null
@@ -299,11 +307,13 @@ class Users extends ResourceController {
     ]);
     // print_r(count($allUserToBlockAccount));
   }
-  public function DebloqueAllCountUsers(){
+  public function DebloqueAllCountUsers($iduser){
     $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
+    $this->logSystemModel->addLogSys($iduser, 8);
     foreach ($allUserToBlockAccount as $key => $value) {
       $in = $this->userAuthModel->Where('users_id',$value->id)->find();
       if($this->userAuthModel->update($in[0]->id, ['status_users_id'=>1])){
+
         $message = [
           'success' => 'Tous les comptes sont activés',
           'errors' => null
@@ -739,5 +749,7 @@ class Users extends ResourceController {
         'data'=> $data
       ]);
   }
+
+
 
 }

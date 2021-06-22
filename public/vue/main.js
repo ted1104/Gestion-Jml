@@ -2153,13 +2153,13 @@ var vthis = new Vue({
     operation_systeme_config(type){
       let newurl = null;
       if(type==1){
-       newurl = this.url+"cloture-stock-journalier";
+       newurl = this.url+"cloture-stock-journalier/"+this.users_id;
      }else if(type ==2){
-        newurl = this.url+"cloture-caisse-journalier";
+        newurl = this.url+"cloture-caisse-journalier/"+this.users_id;
      }else if(type ==3){
-         newurl = this.url+"users-debloque-account";
+         newurl = this.url+"users-debloque-account/"+this.users_id;
      }else if(type ==4){
-        newurl = this.url+"users-bloque-account";
+        newurl = this.url+"users-bloque-account/"+this.users_id;
      }
       this.messageError = false;
       this.isLoadSaveMainButton = true;

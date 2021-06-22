@@ -36,8 +36,8 @@ $routes->group('api/v1', function($routes){
   $routes->post('users-update-profile','Users::user_update_profile_picture');
   $routes->get('users-reset-password-connexion/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_connexion/$1/$2/$3');
   $routes->get('users-reset-password-operation/(:num)/(:any)/(:any)/update','Users::user_account_reset_password_operation/$1/$2/$3');
-  $routes->get('users-bloque-account','Users::bloqueAllCountUsers');
-  $routes->get('users-debloque-account','Users::DebloqueAllCountUsers');
+  $routes->get('users-bloque-account/(:num)','Users::bloqueAllCountUsers/$1');
+  $routes->get('users-debloque-account/(:num)','Users::DebloqueAllCountUsers/$1');
   $routes->get('users-change-pv-gestion-access/(:num)','Users::changeAccessToGestionPv/$1');
   $routes->get('users-change-achat-partiels-gestion-access/(:num)','Users::changeAccessToGestionAchatPartiels/$1');
   $routes->get('users-access-menu-system/(:num)','Users::changeAccessToSystemMenu/$1');
@@ -130,8 +130,8 @@ $routes->group('api/v1', function($routes){
 
 
   //CLOTURE AUTOMATIQUE
-  $routes->get('cloture-stock-journalier','Approvisionnement::clotureJournalierStock');
-  $routes->get('cloture-caisse-journalier','OperationCaisseEncaissement::clotureJournalierCaisse');
+  $routes->get('cloture-stock-journalier/(:num)','Approvisionnement::clotureJournalierStock/$1');
+  $routes->get('cloture-caisse-journalier/(:num)','OperationCaisseEncaissement::clotureJournalierCaisse/$1');
 
 
 

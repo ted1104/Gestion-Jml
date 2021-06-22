@@ -22,4 +22,16 @@ class ClotureStockModel extends Model{
     'date_cloture' => ['required' => 'La date est obligatoire']
   ];
   protected $returnType ='App\Entities\ClotureStockEntity';
+
+
+    // LES TRANSACTIONS
+    public function beginTrans(){
+      $this->db->transBegin();
+    }
+    public function RollbackTrans(){
+      $this->db->transRollback();
+    }
+    public function commitTrans(){
+      $this->db->transCommit();
+    }
 }

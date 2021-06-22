@@ -11,13 +11,13 @@ class CloturePersonnelStockModel extends Model{
   protected $useTimestamps = true;
   protected $validationRules = [
     'articles_id' => 'required',
-    'depot_id' => 'required',
+    'users_id' => 'required',
     'qte_stock' => 'required',
     'date_cloture' => 'required'
   ];
   protected $validationMessages = [
     'articles_id'=>['required' => 'Le champ articles_id est obligatoire',],
-    'depot_id'=>['required' => 'Le champ depot_id est obligatoire'],
+    'users_id'=>['required' => 'Le champ users_id est obligatoire'],
     'qte_stock'=>['required' => 'Le champ qte_stock est obligatoire'],
     'date_cloture' => ['required' => 'La date est obligatoire']
   ];

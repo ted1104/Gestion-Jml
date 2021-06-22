@@ -8,9 +8,11 @@ use App\Models\StockModel;
 use App\Models\ArticlesModel;
 use App\Models\PvRestaurationModel;
 use App\Models\ClotureStockModel;
+use App\Models\CloturePersonnelStockModel;
 use App\Models\StockPersonnelModel;
 use App\Models\PvPerdueHistoriqueModel;
 use App\Models\PvPerdueHistoriqueDetailModel;
+use App\Models\LogSystemModel;
 
 use App\Entities\StockEntity;
 use App\Entities\PvRestaurationEntity;
@@ -28,9 +30,11 @@ class Approvisionnement extends ResourceController {
   protected $articlesModel = null;
   protected $pvRestaurationModel = null;
   protected $clotureStockModel = null;
+  protected $cloturePersonnelStockModel = null;
   protected $stockPersonnelModel = null;
   protected $pvPerdueHistoriqueModel = null;
   protected $pvPerdueHistoriqueDetailModel = null;
+  protected $logSystemModel = null;
 
 
 
@@ -41,9 +45,11 @@ class Approvisionnement extends ResourceController {
     $this->articlesModel = new ArticlesModel();
     $this->pvRestaurationModel = new PvRestaurationModel();
     $this->clotureStockModel = new ClotureStockModel();
+    $this->cloturePersonnelStockModel = new CloturePersonnelStockModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
     $this->pvPerdueHistoriqueModel = new PvPerdueHistoriqueModel();
     $this->pvPerdueHistoriqueDetailModel = new PvPerdueHistoriqueDetailModel();
+    $this->logSystemModel = new LogSystemModel();
 
 
   }
@@ -244,10 +250,13 @@ class Approvisionnement extends ResourceController {
        'data'=> $data
      ]);
   }
-  public function clotureJournalierStock(){
+  public function clotureJournalierStock($iduser =null){
     $d = Time::tomorrow();
     $initStock = $this->stockModel->findAll();
-    if(!$this->clotureStockModel->Where('date_cloture',$d)->find()){
+    $initPersonnelStock = $this->stockPersonnelModel->findAll();
+    $this->clotureStockModel->beginTrans();
+    if(!$this->clotureStockModel->Where('date_cloture',$d)->find() and !$this->cloturePersonnelStockModel->Where('date_cloture',$d)->find()){
+      //CLOTURE STOCK GENERAL
       foreach ($initStock as $key => $value) {
         $data = [
           'articles_id'=>$value->articles_id[0]->id,
@@ -259,17 +268,37 @@ class Approvisionnement extends ResourceController {
 
         $insertData = $this->clotureStockModel->insert($data);
       }
+      //CLOTURE STOCK PERSONNEL
+      foreach ($initPersonnelStock as $key => $value) {
+        $data = [
+          'articles_id'=>$value->articles_id,
+          'users_id' =>$value->users_id,
+          'qte_stock' =>$value->qte_stock,
+          'date_cloture' =>$d
+        ];
+
+        $insertData = $this->cloturePersonnelStockModel->insert($data);
+
+      }
+      if(!$this->logSystemModel->addLogSys($iduser, 1)){
+        $this->clotureStockModel->RollbackTrans();
+      }
+
+      // print_r($this->logSystemModel->errors());
+      // die();
       //echo 'cloture avec success';
       $message = [
-        'success' => "La cloture journalière du stock a été effectuée avec succès",
+        'success' => "La cloture journalière du stock général et personnel a été effectuée avec succès",
         'errors' => null
       ];
     }else{
       $message = [
         'success' => null,
-        'errors' => ["Merci de reessayer demain car la cloture journalière du stock est déjà faite"]
+        'errors' => ["Merci de reessayer demain car la cloture journalière du stock général et personnel est déjà faite"]
       ];
     }
+
+    $this->clotureStockModel->commitTrans();
     return $this->respond([
       'status' => 200,
       'message' =>$message,
