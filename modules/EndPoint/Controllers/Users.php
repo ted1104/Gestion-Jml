@@ -287,7 +287,7 @@ class Users extends ResourceController {
   }
 
 
-  public function bloqueAllCountUsers($iduser){
+  public function bloqueAllCountUsers($iduser =null){
     $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
     $this->logSystemModel->addLogSys($iduser, 7);
     foreach ($allUserToBlockAccount as $key => $value) {
@@ -307,7 +307,7 @@ class Users extends ResourceController {
     ]);
     // print_r(count($allUserToBlockAccount));
   }
-  public function DebloqueAllCountUsers($iduser){
+  public function DebloqueAllCountUsers($iduser=null){
     $allUserToBlockAccount = $this->model->Where('roles_id !=',1)->findAll();
     $this->logSystemModel->addLogSys($iduser, 8);
     foreach ($allUserToBlockAccount as $key => $value) {

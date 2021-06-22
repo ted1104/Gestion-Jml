@@ -360,7 +360,7 @@ class OperationCaisseEncaissement extends ResourceController {
 
   }
   // #########CLOTURE OPERATION AUTOMATIQUE
-  public function clotureJournalierCaisse($iduser){
+  public function clotureJournalierCaisse($iduser =null){
     $d = Time::today();
     $initCaisse = $this->caisseModel->findAll();
     $this->caisseModel->beginTrans();

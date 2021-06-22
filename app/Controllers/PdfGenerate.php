@@ -1111,4 +1111,368 @@ class PdfGenerate extends BaseController {
     // $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
     $this->outPut();
   }
+
+  public function rapport_journal_de_sorti_par_magazinier($idDepot,$dateRapport){
+      $depotInfo = $this->depotModel->find($idDepot);
+      $allArticle = $this->articlesModel->Where('is_show_on_rapport',1)->findAll();
+
+      //===LISTE DES TOUTES LES FACTURES PAYES ET LIVRES AUJOURDHUI==========
+      $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.status_vente_id',3)->Where('depots_id',$idDepot)->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+
+      // $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll(); PAR DATE
+      //
+      //===LISTE DES TOUTES LES FACTURES PAYES NON LIVREES DE TOUS LES JOURS ==========
+      $AchatHistoroFacturePayeNonLivre = $this->commande->Where('depots_id',$idDepot)->Where('status_vente_id',2)->findAll();
+
+      //===LISTE DES TOUTES LES FACTURES PAYES MAIS LIVREES PARTIELLEMENT DE TOUS LES JOURS ==========
+      $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); //TOUTLES FACTURES PAYE MAIS LIVRER PARTIELLEMENT DU SYSTEME
+
+      // ====CALCUL =====
+      // ====CALCUL =====
+      // ====CALCUL =====
+
+      //=== CALCUL DU TOTAL VENDU :: TOUTES LES FACTURES PAYES
+      $AchatsHistoFacturePayeCalcul = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->like('g_interne_vente_historique_status.created_at',$dateRapport,'after')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll();
+      // $AchatsHisto = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',2)->Where('depots_id',$idDepot)->findAll(); //TOUTLES FACTURES PAYE MAIS NON LIVRER DU SYSTEME
+
+
+
+      // $AchatLivrePartiellement = $this->commande->Where('status_vente_id',3)->Where('is_livrer_all',1)->like('updated_at',$dateRapport,'after')->findAll(); LIVRER PARTIELLEMENT PAR DATE
+
+
+      $this->pdf = new ConfigHeaderRapportSortiDepot('L','mm','A4');
+      $this->pdf->AliasNbPages();
+      $this->pdf->SetFont('Helvetica','B',12);
+      $this->pdf->SetMargins(5,5,5);
+      $this->pdf->AddPage();
+
+      $this->pdf->Cell(287,5,utf8_decode('RAPPORT JOURNAL DE SORTI '.$depotInfo->nom),0,1,'C');
+      $this->pdf->SetFont('Helvetica','B',8);
+      $this->pdf->Cell(287,5,'Date : '.$dateRapport,0,1,'C');
+
+      if(!$allArticle){
+        $this->pdf->Cell(287,20,'AUCUN ARTICLE SELECTIONNER SUR LE RAPPORT',1,0,'C');
+        $this->outPut();
+      }
+
+
+      //CREATION ENTETE TABLEAU
+      $enteTableArticle = array();
+      $DonneTableArticle = array();
+      $DonneStockInitial = array();
+      $DonneStockInitialVirtuel = array();
+      $DonneApprovisionnement = array();
+      $DonneApprovisionnementPv = array();
+      $DonneApprovisionnementTotal = array();
+      $LineEmptyNumFacture = array();
+      $DonneApprovisionnementInterDepot = array();
+      $DonneApprovisionnementInterDepotRecu = array();
+      for($i = 0; $i < count($allArticle); $i++){
+        //APPROVISIONNEMENT GENERAL
+        $approGen = $this->approvisionnementsDetailModel->selectSum('qte')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $approGenPv = $this->approvisionnementsDetailModel->selectSum('qte_pv')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $approGenTotal = $this->approvisionnementsDetailModel->selectSum('qte_total')->join('g_interne_approvisionnement','g_interne_approvisionnement.id = g_interne_approvisionnement_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement.depots_id",$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $pvPerdue = $this->pvPerdueHistoriqueModel->selectSum('qte_perdue')->join('g_interne_pv_perdue_historique_detail','g_interne_pv_perdue_historique.id = g_interne_pv_perdue_historique_detail.pv_historique_id')->Where('g_interne_pv_perdue_historique.date_historique',$dateRapport)->Where('g_interne_pv_perdue_historique.depots_id',$idDepot)->Where('g_interne_pv_perdue_historique_detail.articles_id',$allArticle[$i]->id)->find();
+
+        // print_r($pvPerdue[0]->qte_perdue);
+        // die();
+
+
+        $approInterDepotExped = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_source",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
+
+        $approInterDepotRecu = $this->approvisionnementsInterDepotDetailModel->selectSum('qte')->join('g_interne_approvisionnement_inter_depot','g_interne_approvisionnement_inter_depot.id = g_interne_approvisionnement_inter_depot_detail.approvisionnement_id','left')->like('g_interne_approvisionnement_inter_depot_detail.created_at',$dateRapport,'after')->Where("g_interne_approvisionnement_inter_depot.depots_id_dest",$idDepot)->Where('g_interne_approvisionnement_inter_depot_detail.is_validate',1)->Where('articles_id',$allArticle[$i]->id)->find();
+        //GET QUANTITE INITIAL RESTANT EN STOCK HIER
+
+        $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateRapport)->find();
+
+
+        array_push($enteTableArticle,273/count($allArticle));
+        array_push($DonneTableArticle,utf8_decode($allArticle[$i]->nom_article));
+        array_push($DonneStockInitial,$stockInit ? $stockInit[0]->qte_stock : 0);
+        array_push($DonneStockInitialVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
+        array_push($DonneApprovisionnement,$approGen[0]->qte?$approGen[0]->qte:0);
+        // array_push($DonneApprovisionnementPv,$approGenPv[0]->qte_pv?$approGenPv[0]->qte_pv:0);
+        array_push($DonneApprovisionnementPv,$pvPerdue[0]->qte_perdue?$pvPerdue[0]->qte_perdue:0);
+
+        array_push($DonneApprovisionnementTotal,$approGenTotal[0]->qte_total?$approGenTotal[0]->qte_total:0);
+        array_push($LineEmptyNumFacture,'');
+        array_push($DonneApprovisionnementInterDepot,$approInterDepotExped[0]->qte?$approInterDepotExped[0]->qte:0);
+        array_push($DonneApprovisionnementInterDepotRecu,$approInterDepotRecu[0]->qte?$approInterDepotRecu[0]->qte:0);
+
+
+      }
+      $this->pdf->SetWidths($enteTableArticle);
+
+      $this->pdf->SetFont('Helvetica','B',6);
+      $this->pdf->Cell(14,5,'Produit',1,0,'L');
+      $this->pdf->Row($DonneTableArticle);
+
+      // DEBUT LISTE FACTURE JOURNALIERE
+
+      // $this->pdf->Cell(14,5,'Facture',1,0,'L');
+      $this->pdf->SetFillColor(96,96,96);
+      $this->pdf->SetTextColor(255,255,255);
+      $this->pdf->Cell(287,5,utf8_decode('TOUTES LES FACTURES LIVREES AUJOURD\'HUI'),0,1,'C',1);
+      $this->pdf->SetTextColor(0,0,0);
+      $this->pdf->SetWidths(array(273));
+      // $this->pdf->Row(array(''));
+      $this->pdf->SetFont('Helvetica','',6);
+      $this->pdf->SetWidths($enteTableArticle);
+      // $venteArray = array();
+      foreach ($AchatsHistoLivre as $key => $value) {
+        $achat = $this->commande->find($value->vente_id);
+        $this->pdf->Cell(14,5,utf8_decode($achat->numero_commande),1,0,'L');
+        $venteDetailArray = array();
+        for($i = 0; $i < count($allArticle); $i++){
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$achat->id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',1)->like('updated_at',$dateRapport,'after')->findAll();
+            array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
+        }
+        $this->pdf->Row($venteDetailArray);
+      }
+
+      if(count($AchatsHistoLivre) < 1){
+        $this->pdf->Cell(287,5,utf8_decode('Pas de facture livrées aujord\'hui'),0,1,'C');
+      }
+
+
+      //FACTURES PAYES MAIS NON LIVRER : TOUTLES
+      $this->pdf->SetFont('Helvetica','B',6);
+      // $this->pdf->Cell(14,5,utf8_decode('Non livré'),1,0,'L');
+      $this->pdf->SetFillColor(96,96,96);
+      $this->pdf->SetTextColor(255,255,255);
+      $this->pdf->Cell(287,5,utf8_decode('TOUTES LES FACTURES NON LIVREES'),0,1,'C',1);
+      $this->pdf->SetTextColor(0,0,0);
+      $this->pdf->SetWidths(array(273));
+      // $this->pdf->SetWidths(array(273));
+      // $this->pdf->Row(array(''));
+      $this->pdf->SetFont('Helvetica','',6);
+      $this->pdf->SetWidths($enteTableArticle);
+      foreach ($AchatHistoroFacturePayeNonLivre as $key => $value) {
+        $checkIfIsNonLivred = $this->commandesStatusHistoriqueModel->Where('vente_id',$value->id)->Where('status_vente_id',3)->find();
+        // $achat = $this->commande->find($value->vente_id);
+        // print_r($achat[0]->date_vente);
+        // die();
+        $this->pdf->SetTextColor(0,0,0);
+        if(count($checkIfIsNonLivred) < 1){
+
+          if($dateRapport !== explode(' ',$value->date_vente)[0]){
+            $this->pdf->SetTextColor(255,0,0);
+          }
+          $this->pdf->Cell(14,5,utf8_decode($value->numero_commande),1,0,'L');
+          $this->pdf->SetTextColor(0,0,0);
+
+        }
+        $venteDetailFactureNonPayeArray = array();
+        for($i = 0; $i < count($allArticle); $i++){
+          // print_r($checkIfIsNonLivred);
+          if(count($checkIfIsNonLivred) < 1){
+            //like('updated_at',$dateRapport,'after')-> condition to add for speicific date
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->findAll();
+                array_push($venteDetailFactureNonPayeArray,$detAchat?$detAchat[0]->qte_vendue:'-');
+          }
+        }
+        $this->pdf->Row($venteDetailFactureNonPayeArray);
+      }
+
+      if(count($AchatHistoroFacturePayeNonLivre) < 1){
+        $this->pdf->Cell(287,5,utf8_decode('Pas de factures non livrées'),1,1,'C');
+      }
+
+      //FACTURE PAYE PMAIS LIVRER PARTILLEMENT ALORS LISTE DES ARTICLES NON LIVRER
+      $this->pdf->SetFont('Helvetica','B',6);
+      // $this->pdf->Cell(14,5,utf8_decode('Payé Partiel'),1,1,'L');
+      $this->pdf->SetFillColor(96,96,96);
+      $this->pdf->SetTextColor(255,255,255);
+      $this->pdf->Cell(287,5,utf8_decode('TOUTES LES FACTURES PAYEES PARTIELLEMENT'),1,1,'C',1);
+      $this->pdf->SetTextColor(0,0,0);
+      $this->pdf->SetWidths(array(273));
+      // $this->pdf->Row(array('TOUTLES LES FACTURES PAYES PARTIELLEMENT'));
+
+      $this->pdf->SetFont('Helvetica','',6);
+      $this->pdf->SetWidths($enteTableArticle);
+
+      // $venteArray = array();
+      foreach ($AchatLivrePartiellement as $key => $value) {
+        // $achat = $this->commande->find($value->vente_id);
+        $qteTotalPartiel = 0;
+        $this->pdf->SetTextColor(0,0,0);
+        if($dateRapport !== explode(' ',$value->date_vente)[0]){
+          $this->pdf->SetTextColor(255,0,0);
+        }
+        $this->pdf->Cell(14,5,utf8_decode($value->numero_commande),1,0,'L');
+        $this->pdf->SetTextColor(0,0,0);
+        $venteDetailArray = array();
+        for($i = 0; $i < count($allArticle); $i++){
+          $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->where('is_validate_livrer',0)->findAll();
+            array_push($venteDetailArray,$detAchat?$detAchat[0]->qte_vendue:'-');
+        }
+        $this->pdf->Row($venteDetailArray);
+      }
+      if(count($AchatLivrePartiellement) < 1){
+        $this->pdf->Cell(287,5,utf8_decode('Pas de facture livrées partiellement'),1,1,'C');
+      }
+
+
+      $this->pdf->SetFont('Helvetica','B',6);
+      $this->pdf->Cell(14,5,'Stock Init R',1,0,'L');
+      $this->pdf->Row($DonneStockInitial);
+
+      $this->pdf->Cell(14,5,'Stock Init V',1,0,'L');
+      $this->pdf->Row($DonneStockInitialVirtuel);
+
+      $this->pdf->Cell(14,5,'Appro Bon',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnement);
+
+      $this->pdf->Cell(14,5,'PV',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementPv);
+
+      $this->pdf->Cell(14,5,'Appro Total',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementTotal);
+
+      $this->pdf->Cell(14,5,'Appr Inter E',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementInterDepot);
+
+      $this->pdf->Cell(14,5,'Appr Inter R',1,0,'L');
+      $this->pdf->Row($DonneApprovisionnementInterDepotRecu);
+
+
+      // -====== CALCUL TOTAUX ==========//
+      // -====== CALCUL TOTAUX ==========//
+      // -====== CALCUL TOTAUX ==========//
+      // -====== CALCUL TOTAUX ==========//
+
+
+    //RECHERCHE QUANTITE TOTAL VENDU PAR ARTICLE
+      $this->pdf->SetFont('Helvetica','B',6);
+      $this->pdf->SetWidths($enteTableArticle);
+      $this->pdf->Cell(14,5,'Total vendu',1,0,'L');
+      $TotalArticleVenduPayer =  array();
+
+      for($i = 0; $i < count($allArticle); $i++){
+        $qteTotal = 0;
+        foreach ($AchatsHistoFacturePayeCalcul as $key => $value) {
+          $detAchatPaye = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('created_at',$dateRapport,'after')->findAll();
+          if($detAchatPaye){
+            $qteTotal = $qteTotal + $detAchatPaye[0]->qte_vendue;
+          }else{
+            $qteTotal = $qteTotal + 0;
+          }
+        }
+        array_push($TotalArticleVenduPayer, $qteTotal);
+      }
+      $this->pdf->Row($TotalArticleVenduPayer);
+
+
+
+
+      //RECHERCHE QUNATITE TOTAL LIVRER
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->SetWidths($enteTableArticle);
+        $this->pdf->Cell(14,5,utf8_decode('Total livré'),1,0,'L');
+        $TotalArticleVenduEtLivre = array();
+
+        for($i = 0; $i < count($allArticle); $i++){
+          $qteTotal = 0;
+          foreach ($AchatsHistoLivre as $key => $value) {
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->Where('is_validate_livrer',1)->like('updated_at',$dateRapport,'after')->findAll();
+            if($detAchat){
+              $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+            }else{
+              $qteTotal = $qteTotal + 0;
+            }
+          }
+          array_push($TotalArticleVenduEtLivre, $qteTotal);
+        }
+        $this->pdf->Row($TotalArticleVenduEtLivre);
+
+
+
+      // //CALCUL TOTATL ARTICLE PAYE MAIS LIVRER PARTIELLEMENT
+      // $qteTotalPayeMaisPasLivre = array();
+      // for($i = 0; $i < count($allArticle); $i++){
+      //   $qteTotal = 0;
+      //   foreach ($AchatLivrePartiellement as $key => $value) {
+      //       $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->vente_id)->Where('articles_id',$allArticle[$i]->id)->like('updated_at',$dateRapport,'after')->Where('is_validate_livrer',0)->findAll();
+      //       if($detAchat){
+      //         $qteTotal = $qteTotal + $detAchat[0]->qte_vendue;
+      //       }else{
+      //         $qteTotal = $qteTotal + 0;
+      //       }
+      //   }
+      //   array_push($qteTotalPayeMaisPasLivre, $qteTotal);
+      // }
+
+
+        //AFFICHAGE NON LIVRER
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->SetWidths($enteTableArticle);
+        $this->pdf->Cell(14,5,utf8_decode('Tot Non livré'),1,0,'L');
+        $TotalArticleVenduNonLivrer =  array();
+
+        for($i = 0; $i < count($allArticle); $i++){
+          $qteTotal = 0;
+          foreach ($AchatHistoroFacturePayeNonLivre as $key => $value) {
+            $detAchatPaye = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$value->id)->Where('articles_id',$allArticle[$i]->id)->like('created_at',$dateRapport,'after')->findAll();
+            if($detAchatPaye){
+              $qteTotal = $qteTotal + $detAchatPaye[0]->qte_vendue;
+            }else{
+              $qteTotal = $qteTotal + 0;
+            }
+          }
+          array_push($TotalArticleVenduNonLivrer, $qteTotal);
+        }
+        $this->pdf->Row($TotalArticleVenduNonLivrer);
+        // $this->pdf->Row($TotalArticleVenduNonPayer);
+
+        //AFFICHAGE TOTAL PAYER MAIS NON  LIVRER
+        // $this->pdf->SetFont('Helvetica','B',6);
+        // $this->pdf->SetWidths($enteTableArticle);
+        // $this->pdf->Cell(14,5,utf8_decode('Tot Rst Part'),1,0,'L');
+        // $this->pdf->Row($qteTotalPayeMaisPasLivre);
+
+
+        //RESTE EN STOCK REEL ET VIRTUEL
+        $this->pdf->SetWidths($enteTableArticle);
+
+        $qteStockResteReelle = array();
+        $qteStockResteVirtuel = array();
+
+        $todayDate = Time::today();
+        $m = strlen($todayDate->getMonth())==1?'0'.$todayDate->getMonth():$todayDate->getMonth();
+        $d = strlen($todayDate->getDay())==1?'0'.$todayDate->getDay():$todayDate->getDay();
+        $compareDate = $todayDate->getYear().'-'.$m.'-'.$d;
+
+        for($i = 0; $i < count($allArticle); $i++){
+          if($compareDate==$dateRapport){
+            $stock = $this->stockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->find();
+            array_push($qteStockResteReelle,$stock[0]->qte_stock);
+            array_push($qteStockResteVirtuel,$stock[0]->qte_stock_virtuel);
+          }else{
+            $dateR = Time::parse($dateRapport);
+            $m = strlen($dateR->getMonth())==1?'0'.$dateR->getMonth():$dateR->getMonth();
+            $dy = $dateR->getDay()+1;
+            $dy = strlen($dy)==1?'0'. $dy:$dy;
+            $dateR = $dateR->getYear().'-'.$m.'-'.$dy;
+            $stockInit = $this->clotureStockModel->Where('depot_id',$idDepot)->Where('articles_id',$allArticle[$i]->id)->Where('date_cloture',$dateR)->find();
+            array_push($qteStockResteReelle,$stockInit ? $stockInit[0]->qte_stock : 0);
+            array_push($qteStockResteVirtuel,$stockInit ? $stockInit[0]->qte_stock_virtuel : 0);
+          }
+        }
+
+        $this->pdf->SetFont('Helvetica','B',6);
+        $this->pdf->Cell(14,5,'Rst Stock R',1,0,'L');
+        $this->pdf->Row($qteStockResteReelle);
+
+        $this->pdf->Cell(14,5,'Rst Stock V',1,0,'L');
+        $this->pdf->Row($qteStockResteVirtuel);
+
+
+
+      $this->response->setHeader('Content-Type', 'application/pdf');
+      // $this->pdf->Output('D',$dateRapport.'_Rapport_journal_de_sorti.pdf');
+      $this->outPut();
+    }
 }

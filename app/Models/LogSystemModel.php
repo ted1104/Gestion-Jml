@@ -23,7 +23,7 @@ class LogSystemModel extends Model{
   public function addLogSys($users, $action, $notice =null){
     //CREATE LOG SYSTEM
     $dataLog = [
-      "users_id" =>$users,
+      "users_id" =>$users == 0 ? null : $users,
       "action_id" =>$action,
       "notice" =>$notice
     ];
