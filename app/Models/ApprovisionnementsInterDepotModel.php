@@ -6,7 +6,7 @@ class ApprovisionnementsInterDepotModel extends Model{
   protected $table = 'g_interne_approvisionnement_inter_depot';
   protected $DBGroup = 'default';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['date_approvisionnement','depots_id_source','depots_id_dest','users_id','status_operation'];
+  protected $allowedFields = ['date_approvisionnement','depots_id_source','depots_id_dest','users_id','user_id_valid','status_operation'];
   protected $useTimestamps = true;
   protected $validationRules = [
     'date_approvisionnement' => 'required|valid_date[Y-m-d]',

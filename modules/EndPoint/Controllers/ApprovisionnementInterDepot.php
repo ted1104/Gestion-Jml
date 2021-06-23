@@ -148,7 +148,7 @@ class ApprovisionnementInterDepot extends ResourceController {
 
 
 
-      $data = ['status_operation'=>2];
+      $data = ['status_operation'=>2,'user_id_valid'=>$iduser];
       if(!$updateData = $this->model->update($idAppro,$data)){
         $status = 400;
         $message = [
