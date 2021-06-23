@@ -315,6 +315,10 @@ var vthis = new Vue({
       prix_transport:0,
       price_transport_id : null,
 
+      //RAPPORT PERSONNEL
+      depots_id_perso : null,
+      dateRapportPersonnel : null
+
 
 
 
@@ -3729,6 +3733,7 @@ var vthis = new Vue({
       this.dateRapportEnd = currentDateWithFormat;
       this.dateRapportDebutAppro = currentDateWithFormat;
       this.dateRapportEndAppro = currentDateWithFormat;
+      this.dateRapportPersonnel = currentDateWithFormat;
     },
     _u_see_detail_tab(data, indLine=null){
       this.codeIdArticlePrint = data.id;
@@ -4554,6 +4559,14 @@ var vthis = new Vue({
       day =  day.toString().length ==1 ? '0'+day: day;
       this.dateRapportEndAppro = date.getFullYear()+'-'+month+'-'+day;
       //console.log(this.dateRapport);
+    },
+    dateRapportPersonnel:function(val){
+      var date = new Date(val);
+      var month = date.getMonth()+1;
+      month = month.toString().length ==1 ? '0'+month: month;
+      var day = date.getDate();
+      day =  day.toString().length ==1 ? '0'+day: day;
+      this.dateRapportPersonnel = date.getFullYear()+'-'+month+'-'+day;
     },
 
     qte_pv_kg : function(val){

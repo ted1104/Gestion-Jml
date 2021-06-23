@@ -135,6 +135,33 @@
 																			</div>
 																		</div>
 																</div>
+
+																<div class="col-md-4 col-lg-4 col-xl-4 ">
+																		<div class="card m-b-30">
+																				<div class="card-header bg-white">
+																						<h5 class="card-title text-black">RAPPORT JOURNAL DE SORTI JOURNALIER DEPOT PERSONNEL </h5>
+																				</div>
+																				<div class="card-body margin-bottom-8">
+																					<div class="form-group">
+																						<label for="dateRapportPersonnel">Date</label>
+																						<vuejs-datepicker input-class="form-control" :bootstrap-styling=true format="yyyy-MM-dd" :clear-button=true v-model="dateRapportPersonnel"></vuejs-datepicker>
+																					</div>
+																					<div class="form-group">
+																						<label for="depots_id_perso">Dépôt</label>
+																						<select class="form-control" v-model="depots_id_perso" @change="get_magasinier_by_depot(depots_id_perso)">
+																							<option v-for="(dp, i) in depotList" :value="dp.id">{{dp.nom}}</option>
+																						</select>
+																					</div>
+																					<div class="form-group">
+				                                    <label for="depots_id">Magasinier Destination</label>
+																						<select class="form-control" v-model="usersDestTransfert">
+																							<option v-for="(u, i) in usersListParDepot" :value="u.id" v-if="u.id != users_id">{{u.nom+' '+u.prenom}}</option>
+																						</select>
+				                                  </div>
+																					<a target="_blank" :href="'<?=base_url() ?>/rapport-journal-de-sorti-par-magazinier/'+usersDestTransfert+'/'+dateRapport+''" class="btn btn-primary">Généré</a>
+																				</div>
+																			</div>
+																	</div>
 											</div>
                     </div>
                     <!-- End XP Col -->
