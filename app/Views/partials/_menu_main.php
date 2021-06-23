@@ -15,13 +15,13 @@
             <?php if(session('users')['info'][0]->roles_id == 1):  ?>
               <li>
                   <a href="<?=base_url('facturier-dashboard') ?>">
-                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                      <i class="mdi mdi-view-dashboard"></i><span>Tableau De Bord</span>
                   </a>
 
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-shopify"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-list-achat') ?>">Achat</a></li>
@@ -32,7 +32,7 @@
 
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Operation-Ventes</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-package-variant"></i><span>G-Operation-Ventes</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-vente') ?>">Créer</a></li>
@@ -42,7 +42,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-quadcopter"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-article') ?>">Créer</a></li>
@@ -73,12 +73,12 @@
               </li>
               <li>
                   <a href="<?=base_url('admin-list-negotiation-achat') ?>">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Negotiation</span>
+                      <i class="mdi mdi-all-inclusive"></i><span>G-Negotiation</span>
                   </a>
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-adjust"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
 
                   </a>
                   <ul class="xp-vertical-submenu">
@@ -91,7 +91,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-table"></i><span>G-Caisses</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-currency-usd"></i><span>G-Caisses</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-caisse') ?>">Caissiers</a></li>
@@ -113,7 +113,7 @@
               </li> -->
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-table"></i><span>G-Config</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-settings"></i><span>G-Config</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-config-depot') ?>">C-Dépôt</a></li>
@@ -125,7 +125,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-table"></i><span>G-Utilisateurs</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-account-settings"></i><span>G-Utilisateurs</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('admin-add-users') ?>">Créer</a></li>
@@ -135,7 +135,13 @@
 
               <li>
                   <a href="<?=base_url('admin-rapport') ?>">
-                      <i class="mdi mdi-email"></i><span>Rapport</span>
+                      <i class="mdi mdi-chart-areaspline"></i><span>Rapport</span>
+                  </a>
+
+              </li>
+              <li>
+                  <a href="<?=base_url('admin-log-systeme') ?>">
+                      <i class="mdi mdi-calendar-check"></i><span>Logs</span>
                   </a>
 
               </li>
@@ -145,12 +151,12 @@
             <?php if(session('users')['info'][0]->roles_id == 2): ?>
               <li>
                   <a href="<?=base_url('gerant-dashboard') ?>">
-                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                      <i class="mdi mdi-view-dashboard"></i><span>Tableau De Bord</span>
                   </a>
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-shopify"></i><span>G-Achat</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('gerant-list-achat') ?>">Achat</a></li>
@@ -161,7 +167,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-quadcopter"></i><span>G-Articles</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('gerant-stock') ?>">Stock</a></li>
@@ -192,7 +198,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-adjust"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
 
@@ -205,7 +211,7 @@
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
                 <li>
                   <a href="<?=base_url('gerant-config-system') ?>">
-                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                    <i class="mdi mdi-settings"></i><span>C-Système</span>
                   </a>
                 </li>
               <?php endif; ?>
@@ -215,13 +221,13 @@
             <?php if(session('users')['info'][0]->roles_id == 3): ?>
               <li>
                   <a href="<?=base_url('caissier-dashboard') ?>">
-                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                      <i class="mdi mdi-view-dashboard"></i><span>Tableau De Bord</span>
                   </a>
 
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-shopify"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <?php if(session('users')['info'][0]->is_main == 1): ?>
@@ -278,7 +284,7 @@
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
                 <li>
                   <a href="<?=base_url('caissier-config-system') ?>">
-                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                    <i class="mdi mdi-settings"></i><span>C-Système</span>
                   </a>
                 </li>
               <?php endif; ?>
@@ -288,13 +294,13 @@
             <?php if(session('users')['info'][0]->roles_id == 4): ?>
               <li>
                   <a href="<?=base_url('facturier-dashboard') ?>">
-                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                      <i class="mdi mdi-view-dashboard"></i><span>Tableau De Bord</span>
                   </a>
 
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-shopify"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                       <li><a href="<?=base_url('facturier-add-achat') ?>">Créer</a></li>
@@ -327,7 +333,7 @@
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
                 <li>
                   <a href="<?=base_url('facturier-config-system') ?>">
-                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                    <i class="mdi mdi-settings"></i><span>C-Système</span>
                   </a>
                 </li>
               <?php endif; ?>
@@ -348,13 +354,13 @@
             <?php if(session('users')['info'][0]->roles_id == 5): ?>
               <li>
                   <a href="<?=base_url('magaz-dashboard') ?>">
-                      <i class="mdi mdi-email"></i><span>Tableau De Bord</span>
+                      <i class="mdi mdi-view-dashboard"></i><span>Tableau De Bord</span>
                   </a>
 
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-shopify"></i><span>G-Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-list-achat') ?>">Mes Achats</a></li>
@@ -371,7 +377,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Stock</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-stocking"></i><span>G-Stock</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
                     <li><a href="<?=base_url('magaz-stock') ?>">Mon stock</a></li>
@@ -401,7 +407,7 @@
               </li>
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-chart-areaspline"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-adjust"></i><span>G-Approvisionnement</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
 
@@ -438,7 +444,7 @@
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
                 <li>
                   <a href="<?=base_url('magaz-config-system') ?>">
-                    <i class="mdi mdi-chart-areaspline"></i><span>C-Système</span>
+                    <i class="mdi mdi-settings"></i><span>C-Système</span>
                   </a>
                 </li>
               <?php endif; ?>
