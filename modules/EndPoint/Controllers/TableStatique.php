@@ -13,6 +13,7 @@ use App\Models\UsersModel;
 use App\Models\UsersAuthModel;
 use App\Models\StMotifDecaissementExterneModel;
 use App\Models\StZoneModel;
+use App\Models\LogSystemModel;
 use CodeIgniter\I18n\Time;
 
 class TableStatique extends ResourceController {
@@ -28,6 +29,7 @@ class TableStatique extends ResourceController {
   protected $usersAuthModel = null;
   protected $stMotifDecaissementExterneModel = null;
   protected $stZoneModel = null;
+  protected $logSystemModel = null;
 
   public function __construct(){
     helper(['global']);
@@ -42,6 +44,7 @@ class TableStatique extends ResourceController {
     $this->usersAuthModel = new UsersAuthModel();
     $this->stMotifDecaissementExterneModel = new StMotifDecaissementExterneModel();
     $this->stZoneModel = new StZoneModel();
+    $this->logSystemModel = new LogSystemModel();
   }
 
   public function depot_get(){
@@ -335,5 +338,20 @@ class TableStatique extends ResourceController {
       'message' => 'success',
       'data' => $data,
     ]);
+  }
+
+  //LOGS
+  public function logs_get($dateFilter){
+    $d = Time::today();
+    if($dateFilter == "null"){
+      $dateFilter = $d;
+    }
+    $data = $this->logSystemModel->like('created_at',$dateFilter,'after')->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data,
+    ]);
+
   }
 }

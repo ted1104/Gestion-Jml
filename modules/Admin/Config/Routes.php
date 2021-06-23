@@ -39,6 +39,7 @@ $routes->get('admin-historique-pv','Achat::getPvPerdue',['filter' => 'isManager'
 $routes->get('admin-list-achat-a-retirer','Achat::getAchatAretirer',['filter' => 'isManager']);
 
 $routes->get('admin-config-zone','Dashboard::getConfigZone',['filter' => 'isManager']);
+$routes->get('admin-log-systeme','Dashboard::getLogSystem',['filter' => 'isManager']);
 
 
 
