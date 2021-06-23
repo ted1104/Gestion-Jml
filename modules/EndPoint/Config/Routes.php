@@ -20,7 +20,7 @@ $routes->group('api/v1', function($routes){
   $routes->get('motif-decaissement-desable-activated/(:num)','TableStatique::motif_decaissement_enable_desable/$1');
   $routes->post('zone-create-one','TableStatique::zone_create');
   $routes->get('zone-get-all','TableStatique::zone_get');
-  $routes->get('log-get-all/(:any)','TableStatique::logs_get/$1');
+  $routes->get('log-get-all/(:num)/(:num)/(:any)','TableStatique::logs_get/$1/$2/$3');
 
 
 

@@ -341,16 +341,21 @@ class TableStatique extends ResourceController {
   }
 
   //LOGS
-  public function logs_get($dateFilter){
+  public function logs_get($limit,$offset,$dateFilter){
+
     $d = Time::today();
+    $d = explode(' ',$d);
+    $d = $d[0];
     if($dateFilter == "null"){
       $dateFilter = $d;
     }
-    $data = $this->logSystemModel->like('created_at',$dateFilter,'after')->findAll();
+    // print_r($dateFilter);
+    $data = $this->logSystemModel->like('created_at',$dateFilter,'after')->orderBy('id','DESC')->findAll($limit,$offset);
     return $this->respond([
       'status' => 200,
       'message' => 'success',
       'data' => $data,
+      'all' => count($this->logSystemModel->like('created_at',$dateFilter,'after')->findAll()),
     ]);
 
   }

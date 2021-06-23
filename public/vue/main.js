@@ -317,7 +317,8 @@ var vthis = new Vue({
 
       //RAPPORT PERSONNEL
       depots_id_perso : null,
-      dateRapportPersonnel : null
+      dateRapportPersonnel : null,
+
 
 
 
@@ -2980,6 +2981,30 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_logs(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"log-get-all/"+limit+"/"+offset+"/"+this.dateFilter;
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              // console.log(this.dataToDisplay);
+              this.isShow = false;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              // console.log("====Log====");
+              // console.log(this.dataToDisplay);
+              this.currentIndexPage = indexPage;
+              this.paginationTab=[];
+              this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -4483,7 +4508,9 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='admin-config-list-article'){
       this.get_article_config();
     }
-
+    if(pth[this.indexRoute]=='admin-log-systeme'){
+      this.get_logs();
+    }
 
   }
 

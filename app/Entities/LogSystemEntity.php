@@ -16,6 +16,7 @@ class LogSystemEntity extends Entity{
     'time_ago' => null,
     'custom_error_message'=>null,
     'attribute' =>null,
+    'notice'=>null,
     'created_at' => null,
     'updated_at' => null,
     'deleted_at' => null,
@@ -49,12 +50,21 @@ class LogSystemEntity extends Entity{
 
     $heure = explode(" ",$this->attributes["created_at"]);
 
+    //POUR ACTION : TENTATIVE DE CONNEXION AVEC COMPTE BLOQUE == 6
+
+    if($this->attributes['action_id']==5){
+      $name = "Inconnu";
+      $toAddToMessage = ", et il a tenté d'utiliser cet identifiant ".$this->attributes['notice'];
+      $message = $message.''.$toAddToMessage;
+    }
+
     $messageIntegrate = str_replace("###",$name,$message);
     $messageIntegrate = str_replace("$$$",$heure[1],$messageIntegrate);
 
     return [
       "message" => $messageIntegrate,
-      "date" => $heure[0]
+      "date" => $heure[0],
+      "action" => $this->attributes['action_id']
     ];
   }
   public function getTimeAgo(){
