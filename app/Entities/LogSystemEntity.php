@@ -64,7 +64,7 @@ class LogSystemEntity extends Entity{
     return [
       "message" => $messageIntegrate,
       "date" => $heure[0],
-      "action" => $this->attributes['action_id']
+      "name" => $name
     ];
   }
   public function getTimeAgo(){

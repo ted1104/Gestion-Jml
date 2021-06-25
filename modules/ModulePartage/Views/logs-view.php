@@ -40,7 +40,7 @@
                                     <div v-for="(dt, index) in dataToDisplay" class="xp-actions-history">
                                         <div class="xp-actions-history-list">
                                             <div class="xp-actions-history-item">
-                                              <h6 class="mb-1 text-black">{{dt.action_id.name}} - {{dt.users_id}}</h6>
+                                              <h6 class="mb-1 text-black">{{dt.action_id.name}} - {{dt.custom_error_message.name}}</h6>
                                               <p class="text-muted font-12">Séverité : <span :class="dt.action_id.severite ==1 ? 'text-success font-bold' : (dt.action_id.severite ==2 ? 'text-warning font-bold' :'text-danger font-bold')">{{dt.action_id.severite ==1 ? 'Informationel' : (dt.action_id.severite ==2 ? 'Critique' :'Grave')}}</span></p>
                                               <p class="text-muted font-12">{{ dt.custom_error_message.date}} - {{dt.time_ago}}</p>
 
