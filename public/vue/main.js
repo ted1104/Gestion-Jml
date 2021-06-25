@@ -4049,6 +4049,31 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    _u_change_droit_access_dynamique(indexAccess){
+      var userID = this.codeIdArticlePrint;
+      let newurl = null;
+      newurl = this.url+"users-change-access/"+userID+"/"+indexAccess;
+      this.messageError = false;
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+                if(response.data.message.success !=null){
+                  var err = response.data.message.success;
+                  this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  this.get_users_admin();
+                  // this.get_article();
+                  // this.isLoadSaveMainButton = false;
+                  // this.tabListData=[];
+                  return;
+                }
+                var err = response.data.message.errors;
+                this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                // this.isLoadSaveMainButton = false;
+            })
+            .catch(error =>{
+              console.log(error);
+            })
+    },
     _u_update_article(art, index){
       this.idElementSelected = art.id;
       // this.wantToUpdate = false;

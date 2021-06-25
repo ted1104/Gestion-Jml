@@ -615,8 +615,7 @@ class Users extends ResourceController {
     ]);
   }
 
-  public function setAccessToFx($idUser){
-    $indexAccess=0;
+  public function setAccessToFx($idUser,$indexAccess){
     $TabAccess =[
       [
         "champs"=>"g_rapport_sorti_depot_journalier_detail",
@@ -624,23 +623,23 @@ class Users extends ResourceController {
       ],
       [
         "champs"=>"g_rapport_sorti_magasinier_journalier_detail",
-        "msg" => "Un messafe"
+        "msg" => "Le droit d'accès au rapport journalier de sorti de magasinier détaillé"
       ],
       [
         "champs"=>"g_rapport_stock_general",
-        "msg" => "Un messafe"
+        "msg" => "Le droit d'accès au rapport du stock général"
       ],
       [
         "champs"=>"g_rapport_financier",
-        "msg" => "Un messafe"
+        "msg" => "Le droit d'accès au rapport financier"
       ],
       [
         "champs"=>"g_rapport_sorti_entree",
-        "msg" => "Un messafe"
+        "msg" => "Le droit d'accès au rapport de sorti et entrée"
       ],
       [
         "champs"=>"g_rapport_approvisionnement",
-        "msg" => "Un messafe"
+        "msg" => "Le droit d'accès au rapport d'approvisionnement"
       ]
     ];
     $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();

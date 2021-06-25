@@ -163,30 +163,76 @@
 																		<div class="col-md-12 text-left">
 																			<h5 class="card-title">DROIT DU COMPTE</h5>
 																		</div>
+
+																		<div class="col-md-12 text-left">
+																			<h6 class="card-title text-info">GESTION </h6>
+
+																		</div>
+
+
 																		<div class="col-md-12">
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" id="ch" class="custom-control-input" @change="_u_change_droit_access(1)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_pv==1? 'checked':'':''">
-																				<label class="custom-control-label" for="ch">Gestion PV</label>
+																				<label class="custom-control-label" for="ch">PV</label>
 																			</div>
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" id="chs" class="custom-control-input" @change="_u_change_droit_access(2)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_achat_partiels==1? 'checked':'':''">
-																				<label class="custom-control-label" for="chs">Gestion Achat partiels</label>
+																				<label class="custom-control-label" for="chs">Achat partiels</label>
 																			</div>
+																		</div>
+																		<br/>
+																		<br/>
+																		<div class="col-md-12 text-left">
+																			<h6 class="card-title text-info">SYSTEME </h6>
+																		</div>
+
+																		<div class="col-md-12">
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" id="chss" class="custom-control-input" @change="_u_change_droit_access(3)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme==1? 'checked':'':''">
 																				<label class="custom-control-label" for="chss">Accès Menu Système</label>
 																			</div>
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" id="chsss" class="custom-control-input" @change="_u_change_droit_access(4)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme_cloture_stock==1? 'checked':'':''">
-																				<label class="custom-control-label" for="chsss">Accès Système : Clôture Stock</label>
+																				<label class="custom-control-label" for="chsss">Clôture Stock</label>
 																			</div>
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" id="chssss" class="custom-control-input" @change="_u_change_droit_access(5)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme_cloture_caisse==1? 'checked':'':''">
-																				<label class="custom-control-label" for="chssss">Accès Système : Clôture Caisse</label>
+																				<label class="custom-control-label" for="chssss">Clôture Caisse</label>
 																			</div>
 																			<div class="custom-control custom-checkbox custom-control-inline">
 																				<input type="checkbox" id="chsssss" class="custom-control-input" @change="_u_change_droit_access(6)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_systeme_operation_compte==1? 'checked':'':''">
-																				<label class="custom-control-label" for="chsssss">Accès Système : Opérations Comptes</label>
+																				<label class="custom-control-label" for="chsssss">Opérations Comptes</label>
+																			</div>
+																		</div>
+																		<br/>
+																		<br/>
+																		<div class="col-md-12 text-left">
+																			<h6 class="card-title text-info">RAPPORT </h6>
+																		</div>
+																		<div class="col-md-12">
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chssp" class="custom-control-input" @change="_u_change_droit_access_dynamique(0)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_rapport_sorti_depot_journalier_detail==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chssp">Rapport Sorti Journalier Dépot Détaillé </label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chsspp" class="custom-control-input" @change="_u_change_droit_access_dynamique(1)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_rapport_sorti_magasinier_journalier_detail==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chsspp">Rapport Sorti Journalier Magasinier Détaillé </label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chssppp" class="custom-control-input" @change="_u_change_droit_access_dynamique(2)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_rapport_stock_general==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chssppp">Rapport Stock Général </label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chssppkk" class="custom-control-input" @change="_u_change_droit_access_dynamique(3)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_rapport_financier==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chssppkk">Rapport Financier </label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chsspkk" class="custom-control-input" @change="_u_change_droit_access_dynamique(4)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_rapport_sorti_entree==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chsspkk">Rapport Sorti Entré </label>
+																			</div>
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" id="chssptt" class="custom-control-input" @change="_u_change_droit_access_dynamique(5)" :checked="detailTab.logic_droit_access.length > 0 ? detailTab.logic_droit_access[0].g_rapport_approvisionnement==1? 'checked':'':''">
+																				<label class="custom-control-label" for="chssptt">Rapport Approvisionnement </label>
 																			</div>
 																		</div>
 
