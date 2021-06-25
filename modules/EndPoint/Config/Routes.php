@@ -47,6 +47,8 @@ $routes->group('api/v1', function($routes){
   $routes->get('users-access-system-operation-comptes/(:num)','Users::changeAccessToSystemOperationCompte/$1');
   $routes->get('users-check-correct-password/(:num)/(:any)','Users::CheckIfPasswordIsCorrect/$1/$2');
   $routes->get('users-get-magaz-by-depot/(:num)','Users::users_get_magasinier_by_depot/$1');
+  $routes->get('users-change-access/(:num)','Users::setAccessToFx/$1');
+
 
   //2. USERS CLIENTS
   $routes->get('client-get-all/(:num)/(:num)','Users::client_get/$1/$2');

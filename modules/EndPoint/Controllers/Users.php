@@ -615,6 +615,80 @@ class Users extends ResourceController {
     ]);
   }
 
+  public function setAccessToFx($idUser){
+    $indexAccess=0;
+    $TabAccess =[
+      [
+        "champs"=>"g_rapport_sorti_depot_journalier_detail",
+        "msg" => "Le droit d'acces au rapport journalier de sorti de dépôt détaillé"
+      ],
+      [
+        "champs"=>"g_rapport_sorti_magasinier_journalier_detail",
+        "msg" => "Un messafe"
+      ],
+      [
+        "champs"=>"g_rapport_stock_general",
+        "msg" => "Un messafe"
+      ],
+      [
+        "champs"=>"g_rapport_financier",
+        "msg" => "Un messafe"
+      ],
+      [
+        "champs"=>"g_rapport_sorti_entree",
+        "msg" => "Un messafe"
+      ],
+      [
+        "champs"=>"g_rapport_approvisionnement",
+        "msg" => "Un messafe"
+      ]
+    ];
+    $userHaveAccess = $this->droitAccessModel->Where('users_id',$idUser)->find();
+    $string = $TabAccess[$indexAccess]["champs"];
+    if(!$userHaveAccess){
+      $data = ['users_id' => $idUser ,$string=>1,'g_systeme' => 1];
+      if(!$insertData = $this->droitAccessModel->insert($data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $message = [
+          'success' => $TabAccess[$indexAccess]["msg"].' a été activé avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }else{
+
+      $data = [ $string => $userHaveAccess[0]->$string ? 0 : 1 ];
+      if(!$this->droitAccessModel->update($userHaveAccess[0]->id,$data)){
+        $status = 400;
+        $message = [
+          'success' =>null,
+          'errors'=>$this->droitAccessModel->errors()
+        ];
+        $data = null;
+      }else{
+        $status = 200;
+        $text = $userHaveAccess[0]->$string ? 'desactivé' : 'activé';
+        $message = [
+          'success' => $TabAccess[$indexAccess]["msg"].' a été '.$text.' avec succès',
+          'errors' => null
+        ];
+        $data = 'null';
+      }
+    }
+    return $this->respond([
+      'status' => $status=200,
+      'message' => $message,
+      'data' => $data
+    ]);
+  }
+
   public function users_get_magasinier_by_depot($idDepot){
     $data = $this->model->select('id,nom,prenom')->Where('roles_id',5)->Where('depot_id',$idDepot)->findAll();
     return $this->respond([
