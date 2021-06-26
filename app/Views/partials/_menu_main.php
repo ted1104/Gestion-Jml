@@ -14,7 +14,7 @@
             <!-- MENU MANAGER -->
             <?php if(session('users')['info'][0]->roles_id == 1):  ?>
               <li>
-                  <a href="<?=base_url('facturier-dashboard') ?>">
+                  <a href="<?=base_url('admin-dashboard') ?>">
                       <i class="mdi mdi-view-dashboard"></i><span>Tableau De Bord</span>
                   </a>
 
