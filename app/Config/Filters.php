@@ -31,6 +31,9 @@ class Filters extends BaseConfig
 		'isMagazinier'=>[
 			\App\Filters\IsLoggedIn::class,
 			\App\Filters\IsLoggedAsMagazinier::class
+		],
+		'isAuthorizedToAccessRapport'=>[
+			\App\Filters\IsLoggedAnCanAccessRapport::class,
 		]
 
 		// 'isLoggedAsManager'=>\App\Filters\IsLoggedAsManager::class

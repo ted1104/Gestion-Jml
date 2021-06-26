@@ -68,7 +68,8 @@ class Dashboard extends BaseController {
     $data = [
       'titlePage' => 'RAPPORTS : ADMINISTRATION'
     ];
-    echo view($this->linkMod.'\rapport\rapport-view', $data);
+    // echo view($this->linkMod.'\rapport\rapport-view', $data);
+    echo view('Modules\ModulePartage\Views\rapport\rapport-view', $data);
   }
   public function getConfigSystem(){
     $data = [

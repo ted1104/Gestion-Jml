@@ -4483,7 +4483,7 @@ var vthis = new Vue({
       this.get_decaisssement_externe_admin();
       this.get_destination_motif_decaissement();
     }
-    if(pth[this.indexRoute] == 'admin-rapport'){
+    if(pth[this.indexRoute] == 'admin-rapport' ||pth[this.indexRoute] == 'gerant-rapport'){
       this.get_depots();
     }
     if(pth[this.indexRoute]=='admin-config-system' || pth[this.indexRoute]=='facturier-config-system' || pth[this.indexRoute] == 'caissier-config-system' || pth[this.indexRoute]=='magaz-config-system' || pth[this.indexRoute]=='gerant-config-system'){

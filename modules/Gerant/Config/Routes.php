@@ -13,3 +13,4 @@ $routes->get('gerant-add-pv-historique','Dashboard::addPvPerdue',['filter' => 'i
 $routes->get('gerant-historique-pv','Dashboard::getPvPerdue',['filter' => 'isGerant']);
 $routes->get('gerant-stock-personnel','Dashboard::getStockPersonnel',['filter' => 'isGerant']);
 $routes->get('gerant-histo-transfert','Dashboard::getHistoTransfert',['filter' => 'isGerant']);
+$routes->get('gerant-rapport','Dashboard::getRapport',['filter' => 'isGerant']);

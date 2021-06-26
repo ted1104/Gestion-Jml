@@ -42,7 +42,7 @@
                             <a class="dropdown-toggle user-profile-img text-white" href="http://169.255.189.89:8090/" target="_blank" role="button" id="xp-notification">
                                 <i class="mdi mdi-camera font-25 v-a-m"></i>
                             </a>
-                            <a class="dropdown-toggle user-profile-img text-white" href="https://webmail1.hostinger.com/" target="_blank" role="button" id="xp-notification">
+                      <a class="dropdown-toggle user-profile-img text-white" href="https://webmail1.hostinger.com/" target="_blank" role="button" id="xp-notification">
                                 <i class="mdi mdi-email font-25 v-a-m"></i>
                             </a>
                           <?php endif; ?>

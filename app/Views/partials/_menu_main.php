@@ -147,7 +147,7 @@
               </li>
             <?php endif; ?>
 
-            <!-- MENU GERANT -->
+            <!-- MENU GERANT OU CAPS -->
             <?php if(session('users')['info'][0]->roles_id == 2): ?>
               <li>
                   <a href="<?=base_url('gerant-dashboard') ?>">
@@ -206,6 +206,12 @@
                       <li><a href="<?=base_url('gerant-histo-appro-inter-depot') ?>">Historique Inter-Dépôt</a></li>
                       <li><a href="<?=base_url('gerant-histo-transfert') ?>">Historique Transferts</a></li>
                   </ul>
+
+              </li>
+              <li>
+                  <a href="<?=base_url('gerant-rapport') ?>">
+                      <i class="mdi mdi-chart-areaspline"></i><span>Rapport</span>
+                  </a>
 
               </li>
               <?php if(session('accessDroit')['g_systeme'] == 1): ?>
