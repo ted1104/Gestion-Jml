@@ -233,10 +233,10 @@
 																<br>
 																<div class="row">
 																	<span class="col-md-12">Achat Normal <span v-if="det.is_faveur==1" class="text-success">avec faveur</span></span>
-
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Prix: <br> {{det.prix_unitaire}} USD</span>
 																	<span :class="det.is_negotiate==2?'col-md-4 price-bare':'col-md-4'">Total: <br> {{parseFloat(det.qte_vendue)* parseFloat(det.prix_unitaire)}} USD</span>
 																	<span :class="col-md-4">Prix Transp: <br> {{parseFloat(det.prix_transport)}} USD</span>
+																	
 																</div>
 																<br>
 																<!-- <div class="row">

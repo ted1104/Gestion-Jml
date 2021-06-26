@@ -14,6 +14,7 @@ use App\Models\CaisseModel;
 use App\Models\StockModel;
 use App\Models\StockPersonnelModel;
 use App\Models\AretirerModel;
+use Modules\EndPoint\Controllers\OperationCaisseEncaissement;
 
 
 
@@ -28,6 +29,7 @@ class Commandes extends ResourceController {
   protected $stockModel = null;
   protected $stockPersonnelModel = null;
   protected $aretirerModel = null;
+  protected $operationCaisseController = null;
 
   public function __construct(){
     helper(['global']);
@@ -39,6 +41,7 @@ class Commandes extends ResourceController {
     $this->stockModel = new StockModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
     $this->aretirerModel = new AretirerModel();
+    $this->operationCaisseController = new OperationCaisseEncaissement();
   }
   public function commandes_get(){
     $data = $this->model->orderBy('id','DESC')->findAll();
@@ -1670,6 +1673,20 @@ class Commandes extends ResourceController {
     }
     return round($sommesTotal,2);
   }
+  public function sommesMontantTotalDeBus($conditionStatus,$condition){
+    $sommesTotal = 0;
+    $allVente = $this->model->Where('is_transported',1)->Where($conditionStatus)->Where($condition)->findAll();
+    foreach ($allVente as $key) {
+      $detail = $this->commandesDetailModel->Where('vente_id',$key->id)->findAll();
+      $sommes= 0;
+      foreach ($detail as $key => $value) {
+        $montant =$value->prix_transport;
+        $sommes +=$montant;
+      }
+      $sommesTotal+=$sommes;
+    }
+    return round($sommesTotal,2);
+  }
   public function NbreAchatByTypeNegotiation($statusCommandeNegotiation){
     return $array =[
       'negotiation_attente'=>count($this->model->orderBy('id','DESC')->Where('status_vente_id',1)->Where('is_negotiate',1)->findAll()),
@@ -1679,6 +1696,27 @@ class Commandes extends ResourceController {
   }
 
 
+//DASHBORD eio_fdatasync
+
+public function dashboard_get(){
+  $d = Time::today();
+  $d = explode(' ',$d);
+  $d = $d[0];
+  $condition =['date_vente'=> $d];
+  $conditionLike = [];
+  $conditionDate =['date_decaissement'=> $d];
+  $ventesNbre = $this->commandeByTypeByuser(null,'logic_article',$condition);
+  return $this->respond([
+    'status' => 200,
+    'message' => 'success',
+    'data' => [
+      "ventes" => $ventesNbre['payer'] + $ventesNbre['livrer'],
+      "sommes" => $this->sommesMontantTotalParTypeDeVente(['status_vente_id'=>2],$condition,$conditionLike) + $this->sommesMontantTotalParTypeDeVente(['status_vente_id'=>3],$condition,$conditionLike),
+      "sommesBus" =>$this->sommesMontantTotalDeBus(['status_vente_id'=>2],$condition) + $this->sommesMontantTotalDeBus(['status_vente_id'=>3],$condition),
+      'totalDecaissement' => $this->operationCaisseController->sommesMontantDecaissementExterne([],$conditionDate,[])
+    ]
+  ]);
+}
 //HELPER MODEL FUNCTION
   // public function
 

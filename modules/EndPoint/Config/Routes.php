@@ -24,6 +24,7 @@ $routes->group('api/v1', function($routes){
 
 
 
+
   //ENDPOINTS LOGIQUES DATA
   //1.USERS
   $routes->get('users-get-all/(:num)/(:num)','Users::users_get/$1/$2');
@@ -113,6 +114,7 @@ $routes->group('api/v1', function($routes){
   $routes->post('save-article-retire-commande','Commandes::save_article_retirer_commande');
   $routes->post('retourner-livrer-en-payer','Commandes::retourne_facture_livre_en_paye');
   $routes->post('supprimer-facturer-payer','Commandes::supprimer_facture_payee');
+  $routes->get('dashboard-get', 'Commandes::dashboard_get');
 
   //3. APPROVISIONNEMENT
   $routes->get('approvisionnement-get-all/(:any)/(:num)/(:num)','Approvisionnement::approvisionnement_get/$1/$2/$3');

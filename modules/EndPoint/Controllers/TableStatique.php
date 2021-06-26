@@ -14,6 +14,7 @@ use App\Models\UsersAuthModel;
 use App\Models\StMotifDecaissementExterneModel;
 use App\Models\StZoneModel;
 use App\Models\LogSystemModel;
+use App\Models\CommandesModel;
 use CodeIgniter\I18n\Time;
 
 class TableStatique extends ResourceController {
@@ -30,6 +31,7 @@ class TableStatique extends ResourceController {
   protected $stMotifDecaissementExterneModel = null;
   protected $stZoneModel = null;
   protected $logSystemModel = null;
+  protected $commandesModel =null;
 
   public function __construct(){
     helper(['global']);
@@ -45,6 +47,7 @@ class TableStatique extends ResourceController {
     $this->stMotifDecaissementExterneModel = new StMotifDecaissementExterneModel();
     $this->stZoneModel = new StZoneModel();
     $this->logSystemModel = new LogSystemModel();
+    $this->commandesModel = new CommandesModel();
   }
 
   public function depot_get(){
@@ -359,4 +362,5 @@ class TableStatique extends ResourceController {
     ]);
 
   }
+  
 }
