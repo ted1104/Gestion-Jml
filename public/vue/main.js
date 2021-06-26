@@ -319,6 +319,12 @@ var vthis = new Vue({
       depots_id_perso : null,
       dateRapportPersonnel : null,
 
+      //DASHBORD DATA
+      D_NbreVente : 0,
+      D_MontantVente : 0,
+      D_MontantBus : 0,
+      D_MontantDecaiss : 0
+
 
 
 
@@ -3005,6 +3011,31 @@ var vthis = new Vue({
               console.log(error);
             })
     },
+    get_dashboard_admin(limit=this.PerPaged,offset=0, indexPage=0){
+      const newurl = this.url+"dashboard-get";
+
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              this.D_NbreVente=response.data.data.NbreVentes;
+              this.D_MontantVente=response.data.data.SommesMontantVentes;
+              this.D_MontantBus=response.data.data.SommesMontantBus;
+              this.D_MontantDecaiss=response.data.data.totalMontantDecaissement;
+              // console.log(this.dataToDisplay);
+              // this.isShow = false;
+              // if(this.dataToDisplay.length < 1){
+              //   this.isNoReturnedData = true;
+              // }
+              // // console.log("====Log====");
+              // // console.log(this.dataToDisplay);
+              // this.currentIndexPage = indexPage;
+              // this.paginationTab=[];
+              // this._u_fx_generate_pagination(response.data.all);
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
 
 
     //QUELQUES FONCTIONS COTE ADMINISTRATION
@@ -4535,6 +4566,9 @@ var vthis = new Vue({
     }
     if(pth[this.indexRoute]=='admin-log-systeme'){
       this.get_logs();
+    }
+    if(pth[this.indexRoute]=='admin-dashboard'){
+      this.get_dashboard_admin()
     }
 
   }

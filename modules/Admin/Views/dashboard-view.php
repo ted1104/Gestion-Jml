@@ -28,14 +28,18 @@
                     <div class="col-md-12 col-lg-12 col-xl-12">
 											<div class="row">
 
+
+
+
+
 											<!-- End XP Col -->
 											<div class="col-md-6 col-lg-6 col-xl-3">
 													<div class="card m-b-30">
 															<div class="card-body">
 																	<div class="xp-widget-box">
 																			<div class="float-left">
-																					<h4 class="xp-counter text-primary">2580</h4>
-																					<p class="mb-0 text-muted">Total Factures Ventes</p>
+																					<h4 class="xp-counter text-primary">{{D_NbreVente}}</h4>
+																					<p class="mb-0 text-muted">Nbre Factures</p>
 																			</div>
 																			<div class="float-right">
 																					<div class="xp-widget-icon xp-widget-icon-bg bg-primary-rgba">
@@ -55,7 +59,7 @@
 															<div class="card-body">
 																	<div class="xp-widget-box">
 																			<div class="float-left">
-																					<h4 class="xp-counter text-success">55790</h4>
+																					<h4 class="xp-counter text-success">{{D_MontantVente}} USD</h4>
 																					<p class="mb-0 text-muted">Total Montant Ventes</p>
 																			</div>
 																			<div class="float-right">
@@ -76,7 +80,7 @@
 															<div class="card-body">
 																	<div class="xp-widget-box">
 																			<div class="float-left">
-																					<h4 class="xp-counter text-warning">930</h4>
+																					<h4 class="xp-counter text-warning">{{D_MontantBus}} USD</h4>
 																					<p class="mb-0 text-muted">Total Montant Bus</p>
 																			</div>
 																			<div class="float-right">
@@ -97,12 +101,12 @@
 															<div class="card-body">
 																	<div class="xp-widget-box">
 																			<div class="float-left">
-																					<h4 class="xp-counter text-danger">2750</h4>
+																					<h4 class="xp-counter text-danger">{{D_MontantDecaiss}} USD</h4>
 																					<p class="mb-0 text-muted">Total Montant Décaissé</p>
 																			</div>
 																			<div class="float-right">
 																					<div class="xp-widget-icon xp-widget-icon-bg bg-danger-rgba">
-																							<i class="mdi mdi-eye font-30 text-danger"></i>
+																							<i class="mdi mdi-currency-usd font-30 text-danger"></i>
 																					</div>
 																			</div>
 																			<div class="clearfix"></div>

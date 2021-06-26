@@ -1710,10 +1710,10 @@ public function dashboard_get(){
     'status' => 200,
     'message' => 'success',
     'data' => [
-      "ventes" => $ventesNbre['payer'] + $ventesNbre['livrer'],
-      "sommes" => $this->sommesMontantTotalParTypeDeVente(['status_vente_id'=>2],$condition,$conditionLike) + $this->sommesMontantTotalParTypeDeVente(['status_vente_id'=>3],$condition,$conditionLike),
-      "sommesBus" =>$this->sommesMontantTotalDeBus(['status_vente_id'=>2],$condition) + $this->sommesMontantTotalDeBus(['status_vente_id'=>3],$condition),
-      'totalDecaissement' => $this->operationCaisseController->sommesMontantDecaissementExterne([],$conditionDate,[])
+      "NbreVentes" => $ventesNbre['payer'] + $ventesNbre['livrer'],
+      "SommesMontantVentes" => $this->sommesMontantTotalParTypeDeVente(['status_vente_id'=>2],$condition,$conditionLike) + $this->sommesMontantTotalParTypeDeVente(['status_vente_id'=>3],$condition,$conditionLike),
+      "SommesMontantBus" =>$this->sommesMontantTotalDeBus(['status_vente_id'=>2],$condition) + $this->sommesMontantTotalDeBus(['status_vente_id'=>3],$condition),
+      'totalMontantDecaissement' => $this->operationCaisseController->sommesMontantDecaissementExterne([],$conditionDate,[])
     ]
   ]);
 }
