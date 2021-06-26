@@ -27,6 +27,7 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-12 col-xl-12">
                       <div class="row">
+												<?php if(session('accessDroit')['g_rapport_sorti_depot_journalier_detail'] == 1): ?>
 												<div class="col-md-4 col-lg-4 col-xl-4 ">
 	                          <div class="card m-b-30">
 	                              <div class="card-header bg-white">
@@ -47,6 +48,8 @@
 	                              </div>
 	                            </div>
 	                        </div>
+													<?php endif; ?>
+													<?php if(session('accessDroit')['g_rapport_financier'] == 1): ?>
 													<div class="col-md-4 col-lg-4 col-xl-4 ">
 		                          <div class="card m-b-30">
 		                              <div class="card-header bg-white">
@@ -61,6 +64,8 @@
 		                              </div>
 		                            </div>
 		                        </div>
+														<?php endif; ?>
+														<?php if(session('accessDroit')['g_rapport_stock_general'] == 1): ?>
 														<div class="col-md-4 col-lg-4 col-xl-4 ">
 			                          <div class="card m-b-30">
 		                              <div class="card-header bg-white">
@@ -75,7 +80,8 @@
 		                              </div>
 		                            </div>
 		                        </div>
-
+														<?php endif; ?>
+														<?php if(session('accessDroit')['g_rapport_sorti_entree'] == 1): ?>
 														<div class="col-md-4 col-lg-4 col-xl-4 ">
 																<div class="card m-b-30">
 																		<div class="card-header bg-white">
@@ -105,7 +111,8 @@
 																		</div>
 																	</div>
 															</div>
-
+															<?php endif; ?>
+															<?php if(session('accessDroit')['g_rapport_approvisionnement'] == 1): ?>
 															<div class="col-md-4 col-lg-4 col-xl-4 ">
 																	<div class="card m-b-30">
 																			<div class="card-header bg-white">
@@ -135,7 +142,8 @@
 																			</div>
 																		</div>
 																</div>
-
+																<?php endif; ?>
+																<?php if(session('accessDroit')['g_rapport_sorti_magasinier_journalier_detail'] == 1): ?>
 																<div class="col-md-4 col-lg-4 col-xl-4 ">
 																		<div class="card m-b-30">
 																				<div class="card-header bg-white">
@@ -162,8 +170,19 @@
 																				</div>
 																			</div>
 																	</div>
+																		<?php endif; ?>
 											</div>
                     </div>
+
+										<?php if(session('accessDroit')['g_rapport_sorti_depot_journalier_detail'] == 0 && session('accessDroit')['g_rapport_sorti_magasinier_journalier_detail'] == 0 && session('accessDroit')['g_rapport_stock_general'] == 0 && session('accessDroit')['g_rapport_financier'] == 0 && session('accessDroit')['g_rapport_approvisionnement'] == 0 ):?>
+											<div class="messageInfo">
+												<div class="text-center">
+													<img src="<?=base_url() ?>/public/load/empty.png">
+													<h6 class="text-info">Vous n'avez aucun rapport disponible pour l'instant, veuillez contacter l'administrateur du système ou si vous êtes un administrateur, veuillez naviguer dans la partie utilisateur et activer la visibilité de rapports</h6>
+													<h6>Après activation, vous devez vous reconnecter de nouveau afin que les modifications prennent effet!</h6>
+												</div>
+											</div>
+										<?php endif; ?>
                     <!-- End XP Col -->
                 </div>
                 <!-- End XP Row -->

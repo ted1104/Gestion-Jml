@@ -67,6 +67,12 @@ if(! function_exists('getAllDroitAccess')){
       'g_systeme_cloture_stock' => $data ? $data->g_systeme_cloture_stock:0,
       'g_systeme_cloture_caisse' => $data ? $data->g_systeme_cloture_caisse:0,
       'g_systeme_operation_compte' => $data ? $data->g_systeme_operation_compte:0,
+      'g_rapport_sorti_depot_journalier_detail' => $data ? $data->g_rapport_sorti_depot_journalier_detail:0,
+      'g_rapport_sorti_magasinier_journalier_detail' => $data ? $data->g_rapport_sorti_magasinier_journalier_detail:0,
+      'g_rapport_stock_general' => $data ? $data->g_rapport_stock_general:0,
+      'g_rapport_financier' => $data ? $data->g_rapport_financier:0,
+      'g_rapport_sorti_entree' => $data ? $data->g_rapport_sorti_entree:0,
+      'g_rapport_approvisionnement' => $data ? $data->g_rapport_approvisionnement:0,
     ];
   }
 }
