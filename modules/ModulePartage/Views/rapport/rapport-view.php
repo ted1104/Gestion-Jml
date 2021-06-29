@@ -166,7 +166,7 @@
 																							<option v-for="(u, i) in usersListParDepot" :value="u.id" v-if="u.id != users_id">{{u.nom+' '+u.prenom}}</option>
 																						</select>
 				                                  </div>
-																					<a target="_blank" :href="'<?=base_url() ?>/rapport-journal-de-sorti-par-magazinier/'+usersDestTransfert+'/'+dateRapport+''" class="btn btn-primary">Généré</a>
+																					<a target="_blank" :href="'<?=base_url() ?>/rapport-journal-de-sorti-par-magazinier/'+usersDestTransfert+'/'+dateRapportPersonnel+''" class="btn btn-primary">Généré</a>
 																				</div>
 																			</div>
 																	</div>
