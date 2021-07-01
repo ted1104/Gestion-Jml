@@ -2009,7 +2009,7 @@ var vthis = new Vue({
                   this.get_article_config(limit=this.PerPaged,offset=this.currentOffset,indexPage=this.currentIndexPage);
                   // limit=this.PerPaged,offset=0,indexPage=this.currentIndexPage
 
-                  console.log("current offset", this.currentOffset);
+                  // console.log("current offset", this.currentOffset);
 
                   // this.get_article();
                   this.isLoadSaveMainButton = false;
