@@ -4445,7 +4445,7 @@ var vthis = new Vue({
     if(pth[this.indexRoute]=='admin-list-achat' || pth[this.indexRoute]=='gerant-list-achat'){
       this.get_commande_admin();
     }
-    if(pth[this.indexRoute]=='admin-list-achat-partiel'){
+    if(pth[this.indexRoute]=='admin-list-achat-partiel' || pth[this.indexRoute]=='gerant-list-achat-partiel'){
       this.isPartielFecthData = 1;
       this.get_commande_admin(3);
     }
