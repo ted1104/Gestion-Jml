@@ -2030,6 +2030,7 @@ var vthis = new Vue({
       const newurl = this.url+"validate-partiel-article-approvisionnement";
       var form = new FormData();
       form.append('idappro',cmd);
+      form.append('iduser', this.users_id);
       for(var i=0; i< this.checkBoxArticles.length; i++){
         form.append('idarticle[]', this.checkBoxArticles[i]);
     	}

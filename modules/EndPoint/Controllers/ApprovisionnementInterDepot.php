@@ -345,8 +345,14 @@ class ApprovisionnementInterDepot extends ResourceController {
   public function approvisionnement_validate_partiel_articles(){
     $idappro = $this->request->getPost('idappro');
     $idarticle = $this->request->getPost('idarticle');
+    $iduser = $this->request->getPost('iduser');
+
+    $infoAppro = $this->model->find($idappro);
+    $userSource = $infoAppro->users_id->id;
+
     $getAllarticleDeLAppro = $this->approvisionnementsInterDepotDetailModel->Where('approvisionnement_id', $idappro)->Where('is_validate', 0)->findAll();
     if(count($idarticle) < count($getAllarticleDeLAppro)){
+
     for ($i=0; $i < count($idarticle); $i++) {
         $condition = [
           'approvisionnement_id' =>$idappro,
@@ -375,8 +381,11 @@ class ApprovisionnementInterDepot extends ResourceController {
           $QteSource = $initqteSource->qte_stock - $allArticleIn[0]->qte;//ADDITION ANCIENNE + NOUVELLE
 
           $updStockDest = $this->stockModel->update($initqteDest->id,['qte_stock'=>$QteDest,'qte_stock_virtuel'=>$QteVirtuelDest]);
-
           $updStockSource = $this->stockModel->update($initqteSource->id,['qte_stock'=>$QteSource]);
+
+          //UPDATE STOCK PERSONNEL
+          $this->stockPersonnelModel->updateQtePersonnel($iduser,$allArticleIn[0]->articles_id[0]->id,$allArticleIn[0]->qte); //STOCK PERSONNEL DESTINATION
+          $this->stockPersonnelModel->updateQtePersonnel($userSource,$allArticleIn[0]->articles_id[0]->id,$allArticleIn[0]->qte,0); //STOCK PERSONNEL SOURCE
 
           if($updStockSource and $updStockDest){
             if($this->approvisionnementsInterDepotDetailModel->update($allArticleIn[0]->id, ['is_validate'=>1]) and $this->model->update($idappro, ['status_operation'=>1])){
