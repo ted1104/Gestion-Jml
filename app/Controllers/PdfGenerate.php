@@ -543,7 +543,7 @@ class PdfGenerate extends BaseController {
 
   public function rapport_finacier_journalier($dateRapport){
 
-    $dataAllCaissiers = $this->usersModel->Where('roles_id',3)->findAll();
+    $dataAllCaissiers = $this->usersModel->Where('roles_id',3)->orWhere('roles_id', 1)->findAll();
 
     $this->pdf = new TableFpdf('P','mm','A4');
     $this->pdf->AliasNbPages();
