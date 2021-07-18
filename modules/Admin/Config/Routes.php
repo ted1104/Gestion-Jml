@@ -41,6 +41,10 @@ $routes->get('admin-list-achat-a-retirer','Achat::getAchatAretirer',['filter' =>
 $routes->get('admin-config-zone','Dashboard::getConfigZone',['filter' => 'isManager']);
 $routes->get('admin-log-systeme','Dashboard::getLogSystem',['filter' => 'isManager']);
 
+$routes->get('admin-add-decaissement','Dashboard::addDecaissement',['filter' => 'isManager']);
+
+
+
 
 
 

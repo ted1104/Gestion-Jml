@@ -4454,7 +4454,7 @@ var vthis = new Vue({
       // this.get_caissier_main();
       this.get_caissiers();
     }
-    if(pth[this.indexRoute]=='caissier-add-decaissement'){
+    if(pth[this.indexRoute]=='caissier-add-decaissement' || pth[this.indexRoute]=='admin-add-decaissement'){
       this.get_caissier_main();
       this.get_decaisssement_caissier_secondaire();
     }

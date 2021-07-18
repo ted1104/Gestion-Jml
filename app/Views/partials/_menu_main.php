@@ -32,12 +32,30 @@
 
               <li>
                   <a href="javaScript:void();">
-                      <i class="mdi mdi-package-variant"></i><span>G-Operation-Ventes</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      <i class="mdi mdi-package-variant"></i><span>G-Mes-Opérations</span><i class="mdi mdi-chevron-right pull-right"></i>
                   </a>
                   <ul class="xp-vertical-submenu">
-                      <li><a href="<?=base_url('admin-add-vente') ?>">Créer</a></li>
-                      <li><a href="<?=base_url('admin-list-ventes') ?>">Mes Achats</a></li>
-                      <!-- <li><a href="<?=base_url('admin-list-dettes') ?>">Mes Déttes</a></li> -->
+                    <li>
+                      <a href="javaScript:void();">
+                          <span>G-Mes Achats</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      </a>
+                      <ul class="xp-vertical-submenu">
+                          <li><a href="<?=base_url('admin-add-vente') ?>">Créer</a></li>
+                          <li><a href="<?=base_url('admin-list-ventes') ?>">Mes Achats</a></li>
+                          <!-- <li><a href="<?=base_url('admin-list-dettes') ?>">Mes Déttes</a></li> -->
+                      </ul>
+                    </li>
+
+                    <li>
+                      <a href="javaScript:void();">
+                          <span>G-Mes Decaissements</span><i class="mdi mdi-chevron-right pull-right"></i>
+                      </a>
+                      <ul class="xp-vertical-submenu">
+                          <li>
+                            <a href="<?=base_url('admin-add-decaissement') ?>">Créer</a>
+                          </li>
+                      </ul>
+                    </li>
                   </ul>
               </li>
               <li>
@@ -102,6 +120,7 @@
                       <li><a href="table-rwdtable.html">RWD Table</a></li> -->
                   </ul>
               </li>
+
               <!-- <li>
                   <a href="javaScript:void();">
                       <i class="mdi mdi-table"></i><span>G-Clients</span><i class="mdi mdi-chevron-right pull-right"></i>
