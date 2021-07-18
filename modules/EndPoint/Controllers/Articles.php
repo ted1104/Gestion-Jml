@@ -11,6 +11,9 @@ use App\Models\ArticlesConfigFaveurModel;
 use App\Models\StockPersonnelModel;
 use App\Models\TransportPrixArticlesModel;
 use App\Entities\TransportPrixArticlesEntity;
+use App\Models\CommandesModel;
+use App\Models\CommandesDetailModel;
+use App\Models\CommandesStatusHistoriqueModel;
 
 class Articles extends ResourceController {
   protected $format = 'json';
@@ -22,6 +25,9 @@ class Articles extends ResourceController {
   protected $articlesConfigFaveurModel = null;
   protected $stockPersonnelModel = null;
   protected $transportPrixArticlesModel = null;
+  protected $commande;
+  protected $commandesDetailModel = null;
+  protected $commandesStatusHistoriqueModel = null;
 
 
   public function __construct(){
@@ -33,6 +39,9 @@ class Articles extends ResourceController {
     $this->articlesConfigFaveurModel = new ArticlesConfigFaveurModel();
     $this->stockPersonnelModel = new StockPersonnelModel();
     $this->transportPrixArticlesModel = new TransportPrixArticlesModel();
+    $this->commande = new CommandesModel();
+    $this->commandesDetailModel = new CommandesDetailModel();
+    $this->commandesStatusHistoriqueModel = new CommandesStatusHistoriqueModel();
   }
   public function articles_get($limit, $offset){
     $data = $this->model->Where('is_visible', 1)->findAll($limit, $offset);
@@ -958,6 +967,53 @@ class Articles extends ResourceController {
       // 'msg' => fmod($calc, 1) == 0.00
     ]);
   }
+  public function articles_get_all_visible_on_rapport(){
+    $data = $this->model->select('id,code_article,nom_article')->Where('is_show_on_rapport', 1)->findAll();
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'data' => $data
+    ]);
+  }
+
+
+  //RAPPORT GRAPHIQUE DATA
+  public function rapport_graphique_ecoulement_article(){
+    $dates = $this->request->getPost('date');
+    $articles = $this->request->getPost('articles');
+    $series = [];
+
+    for ($i=0; $i < count($articles); $i++) {
+      $artID = explode('/',$articles[$i]);
+      // echo $artID[0];
+      $data = ['name'=>$articles[$i], 'data'=>[]];
+
+      for($p = 0; $p < count($dates); $p++){
+        $date = explode('<br>',$dates[$p]);
+        // echo $date[1];
+          $AchatsHistoLivre = $this->commandesStatusHistoriqueModel->join('g_interne_vente','g_interne_vente_historique_status.vente_id=g_interne_vente.id','left')->Where('g_interne_vente_historique_status.status_vente_id',3)->Where('g_interne_vente.status_vente_id',3)->like('g_interne_vente_historique_status.created_at',$date[1],'after')->groupBy('g_interne_vente_historique_status.vente_id')->findAll();
+
+          $qteTotalLivre = 0;
+          foreach ($AchatsHistoLivre as $key) {
+            $detAchat = $this->commandesDetailModel->selectSum('qte_vendue')->Where('vente_id',$key->vente_id)->Where('articles_id',$artID[0])->Where('is_validate_livrer',1)->like('updated_at',$date[1],'after')->findAll();
+            if($detAchat){
+              $qteTotalLivre += $detAchat[0]->qte_vendue;
+            }
+          }
+        array_push($data['data'],$qteTotalLivre);
+      }
+      array_push($series, $data);
+    }
+
+
+    return $this->respond([
+      'status' => 200,
+      'message' => 'success',
+      'categories' => null,
+      'series' => $series
+    ]);
+  }
+
   public function multitest(){
     print_r($this->request->getPost());
 

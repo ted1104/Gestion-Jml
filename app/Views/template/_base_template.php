@@ -16,20 +16,28 @@
     <link href="<?=base_url() ?>/public/assets/css/style.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url() ?>/public/css/monstyle.css" rel="stylesheet" type="text/css">
     <link href="<?=base_url() ?>/public/assets/plugins/animate/animate.css" rel="stylesheet" type="text/css">
+
     <script type="text/javascript" src="<?=base_url() ?>/public/vue/others.js" defer></script>
     <script type="text/javascript" src="<?=base_url() ?>/public/lib/vue.js" defer></script>
     <script type="text/javascript" src="<?=base_url() ?>/public/lib/axios.min.js" defer></script>
     <script type="text/javascript" src="<?=base_url() ?>/public/vue/main.js" defer></script>
 
-
+    <!-- GRAPHIC IMPLEMENTATIONS -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- <script src="https://code.highcharts.com/modules/series-label.js"></script> -->
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <!-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
+    <script>
+    highcharts = Highcharts
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/highcharts-vue@1.2.0/dist/module/highcharts-vue.js"></script>
     <!-- End CSS -->
   </head>
 
   <body class="xp-vertical">
     <div class="container-main-admin" style="z-index:-100" id="app" @click="_u_fx_bodyClicked">
       <?=$this->renderSection('content') ?>
-
-
 
         <?php if(session()->getFlashData('message')): ?>
         <div class="message-alert u-animation-FromTop cursor-div" v-if="isShowLoginMessage" @click="isShowLoginMessage=false">

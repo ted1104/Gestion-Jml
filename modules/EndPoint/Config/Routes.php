@@ -61,6 +61,8 @@ $routes->group('api/v1', function($routes){
   //2.ARTCILES
   $routes->get('articles-get-all/(:num)/(:num)','Articles::articles_get/$1/$2');
   $routes->get('articles-get-all-config/(:num)/(:num)','Articles::articles_get_all/$1/$2');
+  $routes->get('articles-get-all-rapport','Articles::articles_get_all_visible_on_rapport');
+  $routes->post('rapport-graphique-ecoulement','Articles::rapport_graphique_ecoulement_article');
 
 
   $routes->post('articles-create-one','Articles::articles_create');

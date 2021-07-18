@@ -1,3 +1,4 @@
+Vue.use(HighchartsVue.default);
 var vthis = new Vue({
   el : "#app",
   components: {
@@ -36,6 +37,7 @@ var vthis = new Vue({
       modalTitle :"",
       dateFilter :null,
       dateFilterDisplay : "D'AUJORD'HUI",
+      chartstyle : 'width : 100%',
 
       //  Recherche
       dataToSearch : "",
@@ -87,6 +89,7 @@ var vthis = new Vue({
       ListFiltreData : [], //POUR MENU LISTE
       checkBoxArticles: [],
       checkBoxTransport : [],
+      checkBoxArtilcesDashbord : [],
       ArticleValidateNego : {},
       CritiqueDataTab:[],
       checkBoxAchatSelected:[],
@@ -323,12 +326,72 @@ var vthis = new Vue({
       D_NbreVente : 0,
       D_MontantVente : 0,
       D_MontantBus : 0,
-      D_MontantDecaiss : 0
+      D_MontantDecaiss : 0,
 
+      //RAPPORT GRAPHIQUE
+      categoriesDates : [],
+      seriesData : [],
+      chartOptions: {
+        chart: {
+           type: 'line'
+       },
+        title: {
+          text: "RAPPORT GRAPHIQUE ECOULEMENT ARTICLE .... 7 DERNIERS JOURS"
+        },
+        // subtitle: {
+        //   text: "Source : JML Système"
+        // },
+        xAxis: {
+             categories: []
+         },
+        yAxis: {
+          title: {
+            text: "Quantité(s) écoulée(s)"
+          }
+        },
+        credits : {
+          enabled : true,
+          text : 'FL SYSTEME'
+        },
+        // legend: {
+        //   layout: "vertical",
+        //   align: "center",
+        //   verticalAlign: "middle"
+        // },
 
+        plotOptions: {
+          // series: {
+          //   label: {
+          //     connectorAllowed: false
+          //   },
+          //   pointStart: 2010
+          // }
+          line: {
+              dataLabels: {
+                  enabled: true
+              },
+              enableMouseTracking: false
+          },
+        },
 
-
-
+        series: [],
+        responsive: {
+          rules: [
+            {
+              condition: {
+                maxWidth: 500
+              },
+              // chartOptions: {
+              //   legend: {
+              //     layout: "vertical",
+              //     align: "center",
+              //     verticalAlign: "bottom"
+              //   }
+              // }
+            }
+          ]
+        }
+      }
     }
   },
 
@@ -338,8 +401,9 @@ var vthis = new Vue({
     this._u_get_code_facture();
     this._u_get_today();
     this._u_fx_get_montant();
-    console.log("==on mOunted ==");
-    console.log(this.zone_destination);
+    this._u_fx_calculate_interval_date();
+    // console.log("==on mOunted ==");
+    // console.log(this.zone_destination);
 
 
   },
@@ -411,6 +475,29 @@ var vthis = new Vue({
               this._u_fx_generate_pagination(response.data.all);
 
               this.currentOffset = offset;
+            }).catch(error =>{
+              console.log(error);
+            })
+    },
+    get_article_visible_on_rapport(){
+      const newurl = this.url+"articles-get-all-rapport";
+      this.dataToDisplay=[];
+      if(this.isShow){
+        this.isShow = !this.isShow;
+      }
+      return axios
+            .get(newurl,{headers: this.tokenConfig})
+            .then(response =>{
+              this.dataToDisplay = response.data.data;
+              console.log("Article visible sur rapport");
+              console.log(this.dataToDisplay);
+              this.isShow = false;
+              if(this.dataToDisplay.length < 1){
+                this.isNoReturnedData = true;
+              }
+              // this.currentIndexPage = indexPage;
+              // this.paginationTab=[];
+              // this._u_fx_generate_pagination(response.data.all);
             }).catch(error =>{
               console.log(error);
             })
@@ -3018,7 +3105,8 @@ var vthis = new Vue({
       return axios
             .get(newurl,{headers: this.tokenConfig})
             .then(response =>{
-              this.dataToDisplay = response.data.data;
+              // this.dataToDisplay = response.data.data;
+              // console.log(this.dataToDisplay);
               this.D_NbreVente=response.data.data.NbreVentes;
               this.D_MontantVente=response.data.data.SommesMontantVentes;
               this.D_MontantBus=response.data.data.SommesMontantBus;
@@ -3036,6 +3124,49 @@ var vthis = new Vue({
             }).catch(error =>{
               console.log(error);
             })
+    },
+
+    get_data_graphique(){
+      console.log("Data to send");
+      // console.log(this.categoriesDates);
+      // console.log(this.seriesData);
+        const newurl = this.url+"rapport-graphique-ecoulement";
+        var form = new FormData();
+
+        for(var i=0; i< this.categoriesDates.length; i++){
+          form.append('date[]', this.categoriesDates[i]);
+  			}
+        for(var i=0; i< this.seriesData.length; i++){
+          form.append('articles[]', this.seriesData[i].name);
+  			}
+
+        // if(this.tabListData.length < 1){
+        //   this._u_fx_config_error_message("Erreur",["Veuillez renseigner les articles"],'alert-danger');
+        //   return;
+        // }
+        this.isLoadSaveMainButton = true;
+        this.messageError = false;
+        return axios
+              .post(newurl,form,{headers: this.tokenConfig})
+              .then(response =>{
+                this.chartOptions.series = response.data.series;
+                  console.log(response.data.series);
+                  // if(response.data.message.success !=null){
+                  //   var err = response.data.message.success;
+                  //   this._u_fx_config_error_message("Succès",[err],'alert-success');
+                  //   this._u_fx_form_init_field();
+                  //   // this.get_article();
+                  //   this.isLoadSaveMainButton = false;
+                  //   this.tabListData=[];
+                  //   return;
+                  // }
+                  // var err = response.data.message.errors;
+                  // this._u_fx_config_error_message("Erreur",Object.values(err),'alert-danger');
+                  this.isLoadSaveMainButton = false;
+              })
+              .catch(error =>{
+                console.log(error);
+              })
     },
 
 
@@ -4386,6 +4517,28 @@ var vthis = new Vue({
       formData.append('description',vthis.adresse);
       return formData;
     },
+    _u_fx_calculate_interval_date(){
+      var nombreJours = 7;
+      this.categoriesDates = [];
+      Date.prototype.addDays = function(days) {
+          var date = new Date(this.valueOf());
+          date.setDate(date.getDate() - days);
+          return date;
+      }
+      var daysString = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
+      for(let i = 0; i < nombreJours; i++){
+        var date = new Date(this.dateFilter);
+        var namedDay = daysString[date.addDays(i).getDay()];
+        date = this._u_formatOnlyDateAndReturn(date.addDays(i));
+        this.categoriesDates.push( namedDay+'<br>'+date);
+      }
+      this.categoriesDates.sort(function(a,b){
+        return new Date(a.split('<br>')[1]) - new Date(b.split('<br>')[1]);
+      })
+      this.chartOptions.xAxis.categories = this.categoriesDates;
+      this.chartOptions.series = this.seriesData;
+    },
     _u_fx_form_data_price_transport_article(){
       var formData = new FormData();
       formData.append('zone_id',this.zone_destination);
@@ -4574,9 +4727,10 @@ var vthis = new Vue({
       this.get_logs();
     }
     if(pth[this.indexRoute]=='admin-dashboard'){
-      this.get_dashboard_admin()
-    }
+      this.get_dashboard_admin();
+      this.get_article_visible_on_rapport();
 
+    }
   }
 
   },
@@ -4587,7 +4741,8 @@ var vthis = new Vue({
     dateFilter : function(val){
       // console.log('date filter changed');
       this.disabledDate.ranges[0].to = new Date(this.dateFilter);
-      // console.log(this.disabledDate);
+      this._u_fx_calculate_interval_date();
+      console.log("changed");
     },
     dateRapport : function(val){
       var date = new Date(val);
@@ -4659,6 +4814,21 @@ var vthis = new Vue({
       var day = date.getDate();
       day =  day.toString().length ==1 ? '0'+day: day;
       this.dateRapportPersonnel = date.getFullYear()+'-'+month+'-'+day;
+    },
+    checkBoxArtilcesDashbord: function(val){
+
+      console.log(val);
+      this.seriesData = [];
+      for(let i=0; i < val.length; i++){
+        var data = {
+          name: null,
+          data: [0, 0, 0, 0, 0, 0, 0]
+        };
+        data.name = val[i];
+        this.seriesData.push(data);
+      }
+      this.chartOptions.series = this.seriesData;
+      console.log(this.chartOptions.series);
     },
 
     qte_pv_kg : function(val){
