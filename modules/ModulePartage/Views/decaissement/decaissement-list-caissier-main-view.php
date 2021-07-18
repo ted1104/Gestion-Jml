@@ -28,7 +28,7 @@
 									<!-- Start XP Col -->
 									 <div class="col-md-12 col-lg-12 col-xl-12">
 											 <div class="text-center mt-3 mb-5">
-													 <h4>LISTE DEMANDE DE DECAISSEMENT CAISSIER ET DECAISSEMENT</h4>
+													 <h4>LISTE DEMANDE DE DECAISSEMENT CAISSIER ET DECAISSEMENT EXTERNE</h4>
 											 </div>
 									 </div>
 									 <!-- End XP Col -->
@@ -77,9 +77,11 @@
 																<h5 class="col-md-3 text-right text-secondary">{{montantTotatAllDecaissement}} USD</h5>
 															</div>
 															<div class="">
+																<?php if(session('users')['info'][0]->roles_id == 3): ?>
 																<div @click="get_decaisssement_caissier_principale(2)" class="btn badge-warning padding-4" :id="!isDecaissementExterne?'border-menu':''">
 																		Decaissement Interne
 																</div>
+																<?php endif; ?>
 																<div @click="get_decaisssement_externe" class="btn btn-info padding-4" :id="isDecaissementExterne?'border-menu':''">
 																		Decaissement Externe
 																</div>

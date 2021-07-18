@@ -4463,6 +4463,11 @@ var vthis = new Vue({
       this.get_decaisssement_caissier_principale();
       this.get_destination_motif_decaissement();
     }
+    if(pth[this.indexRoute]=='admin-add-decaissement-externe'){
+      this.destination = 0;
+      this.get_destination_motif_decaissement();
+      this.get_decaisssement_externe();
+    }
     if(pth[this.indexRoute]=='admin-histo-appro' || pth[this.indexRoute]=='gerant-histo-appro'){
       this.get_historique_approvisionnement();
     }

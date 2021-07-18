@@ -115,10 +115,18 @@ class Dashboard extends BaseController {
 
   public function addDecaissement(){
     $data = [
-      'titlePage' => 'DECAISSEMENT : ADMINISTRATION'
+      'titlePage' => 'DECAISSEMENT INTERNE: ADMINISTRATION'
     ];
     // echo view($this->linkMod.'\decaissement-add-caissier-secondaire-view', $data);
     echo view('Modules\ModulePartage\Views\decaissement\decaissement-add-caissier-secondaire-view', $data);
+  }
+
+  public function addDecaissementExterne(){
+    $data = [
+      'titlePage' => 'DECAISSEMENT EXTERNE: ADMINISTRATION'
+    ];
+    // echo view($this->linkMod.'\decaissement-add-caissier-secondaire-view', $data);
+    echo view('Modules\ModulePartage\Views\decaissement\decaissement-list-caissier-main-view', $data);
   }
 
 

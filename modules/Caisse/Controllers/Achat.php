@@ -28,7 +28,9 @@ class Achat extends BaseController {
     $data = [
       'titlePage' => 'DECAISSEMENT : Caissier'
     ];
-    echo view($this->linkMod.'\decaissement-list-caissier-main-view', $data);
+    // echo view($this->linkMod.'\decaissement-list-caissier-main-view', $data);
+    echo view('Modules\ModulePartage\Views\decaissement\decaissement-list-caissier-main-view', $data);
+
   }
   public function listCaissier(){
     $data = [

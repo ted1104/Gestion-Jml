@@ -52,7 +52,10 @@
                       </a>
                       <ul class="xp-vertical-submenu">
                           <li>
-                            <a href="<?=base_url('admin-add-decaissement') ?>">Créer</a>
+                            <a href="<?=base_url('admin-add-decaissement') ?>">Créer Interne</a>
+                          </li>
+                          <li>
+                            <a href="<?=base_url('admin-add-decaissement-externe') ?>">Créer Externe</a>
                           </li>
                       </ul>
                     </li>
@@ -290,7 +293,7 @@
                   </a>
                   <ul class="xp-vertical-submenu">
                     <?php if(session('users')['info'][0]->is_main == 1): ?>
-                      <li><a href="<?=base_url('caissier-list-decaissement') ?>">En cours</a></li>
+                      <li><a href="<?=base_url('caissier-list-decaissement') ?>">En cours & Externe</a></li>
                       <li><a href="<?=base_url('caissier-list-caissier') ?>">Caissiers</a></li>
                     <?php else: ?>
                       <li><a href="<?=base_url('caissier-add-decaissement') ?>">Créer</a></li>

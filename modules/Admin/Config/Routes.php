@@ -42,6 +42,9 @@ $routes->get('admin-config-zone','Dashboard::getConfigZone',['filter' => 'isMana
 $routes->get('admin-log-systeme','Dashboard::getLogSystem',['filter' => 'isManager']);
 
 $routes->get('admin-add-decaissement','Dashboard::addDecaissement',['filter' => 'isManager']);
+$routes->get('admin-add-decaissement-externe','Dashboard::addDecaissementExterne',['filter' => 'isManager']);
+
+
 
 
 
