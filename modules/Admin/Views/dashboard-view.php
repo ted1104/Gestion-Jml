@@ -120,19 +120,22 @@
 													<div class="">
 														<div class="pull-left row">
 															<div class="col-12">
-																<div class="custom-control custom-checkbox custom-control-inline">
+																<!-- <div class="custom-control custom-checkbox custom-control-inline">
 																	<input type="checkbox" name="checkBoxArticles" id="0" class="custom-control-input" value="0" v-model="checkBoxArticles">
 																	<label class="custom-control-label" for="0">{{checkBoxArticles.length > 0 ?'Désactiver': 'Activer'}} filtre d'interval</label>
-																</div>
+																</div> -->
 															</div>
 														</div>
 														<div class="pull-right row">
 															<div class="form-group">
-																<select class="form-control" v-model="destination">
-																	<option value="" disabled>--Choisir Destination Type--</option>
-																	<option value="0">Tout</option>
-																	<option v-for="(det, i) in ListMotifDecaissement" :value="det.id">{{det.description}}</option>
-																</select>
+																<div class="row">
+																	<div class="col-4">
+																		<label for="">Nombre de jours passés</label>
+																	</div>
+																	<div class="col-6">
+																		<input type="number" class="form-control" id="numero_commande" aria-describedby="nombreDeJours" v-model="nombreDeJours">
+																	</div>
+																</div>
 															</div>
 															<div v-if="checkBoxArticles.length > 0" class="margin-left-4">
 																<span>DE : </span>
@@ -153,11 +156,11 @@
 													</div>
 												</div>
 
-												<div class="card" style="border : 1px solid red; margin-top:20px">
+												<div class="card" style="margin-top:20px; padding:10px 0px">
 													<div class="row container">
 														<div class="col-xl-12 ">
 															<h6>SELECTIONNER LES ARTILCES</h6>
-															{{checkBoxArtilcesDashbord}}
+															<!-- {{checkBoxArtilcesDashbord}} -->
 														</div>
 													</div>
 													<div class="row container">
@@ -172,7 +175,11 @@
 												</div>
 										</div>
 										<div class="col-md-12 col-lg-12 col-xl-12" style="margin-bottom :100px">
-											<highcharts :style="chartstyle" :options="chartOptions"></highcharts>
+											<highcharts v-if="checkBoxArtilcesDashbord.length > 0" :style="chartstyle" :options="chartOptions"></highcharts>
+											<div class="text-center" v-if="checkBoxArtilcesDashbord.length==0">
+												<h5>RAPPORT GRAPHIQUE ECOULEMENT ARTICLES {{nombreDeJours}} DERNIERS JOURS</h5>
+												<span>Veuillez selectionner un article pour visualiser le rapport graphique</span>
+											</div>
 										</div>
                     <!-- End XP Col -->
                 </div>

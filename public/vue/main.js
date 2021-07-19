@@ -327,6 +327,7 @@ var vthis = new Vue({
       D_MontantVente : 0,
       D_MontantBus : 0,
       D_MontantDecaiss : 0,
+      nombreDeJours : 10,
 
       //RAPPORT GRAPHIQUE
       categoriesDates : [],
@@ -336,7 +337,7 @@ var vthis = new Vue({
            type: 'line'
        },
         title: {
-          text: "RAPPORT GRAPHIQUE ECOULEMENT ARTICLE .... 7 DERNIERS JOURS"
+          text: "RAPPORT GRAPHIQUE ECOULEMENT ARTICLES DERNIERS JOURS"
         },
         // subtitle: {
         //   text: "Source : JML Système"
@@ -402,6 +403,8 @@ var vthis = new Vue({
     this._u_get_today();
     this._u_fx_get_montant();
     this._u_fx_calculate_interval_date();
+
+    this.chartOptions.title.text = "RAPPORT GRAPHIQUE ECOULEMENT ARTICLES "+this.nombreDeJours+" DERNIERS JOURS"
     // console.log("==on mOunted ==");
     // console.log(this.zone_destination);
 
@@ -4518,7 +4521,7 @@ var vthis = new Vue({
       return formData;
     },
     _u_fx_calculate_interval_date(){
-      var nombreJours = 7;
+      var nombreJours = this.nombreDeJours;
       this.categoriesDates = [];
       Date.prototype.addDays = function(days) {
           var date = new Date(this.valueOf());
@@ -4537,7 +4540,9 @@ var vthis = new Vue({
         return new Date(a.split('<br>')[1]) - new Date(b.split('<br>')[1]);
       })
       this.chartOptions.xAxis.categories = this.categoriesDates;
-      this.chartOptions.series = this.seriesData;
+      // this.chartOptions.series = this.seriesData;
+
+      console.log(this.chartOptions.xAxis.categories);
     },
     _u_fx_form_data_price_transport_article(){
       var formData = new FormData();
@@ -4742,7 +4747,7 @@ var vthis = new Vue({
       // console.log('date filter changed');
       this.disabledDate.ranges[0].to = new Date(this.dateFilter);
       this._u_fx_calculate_interval_date();
-      console.log("changed");
+      // console.log("changed");
     },
     dateRapport : function(val){
       var date = new Date(val);
@@ -4816,21 +4821,48 @@ var vthis = new Vue({
       this.dateRapportPersonnel = date.getFullYear()+'-'+month+'-'+day;
     },
     checkBoxArtilcesDashbord: function(val){
-
-      console.log(val);
       this.seriesData = [];
       for(let i=0; i < val.length; i++){
         var data = {
           name: null,
-          data: [0, 0, 0, 0, 0, 0, 0]
+          data: []
         };
         data.name = val[i];
+        const leng = this.nombreDeJours;
+        for (let is=0; is < leng; is++) {
+            data.data.push(0);
+        }
+        // console.log(data);
         this.seriesData.push(data);
       }
       this.chartOptions.series = this.seriesData;
-      console.log(this.chartOptions.series);
+      // console.log(this.chartOptions.series);
     },
+    nombreDeJours : function(val){
+      this.chartOptions.title.text = "RAPPORT GRAPHIQUE ECOULEMENT ARTICLES "+this.nombreDeJours+" DERNIERS JOURS";
+      console.log(this.checkBoxArtilcesDashbord);
+      this._u_fx_calculate_interval_date();
 
+
+
+      // console.log('Length', this.checkBoxArtilcesDashbord.length);
+      this.seriesData = [];
+      for(let i=0; i < this.checkBoxArtilcesDashbord.length; i++){
+        var data = {
+          name: null,
+          data: []
+        };
+        const leng = this.nombreDeJours;
+        data.name = this.checkBoxArtilcesDashbord[i];
+        for (let is=0; is < leng; is++) {
+            data.data.push(0);
+        }
+        // data.data = new Array(leng).fill(0);
+        console.log(data);
+        this.seriesData.push(data);
+      }
+      this.chartOptions.series = this.seriesData;
+    },
     qte_pv_kg : function(val){
       this.qte_restaurer = Number(this.qte_pv_kg) / Number(this.poids_article);
       this.qte_perdue = Number(this.qte_restaurer_init) - Number(this.qte_restaurer);
